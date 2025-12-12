@@ -4,6 +4,7 @@ import TabBar from "./device/TabBar";
 import HomeScreen from "./screens/HomeScreen";
 import ProjectsScreen from "./screens/ProjectsScreen";
 import SkillsScreen from "./screens/SkillsScreen";
+import ResumeScreen from "./screens/ResumeScreen";
 import ContactScreen from "./screens/ContactScreen";
 
 const PortfolioApp = () => {
@@ -17,6 +18,8 @@ const PortfolioApp = () => {
         return <ProjectsScreen onNavigate={setActiveTab} />;
       case "skills":
         return <SkillsScreen />;
+      case "resume":
+        return <ResumeScreen />;
       case "contact":
         return <ContactScreen />;
       default:
