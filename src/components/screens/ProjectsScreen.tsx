@@ -218,6 +218,15 @@ const ProjectDetail = ({ project, onBack }: ProjectDetailProps) => {
             </div>
           </div>
 
+          {/* Long Description */}
+          {project.longDescription && (
+            <div className="mt-6 p-4 bg-muted/50 rounded-2xl">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {project.longDescription}
+              </p>
+            </div>
+          )}
+
           {/* Tech Stack */}
           <div className="mt-8">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
@@ -231,6 +240,89 @@ const ProjectDetail = ({ project, onBack }: ProjectDetailProps) => {
               ))}
             </div>
           </div>
+
+          {/* Detailed Stack */}
+          {project.stack && (
+            <div className="mt-6 space-y-4">
+              {project.stack.frontend && project.stack.frontend.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-primary mb-2">Frontend</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.stack.frontend.map((tech) => (
+                      <span key={tech} className="text-xs px-2 py-1 rounded-full bg-blue-500/10 text-blue-600">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {project.stack.backend && project.stack.backend.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-primary mb-2">Backend</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.stack.backend.map((tech) => (
+                      <span key={tech} className="text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-600">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {project.stack.database && project.stack.database.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-primary mb-2">Database</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.stack.database.map((tech) => (
+                      <span key={tech} className="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-600">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {project.stack.devops && project.stack.devops.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-primary mb-2">DevOps</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.stack.devops.map((tech) => (
+                      <span key={tech} className="text-xs px-2 py-1 rounded-full bg-orange-500/10 text-orange-600">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {project.stack.testing && project.stack.testing.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-primary mb-2">Testing</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.stack.testing.map((tech) => (
+                      <span key={tech} className="text-xs px-2 py-1 rounded-full bg-red-500/10 text-red-600">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Highlights */}
+          {project.highlights && project.highlights.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                Points forts
+              </h3>
+              <div className="space-y-3">
+                {project.highlights.map((highlight) => (
+                  <div key={highlight.title} className="p-3 bg-muted/30 rounded-xl">
+                    <h4 className="text-sm font-semibold text-foreground">{highlight.title}</h4>
+                    <p className="text-xs text-muted-foreground mt-1">{highlight.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* CTA */}
           <div className="mt-8">

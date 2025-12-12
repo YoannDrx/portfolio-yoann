@@ -41,10 +41,16 @@ export interface ProjectLinks {
   github?: string;
 }
 
+export interface ProjectHighlight {
+  title: string;
+  description: string;
+}
+
 export interface Project {
   id: string;
   name: string;
   description: string;
+  longDescription?: string;
   category: string;
   projectType: ProjectType;
   year: string;
@@ -54,6 +60,15 @@ export interface Project {
   image?: string;
   stats: ProjectStats;
   features: string[];
+  // Enriched project data
+  stack?: {
+    frontend?: string[];
+    backend?: string[];
+    database?: string[];
+    devops?: string[];
+    testing?: string[];
+  };
+  highlights?: ProjectHighlight[];
   links?: ProjectLinks;
 }
 
