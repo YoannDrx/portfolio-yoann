@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * HomeScreen
  * Écran d'accueil du portfolio avec présentation et navigation
@@ -5,7 +7,7 @@
 
 import { Sparkles } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
-import { IOSCard, IOSAvatar, IOSListItem, IOSBadge } from '../ios';
+import { IOSCard, IOSListItem, IOSBadge } from '../ios';
 import { profile, navigationItems } from '@/data';
 
 interface HomeScreenProps {
@@ -21,17 +23,23 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
         {/* Hero Section */}
         <div className="pt-4 animate-ios-spring">
           <div className="relative">
-            {/* Avatar */}
+            {/* Avatar avec cercle blanc */}
             <div className="flex justify-center mb-6">
               <div className="relative">
+                {/* Glow effect */}
                 <div className="absolute -inset-4 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
-                <IOSAvatar
-                  initials={profile.initials}
-                  src={profile.avatar}
-                  size="2xl"
-                  status="online"
-                  statusIcon={<Sparkles className="w-4 h-4 text-white" />}
-                />
+                {/* Avatar avec bordure blanche */}
+                <div className="relative w-28 h-28 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                  <img
+                    src={profile.avatar}
+                    alt={`${profile.firstName} ${profile.lastName}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Badge disponible */}
+                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1.5 border-2 border-white shadow-md">
+                  <Sparkles className="w-3.5 h-3.5 text-white" />
+                </div>
               </div>
             </div>
 

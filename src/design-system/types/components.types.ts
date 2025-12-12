@@ -3,7 +3,7 @@
  * Définit les interfaces pour tous les props des composants iOS
  */
 
-import type { ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, HTMLAttributes } from 'react';
+import type { ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, HTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 // ============ COMMON TYPES ============
 
@@ -74,7 +74,7 @@ export interface IOSInputProps extends Omit<InputHTMLAttributes<HTMLInputElement
 
 // ============ IOS TEXTAREA ============
 
-export interface IOSTextareaProps extends HTMLAttributes<HTMLTextAreaElement> {
+export interface IOSTextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   /** État visuel */
   state?: InputState;
   /** Nombre de lignes visibles */
@@ -85,12 +85,6 @@ export interface IOSTextareaProps extends HTMLAttributes<HTMLTextAreaElement> {
   helperText?: string;
   /** Message d'erreur */
   errorText?: string;
-  /** Placeholder */
-  placeholder?: string;
-  /** Valeur */
-  value?: string;
-  /** Callback onChange */
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 // ============ IOS BADGE ============

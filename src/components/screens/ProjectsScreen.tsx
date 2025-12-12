@@ -1,10 +1,12 @@
+"use client";
+
 /**
  * ProjectsScreen
  * Écran listant les projets du portfolio avec vue détaillée
  */
 
 import { useState } from 'react';
-import { ChevronRight, Apple, Smartphone, Globe, Star, Download, ExternalLink } from 'lucide-react';
+import { ChevronRight, Apple, Smartphone, Globe, Star, Download, ExternalLink, Github } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
 import { projects, getProjectsCount, uiTexts } from '@/data';
@@ -324,11 +326,68 @@ const ProjectDetail = ({ project, onBack }: ProjectDetailProps) => {
             </div>
           )}
 
-          {/* CTA */}
-          <div className="mt-8">
-            <IOSButton fullWidth leftIcon={<ExternalLink className="w-5 h-5" />}>
-              {uiTexts.buttons.viewProject}
-            </IOSButton>
+          {/* CTA - Boutons fonctionnels */}
+          <div className="mt-8 space-y-3">
+            {project.links?.website ? (
+              <a
+                href={project.links.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full"
+              >
+                <IOSButton fullWidth leftIcon={<ExternalLink className="w-5 h-5" />}>
+                  {uiTexts.buttons.viewProject}
+                </IOSButton>
+              </a>
+            ) : (
+              <IOSButton
+                fullWidth
+                leftIcon={<ExternalLink className="w-5 h-5" />}
+                disabled
+                className="opacity-50 cursor-not-allowed"
+              >
+                Projet privé
+              </IOSButton>
+            )}
+
+            {project.links?.github && (
+              <a
+                href={project.links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full"
+              >
+                <IOSButton variant="secondary" fullWidth leftIcon={<Github className="w-5 h-5" />}>
+                  Voir le code
+                </IOSButton>
+              </a>
+            )}
+
+            {project.links?.appStore && (
+              <a
+                href={project.links.appStore}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full"
+              >
+                <IOSButton variant="secondary" fullWidth leftIcon={<Apple className="w-5 h-5" />}>
+                  App Store
+                </IOSButton>
+              </a>
+            )}
+
+            {project.links?.playStore && (
+              <a
+                href={project.links.playStore}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full"
+              >
+                <IOSButton variant="secondary" fullWidth leftIcon={<Smartphone className="w-5 h-5" />}>
+                  Play Store
+                </IOSButton>
+              </a>
+            )}
           </div>
         </div>
       </div>

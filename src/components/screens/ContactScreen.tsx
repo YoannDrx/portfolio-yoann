@@ -1,10 +1,12 @@
+"use client";
+
 /**
  * ContactScreen
  * Écran de contact avec formulaire et liens sociaux
  */
 
 import { useState } from 'react';
-import { Mail, Github, Linkedin, Twitter, Send, CheckCircle } from 'lucide-react';
+import { Mail, Github, Linkedin, Twitter, Send, CheckCircle, Phone, Briefcase } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import {
   IOSCard,
@@ -13,7 +15,6 @@ import {
   IOSTextarea,
   IOSBadge,
   IOSNavigationBar,
-  IOSToast,
 } from '../ios';
 import { socialLinks, profile, uiTexts } from '@/data';
 import { toast } from '@/hooks/use-toast';
@@ -24,6 +25,8 @@ const iconMap: Record<string, React.FC<{ className?: string }>> = {
   Linkedin,
   Twitter,
   Mail,
+  Phone,
+  Briefcase,
 };
 
 const ContactScreen = () => {
@@ -39,21 +42,41 @@ const ContactScreen = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      if (response.ok) {
+        setIsSubmitted(true);
+        toast({
+          title: uiTexts.messages.messageSent,
+          description: uiTexts.messages.messageSentDescription,
+        });
 
-    toast({
-      title: uiTexts.messages.messageSent,
-      description: uiTexts.messages.messageSentDescription,
-    });
-
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', message: '' });
-    }, 3000);
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({ name: '', email: '', message: '' });
+        }, 3000);
+      } else {
+        const data = await response.json();
+        toast({
+          title: 'Erreur',
+          description: data.error || 'Une erreur est survenue',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Impossible d\'envoyer le message',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -67,21 +90,48 @@ const ContactScreen = () => {
           subtitle={uiTexts.stats.discussProject}
         />
 
-        {/* Social Links */}
-        <div className="px-5 mb-6 stagger-children">
-          <div className="flex justify-center gap-4">
+        {/* Social Links - Nouveau design avec hover effects */}
+        <div className="px-5 mb-6">
+          <div className="flex justify-center gap-3">
             {socialLinks.map((link) => {
               const Icon = iconMap[link.icon];
               return (
                 <a
                   key={link.id}
                   href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-14 h-14 rounded-2xl ${link.color} flex items-center justify-center shadow-soft ios-interactive`}
+                  target={link.href.startsWith('http') ? '_blank' : undefined}
+                  rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  className="group relative"
                   aria-label={link.name}
                 >
-                  {Icon && <Icon className="w-6 h-6 text-white" />}
+                  {/* Background avec gradient et hover effect */}
+                  <div
+                    className={`
+                      w-14 h-14 rounded-2xl ${link.color}
+                      flex items-center justify-center
+                      shadow-lg
+                      transform transition-all duration-300 ease-out
+                      group-hover:scale-110 group-hover:shadow-xl
+                      group-hover:-translate-y-1
+                      group-active:scale-95
+                    `}
+                  >
+                    {Icon && <Icon className="w-6 h-6 text-white transition-transform duration-300 group-hover:scale-110" />}
+                  </div>
+                  {/* Tooltip avec nom */}
+                  <span
+                    className="
+                      absolute -bottom-7 left-1/2 -translate-x-1/2
+                      text-[10px] font-medium text-muted-foreground
+                      opacity-0 group-hover:opacity-100
+                      transition-opacity duration-200
+                      whitespace-nowrap
+                      bg-background/80 backdrop-blur-sm
+                      px-2 py-0.5 rounded-full
+                    "
+                  >
+                    {link.name}
+                  </span>
                 </a>
               );
             })}
@@ -89,7 +139,7 @@ const ContactScreen = () => {
         </div>
 
         {/* Contact Form */}
-        <div className="px-5">
+        <div className="px-5 mt-4">
           <IOSCard variant="glass" padding="lg">
             <h3 className="font-semibold text-foreground mb-4">
               {uiTexts.sections.sendMessage}
