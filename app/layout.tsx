@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 
 export const metadata: Metadata = {
   title: "Yoann Andrieux - Portfolio",
   description: "Développeur Mobile & Web - React Native, iOS, Android, Web",
   keywords: ["développeur", "mobile", "web", "react native", "ios", "android", "portfolio"],
   authors: [{ name: "Yoann Andrieux" }],
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
+  manifest: "/manifest.json",
   openGraph: {
     title: "Yoann Andrieux - Portfolio",
     description: "Développeur Mobile & Web - React Native, iOS, Android, Web",
@@ -28,7 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased" suppressHydrationWarning>
+        <ServiceWorkerRegister />
         <Providers>{children}</Providers>
       </body>
     </html>

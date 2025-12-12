@@ -3,10 +3,24 @@
  * Écran affichant le CV avec expériences et formations
  */
 
+'use client';
+
+import dynamic from 'next/dynamic';
 import StatusBar from '../device/StatusBar';
-import { IOSCard, IOSBadge, IOSNavigationBar } from '../ios';
+import { IOSCard, IOSBadge, IOSNavigationBar, IOSButton } from '../ios';
 import { experiences, education } from '@/data/resume';
-import { Briefcase, GraduationCap, MapPin, ExternalLink } from 'lucide-react';
+import { Briefcase, GraduationCap, MapPin, ExternalLink, Download } from 'lucide-react';
+
+// Lazy loading du bouton PDF
+const PDFDownloadButton = dynamic(() => import('../pdf/PDFDownloadButton'), {
+  ssr: false,
+  loading: () => (
+    <IOSButton variant="ghost" size="sm" disabled>
+      <Download className="w-4 h-4" />
+      PDF
+    </IOSButton>
+  ),
+});
 
 const getEmploymentTypeLabel = (type: string) => {
   const labels: Record<string, string> = {
@@ -43,6 +57,7 @@ const ResumeScreen = () => {
         <IOSNavigationBar
           title="CV"
           subtitle="Parcours & Formation"
+          rightAction={<PDFDownloadButton />}
         />
 
         {/* Experience Section */}
