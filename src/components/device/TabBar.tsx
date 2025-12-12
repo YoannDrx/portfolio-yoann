@@ -34,17 +34,12 @@ const TabBar: React.FC<TabBarProps> = ({
     <div
       className={cn(
         'absolute bottom-0 left-0 right-0 z-40',
-        variant === 'default' ? 'pb-8' : 'pb-6'
+        'bg-background'
       )}
     >
-      {/* Glass Background */}
-      <div
-        className={cn(
-          'glass-card',
-          variant === 'default' ? 'mx-2 rounded-2xl' : 'mx-4 rounded-3xl shadow-medium'
-        )}
-      >
-        <div className="flex items-center justify-around py-2">
+      {/* Border top */}
+      <div className="border-t border-border/50">
+        <div className="flex items-center justify-around py-2 pb-6">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
 
