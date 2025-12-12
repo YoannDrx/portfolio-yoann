@@ -4,11 +4,29 @@
  */
 
 import { useState } from 'react';
-import { ChevronRight, Apple, Smartphone, Star, Download, ExternalLink } from 'lucide-react';
+import { ChevronRight, Apple, Smartphone, Globe, Star, Download, ExternalLink } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
 import { projects, getProjectsCount, uiTexts } from '@/data';
-import type { Project } from '@/data';
+import type { Project, ProjectType } from '@/data';
+
+const getProjectTypeLabel = (type: ProjectType) => {
+  const labels: Record<ProjectType, string> = {
+    freelance: 'Client Freelance',
+    cdi: 'CDI',
+    personal: 'Projet Perso',
+  };
+  return labels[type];
+};
+
+const getProjectTypeColor = (type: ProjectType) => {
+  const colors: Record<ProjectType, string> = {
+    freelance: 'bg-blue-500/20 text-blue-600',
+    cdi: 'bg-green-500/20 text-green-600',
+    personal: 'bg-purple-500/20 text-purple-600',
+  };
+  return colors[type];
+};
 
 interface ProjectsScreenProps {
   onNavigate: (tab: string) => void;
@@ -44,10 +62,32 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
               interactive
               onPress={() => setSelectedProject(project)}
             >
-              {/* Gradient Header */}
-              <div className={`h-24 bg-gradient-to-br ${project.gradient} relative`}>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-5xl">{project.emoji}</span>
+              {/* Header avec Image ou Gradient */}
+              <div className={`h-32 relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}>
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-5xl">{project.emoji}</span>
+                  </div>
+                )}
+                {/* Overlay gradient pour lisibilité des tags */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+                {/* Project Type Tag */}
+                <div className="absolute top-3 left-3">
+                  <span className={`px-2 py-1 text-[10px] font-semibold rounded-full backdrop-blur-sm ${getProjectTypeColor(project.projectType)}`}>
+                    {getProjectTypeLabel(project.projectType)}
+                  </span>
+                </div>
+                {/* Year */}
+                <div className="absolute top-3 right-3">
+                  <span className="px-2 py-1 text-[10px] font-semibold rounded-full bg-black/30 backdrop-blur-sm text-white">
+                    {project.year}
+                  </span>
                 </div>
               </div>
 
@@ -79,6 +119,9 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
                   </div>
                   <div className="flex-1" />
                   <div className="flex items-center gap-1.5">
+                    {project.platforms.includes('web') && (
+                      <Globe className="w-4 h-4 text-foreground" />
+                    )}
                     {project.platforms.includes('ios') && (
                       <Apple className="w-4 h-4 text-foreground" />
                     )}
@@ -117,15 +160,31 @@ const ProjectDetail = ({ project, onBack }: ProjectDetailProps) => {
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Hero */}
         <div
-          className={`mx-5 mt-4 h-48 rounded-3xl bg-gradient-to-br ${project.gradient} relative overflow-hidden`}
+          className={`mx-5 mt-4 h-48 rounded-3xl relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-8xl animate-float">{project.emoji}</span>
-          </div>
+          {project.image ? (
+            <img
+              src={project.image}
+              alt={project.name}
+              className="w-full h-full object-cover object-top"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-8xl animate-float">{project.emoji}</span>
+            </div>
+          )}
         </div>
 
         {/* Info */}
         <div className="px-5 mt-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
+              {getProjectTypeLabel(project.projectType)}
+            </span>
+            <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-muted text-muted-foreground">
+              {project.year}
+            </span>
+          </div>
           <h1 className="ios-nav-title-large">{project.name}</h1>
           <p className="text-primary font-medium mt-1">{project.category}</p>
           <p className="text-muted-foreground mt-3 leading-relaxed">
@@ -151,6 +210,7 @@ const ProjectDetail = ({ project, onBack }: ProjectDetailProps) => {
             <div className="w-px h-10 bg-border" />
             <div className="text-center">
               <div className="flex items-center justify-center gap-1">
+                {project.platforms.includes('web') && <Globe className="w-5 h-5" />}
                 {project.platforms.includes('ios') && <Apple className="w-5 h-5" />}
                 {project.platforms.includes('android') && <Smartphone className="w-5 h-5" />}
               </div>

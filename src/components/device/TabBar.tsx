@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { Home, FolderOpen, Layers, Mail } from 'lucide-react';
+import { Home, FolderOpen, Layers, FileText, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { uiTexts } from '@/data';
 import type { TabItem, IOSTabBarProps } from '@/design-system/types';
@@ -14,6 +14,7 @@ const defaultTabs: TabItem[] = [
   { id: 'home', label: uiTexts.nav.home, icon: <Home /> },
   { id: 'projects', label: uiTexts.nav.projects, icon: <FolderOpen /> },
   { id: 'skills', label: uiTexts.nav.skills, icon: <Layers /> },
+  { id: 'resume', label: 'CV', icon: <FileText /> },
   { id: 'contact', label: uiTexts.nav.contact, icon: <Mail /> },
 ];
 

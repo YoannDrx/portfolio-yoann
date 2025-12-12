@@ -27,6 +27,15 @@ export {
   getCategoryAverageLevel,
 } from './skills';
 
+// Resume (CV)
+export {
+  experiences,
+  education,
+  getExperiencesByType,
+  getDevExperiences,
+  getTotalYearsOfExperience,
+} from './resume';
+
 // Social
 export { socialLinks, getSocialLinkById, getContactEmail } from './social';
 

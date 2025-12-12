@@ -27,6 +27,7 @@ export interface Profile {
 // ============ PROJECTS ============
 
 export type Platform = 'ios' | 'android' | 'web';
+export type ProjectType = 'freelance' | 'cdi' | 'personal';
 
 export interface ProjectStats {
   rating: number;
@@ -45,6 +46,8 @@ export interface Project {
   name: string;
   description: string;
   category: string;
+  projectType: ProjectType;
+  year: string;
   platforms: Platform[];
   gradient: string;
   emoji: string;
@@ -94,6 +97,33 @@ export interface NavigationItem {
   subtitle: string;
   icon: string;
   gradient: string;
+}
+
+// ============ RESUME (CV) ============
+
+export type EmploymentType = 'cdi' | 'freelance' | 'independant' | 'cdd' | 'intermittent';
+
+export interface Experience {
+  id: string;
+  company: string;
+  role: string;
+  type: EmploymentType;
+  startDate: string;
+  endDate?: string; // undefined = présent
+  location: string;
+  remote?: 'remote' | 'hybrid' | 'onsite';
+  description: string[];
+  skills: string[];
+  logo?: string;
+  url?: string;
+}
+
+export interface Education {
+  id: string;
+  degree: string;
+  school: string;
+  year: string;
+  icon?: string;
 }
 
 // ============ SITE CONFIG ============

@@ -7,32 +7,39 @@ import type { SocialLink } from './types';
 
 export const socialLinks: SocialLink[] = [
   {
-    id: 'github',
-    name: 'GitHub',
-    href: 'https://github.com',
-    icon: 'Github',
-    color: 'bg-zinc-800',
-  },
-  {
     id: 'linkedin',
     name: 'LinkedIn',
-    href: 'https://linkedin.com',
+    href: 'https://www.linkedin.com/in/yoann-andrieux/',
     icon: 'Linkedin',
     color: 'bg-blue-600',
   },
   {
-    id: 'twitter',
-    name: 'Twitter',
-    href: 'https://twitter.com',
-    icon: 'Twitter',
-    color: 'bg-sky-500',
+    id: 'malt',
+    name: 'Malt',
+    href: 'https://www.malt.fr/profile/yoannandrieux',
+    icon: 'Briefcase',
+    color: 'bg-red-500',
+  },
+  {
+    id: 'github',
+    name: 'GitHub',
+    href: 'https://github.com/YoannDrx',
+    icon: 'Github',
+    color: 'bg-zinc-800',
   },
   {
     id: 'email',
     name: 'Email',
-    href: 'mailto:hello@example.com',
+    href: 'mailto:yoann.andrieux@gmail.com',
     icon: 'Mail',
-    color: 'bg-primary',
+    color: 'bg-green-500',
+  },
+  {
+    id: 'phone',
+    name: 'Téléphone',
+    href: 'tel:+33663434665',
+    icon: 'Phone',
+    color: 'bg-purple-500',
   },
 ];
 
