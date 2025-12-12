@@ -1,7 +1,7 @@
 {
-  "id": "yoann-andrieux-portfolio",
-  "name": "Yoann Andrieux - Portfolio",
-  "short_name": "YA Portfolio",
+  "id": "portfolio-yoann",
+  "name": "Portfolio Yoann",
+  "short_name": "Portfolio",
   "description": "Développeur Mobile & Web - React Native, iOS, Android",
   "start_url": "/",
   "scope": "/",

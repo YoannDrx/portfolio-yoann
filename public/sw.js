@@ -5,9 +5,9 @@
 
 const CACHE_VERSION = 'v1';
 const CACHE_NAMES = {
-  core: `portfolio-core-${CACHE_VERSION}`,
-  images: `portfolio-images-${CACHE_VERSION}`,
-  fonts: `portfolio-fonts-${CACHE_VERSION}`,
+  core: `portfolio-yoann-core-${CACHE_VERSION}`,
+  images: `portfolio-yoann-images-${CACHE_VERSION}`,
+  fonts: `portfolio-yoann-fonts-${CACHE_VERSION}`,
 };
 
 // Assets critiques à pré-cacher (120 KB)

@@ -6,9 +6,9 @@
 import type { SiteConfig } from './types';
 
 export const siteConfig: SiteConfig = {
-  name: 'Portfolio React Native',
+  name: 'Portfolio Yoann',
   description: 'Portfolio de développeur React Native - Applications mobiles iOS & Android',
-  url: 'https://example.com',
+  url: 'https://yoann-andrieux.fr',
   ogImage: '/og-image.png',
   locale: 'fr-FR',
   theme: {
