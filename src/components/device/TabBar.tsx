@@ -1,40 +1,92 @@
-import { Home, FolderOpen, Layers, Mail } from "lucide-react";
+/**
+ * TabBar
+ * Barre de navigation inférieure style iOS
+ */
+
+import * as React from 'react';
+import { Home, FolderOpen, Layers, Mail } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { uiTexts } from '@/data';
+import type { TabItem, IOSTabBarProps } from '@/design-system/types';
+
+// Default tabs configuration
+const defaultTabs: TabItem[] = [
+  { id: 'home', label: uiTexts.nav.home, icon: <Home /> },
+  { id: 'projects', label: uiTexts.nav.projects, icon: <FolderOpen /> },
+  { id: 'skills', label: uiTexts.nav.skills, icon: <Layers /> },
+  { id: 'contact', label: uiTexts.nav.contact, icon: <Mail /> },
+];
 
 interface TabBarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  tabs?: TabItem[];
+  variant?: 'default' | 'floating';
 }
 
-const tabs = [
-  { id: "home", label: "Accueil", icon: Home },
-  { id: "projects", label: "Projets", icon: FolderOpen },
-  { id: "skills", label: "Skills", icon: Layers },
-  { id: "contact", label: "Contact", icon: Mail },
-];
-
-const TabBar = ({ activeTab, onTabChange }: TabBarProps) => {
+const TabBar: React.FC<TabBarProps> = ({
+  activeTab,
+  onTabChange,
+  tabs = defaultTabs,
+  variant = 'default',
+}) => {
   return (
-    <div className="absolute bottom-0 left-0 right-0 z-40 pb-8">
+    <div
+      className={cn(
+        'absolute bottom-0 left-0 right-0 z-40',
+        variant === 'default' ? 'pb-8' : 'pb-6'
+      )}
+    >
       {/* Glass Background */}
-      <div className="mx-2 rounded-2xl glass-card">
+      <div
+        className={cn(
+          'glass-card',
+          variant === 'default' ? 'mx-2 rounded-2xl' : 'mx-4 rounded-3xl shadow-medium'
+        )}
+      >
         <div className="flex items-center justify-around py-2">
           {tabs.map((tab) => {
-            const Icon = tab.icon;
             const isActive = activeTab === tab.id;
-            
+
             return (
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`ios-tab-item ${isActive ? "active" : ""}`}
+                className={cn(
+                  'ios-tab-item',
+                  'ios-press',
+                  isActive && 'active'
+                )}
+                aria-label={tab.label}
+                aria-current={isActive ? 'page' : undefined}
               >
-                <Icon 
-                  className={`h-6 w-6 transition-transform duration-200 ${
-                    isActive ? "scale-110" : ""
-                  }`} 
-                  strokeWidth={isActive ? 2.5 : 2}
-                />
-                <span>{tab.label}</span>
+                <span
+                  className={cn(
+                    'transition-transform duration-200',
+                    '[&_svg]:h-6 [&_svg]:w-6',
+                    isActive && 'scale-110 [&_svg]:stroke-[2.5px]'
+                  )}
+                >
+                  {tab.icon}
+                </span>
+                <span className="text-[10px] font-medium">{tab.label}</span>
+
+                {/* Badge */}
+                {tab.badge !== undefined && (
+                  <span
+                    className={cn(
+                      'absolute -top-1 -right-1',
+                      'min-w-[18px] h-[18px] px-1',
+                      'flex items-center justify-center',
+                      'text-[10px] font-bold text-white',
+                      'bg-error rounded-full'
+                    )}
+                  >
+                    {typeof tab.badge === 'number' && tab.badge > 99
+                      ? '99+'
+                      : tab.badge}
+                  </span>
+                )}
               </button>
             );
           })}
