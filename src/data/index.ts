@@ -25,6 +25,10 @@ export {
   tools,
   getAllSkills,
   getCategoryAverageLevel,
+  // Narrative skills
+  skillStoryIntro,
+  technicalSkills,
+  softSkills,
 } from './skills';
 
 // Resume (CV)

@@ -1,0 +1,404 @@
+/* Inter Variable Font - Local (offline support) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/Inter-Variable.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ============ SYSTEM COLORS ============ */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 11%;
+
+    /* Primary - iOS Blue */
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - iOS Gray */
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 0 0% 11%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+
+    --accent: 240 5% 96%;
+    --accent-foreground: 0 0% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 211 100% 50%;
+
+    --radius: 1rem;
+
+    /* ============ SEMANTIC COLORS ============ */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 32 100% 50%;
+    --warning-foreground: 0 0% 0%;
+    --error: 0 84% 60%;
+    --error-foreground: 0 0% 100%;
+    --info: 199 78% 55%;
+    --info-foreground: 0 0% 100%;
+
+    /* ============ iOS SYSTEM COLORS ============ */
+    --ios-blue: 211 100% 50%;
+    --ios-green: 142 71% 45%;
+    --ios-red: 0 84% 60%;
+    --ios-orange: 32 100% 50%;
+    --ios-yellow: 45 100% 50%;
+    --ios-teal: 199 78% 55%;
+    --ios-purple: 280 67% 60%;
+    --ios-pink: 349 100% 59%;
+    --ios-indigo: 240 60% 59%;
+
+    /* iOS Gray Scale */
+    --ios-gray: 240 5% 96%;
+    --ios-gray-dark: 240 3% 83%;
+    --ios-separator: 240 6% 90%;
+    --ios-label: 0 0% 11%;
+    --ios-label-secondary: 240 4% 46%;
+
+    /* ============ GLASSMORPHISM ============ */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.3;
+    --glass-blur: 20px;
+
+    /* ============ DEVICE FRAME ============ */
+    --device-bg: 240 10% 3.9%;
+    --device-bezel: 240 5% 15%;
+    --device-notch: 0 0% 0%;
+
+    /* ============ SHADOWS ============ */
+    --shadow-soft: 0 8px 32px -8px hsl(0 0% 0% / 0.15);
+    --shadow-medium: 0 16px 48px -12px hsl(0 0% 0% / 0.25);
+    --shadow-elevated: 0 25px 50px -12px hsl(0 0% 0% / 0.35);
+    --shadow-device: 0 50px 100px -20px hsl(0 0% 0% / 0.3), 0 30px 60px -30px hsl(0 0% 0% / 0.4);
+
+    /* ============ ANIMATION VARIABLES ============ */
+    --duration-instant: 0ms;
+    --duration-fast: 100ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+    --duration-slower: 400ms;
+    --duration-slowest: 500ms;
+
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-ios: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* ============ SIDEBAR (compatibility) ============ */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 211 100% 50%;
+  }
+
+  .dark {
+    /* ============ SYSTEM COLORS (DARK) ============ */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 6% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 6% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 211 100% 50%;
+
+    /* ============ SEMANTIC COLORS (DARK) ============ */
+    --success: 142 71% 40%;
+    --warning: 32 100% 45%;
+    --error: 0 62% 50%;
+    --info: 199 78% 50%;
+
+    /* ============ iOS COLORS (DARK) ============ */
+    --ios-gray: 240 4% 16%;
+    --ios-gray-dark: 240 4% 26%;
+    --ios-separator: 240 4% 20%;
+    --ios-label: 0 0% 98%;
+    --ios-label-secondary: 240 5% 65%;
+
+    /* ============ GLASSMORPHISM (DARK) ============ */
+    --glass-bg: 240 6% 10% / 0.8;
+    --glass-border: 0 0% 100% / 0.1;
+
+    /* ============ SHADOWS (DARK) ============ */
+    --shadow-soft: 0 8px 32px -8px hsl(0 0% 0% / 0.4);
+    --shadow-medium: 0 16px 48px -12px hsl(0 0% 0% / 0.5);
+    --shadow-elevated: 0 25px 50px -12px hsl(0 0% 0% / 0.6);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* ============ iOS GLASS CARD ============ */
+  .glass-card {
+    @apply relative overflow-hidden rounded-2xl;
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid hsl(var(--glass-border));
+  }
+
+  /* ============ iOS SEPARATOR ============ */
+  .ios-separator {
+    @apply h-px w-full;
+    background: hsl(var(--ios-separator));
+  }
+
+  /* ============ iOS LIST ITEM ============ */
+  .ios-list-item {
+    @apply flex items-center justify-between px-4 py-3 bg-card;
+    @apply transition-colors duration-150;
+  }
+
+  .ios-list-item:active {
+    background: hsl(var(--ios-gray));
+  }
+
+  /* ============ TOUCH INDICATOR ============ */
+  .touch-indicator {
+    @apply pointer-events-none fixed z-50 rounded-full;
+    @apply transition-transform duration-100 ease-out;
+    width: 44px;
+    height: 44px;
+    background: hsl(var(--ios-blue) / 0.2);
+    border: 2px solid hsl(var(--ios-blue) / 0.4);
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  .touch-indicator.active {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* ============ iOS NAVIGATION TITLES ============ */
+  .ios-nav-title {
+    @apply text-lg font-semibold text-foreground;
+    letter-spacing: -0.02em;
+  }
+
+  .ios-nav-title-large {
+    @apply text-3xl font-bold text-foreground;
+    letter-spacing: -0.03em;
+  }
+
+  /* ============ iOS TAB BAR ITEM ============ */
+  .ios-tab-item {
+    @apply flex flex-col items-center justify-center gap-0.5 py-1 px-3;
+    @apply text-muted-foreground transition-colors duration-200;
+    min-width: 64px;
+  }
+
+  .ios-tab-item.active {
+    @apply text-primary;
+  }
+
+  .ios-tab-item span {
+    @apply text-[10px] font-medium;
+  }
+}
+
+@layer utilities {
+  /* ============ iOS INTERACTION UTILITIES ============ */
+
+  /* Hover effect - subtle brightness increase */
+  .ios-hover {
+    @apply hover:brightness-105 transition-all;
+    transition-duration: var(--duration-normal);
+  }
+
+  /* Press/Active effect - scale down */
+  .ios-press {
+    @apply active:scale-[0.98] active:brightness-95 transition-transform;
+    transition-duration: var(--duration-fast);
+  }
+
+  /* Focus ring iOS style */
+  .ios-focus {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Disabled state */
+  .ios-disabled {
+    @apply disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed;
+  }
+
+  /* Combined interactive state */
+  .ios-interactive {
+    @apply ios-hover ios-press ios-focus ios-disabled cursor-pointer;
+  }
+
+  /* iOS Touch target minimum 44px */
+  .ios-touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* ============ iOS ANIMATIONS ============ */
+
+  /* Spring animation */
+  .animate-ios-spring {
+    animation: ios-spring var(--duration-slowest) var(--ease-spring);
+  }
+
+  @keyframes ios-spring {
+    0% {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* Fade in */
+  .animate-ios-fade-in {
+    animation: ios-fade-in var(--duration-slow) ease-out;
+  }
+
+  @keyframes ios-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Slide up */
+  .animate-ios-slide-up {
+    animation: ios-slide-up var(--duration-slower) var(--ease-ios);
+  }
+
+  @keyframes ios-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Push (slide left) */
+  .animate-ios-push {
+    animation: ios-push 0.35s var(--ease-ios);
+  }
+
+  @keyframes ios-push {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Float animation */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Pulse soft */
+  .animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Stagger children animation */
+  .stagger-children > * {
+    animation: ios-spring var(--duration-slowest) var(--ease-spring) backwards;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+  .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+  .stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+  .stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+
+  /* ============ SEMANTIC COLOR UTILITIES ============ */
+
+  .text-success { color: hsl(var(--success)); }
+  .text-warning { color: hsl(var(--warning)); }
+  .text-error { color: hsl(var(--error)); }
+  .text-info { color: hsl(var(--info)); }
+
+  .bg-success { background-color: hsl(var(--success)); }
+  .bg-warning { background-color: hsl(var(--warning)); }
+  .bg-error { background-color: hsl(var(--error)); }
+  .bg-info { background-color: hsl(var(--info)); }
+
+  .border-success { border-color: hsl(var(--success)); }
+  .border-warning { border-color: hsl(var(--warning)); }
+  .border-error { border-color: hsl(var(--error)); }
+  .border-info { border-color: hsl(var(--info)); }
+
+  /* ============ SHADOW UTILITIES ============ */
+
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-medium { box-shadow: var(--shadow-medium); }
+  .shadow-elevated { box-shadow: var(--shadow-elevated); }
+  .shadow-device { box-shadow: var(--shadow-device); }
+}

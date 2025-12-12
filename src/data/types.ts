@@ -94,6 +94,28 @@ export interface Tool {
   icon?: string;
 }
 
+// ============ NARRATIVE SKILLS ============
+
+export type SkillLevel = 'Expert' | 'Avancé' | 'Confirmé' | 'Intermédiaire';
+
+export interface NarrativeSkillCard {
+  id: string;
+  title: string;
+  level: SkillLevel;
+  gradient: string;
+  icon: string;
+  narrative: string;
+  highlights: string[];
+}
+
+export interface SoftSkillCard {
+  id: string;
+  title: string;
+  icon: string;
+  gradient: string;
+  narrative: string;
+}
+
 // ============ SOCIAL ============
 
 export interface SocialLink {

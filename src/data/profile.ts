@@ -17,8 +17,8 @@ export const profile: Profile = {
   availabilityText: 'Disponible pour de nouveaux projets',
   availabilityOptions: ['Freelance', 'Mission longue', 'CDI'],
   stats: [
-    { label: 'Années XP', value: '2+' },
-    { label: 'Projets', value: '8+' },
+    { label: 'Années XP', value: '3+' },
+    { label: 'Projets', value: '15+' },
     { label: 'Clients', value: '10+' },
   ],
 };

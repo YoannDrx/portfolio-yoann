@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import IPhoneFrame from "./device/iPhoneFrame";
 import TabBar from "./device/TabBar";

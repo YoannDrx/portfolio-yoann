@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * TabBar
  * Barre de navigation inférieure style iOS

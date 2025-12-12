@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import PortfolioApp from "@/components/PortfolioApp";
 import TouchIndicator from "@/components/TouchIndicator";
@@ -8,7 +10,16 @@ import { skillCategories } from "@/data/skills";
 import { experiences, education } from "@/data/resume";
 import { socialLinks } from "@/data/social";
 
-const Index = () => {
+// Icon mapping for social links
+const iconMap: Record<string, React.ReactNode> = {
+  Linkedin: <Linkedin className="w-5 h-5" />,
+  Github: <Github className="w-5 h-5" />,
+  Mail: <Mail className="w-5 h-5" />,
+  Phone: <Phone className="w-5 h-5" />,
+  Briefcase: <Briefcase className="w-5 h-5" />,
+};
+
+export default function Home() {
   const [viewMode, setViewMode] = useState<"device" | "web">("device");
   const [mounted, setMounted] = useState(false);
 
@@ -19,7 +30,7 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950">
       <TouchIndicator />
-      
+
       {/* View Mode Toggle - Desktop Only */}
       <div className="hidden lg:flex fixed top-6 right-6 z-50 items-center gap-2 p-1.5 rounded-full bg-card/80 backdrop-blur-xl shadow-soft border border-border/50">
         <button
@@ -55,9 +66,9 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse-soft" />
               <div className="absolute inset-20 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse-soft" style={{ animationDelay: "1s" }} />
             </div>
-            
+
             <PortfolioApp />
-            
+
             {/* Caption */}
             <p className="hidden lg:block text-center text-sm text-muted-foreground mt-6">
               Faites glisser pour naviguer • Cliquez sur les onglets
@@ -74,16 +85,7 @@ const Index = () => {
       )}
     </main>
   );
-};
-
-// Icon mapping for social links
-const iconMap: Record<string, React.ReactNode> = {
-  Linkedin: <Linkedin className="w-5 h-5" />,
-  Github: <Github className="w-5 h-5" />,
-  Mail: <Mail className="w-5 h-5" />,
-  Phone: <Phone className="w-5 h-5" />,
-  Briefcase: <Briefcase className="w-5 h-5" />,
-};
+}
 
 // Full Web View Component
 const WebView = () => {
@@ -327,11 +329,9 @@ const WebView = () => {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto text-center text-muted-foreground text-sm">
-          <p>© {new Date().getFullYear()} {profile.firstName} {profile.lastName}. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} {profile.firstName} {profile.lastName}. Tous droits réservés.</p>
         </div>
       </footer>
     </div>
   );
 };
-
-export default Index;
