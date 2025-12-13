@@ -329,11 +329,72 @@ const styles = StyleSheet.create({
     color: pdfColors.iosGreen,
   },
 
-  // Soft Skills
-  softSkillItem: {
-    fontSize: pdfFontSizes.xs,
+  // Soft Skills Cards
+  softSkillCard: {
+    backgroundColor: pdfColors.glass.card,
+    borderRadius: 6,
+    padding: pdfSpacing.xs,
+    marginBottom: pdfSpacing.xs,
+    borderWidth: 1,
+    borderColor: pdfColors.glass.border,
+  },
+  softSkillTitle: {
+    fontSize: 7,
+    fontWeight: 600,
     color: pdfColors.text.primary,
-    marginBottom: 3,
+  },
+
+  // Expertises
+  expertiseCard: {
+    backgroundColor: pdfColors.glass.card,
+    borderRadius: 6,
+    padding: pdfSpacing.sm,
+    marginBottom: pdfSpacing.xs,
+    borderWidth: 1,
+    borderColor: pdfColors.glass.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: pdfSpacing.sm,
+  },
+  expertiseIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  expertiseContent: {
+    flex: 1,
+  },
+  expertiseTitle: {
+    fontSize: pdfFontSizes.xs,
+    fontWeight: 600,
+    color: pdfColors.text.primary,
+  },
+  expertiseDescription: {
+    fontSize: 7,
+    color: pdfColors.text.secondary,
+    marginTop: 1,
+  },
+
+  // Intérêts
+  interestItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: pdfSpacing.xs,
+    gap: 4,
+  },
+  interestIcon: {
+    fontSize: 8,
+  },
+  interestText: {
+    fontSize: 7,
+    color: pdfColors.text.primary,
+    flex: 1,
+  },
+  interestDetail: {
+    fontSize: 6,
+    color: pdfColors.text.secondary,
   },
 });
 
@@ -481,9 +542,107 @@ const SoftSkillsSection = () => (
       <Text style={styles.sectionTitle}>Soft Skills</Text>
     </View>
     {softSkills.map((skill) => (
-      <Text key={skill.id} style={styles.softSkillItem}>
-        {skill.icon} {skill.title}
-      </Text>
+      <View key={skill.id} style={styles.softSkillCard}>
+        <Text style={styles.softSkillTitle}>
+          {skill.icon} {skill.title}
+        </Text>
+      </View>
+    ))}
+  </View>
+);
+
+// Données des expertises
+const expertises = [
+  {
+    id: 'mobile',
+    icon: '📱',
+    title: 'Apps Mobiles',
+    description: 'iOS & Android cross-platform',
+    color: pdfColors.iosBlue,
+  },
+  {
+    id: 'web',
+    icon: '🌐',
+    title: 'Apps Web',
+    description: 'React, Next.js, SSR/SSG',
+    color: pdfColors.iosPurple,
+  },
+  {
+    id: 'ux',
+    icon: '✨',
+    title: 'UX & Accessibilité',
+    description: 'Design centré utilisateur',
+    color: pdfColors.iosTeal,
+  },
+];
+
+const ExpertisesSection = () => (
+  <View style={styles.section}>
+    <View style={styles.sectionHeader}>
+      <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosPink }]}>
+        <Text style={{ color: 'white', fontSize: 10 }}>X</Text>
+      </View>
+      <Text style={styles.sectionTitle}>Expertises</Text>
+    </View>
+    <View style={{ flexDirection: 'row', gap: pdfSpacing.sm }}>
+      {expertises.map((exp) => (
+        <View key={exp.id} style={[styles.expertiseCard, { flex: 1 }]}>
+          <View style={[styles.expertiseIcon, { backgroundColor: exp.color + '20' }]}>
+            <Text style={{ fontSize: 12 }}>{exp.icon}</Text>
+          </View>
+          <View style={styles.expertiseContent}>
+            <Text style={styles.expertiseTitle}>{exp.title}</Text>
+            <Text style={styles.expertiseDescription}>{exp.description}</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  </View>
+);
+
+// Données des intérêts
+const interests = [
+  {
+    id: 'music',
+    icon: '🎸',
+    title: 'Musique',
+    detail: 'Bassiste pro, 8 ans de tournée mondiale',
+  },
+  {
+    id: 'running',
+    icon: '🏃',
+    title: 'Running',
+  },
+  {
+    id: 'nature',
+    icon: '🥾',
+    title: 'Nature & Randonnée',
+  },
+  {
+    id: 'travel',
+    icon: '✈️',
+    title: 'Voyage & Culture',
+  },
+];
+
+const InterestsSection = () => (
+  <View style={styles.section}>
+    <View style={styles.sectionHeader}>
+      <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosRed }]}>
+        <Text style={{ color: 'white', fontSize: 10 }}>I</Text>
+      </View>
+      <Text style={styles.sectionTitle}>Intérêts</Text>
+    </View>
+    {interests.map((interest) => (
+      <View key={interest.id} style={styles.interestItem}>
+        <Text style={styles.interestIcon}>{interest.icon}</Text>
+        <View>
+          <Text style={styles.interestText}>{interest.title}</Text>
+          {interest.detail && (
+            <Text style={styles.interestDetail}>{interest.detail}</Text>
+          )}
+        </View>
+      </View>
     ))}
   </View>
 );
@@ -520,16 +679,18 @@ const CVDocument = () => (
       <Header />
 
       <View style={styles.mainContainer}>
-        {/* Colonne principale - Expériences */}
+        {/* Colonne principale - Expériences & Expertises */}
         <View style={styles.mainColumn}>
           <ExperiencesSection />
+          <ExpertisesSection />
         </View>
 
-        {/* Sidebar - Compétences, Formation, Soft Skills */}
+        {/* Sidebar - Compétences, Formation, Soft Skills, Intérêts */}
         <View style={styles.sidebar}>
           <SkillsSection />
           <EducationSection />
           <SoftSkillsSection />
+          <InterestsSection />
         </View>
       </View>
 
