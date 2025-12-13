@@ -29,6 +29,16 @@ const iconMap: Record<string, React.FC<{ className?: string }>> = {
   Briefcase,
 };
 
+// Couleurs de marque pour chaque icône
+const brandColors: Record<string, string> = {
+  linkedin: 'text-[#0A66C2]', // LinkedIn Blue
+  github: 'text-zinc-800 dark:text-zinc-200',
+  malt: 'text-[#FC5757]', // Malt Red
+  email: 'text-emerald-500',
+  phone: 'text-violet-500',
+  twitter: 'text-[#1DA1F2]',
+};
+
 const ContactScreen = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -90,13 +100,12 @@ const ContactScreen = () => {
           subtitle={uiTexts.stats.discussProject}
         />
 
-        {/* Social Links - Taille réduite et couleurs atténuées */}
+        {/* Social Links - Icônes colorées sur fond glass */}
         <div className="px-5 mb-6">
           <div className="flex justify-center gap-4">
             {socialLinks.map((link) => {
               const Icon = iconMap[link.icon];
-              // Atténuer les couleurs en ajoutant de l'opacité
-              const attenuatedColor = link.color.replace('bg-', 'bg-').replace('-600', '-500/80').replace('-500', '-500/80');
+              const iconColor = brandColors[link.id] || 'text-foreground';
               return (
                 <a
                   key={link.id}
@@ -106,32 +115,22 @@ const ContactScreen = () => {
                   className="group relative"
                   aria-label={link.name}
                 >
-                  {/* Background réduit (11 = 44px touch target) avec couleurs atténuées */}
                   <div
                     className={`
-                      w-11 h-11 rounded-xl ${attenuatedColor}
+                      w-12 h-12 rounded-2xl
+                      bg-card/80 backdrop-blur-sm
+                      border border-border/50
                       flex items-center justify-center
-                      shadow-md
+                      shadow-sm
                       transform transition-all duration-200 ease-out
-                      group-hover:scale-105 group-hover:shadow-lg
-                      group-hover:-translate-y-0.5
+                      group-hover:scale-110 group-hover:shadow-lg
+                      group-hover:-translate-y-1
+                      group-hover:border-border
                       group-active:scale-95
                     `}
                   >
-                    {Icon && <Icon className="w-5 h-5 text-white" />}
+                    {Icon && <Icon className={`w-6 h-6 ${iconColor} transition-transform duration-200 group-hover:scale-110`} />}
                   </div>
-                  {/* Tooltip avec nom */}
-                  <span
-                    className="
-                      absolute -bottom-6 left-1/2 -translate-x-1/2
-                      text-[10px] font-medium text-muted-foreground
-                      opacity-0 group-hover:opacity-100
-                      transition-opacity duration-200
-                      whitespace-nowrap
-                    "
-                  >
-                    {link.name}
-                  </span>
                 </a>
               );
             })}
