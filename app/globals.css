@@ -184,11 +184,15 @@
 @layer components {
   /* ============ iOS GLASS CARD ============ */
   .glass-card {
-    @apply relative overflow-hidden rounded-2xl;
+    @apply relative overflow-hidden rounded-2xl transition-colors duration-200;
     background: hsl(var(--glass-bg));
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid hsl(var(--glass-border));
+  }
+
+  .glass-card:hover {
+    border-color: hsl(var(--primary) / 0.6);
   }
 
   /* ============ iOS SEPARATOR ============ */

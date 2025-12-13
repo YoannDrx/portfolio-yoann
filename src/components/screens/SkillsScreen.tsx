@@ -109,13 +109,15 @@ const AICardCompact = ({ onPress }: { onPress: () => void }) => (
 // Vue détaillée d'une compétence technique
 const TechSkillDetail = ({
   skill,
-  onBack
+  onBack,
+  hideStatusBar = false
 }: {
   skill: NarrativeSkillCard;
   onBack: () => void;
+  hideStatusBar?: boolean;
 }) => (
   <div className="h-full bg-secondary flex flex-col animate-ios-push">
-    <StatusBar />
+    {!hideStatusBar && <StatusBar />}
 
     {/* Back Button */}
     <div className="px-5 pt-2 pb-4">
@@ -170,13 +172,15 @@ const TechSkillDetail = ({
 // Vue détaillée d'un soft skill
 const SoftSkillDetail = ({
   skill,
-  onBack
+  onBack,
+  hideStatusBar = false
 }: {
   skill: SoftSkillCard;
   onBack: () => void;
+  hideStatusBar?: boolean;
 }) => (
   <div className="h-full bg-secondary flex flex-col animate-ios-push">
-    <StatusBar />
+    {!hideStatusBar && <StatusBar />}
 
     {/* Back Button */}
     <div className="px-5 pt-2 pb-4">
@@ -208,9 +212,9 @@ const SoftSkillDetail = ({
 );
 
 // Vue détaillée de la section IA
-const AIDetail = ({ onBack }: { onBack: () => void }) => (
+const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideStatusBar?: boolean }) => (
   <div className="h-full bg-secondary flex flex-col animate-ios-push">
-    <StatusBar />
+    {!hideStatusBar && <StatusBar />}
 
     {/* Back Button */}
     <div className="px-5 pt-2 pb-4">
@@ -274,26 +278,30 @@ const AIDetail = ({ onBack }: { onBack: () => void }) => (
   </div>
 );
 
-const SkillsScreen = () => {
+interface SkillsScreenProps {
+  hideStatusBar?: boolean;
+}
+
+const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
   const [selectedSkill, setSelectedSkill] = useState<SelectedSkill | null>(null);
 
   // Vue détaillée
   if (selectedSkill) {
     if (selectedSkill.type === 'technical') {
-      return <TechSkillDetail skill={selectedSkill.skill} onBack={() => setSelectedSkill(null)} />;
+      return <TechSkillDetail skill={selectedSkill.skill} onBack={() => setSelectedSkill(null)} hideStatusBar={hideStatusBar} />;
     }
     if (selectedSkill.type === 'soft') {
-      return <SoftSkillDetail skill={selectedSkill.skill} onBack={() => setSelectedSkill(null)} />;
+      return <SoftSkillDetail skill={selectedSkill.skill} onBack={() => setSelectedSkill(null)} hideStatusBar={hideStatusBar} />;
     }
     if (selectedSkill.type === 'ai') {
-      return <AIDetail onBack={() => setSelectedSkill(null)} />;
+      return <AIDetail onBack={() => setSelectedSkill(null)} hideStatusBar={hideStatusBar} />;
     }
   }
 
   // Vue liste
   return (
     <div className="h-full bg-secondary flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}

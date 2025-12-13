@@ -5,14 +5,19 @@ import Image from "next/image";
 import PortfolioApp from "@/components/PortfolioApp";
 import TouchIndicator from "@/components/TouchIndicator";
 import PDFDownloadButton from "@/components/pdf/PDFDownloadButton";
+import { useIsRealMobile } from "@/hooks/use-mobile";
 import {
   IOSCard,
   IOSButton,
   IOSBadge,
   IOSChip,
   IOSAvailabilityBadge,
+  IOSInput,
+  IOSTextarea,
 } from "@/components/ios";
-import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase, Download, FileText } from "lucide-react";
+import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase, Download, FileText, Send, CheckCircle } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { uiTexts } from "@/data";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { skillCategories } from "@/data/skills";
@@ -30,12 +35,22 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export default function Home() {
+  const isRealMobile = useIsRealMobile();
   const [viewMode, setViewMode] = useState<"device" | "web">("device");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Mobile réel → fullscreen automatique (pas de cadre iPhone)
+  if (mounted && isRealMobile) {
+    return (
+      <main className="min-h-screen bg-background">
+        <PortfolioApp showFrame={false} />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950">
@@ -97,6 +112,118 @@ export default function Home() {
   );
 }
 
+// Contact Form Component
+const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        toast({
+          title: uiTexts.messages.messageSent,
+          description: uiTexts.messages.messageSentDescription,
+        });
+
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({ name: '', email: '', message: '' });
+        }, 3000);
+      } else {
+        const data = await response.json();
+        toast({
+          title: 'Erreur',
+          description: data.error || 'Une erreur est survenue',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: "Impossible d'envoyer le message",
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <IOSCard variant="glass" padding="lg">
+      <h3 className="text-lg font-semibold text-foreground mb-4">
+        {uiTexts.sections.sendMessage}
+      </h3>
+
+      {isSubmitted ? (
+        <div className="py-8 text-center animate-ios-spring">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
+            <CheckCircle className="w-8 h-8 text-green-500" />
+          </div>
+          <p className="font-semibold text-foreground">
+            {uiTexts.messages.messageSent}
+          </p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {uiTexts.messages.willReplyShort}
+          </p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <IOSInput
+            type="text"
+            label={uiTexts.form.name}
+            placeholder={uiTexts.form.namePlaceholder}
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+
+          <IOSInput
+            type="email"
+            label={uiTexts.form.email}
+            placeholder={uiTexts.form.emailPlaceholder}
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+          />
+
+          <IOSTextarea
+            label={uiTexts.form.message}
+            placeholder={uiTexts.form.messagePlaceholder}
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            rows={4}
+            required
+          />
+
+          <IOSButton
+            type="submit"
+            fullWidth
+            isLoading={isSubmitting}
+            leftIcon={<Send className="w-5 h-5" />}
+          >
+            {uiTexts.buttons.send}
+          </IOSButton>
+        </form>
+      )}
+    </IOSCard>
+  );
+};
+
 // Full Web View Component
 const WebView = () => {
   return (
@@ -110,16 +237,16 @@ const WebView = () => {
 
         <div className="relative z-10 max-w-4xl mx-auto text-center stagger-children">
           {/* Avatar */}
-          <div className="relative mx-auto w-32 h-32 mb-8">
-            <div className="absolute -inset-4 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
-            <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-medium border-4 border-background">
+          <div className="relative mx-auto w-40 h-40 mb-8">
+            <div className="absolute -inset-5 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
+            <div className="relative w-40 h-40 rounded-full overflow-hidden shadow-medium border-4 border-background">
               <Image
                 src={profile.avatar}
                 alt={`${profile.firstName} ${profile.lastName}`}
                 fill
                 className="object-cover"
                 priority
-                sizes="128px"
+                sizes="160px"
               />
             </div>
           </div>
@@ -364,49 +491,64 @@ const WebView = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-foreground mb-4">Travaillons ensemble</h2>
-          <p className="text-muted-foreground mb-8">
-            Vous avez un projet mobile ou web en tête ? Discutons-en !
-          </p>
+      <section id="contact" className="py-20 px-6 bg-secondary">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            {/* Gauche: Titre, sous-titre, icônes */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-4xl font-bold text-foreground mb-3">Travaillons ensemble</h2>
+                <p className="text-muted-foreground text-lg">
+                  Vous avez un projet de Saas, mobile ou web en tête ?<br />
+                  Discutons-en !
+                </p>
+              </div>
 
-          {profile.isAvailable && (
-            <div className="flex justify-center mb-8">
-              <IOSAvailabilityBadge
-                text={profile.availabilityText}
-                variant="prominent"
-                status="available"
-                animated
-              />
+              {profile.isAvailable && (
+                <IOSAvailabilityBadge
+                  text={profile.availabilityText}
+                  variant="prominent"
+                  status="available"
+                  animated
+                />
+              )}
+
+              <div className="flex flex-wrap gap-3">
+                {socialLinks.map((link) => {
+                  const brandColors: Record<string, string> = {
+                    linkedin: 'bg-[#0A66C2]',
+                    github: 'bg-zinc-800 dark:bg-zinc-700',
+                    malt: 'bg-[#FC5757]',
+                    email: 'bg-emerald-500',
+                    phone: 'bg-violet-500',
+                  };
+                  const bgColor = brandColors[link.id] || link.color;
+                  return (
+                    <a
+                      key={link.id}
+                      href={link.href}
+                      target={link.href.startsWith('http') ? '_blank' : undefined}
+                      rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className={`w-12 h-12 rounded-xl ${bgColor} text-white flex items-center justify-center hover:opacity-90 hover:scale-110 hover:-translate-y-0.5 transition-all duration-200`}
+                      title={link.name}
+                    >
+                      {iconMap[link.icon]}
+                    </a>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {profile.availabilityOptions?.map((option) => (
+                  <IOSChip key={option} variant="availability" size="md">
+                    {option}
+                  </IOSChip>
+                ))}
+              </div>
             </div>
-          )}
 
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {socialLinks.map((link) => {
-              // Atténuer les couleurs
-              const attenuatedColor = link.color.replace('-600', '-500/80').replace('-500', '-500/80');
-              return (
-                <a
-                  key={link.id}
-                  href={link.href}
-                  target={link.href.startsWith('http') ? '_blank' : undefined}
-                  rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-xl ${attenuatedColor} text-white font-medium hover:opacity-90 hover:scale-105 hover:-translate-y-0.5 transition-all duration-200`}
-                >
-                  {iconMap[link.icon]}
-                  {link.name}
-                </a>
-              );
-            })}
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-2">
-            {profile.availabilityOptions?.map((option) => (
-              <IOSChip key={option} variant="availability" size="md">
-                {option}
-              </IOSChip>
-            ))}
+            {/* Droite: Formulaire */}
+            <ContactForm />
           </div>
         </div>
       </section>
@@ -417,11 +559,7 @@ const WebView = () => {
           <p className="text-muted-foreground text-sm">
             &copy; {new Date().getFullYear()} {profile.firstName} {profile.lastName}. Tous droits réservés.
           </p>
-          <div className="flex items-center gap-4">
-            <PDFDownloadButton />
-            <span className="text-muted-foreground text-sm">|</span>
-            <span className="text-muted-foreground text-sm">Construit avec Next.js & React</span>
-          </div>
+          <PDFDownloadButton />
         </div>
       </footer>
     </div>

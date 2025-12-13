@@ -39,7 +39,11 @@ const brandColors: Record<string, string> = {
   twitter: 'text-[#1DA1F2]',
 };
 
-const ContactScreen = () => {
+interface ContactScreenProps {
+  hideStatusBar?: boolean;
+}
+
+const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -91,7 +95,7 @@ const ContactScreen = () => {
 
   return (
     <div className="h-full bg-secondary flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}

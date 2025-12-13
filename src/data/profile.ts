@@ -14,7 +14,7 @@ export const profile: Profile = {
   bio: "Développeur Frontend React passionné par l'UI/UX et le sens du détail. Mon parcours atypique, enrichi par plusieurs années de management, m'a appris à allier rigueur technique, empathie et efficacité. J'aide les entrepreneurs à transformer leurs idées en applications solides, utiles et centrées sur l'expérience utilisateur.",
   avatar: '/images/avatar.jpg',
   isAvailable: true,
-  availabilityText: 'Disponible pour de nouveaux projets',
+  availabilityText: 'Disponible immédiatement',
   availabilityOptions: ['CDI', 'Freelance', 'Mission longue'],
   stats: [
     { label: 'Années XP', value: '3+' },

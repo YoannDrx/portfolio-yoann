@@ -32,20 +32,21 @@ const getProjectTypeColor = (type: ProjectType) => {
 
 interface ProjectsScreenProps {
   onNavigate: (tab: string) => void;
+  hideStatusBar?: boolean;
 }
 
-const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
+const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenProps) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   if (selectedProject) {
     return (
-      <ProjectDetail project={selectedProject} onBack={() => setSelectedProject(null)} />
+      <ProjectDetail project={selectedProject} onBack={() => setSelectedProject(null)} hideStatusBar={hideStatusBar} />
     );
   }
 
   return (
     <div className="h-full bg-secondary flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}
@@ -146,12 +147,13 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
+  hideStatusBar?: boolean;
 }
 
-const ProjectDetail = ({ project, onBack }: ProjectDetailProps) => {
+const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetailProps) => {
   return (
     <div className="h-full bg-secondary flex flex-col animate-ios-push">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       {/* Back Button - Added padding bottom */}
       <div className="px-5 pt-2 pb-4">

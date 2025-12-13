@@ -25,6 +25,7 @@ interface TabBarProps {
   onTabChange: (tab: string) => void;
   tabs?: TabItem[];
   variant?: 'default' | 'floating';
+  isFullscreen?: boolean;
 }
 
 const TabBar: React.FC<TabBarProps> = ({
@@ -32,12 +33,13 @@ const TabBar: React.FC<TabBarProps> = ({
   onTabChange,
   tabs = defaultTabs,
   variant = 'default',
+  isFullscreen = false,
 }) => {
   return (
     <div
       className={cn(
-        'absolute bottom-0 left-0 right-0 z-40',
-        'bg-background'
+        'left-0 right-0 z-40 bg-background',
+        isFullscreen ? 'fixed bottom-0' : 'absolute bottom-0'
       )}
     >
       {/* Border top */}

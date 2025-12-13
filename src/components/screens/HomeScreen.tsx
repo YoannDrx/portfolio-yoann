@@ -14,12 +14,13 @@ import { profile, navigationItems } from '@/data';
 
 interface HomeScreenProps {
   onNavigate: (tab: string) => void;
+  hideStatusBar?: boolean;
 }
 
-const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
+const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
   return (
     <div className="h-full bg-background flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto px-5 pb-32">
         {/* Hero Section */}
@@ -29,16 +30,16 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
             <div className="flex justify-center mb-6">
               <div className="relative">
                 {/* Glow effect */}
-                <div className="absolute -inset-4 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
+                <div className="absolute -inset-5 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
                 {/* Avatar avec bordure blanche - Next/Image optimisé */}
-                <div className="relative w-28 h-28 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                <div className="relative w-36 h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
                   <Image
                     src={profile.avatar}
                     alt={`${profile.firstName} ${profile.lastName}`}
                     fill
                     className="object-cover"
                     priority
-                    sizes="112px"
+                    sizes="144px"
                   />
                 </div>
                 {/* Badge disponible */}

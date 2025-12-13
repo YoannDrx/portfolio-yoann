@@ -44,13 +44,17 @@ const getEmploymentTypeColor = (type: string) => {
   return colors[type] || 'bg-gray-500/20 text-gray-600';
 };
 
-const ResumeScreen = () => {
+interface ResumeScreenProps {
+  hideStatusBar?: boolean;
+}
+
+const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
   // Filtrer les expériences de développement (les 9 premières, sans Cyclofix)
   const devExperiences = experiences.slice(0, 9);
 
   return (
     <div className="h-full bg-secondary flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}

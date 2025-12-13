@@ -93,14 +93,14 @@ const styles = StyleSheet.create({
     borderColor: pdfColors.glass.border,
   },
   avatarContainer: {
-    width: 70,
-    height: 70,
+    width: 85,
+    height: 85,
     marginRight: pdfSpacing.lg,
   },
   avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 85,
+    height: 85,
+    borderRadius: 43,
     objectFit: 'cover',
   },
   headerInfo: {
