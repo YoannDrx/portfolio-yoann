@@ -45,3 +45,6 @@ export { socialLinks, getSocialLinkById, getContactEmail } from './social';
 
 // Config
 export { siteConfig, uiTexts } from './config';
+
+// AI Content
+export { aiContent, type AIContent, type AITool } from './ai';

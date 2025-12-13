@@ -3,21 +3,24 @@
 /**
  * HomeScreen
  * Écran d'accueil du portfolio avec présentation et navigation
+ * Design System Apple iOS - Mobile-first avec animations spring
  */
 
+import Image from 'next/image';
 import { Sparkles } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
-import { IOSCard, IOSListItem, IOSBadge } from '../ios';
+import { IOSCard, IOSListItem, IOSAvailabilityBadge, IOSChip } from '../ios';
 import { profile, navigationItems } from '@/data';
 
 interface HomeScreenProps {
   onNavigate: (tab: string) => void;
+  hideStatusBar?: boolean;
 }
 
-const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
+const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
   return (
     <div className="h-full bg-background flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto px-5 pb-32">
         {/* Hero Section */}
@@ -27,19 +30,24 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
             <div className="flex justify-center mb-6">
               <div className="relative">
                 {/* Glow effect */}
-                <div className="absolute -inset-4 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
-                {/* Avatar avec bordure blanche */}
-                <div className="relative w-28 h-28 rounded-full border-4 border-white shadow-lg overflow-hidden">
-                  <img
+                <div className="absolute -inset-5 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
+                {/* Avatar avec bordure blanche - Next/Image optimisé */}
+                <div className="relative w-36 h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                  <Image
                     src={profile.avatar}
                     alt={`${profile.firstName} ${profile.lastName}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="144px"
                   />
                 </div>
                 {/* Badge disponible */}
-                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1.5 border-2 border-white shadow-md">
-                  <Sparkles className="w-3.5 h-3.5 text-white" />
-                </div>
+                {profile.isAvailable && (
+                  <div className="absolute -bottom-1 -right-1 bg-success rounded-full p-1.5 border-2 border-white shadow-md">
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -97,12 +105,31 @@ const HomeScreen = ({ onNavigate }: HomeScreenProps) => {
           ))}
         </div>
 
-        {/* Availability Badge */}
+        {/* Availability Section - Redesigned */}
         {profile.isAvailable && (
-          <div className="mt-8 flex justify-center">
-            <IOSBadge variant="success" size="lg" dot className="px-4 py-2">
-              {profile.availabilityText}
-            </IOSBadge>
+          <div className="mt-8 space-y-4 stagger-children">
+            {/* Main availability badge */}
+            <div className="flex justify-center">
+              <IOSAvailabilityBadge
+                text={profile.availabilityText}
+                variant="prominent"
+                status="available"
+                animated
+              />
+            </div>
+
+            {/* Availability tags (CDI, Freelance, Mission longue) */}
+            <div className="flex justify-center gap-2 flex-wrap">
+              {profile.availabilityOptions?.map((option) => (
+                <IOSChip
+                  key={option}
+                  variant="availability"
+                  size="sm"
+                >
+                  {option}
+                </IOSChip>
+              ))}
+            </div>
           </div>
         )}
       </div>

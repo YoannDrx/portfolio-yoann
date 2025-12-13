@@ -1,6 +1,7 @@
 /**
  * IOSCard
  * Carte style iOS avec variants glassmorphism/elevated/flat
+ * Design System Apple iOS - Glassmorphism premium et animations spring
  */
 
 import * as React from 'react';
@@ -28,14 +29,34 @@ const iosCardVariants = cva(
         glass: [
           'glass-card',
         ],
+        // Premium glassmorphism effect
+        frosted: [
+          'bg-white/60 dark:bg-black/40',
+          'backdrop-blur-xl',
+          'border border-white/30 dark:border-white/10',
+          'shadow-[0_8px_32px_-8px_rgba(0,0,0,0.1),inset_0_1px_0_0_rgba(255,255,255,0.4)]',
+          'dark:shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.1)]',
+        ],
+        // Gradient border card
+        gradient: [
+          'bg-card',
+          'border-0',
+          'before:absolute before:inset-0 before:rounded-[inherit] before:p-[1px]',
+          'before:bg-gradient-to-br before:from-primary/50 before:to-primary/10',
+          'before:-z-10',
+          'shadow-soft',
+        ],
       },
       padding: {
         none: 'p-0',
+        xs: 'p-2',
         sm: 'p-3',
         md: 'p-4',
         lg: 'p-6',
+        xl: 'p-8',
       },
       rounded: {
+        none: 'rounded-none',
         sm: 'rounded-xl',
         md: 'rounded-2xl',
         lg: 'rounded-3xl',
@@ -45,11 +66,19 @@ const iosCardVariants = cva(
         true: [
           'cursor-pointer',
           'transition-all duration-200',
-          'hover:brightness-105',
+          'hover:brightness-[1.02]',
           'hover:shadow-medium',
+          'hover:-translate-y-0.5',
           'active:scale-[0.98]',
           'active:brightness-95',
+          'active:translate-y-0',
+          'motion-safe:transition-transform motion-safe:duration-150',
         ],
+        false: '',
+      },
+      // Animation d'entrée
+      animated: {
+        true: 'animate-ios-spring',
         false: '',
       },
     },
@@ -58,6 +87,7 @@ const iosCardVariants = cva(
       padding: 'md',
       rounded: 'md',
       interactive: false,
+      animated: false,
     },
   }
 );
@@ -72,6 +102,7 @@ const IOSCard = React.forwardRef<HTMLDivElement, IOSCardProps & IOSCardVariantPr
       padding,
       rounded,
       interactive,
+      animated,
       header,
       footer,
       children,
@@ -89,9 +120,12 @@ const IOSCard = React.forwardRef<HTMLDivElement, IOSCardProps & IOSCardVariantPr
     const isInteractive = interactive || !!onPress || !!onClick;
 
     const getPaddingClass = () => {
-      if (padding === 'none') return '';
-      if (padding === 'sm') return 'p-3';
-      if (padding === 'lg') return 'p-6';
+      const paddingValue = padding as string;
+      if (paddingValue === 'none') return '';
+      if (paddingValue === 'xs') return 'p-2';
+      if (paddingValue === 'sm') return 'p-3';
+      if (paddingValue === 'lg') return 'p-6';
+      if (paddingValue === 'xl') return 'p-8';
       return 'p-4';
     };
 
@@ -104,6 +138,7 @@ const IOSCard = React.forwardRef<HTMLDivElement, IOSCardProps & IOSCardVariantPr
             padding: header || footer ? 'none' : padding,
             rounded,
             interactive: isInteractive,
+            animated,
           }),
           className
         )}

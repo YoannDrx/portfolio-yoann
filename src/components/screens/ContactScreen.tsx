@@ -29,7 +29,21 @@ const iconMap: Record<string, React.FC<{ className?: string }>> = {
   Briefcase,
 };
 
-const ContactScreen = () => {
+// Couleurs de marque pour chaque icône
+const brandColors: Record<string, string> = {
+  linkedin: 'text-[#0A66C2]', // LinkedIn Blue
+  github: 'text-zinc-800 dark:text-zinc-200',
+  malt: 'text-[#FC5757]', // Malt Red
+  email: 'text-emerald-500',
+  phone: 'text-violet-500',
+  twitter: 'text-[#1DA1F2]',
+};
+
+interface ContactScreenProps {
+  hideStatusBar?: boolean;
+}
+
+const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -81,7 +95,7 @@ const ContactScreen = () => {
 
   return (
     <div className="h-full bg-secondary flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}
@@ -90,11 +104,12 @@ const ContactScreen = () => {
           subtitle={uiTexts.stats.discussProject}
         />
 
-        {/* Social Links - Nouveau design avec hover effects */}
+        {/* Social Links - Icônes colorées sur fond glass */}
         <div className="px-5 mb-6">
-          <div className="flex justify-center gap-3">
+          <div className="flex justify-center gap-4">
             {socialLinks.map((link) => {
               const Icon = iconMap[link.icon];
+              const iconColor = brandColors[link.id] || 'text-foreground';
               return (
                 <a
                   key={link.id}
@@ -104,34 +119,22 @@ const ContactScreen = () => {
                   className="group relative"
                   aria-label={link.name}
                 >
-                  {/* Background avec gradient et hover effect */}
                   <div
                     className={`
-                      w-14 h-14 rounded-2xl ${link.color}
+                      w-12 h-12 rounded-2xl
+                      bg-card/80 backdrop-blur-sm
+                      border border-border/50
                       flex items-center justify-center
-                      shadow-lg
-                      transform transition-all duration-300 ease-out
-                      group-hover:scale-110 group-hover:shadow-xl
+                      shadow-sm
+                      transform transition-all duration-200 ease-out
+                      group-hover:scale-110 group-hover:shadow-lg
                       group-hover:-translate-y-1
+                      group-hover:border-border
                       group-active:scale-95
                     `}
                   >
-                    {Icon && <Icon className="w-6 h-6 text-white transition-transform duration-300 group-hover:scale-110" />}
+                    {Icon && <Icon className={`w-6 h-6 ${iconColor} transition-transform duration-200 group-hover:scale-110`} />}
                   </div>
-                  {/* Tooltip avec nom */}
-                  <span
-                    className="
-                      absolute -bottom-7 left-1/2 -translate-x-1/2
-                      text-[10px] font-medium text-muted-foreground
-                      opacity-0 group-hover:opacity-100
-                      transition-opacity duration-200
-                      whitespace-nowrap
-                      bg-background/80 backdrop-blur-sm
-                      px-2 py-0.5 rounded-full
-                    "
-                  >
-                    {link.name}
-                  </span>
                 </a>
               );
             })}

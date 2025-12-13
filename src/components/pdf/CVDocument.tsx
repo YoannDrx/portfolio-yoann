@@ -10,18 +10,12 @@ import {
   Text,
   Image,
   StyleSheet,
-  Font,
   Link,
 } from '@react-pdf/renderer';
 import { profile } from '@/data/profile';
 import { experiences, education } from '@/data/resume';
 import { technicalSkills, softSkills } from '@/data/skills';
-import { socialLinks } from '@/data/social';
 import { pdfColors, pdfFontSizes, pdfSpacing } from './styles/pdfTheme';
-
-// Utilisation de Helvetica (police intégrée, toujours disponible)
-// Note: @react-pdf/renderer ne supporte que TTF/OTF, pas woff2
-// Helvetica est une police professionnelle parfaite pour un CV
 
 // Helpers
 const getEmploymentTypeLabel = (type: string) => {
@@ -44,8 +38,9 @@ const getBadgeColors = (type: string) => {
   );
 };
 
-const getLevelStars = (level: string) => {
-  const levels: Record<string, number> = {
+const getLevelStars = (level: string, skillId?: string) => {
+  // Override pour React Native : +1 point
+  const baseLevel: Record<string, number> = {
     Expert: 5,
     Avance: 4,
     Avancé: 4,
@@ -54,11 +49,28 @@ const getLevelStars = (level: string) => {
     Intermediaire: 2,
     Intermédiaire: 2,
   };
-  return levels[level] || 3;
+  const stars = baseLevel[level] || 3;
+  // React Native : ajouter 1 point
+  if (skillId === 'react-native') return Math.min(stars + 1, 5);
+  return stars;
 };
 
-// Sélection des 5 expériences clés pour le CV 1 page
-const selectedExperiences = experiences.slice(0, 5);
+// Sélection des 7 expériences clés pour le CV 1 page
+const selectedExperiences = experiences.slice(0, 7);
+
+// Langues
+const languages = [
+  { id: 'fr', name: 'Français', level: 'Natif' },
+  { id: 'en', name: 'Anglais', level: 'Professionnel' },
+];
+
+// Intérêts
+const interests = [
+  { id: 'music', title: 'Musique', detail: 'Bassiste pro' },
+  { id: 'running', title: 'Running' },
+  { id: 'nature', title: 'Nature & randonnée' },
+  { id: 'travel', title: 'Voyage & culture' },
+];
 
 // Styles
 const styles = StyleSheet.create({
@@ -73,7 +85,7 @@ const styles = StyleSheet.create({
   // Header
   header: {
     flexDirection: 'row',
-    marginBottom: pdfSpacing.lg,
+    marginBottom: pdfSpacing.md,
     backgroundColor: pdfColors.glass.card,
     borderRadius: 12,
     padding: pdfSpacing.lg,
@@ -81,14 +93,14 @@ const styles = StyleSheet.create({
     borderColor: pdfColors.glass.border,
   },
   avatarContainer: {
-    width: 70,
-    height: 70,
+    width: 85,
+    height: 85,
     marginRight: pdfSpacing.lg,
   },
   avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 85,
+    height: 85,
+    borderRadius: 43,
     objectFit: 'cover',
   },
   headerInfo: {
@@ -184,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: pdfColors.glass.card,
     borderRadius: 8,
     padding: pdfSpacing.sm,
-    marginBottom: pdfSpacing.sm,
+    marginBottom: pdfSpacing.xs,
     borderWidth: 1,
     borderColor: pdfColors.glass.border,
   },
@@ -192,7 +204,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 3,
+    marginBottom: 2,
   },
   companyName: {
     fontSize: pdfFontSizes.sm,
@@ -208,7 +220,7 @@ const styles = StyleSheet.create({
   experienceMeta: {
     flexDirection: 'row',
     gap: pdfSpacing.md,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   metaText: {
     fontSize: pdfFontSizes.xs,
@@ -290,6 +302,65 @@ const styles = StyleSheet.create({
     color: pdfColors.iosPurple,
   },
 
+  // Soft Skills (cards dans colonne principale)
+  softSkillsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: pdfSpacing.sm,
+  },
+  softSkillCard: {
+    width: '48%',
+    backgroundColor: pdfColors.glass.card,
+    borderRadius: 8,
+    padding: pdfSpacing.sm,
+    borderWidth: 1,
+    borderColor: pdfColors.glass.border,
+  },
+  softSkillHeader: {
+    marginBottom: 4,
+  },
+  softSkillTitle: {
+    fontSize: pdfFontSizes.xs,
+    fontWeight: 600,
+    color: pdfColors.text.primary,
+  },
+  softSkillNarrative: {
+    fontSize: 6,
+    color: pdfColors.text.secondary,
+    lineHeight: 1.35,
+  },
+
+  // Languages
+  languageItem: {
+    marginBottom: 4,
+  },
+  languageName: {
+    fontSize: pdfFontSizes.xs,
+    fontWeight: 600,
+    color: pdfColors.text.primary,
+  },
+  languageLevel: {
+    fontSize: pdfFontSizes.xs,
+    fontWeight: 400,
+    color: pdfColors.text.secondary,
+  },
+
+  // Interests
+  interestItem: {
+    marginBottom: 4,
+  },
+  interestTitle: {
+    fontSize: pdfFontSizes.xs,
+    fontWeight: 600,
+    color: pdfColors.text.primary,
+  },
+  interestDetail: {
+    fontSize: pdfFontSizes.xs,
+    fontWeight: 400,
+    color: pdfColors.text.secondary,
+    marginTop: 1,
+  },
+
   // Footer
   footer: {
     flexDirection: 'row',
@@ -328,13 +399,6 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     color: pdfColors.iosGreen,
   },
-
-  // Soft Skills
-  softSkillItem: {
-    fontSize: pdfFontSizes.xs,
-    color: pdfColors.text.primary,
-    marginBottom: 3,
-  },
 });
 
 // Composants
@@ -365,9 +429,7 @@ const Header = () => (
         ))}
       </View>
 
-      <Text style={styles.bio}>
-        {profile.bio.substring(0, 140)}...
-      </Text>
+      <Text style={styles.bio}>{profile.bio}</Text>
     </View>
   </View>
 );
@@ -425,6 +487,27 @@ const ExperiencesSection = () => (
   </View>
 );
 
+const SoftSkillsSection = () => (
+  <View style={styles.section}>
+    <View style={styles.sectionHeader}>
+      <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosOrange }]}>
+        <Text style={{ color: 'white', fontSize: 10 }}>S</Text>
+      </View>
+      <Text style={styles.sectionTitle}>Soft Skills</Text>
+    </View>
+    <View style={styles.softSkillsGrid}>
+      {softSkills.map((skill) => (
+        <View key={skill.id} style={styles.softSkillCard}>
+          <View style={styles.softSkillHeader}>
+            <Text style={styles.softSkillTitle}>{skill.title}</Text>
+          </View>
+          <Text style={styles.softSkillNarrative}>{skill.narrative}</Text>
+        </View>
+      ))}
+    </View>
+  </View>
+);
+
 const SkillsSection = () => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
@@ -434,7 +517,7 @@ const SkillsSection = () => (
       <Text style={styles.sectionTitle}>Compétences</Text>
     </View>
     {technicalSkills.map((skill) => {
-      const stars = getLevelStars(skill.level);
+      const stars = getLevelStars(skill.level, skill.id);
       return (
         <View key={skill.id} style={styles.skillItem}>
           <Text style={styles.skillName}>{skill.title}</Text>
@@ -472,18 +555,37 @@ const EducationSection = () => (
   </View>
 );
 
-const SoftSkillsSection = () => (
+const LanguagesSection = () => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
-      <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosOrange }]}>
-        <Text style={{ color: 'white', fontSize: 10 }}>S</Text>
+      <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosIndigo }]}>
+        <Text style={{ color: 'white', fontSize: 10 }}>L</Text>
       </View>
-      <Text style={styles.sectionTitle}>Soft Skills</Text>
+      <Text style={styles.sectionTitle}>Langues</Text>
     </View>
-    {softSkills.map((skill) => (
-      <Text key={skill.id} style={styles.softSkillItem}>
-        {skill.icon} {skill.title}
-      </Text>
+    {languages.map((lang) => (
+      <View key={lang.id} style={styles.languageItem}>
+        <Text style={styles.languageName}>
+          {lang.name} <Text style={styles.languageLevel}>• {lang.level}</Text>
+        </Text>
+      </View>
+    ))}
+  </View>
+);
+
+const InterestsSection = () => (
+  <View style={styles.section}>
+    <View style={styles.sectionHeader}>
+      <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosPink }]}>
+        <Text style={{ color: 'white', fontSize: 10 }}>I</Text>
+      </View>
+      <Text style={styles.sectionTitle}>Intérêts</Text>
+    </View>
+    {interests.map((interest) => (
+      <View key={interest.id} style={styles.interestItem}>
+        <Text style={styles.interestTitle}>{interest.title}</Text>
+        {interest.detail && <Text style={styles.interestDetail}>{interest.detail}</Text>}
+      </View>
     ))}
   </View>
 );
@@ -520,16 +622,18 @@ const CVDocument = () => (
       <Header />
 
       <View style={styles.mainContainer}>
-        {/* Colonne principale - Expériences */}
+        {/* Colonne principale - Expériences + Soft Skills */}
         <View style={styles.mainColumn}>
           <ExperiencesSection />
+          <SoftSkillsSection />
         </View>
 
-        {/* Sidebar - Compétences, Formation, Soft Skills */}
+        {/* Sidebar - Compétences, Formation, Langues, Intérêts */}
         <View style={styles.sidebar}>
           <SkillsSection />
           <EducationSection />
-          <SoftSkillsSection />
+          <LanguagesSection />
+          <InterestsSection />
         </View>
       </View>
 

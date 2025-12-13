@@ -101,6 +101,7 @@ export type SkillLevel = 'Expert' | 'Avancé' | 'Confirmé' | 'Intermédiaire';
 export interface NarrativeSkillCard {
   id: string;
   title: string;
+  subtitle?: string;
   level: SkillLevel;
   gradient: string;
   icon: string;

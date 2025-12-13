@@ -1,88 +1,307 @@
+"use client";
+
 /**
  * SkillsScreen
- * Écran affichant les compétences avec cartes narratives
+ * Écran affichant les compétences avec cartes cliquables et vue détaillée
+ * Design System Apple iOS
  */
 
+import { useState } from 'react';
+import { ChevronRight } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
-import { IOSCard, IOSBadge, IOSNavigationBar } from '../ios';
-import { skillStoryIntro, technicalSkills, softSkills, tools, uiTexts } from '@/data';
+import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar, IOSChip } from '../ios';
+import { skillStoryIntro, technicalSkills, softSkills, tools, uiTexts, aiContent } from '@/data';
 import type { NarrativeSkillCard, SoftSkillCard } from '@/data/types';
 
+// Type union pour skill sélectionnée
+type SelectedSkill =
+  | { type: 'technical'; skill: NarrativeSkillCard }
+  | { type: 'soft'; skill: SoftSkillCard }
+  | { type: 'ai' };
+
 // Badge de niveau avec couleur
-const LevelBadge = ({ level }: { level: NarrativeSkillCard['level'] }) => {
-  const colorMap = {
+const LevelBadge = ({ level, size = 'sm' }: { level: string; size?: 'sm' | 'md' }) => {
+  const colorMap: Record<string, string> = {
     Expert: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
     Avancé: 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400',
     Confirmé: 'bg-green-500/20 text-green-600 dark:text-green-400',
     Intermédiaire: 'bg-amber-500/20 text-amber-600 dark:text-amber-400',
   };
 
+  const sizeClass = size === 'md' ? 'px-3 py-1.5 text-sm' : 'px-2.5 py-1 text-xs';
+
   return (
-    <span
-      className={`px-2.5 py-1 rounded-full text-xs font-medium ${colorMap[level]}`}
-    >
+    <span className={`${sizeClass} rounded-full font-medium flex-shrink-0 ${colorMap[level] || colorMap.Confirmé}`}>
       {level}
     </span>
   );
 };
 
-// Carte de compétence technique narrative
-const TechSkillCard = ({ skill }: { skill: NarrativeSkillCard }) => (
-  <IOSCard variant="glass" padding="md">
-    {/* Header */}
-    <div className="flex items-center justify-between mb-3">
-      <div className="flex items-center gap-3">
+// Carte compacte cliquable pour compétence technique
+const TechSkillCardCompact = ({
+  skill,
+  onPress
+}: {
+  skill: NarrativeSkillCard;
+  onPress: () => void;
+}) => (
+  <IOSCard variant="glass" padding="md" interactive onPress={onPress}>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
         <div
-          className={`w-10 h-10 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
+          className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
         >
-          <span className="text-lg">{skill.icon}</span>
+          <span className="text-xl">{skill.icon}</span>
         </div>
-        <h3 className="font-semibold text-foreground">{skill.title}</h3>
+        <h3 className="font-semibold text-foreground truncate">{skill.title}</h3>
       </div>
-      <LevelBadge level={skill.level} />
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <LevelBadge level={skill.level} />
+        <ChevronRight className="w-4 h-4 text-muted-foreground" />
+      </div>
     </div>
-
-    {/* Narrative */}
-    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-      {skill.narrative}
-    </p>
-
-    {/* Highlights */}
-    <ul className="space-y-1.5">
-      {skill.highlights.map((highlight, index) => (
-        <li key={index} className="flex items-start gap-2 text-sm">
-          <span className="text-primary mt-0.5">•</span>
-          <span className="text-foreground/80">{highlight}</span>
-        </li>
-      ))}
-    </ul>
   </IOSCard>
 );
 
-// Carte de soft skill narrative
-const SoftSkillCardComponent = ({ skill }: { skill: SoftSkillCard }) => (
-  <IOSCard variant="glass" padding="md">
-    {/* Header */}
-    <div className="flex items-center gap-3 mb-3">
-      <div
-        className={`w-10 h-10 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
-      >
-        <span className="text-lg">{skill.icon}</span>
+// Carte compacte cliquable pour soft skill
+const SoftSkillCardCompact = ({
+  skill,
+  onPress
+}: {
+  skill: SoftSkillCard;
+  onPress: () => void;
+}) => (
+  <IOSCard variant="glass" padding="md" interactive onPress={onPress}>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <div
+          className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
+        >
+          <span className="text-xl">{skill.icon}</span>
+        </div>
+        <h3 className="font-semibold text-foreground truncate">{skill.title}</h3>
       </div>
-      <h3 className="font-semibold text-foreground">{skill.title}</h3>
+      <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
     </div>
-
-    {/* Narrative */}
-    <p className="text-sm text-muted-foreground leading-relaxed">
-      {skill.narrative}
-    </p>
   </IOSCard>
 );
 
-const SkillsScreen = () => {
+// Carte compacte cliquable pour IA
+const AICardCompact = ({ onPress }: { onPress: () => void }) => (
+  <IOSCard variant="glass" padding="md" interactive onPress={onPress}>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <div
+          className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${aiContent.gradient} flex items-center justify-center`}
+        >
+          <span className="text-xl">{aiContent.icon}</span>
+        </div>
+        <h3 className="font-semibold text-foreground truncate">{aiContent.subtitle}</h3>
+      </div>
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <LevelBadge level={aiContent.level} />
+        <ChevronRight className="w-4 h-4 text-muted-foreground" />
+      </div>
+    </div>
+  </IOSCard>
+);
+
+// Vue détaillée d'une compétence technique
+const TechSkillDetail = ({
+  skill,
+  onBack,
+  hideStatusBar = false
+}: {
+  skill: NarrativeSkillCard;
+  onBack: () => void;
+  hideStatusBar?: boolean;
+}) => (
+  <div className="h-full bg-secondary flex flex-col animate-ios-push">
+    {!hideStatusBar && <StatusBar />}
+
+    {/* Back Button */}
+    <div className="px-5 pt-2 pb-4">
+      <IOSButton variant="ghost" size="sm" onClick={onBack} className="p-0 h-auto min-h-0 min-w-0">
+        <ChevronRight className="w-5 h-5 rotate-180" />
+        <span>{uiTexts.buttons.back}</span>
+      </IOSButton>
+    </div>
+
+    <div className="flex-1 overflow-y-auto pb-32 px-5">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6">
+        <div
+          className={`w-16 h-16 flex-shrink-0 rounded-2xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
+        >
+          <span className="text-3xl">{skill.icon}</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl font-bold text-foreground">{skill.title}</h1>
+          {skill.subtitle && (
+            <p className="text-sm text-muted-foreground">{skill.subtitle}</p>
+          )}
+          <LevelBadge level={skill.level} size="sm" />
+        </div>
+      </div>
+
+      {/* Narrative */}
+      <IOSCard variant="glass" padding="md" className="mb-6">
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {skill.narrative}
+        </p>
+      </IOSCard>
+
+      {/* Highlights */}
+      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+        Points clés
+      </h3>
+      <IOSCard variant="glass" padding="md">
+        <ul className="space-y-2">
+          {skill.highlights.map((highlight, index) => (
+            <li key={index} className="flex items-start gap-3 text-sm">
+              <span className="text-primary mt-0.5">•</span>
+              <span className="text-foreground/90">{highlight}</span>
+            </li>
+          ))}
+        </ul>
+      </IOSCard>
+    </div>
+  </div>
+);
+
+// Vue détaillée d'un soft skill
+const SoftSkillDetail = ({
+  skill,
+  onBack,
+  hideStatusBar = false
+}: {
+  skill: SoftSkillCard;
+  onBack: () => void;
+  hideStatusBar?: boolean;
+}) => (
+  <div className="h-full bg-secondary flex flex-col animate-ios-push">
+    {!hideStatusBar && <StatusBar />}
+
+    {/* Back Button */}
+    <div className="px-5 pt-2 pb-4">
+      <IOSButton variant="ghost" size="sm" onClick={onBack} className="p-0 h-auto min-h-0 min-w-0">
+        <ChevronRight className="w-5 h-5 rotate-180" />
+        <span>{uiTexts.buttons.back}</span>
+      </IOSButton>
+    </div>
+
+    <div className="flex-1 overflow-y-auto pb-32 px-5">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6">
+        <div
+          className={`w-16 h-16 flex-shrink-0 rounded-2xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
+        >
+          <span className="text-3xl">{skill.icon}</span>
+        </div>
+        <h1 className="text-2xl font-bold text-foreground flex-1 min-w-0">{skill.title}</h1>
+      </div>
+
+      {/* Narrative */}
+      <IOSCard variant="glass" padding="lg">
+        <p className="text-muted-foreground leading-relaxed">
+          {skill.narrative}
+        </p>
+      </IOSCard>
+    </div>
+  </div>
+);
+
+// Vue détaillée de la section IA
+const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideStatusBar?: boolean }) => (
+  <div className="h-full bg-secondary flex flex-col animate-ios-push">
+    {!hideStatusBar && <StatusBar />}
+
+    {/* Back Button */}
+    <div className="px-5 pt-2 pb-4">
+      <IOSButton variant="ghost" size="sm" onClick={onBack} className="p-0 h-auto min-h-0 min-w-0">
+        <ChevronRight className="w-5 h-5 rotate-180" />
+        <span>{uiTexts.buttons.back}</span>
+      </IOSButton>
+    </div>
+
+    <div className="flex-1 overflow-y-auto pb-32 px-5">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6">
+        <div
+          className={`w-16 h-16 flex-shrink-0 rounded-2xl bg-gradient-to-br ${aiContent.gradient} flex items-center justify-center`}
+        >
+          <span className="text-3xl">{aiContent.icon}</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl font-bold text-foreground">{aiContent.subtitle}</h1>
+          <LevelBadge level={aiContent.level} size="sm" />
+        </div>
+      </div>
+
+      {/* Narrative */}
+      <IOSCard variant="glass" padding="md" className="mb-6">
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {aiContent.narrative}
+        </p>
+      </IOSCard>
+
+      {/* Highlights */}
+      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+        Points clés
+      </h3>
+      <IOSCard variant="glass" padding="md" className="mb-6">
+        <ul className="space-y-2">
+          {aiContent.highlights.map((highlight, index) => (
+            <li key={index} className="flex items-start gap-3 text-sm">
+              <span className="text-purple-500 mt-0.5">•</span>
+              <span className="text-foreground/90">{highlight}</span>
+            </li>
+          ))}
+        </ul>
+      </IOSCard>
+
+      {/* Tools */}
+      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+        Outils utilisés
+      </h3>
+      <IOSCard variant="glass" padding="md">
+        <div className="flex flex-wrap gap-2">
+          {aiContent.tools.map((tool) => (
+            <IOSChip key={tool.name} variant="default" size="md">
+              {tool.icon && <span>{tool.icon}</span>}
+              {tool.name}
+            </IOSChip>
+          ))}
+        </div>
+      </IOSCard>
+    </div>
+  </div>
+);
+
+interface SkillsScreenProps {
+  hideStatusBar?: boolean;
+}
+
+const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
+  const [selectedSkill, setSelectedSkill] = useState<SelectedSkill | null>(null);
+
+  // Vue détaillée
+  if (selectedSkill) {
+    if (selectedSkill.type === 'technical') {
+      return <TechSkillDetail skill={selectedSkill.skill} onBack={() => setSelectedSkill(null)} hideStatusBar={hideStatusBar} />;
+    }
+    if (selectedSkill.type === 'soft') {
+      return <SoftSkillDetail skill={selectedSkill.skill} onBack={() => setSelectedSkill(null)} hideStatusBar={hideStatusBar} />;
+    }
+    if (selectedSkill.type === 'ai') {
+      return <AIDetail onBack={() => setSelectedSkill(null)} hideStatusBar={hideStatusBar} />;
+    }
+  }
+
+  // Vue liste
   return (
     <div className="h-full bg-secondary flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}
@@ -105,11 +324,23 @@ const SkillsScreen = () => {
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
             Compétences techniques
           </h3>
-          <div className="space-y-4 stagger-children">
+          <div className="space-y-3 stagger-children">
             {technicalSkills.map((skill) => (
-              <TechSkillCard key={skill.id} skill={skill} />
+              <TechSkillCardCompact
+                key={skill.id}
+                skill={skill}
+                onPress={() => setSelectedSkill({ type: 'technical', skill })}
+              />
             ))}
           </div>
+        </div>
+
+        {/* AI Section */}
+        <div className="px-5 mb-6">
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            {aiContent.title}
+          </h3>
+          <AICardCompact onPress={() => setSelectedSkill({ type: 'ai' })} />
         </div>
 
         {/* Soft Skills Section */}
@@ -117,9 +348,13 @@ const SkillsScreen = () => {
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
             Soft skills
           </h3>
-          <div className="space-y-4 stagger-children">
+          <div className="space-y-3 stagger-children">
             {softSkills.map((skill) => (
-              <SoftSkillCardComponent key={skill.id} skill={skill} />
+              <SoftSkillCardCompact
+                key={skill.id}
+                skill={skill}
+                onPress={() => setSelectedSkill({ type: 'soft', skill })}
+              />
             ))}
           </div>
         </div>

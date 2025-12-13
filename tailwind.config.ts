@@ -12,6 +12,17 @@ export default {
         "2xl": "1400px",
       },
     },
+    // Mobile-first breakpoints
+    screens: {
+      'xs': '320px',     // iPhone SE (1st gen)
+      'sm': '375px',     // iPhone SE, iPhone 8, iPhone X/11/12 mini
+      'md': '390px',     // iPhone 12/13/14
+      'lg': '430px',     // iPhone 14 Pro Max, iPhone 15 Plus
+      'xl': '744px',     // iPad mini portrait
+      '2xl': '1024px',   // iPad landscape, small laptops
+      '3xl': '1280px',   // Desktop
+      '4xl': '1536px',   // Large desktop
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -74,6 +85,58 @@ export default {
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
+      // Spacing with tokens
+      spacing: {
+        'safe-top': 'var(--safe-area-top)',
+        'safe-bottom': 'var(--safe-area-bottom)',
+        'safe-left': 'var(--safe-area-left)',
+        'safe-right': 'var(--safe-area-right)',
+        'touch': 'var(--touch-target-min)',
+        'touch-comfortable': 'var(--touch-target-comfortable)',
+        'touch-large': 'var(--touch-target-large)',
+        'fluid-xs': 'var(--space-fluid-xs)',
+        'fluid-sm': 'var(--space-fluid-sm)',
+        'fluid-md': 'var(--space-fluid-md)',
+        'fluid-lg': 'var(--space-fluid-lg)',
+        'fluid-xl': 'var(--space-fluid-xl)',
+        'fluid-2xl': 'var(--space-fluid-2xl)',
+        'device-width': 'var(--device-width)',
+        'device-height': 'var(--device-height)',
+      },
+      // Size utilities
+      width: {
+        'device': 'var(--device-width)',
+        'touch': 'var(--touch-target-min)',
+        'touch-comfortable': 'var(--touch-target-comfortable)',
+        'touch-large': 'var(--touch-target-large)',
+      },
+      height: {
+        'device': 'var(--device-height)',
+        'touch': 'var(--touch-target-min)',
+        'touch-comfortable': 'var(--touch-target-comfortable)',
+        'touch-large': 'var(--touch-target-large)',
+      },
+      minWidth: {
+        'touch': 'var(--touch-target-min)',
+        'touch-comfortable': 'var(--touch-target-comfortable)',
+        'touch-large': 'var(--touch-target-large)',
+      },
+      minHeight: {
+        'touch': 'var(--touch-target-min)',
+        'touch-comfortable': 'var(--touch-target-comfortable)',
+        'touch-large': 'var(--touch-target-large)',
+      },
+      // Font sizes with fluid typography
+      fontSize: {
+        'fluid-xs': 'var(--text-fluid-xs)',
+        'fluid-sm': 'var(--text-fluid-sm)',
+        'fluid-base': 'var(--text-fluid-base)',
+        'fluid-lg': 'var(--text-fluid-lg)',
+        'fluid-xl': 'var(--text-fluid-xl)',
+        'fluid-2xl': 'var(--text-fluid-2xl)',
+        'fluid-3xl': 'var(--text-fluid-3xl)',
+        'fluid-4xl': 'var(--text-fluid-4xl)',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -81,6 +144,9 @@ export default {
         "2xl": "1rem",
         "3xl": "1.5rem",
         "4xl": "2rem",
+        "device": "var(--device-corner-radius)",
+        "device-screen": "var(--device-screen-radius)",
+        "device-inner": "var(--device-inner-radius)",
       },
       boxShadow: {
         soft: "var(--shadow-soft)",

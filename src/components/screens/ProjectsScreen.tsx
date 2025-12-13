@@ -32,20 +32,21 @@ const getProjectTypeColor = (type: ProjectType) => {
 
 interface ProjectsScreenProps {
   onNavigate: (tab: string) => void;
+  hideStatusBar?: boolean;
 }
 
-const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
+const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenProps) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   if (selectedProject) {
     return (
-      <ProjectDetail project={selectedProject} onBack={() => setSelectedProject(null)} />
+      <ProjectDetail project={selectedProject} onBack={() => setSelectedProject(null)} hideStatusBar={hideStatusBar} />
     );
   }
 
   return (
     <div className="h-full bg-secondary flex flex-col">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}
@@ -79,33 +80,47 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
                 )}
                 {/* Overlay gradient pour lisibilité des tags */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
-                {/* Project Type Tag */}
+                {/* Year - coin gauche */}
                 <div className="absolute top-3 left-3">
-                  <span className={`px-2 py-1 text-[10px] font-semibold rounded-full backdrop-blur-sm ${getProjectTypeColor(project.projectType)}`}>
-                    {getProjectTypeLabel(project.projectType)}
-                  </span>
-                </div>
-                {/* Year */}
-                <div className="absolute top-3 right-3">
                   <span className="px-2 py-1 text-[10px] font-semibold rounded-full bg-black/30 backdrop-blur-sm text-white">
                     {project.year}
                   </span>
+                </div>
+                {/* Platform Icons - coin droit */}
+                <div className="absolute top-3 right-3">
+                  <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm">
+                    {project.platforms.includes('web') && (
+                      <Globe className="w-3 h-3 text-white" />
+                    )}
+                    {project.platforms.includes('ios') && (
+                      <Apple className="w-3 h-3 text-white" />
+                    )}
+                    {project.platforms.includes('android') && (
+                      <Smartphone className="w-3 h-3 text-white" />
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground">{project.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-0.5">
-                      {project.category}
-                    </p>
+                {/* Titre + Tag aligné à droite */}
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-semibold text-foreground flex-1">{project.name}</h3>
+                  <div className="flex flex-col items-end gap-1.5">
+                    <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
+                      {getProjectTypeLabel(project.projectType)}
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground mt-1" />
                 </div>
 
-                {/* Stats & Platforms */}
+                {/* Catégorie */}
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {project.category}
+                </p>
+
+                {/* Stats */}
                 <div className="flex items-center gap-4 mt-3">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
@@ -118,18 +133,6 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
                     <span className="text-sm text-muted-foreground">
                       {project.stats.downloads}
                     </span>
-                  </div>
-                  <div className="flex-1" />
-                  <div className="flex items-center gap-1.5">
-                    {project.platforms.includes('web') && (
-                      <Globe className="w-4 h-4 text-foreground" />
-                    )}
-                    {project.platforms.includes('ios') && (
-                      <Apple className="w-4 h-4 text-foreground" />
-                    )}
-                    {project.platforms.includes('android') && (
-                      <Smartphone className="w-4 h-4 text-foreground" />
-                    )}
                   </div>
                 </div>
               </div>
@@ -144,16 +147,17 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
+  hideStatusBar?: boolean;
 }
 
-const ProjectDetail = ({ project, onBack }: ProjectDetailProps) => {
+const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetailProps) => {
   return (
     <div className="h-full bg-secondary flex flex-col animate-ios-push">
-      <StatusBar />
+      {!hideStatusBar && <StatusBar />}
 
-      {/* Back Button */}
-      <div className="px-5 pt-2">
-        <IOSButton variant="ghost" size="sm" onClick={onBack} className="p-0 h-auto">
+      {/* Back Button - Added padding bottom */}
+      <div className="px-5 pt-2 pb-4">
+        <IOSButton variant="ghost" size="sm" onClick={onBack} className="p-0 h-auto min-h-0 min-w-0">
           <ChevronRight className="w-5 h-5 rotate-180" />
           <span>{uiTexts.buttons.back}</span>
         </IOSButton>
