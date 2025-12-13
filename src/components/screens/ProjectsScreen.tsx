@@ -85,11 +85,8 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
                     {project.year}
                   </span>
                 </div>
-                {/* Project Type Tag + Platform Icons - coin droit */}
-                <div className="absolute top-3 right-3 flex items-center gap-2">
-                  <span className={`px-2 py-1 text-[10px] font-semibold rounded-full backdrop-blur-sm ${getProjectTypeColor(project.projectType)}`}>
-                    {getProjectTypeLabel(project.projectType)}
-                  </span>
+                {/* Platform Icons - coin droit */}
+                <div className="absolute top-3 right-3">
                   <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm">
                     {project.platforms.includes('web') && (
                       <Globe className="w-3 h-3 text-white" />
@@ -106,15 +103,21 @@ const ProjectsScreen = ({ onNavigate }: ProjectsScreenProps) => {
 
               {/* Content */}
               <div className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground">{project.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-0.5">
-                      {project.category}
-                    </p>
+                {/* Titre + Tag aligné à droite */}
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-semibold text-foreground flex-1">{project.name}</h3>
+                  <div className="flex flex-col items-end gap-1.5">
+                    <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
+                      {getProjectTypeLabel(project.projectType)}
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground mt-1" />
                 </div>
+
+                {/* Catégorie */}
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {project.category}
+                </p>
 
                 {/* Stats */}
                 <div className="flex items-center gap-4 mt-3">

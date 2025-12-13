@@ -32,13 +32,13 @@ const TechSkillCard = ({ skill }: { skill: NarrativeSkillCard }) => (
   <IOSCard variant="glass" padding="md">
     {/* Header */}
     <div className="flex items-center justify-between mb-3">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 min-w-0">
         <div
-          className={`w-10 h-10 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
+          className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
         >
-          <span className="text-lg">{skill.icon}</span>
+          <span className="text-xl">{skill.icon}</span>
         </div>
-        <h3 className="font-semibold text-foreground">{skill.title}</h3>
+        <h3 className="font-semibold text-foreground truncate">{skill.title}</h3>
       </div>
       <LevelBadge level={skill.level} />
     </div>
@@ -66,9 +66,9 @@ const SoftSkillCardComponent = ({ skill }: { skill: SoftSkillCard }) => (
     {/* Header */}
     <div className="flex items-center gap-3 mb-3">
       <div
-        className={`w-10 h-10 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
+        className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
       >
-        <span className="text-lg">{skill.icon}</span>
+        <span className="text-xl">{skill.icon}</span>
       </div>
       <h3 className="font-semibold text-foreground">{skill.title}</h3>
     </div>
@@ -125,33 +125,33 @@ const SkillsScreen = () => {
           </div>
         </div>
 
-        {/* AI Section - New */}
+        {/* AI Section - Same UI as other skill cards */}
         <div className="px-5 mb-6">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
             {aiContent.title}
           </h3>
-          <IOSCard variant="glass" padding="md" className="border-l-4 border-purple-500">
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center">
-                <span className="text-lg">{aiContent.icon}</span>
+          <IOSCard variant="glass" padding="md">
+            {/* Header - Same structure as TechSkillCard */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${aiContent.gradient} flex items-center justify-center`}>
+                  <span className="text-xl">{aiContent.icon}</span>
+                </div>
+                <h3 className="font-semibold text-foreground truncate">{aiContent.subtitle}</h3>
               </div>
-              <div>
-                <h4 className="font-semibold text-foreground">{aiContent.subtitle}</h4>
-                <p className="text-xs text-muted-foreground">Outils IA intégrés au workflow</p>
-              </div>
+              <LevelBadge level={aiContent.level} />
             </div>
 
-            {/* Narrative - shortened for mobile */}
+            {/* Narrative */}
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-              J&apos;utilise l&apos;IA comme un levier de qualité et d&apos;efficacité, pas comme un raccourci. Mon objectif est de construire des applications solides, scalables et maintenables, en tirant parti des outils les plus récents sans perdre l&apos;exigence technique.
+              {aiContent.narrative}
             </p>
 
             {/* Highlights */}
             <ul className="space-y-1.5 mb-4">
-              {aiContent.highlights.slice(0, 3).map((highlight, index) => (
+              {aiContent.highlights.map((highlight, index) => (
                 <li key={index} className="flex items-start gap-2 text-sm">
-                  <span className="text-purple-500 mt-0.5">•</span>
+                  <span className="text-primary mt-0.5">•</span>
                   <span className="text-foreground/80">{highlight}</span>
                 </li>
               ))}
