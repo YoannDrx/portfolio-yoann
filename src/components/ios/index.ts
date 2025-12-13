@@ -1,5 +1,6 @@
 /**
  * iOS Components - Export Central
+ * Design System Apple iOS
  *
  * Usage:
  * import { IOSButton, IOSCard, IOSListItem } from '@/components/ios';
@@ -11,6 +12,11 @@ export { IOSCard, iosCardVariants } from './IOSCard';
 export { IOSInput, iosInputVariants } from './IOSInput';
 export { IOSTextarea } from './IOSTextarea';
 export { IOSBadge, iosBadgeVariants } from './IOSBadge';
+
+// New components
+export { IOSChip, iosChipVariants } from './IOSChip';
+export { IOSAvailabilityBadge, iosAvailabilityBadgeVariants } from './IOSAvailabilityBadge';
+export { IOSSafeArea, IOSSafeAreaView, IOSSafeAreaContent, iosSafeAreaVariants } from './IOSSafeArea';
 
 // List & Navigation
 export { IOSListItem } from './IOSListItem';
@@ -38,3 +44,8 @@ export type {
   IOSToastProps,
   IOSAvatarProps,
 } from '@/design-system/types';
+
+// Export new component types
+export type { IOSChipProps } from './IOSChip';
+export type { IOSAvailabilityBadgeProps } from './IOSAvailabilityBadge';
+export type { IOSSafeAreaProps } from './IOSSafeArea';

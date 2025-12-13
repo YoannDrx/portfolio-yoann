@@ -54,3 +54,18 @@ export {
   animationClasses,
   animationCSSVariables,
 } from './animations';
+
+// Breakpoints & Devices
+export {
+  breakpoints,
+  devices,
+  safeAreas,
+  touchTargets,
+  defaultDevice,
+  mediaQueries,
+  tailwindScreens,
+  generateBreakpointCSSVariables,
+  type Breakpoint,
+  type DeviceType,
+  type DeviceConfig,
+} from './breakpoints';

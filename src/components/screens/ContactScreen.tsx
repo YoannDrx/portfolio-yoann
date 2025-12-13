@@ -90,11 +90,13 @@ const ContactScreen = () => {
           subtitle={uiTexts.stats.discussProject}
         />
 
-        {/* Social Links - Nouveau design avec hover effects */}
+        {/* Social Links - Taille réduite et couleurs atténuées */}
         <div className="px-5 mb-6">
-          <div className="flex justify-center gap-3">
+          <div className="flex justify-center gap-4">
             {socialLinks.map((link) => {
               const Icon = iconMap[link.icon];
+              // Atténuer les couleurs en ajoutant de l'opacité
+              const attenuatedColor = link.color.replace('bg-', 'bg-').replace('-600', '-500/80').replace('-500', '-500/80');
               return (
                 <a
                   key={link.id}
@@ -104,30 +106,28 @@ const ContactScreen = () => {
                   className="group relative"
                   aria-label={link.name}
                 >
-                  {/* Background avec gradient et hover effect */}
+                  {/* Background réduit (11 = 44px touch target) avec couleurs atténuées */}
                   <div
                     className={`
-                      w-14 h-14 rounded-2xl ${link.color}
+                      w-11 h-11 rounded-xl ${attenuatedColor}
                       flex items-center justify-center
-                      shadow-lg
-                      transform transition-all duration-300 ease-out
-                      group-hover:scale-110 group-hover:shadow-xl
-                      group-hover:-translate-y-1
+                      shadow-md
+                      transform transition-all duration-200 ease-out
+                      group-hover:scale-105 group-hover:shadow-lg
+                      group-hover:-translate-y-0.5
                       group-active:scale-95
                     `}
                   >
-                    {Icon && <Icon className="w-6 h-6 text-white transition-transform duration-300 group-hover:scale-110" />}
+                    {Icon && <Icon className="w-5 h-5 text-white" />}
                   </div>
                   {/* Tooltip avec nom */}
                   <span
                     className="
-                      absolute -bottom-7 left-1/2 -translate-x-1/2
+                      absolute -bottom-6 left-1/2 -translate-x-1/2
                       text-[10px] font-medium text-muted-foreground
                       opacity-0 group-hover:opacity-100
                       transition-opacity duration-200
                       whitespace-nowrap
-                      bg-background/80 backdrop-blur-sm
-                      px-2 py-0.5 rounded-full
                     "
                   >
                     {link.name}

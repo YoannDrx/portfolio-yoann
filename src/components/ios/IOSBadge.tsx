@@ -1,6 +1,7 @@
 /**
  * IOSBadge
  * Badge style iOS avec variants sémantiques
+ * Design System Apple iOS - Badges pour tags, disponibilité et statuts
  */
 
 import * as React from 'react';
@@ -13,7 +14,7 @@ const iosBadgeVariants = cva(
   [
     'inline-flex items-center justify-center',
     'font-medium',
-    'transition-colors duration-150',
+    'transition-all duration-200',
   ],
   {
     variants: {
@@ -23,8 +24,31 @@ const iosBadgeVariants = cva(
         warning: 'bg-warning/10 text-warning',
         error: 'bg-error/10 text-error',
         info: 'bg-info/10 text-info',
+        // New variants
+        availability: [
+          'bg-success/10 text-success',
+          'border border-success/20',
+          'shadow-[0_0_12px_-2px_hsl(var(--success)/0.3)]',
+        ],
+        tag: [
+          'bg-secondary text-secondary-foreground',
+          'border border-border/50',
+        ],
+        outline: [
+          'bg-transparent border border-current',
+        ],
+        glass: [
+          'bg-white/10 backdrop-blur-sm text-foreground',
+          'border border-white/20',
+        ],
+        // Solid color variants for platforms/types
+        solid: 'bg-primary text-primary-foreground',
+        'solid-success': 'bg-success text-success-foreground',
+        'solid-warning': 'bg-warning text-warning-foreground',
+        'solid-error': 'bg-error text-error-foreground',
       },
       size: {
+        xs: 'text-[10px] px-1.5 py-0.5 rounded',
         sm: 'text-xs px-2 py-0.5 rounded-md',
         md: 'text-sm px-3 py-1 rounded-lg',
         lg: 'text-base px-4 py-1.5 rounded-xl',
@@ -48,9 +72,18 @@ const dotColorClasses = {
   warning: 'bg-warning',
   error: 'bg-error',
   info: 'bg-info',
+  availability: 'bg-success',
+  tag: 'bg-muted-foreground',
+  outline: 'bg-current',
+  glass: 'bg-foreground',
+  solid: 'bg-primary-foreground',
+  'solid-success': 'bg-success-foreground',
+  'solid-warning': 'bg-warning-foreground',
+  'solid-error': 'bg-error-foreground',
 } as const;
 
 const dotSizeClasses = {
+  xs: 'w-1 h-1',
   sm: 'w-1.5 h-1.5',
   md: 'w-2 h-2',
   lg: 'w-2.5 h-2.5',

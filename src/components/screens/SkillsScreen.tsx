@@ -1,11 +1,12 @@
 /**
  * SkillsScreen
  * Écran affichant les compétences avec cartes narratives
+ * Design System Apple iOS - Inclut bloc IA
  */
 
 import StatusBar from '../device/StatusBar';
-import { IOSCard, IOSBadge, IOSNavigationBar } from '../ios';
-import { skillStoryIntro, technicalSkills, softSkills, tools, uiTexts } from '@/data';
+import { IOSCard, IOSBadge, IOSNavigationBar, IOSChip } from '../ios';
+import { skillStoryIntro, technicalSkills, softSkills, tools, uiTexts, aiContent } from '@/data';
 import type { NarrativeSkillCard, SoftSkillCard } from '@/data/types';
 
 // Badge de niveau avec couleur
@@ -122,6 +123,50 @@ const SkillsScreen = () => {
               <SoftSkillCardComponent key={skill.id} skill={skill} />
             ))}
           </div>
+        </div>
+
+        {/* AI Section - New */}
+        <div className="px-5 mb-6">
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            {aiContent.title}
+          </h3>
+          <IOSCard variant="glass" padding="md" className="border-l-4 border-purple-500">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center">
+                <span className="text-lg">{aiContent.icon}</span>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">{aiContent.subtitle}</h4>
+                <p className="text-xs text-muted-foreground">Outils IA intégrés au workflow</p>
+              </div>
+            </div>
+
+            {/* Narrative - shortened for mobile */}
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+              J&apos;utilise l&apos;IA comme un levier de qualité et d&apos;efficacité, pas comme un raccourci. Mon objectif est de construire des applications solides, scalables et maintenables, en tirant parti des outils les plus récents sans perdre l&apos;exigence technique.
+            </p>
+
+            {/* Highlights */}
+            <ul className="space-y-1.5 mb-4">
+              {aiContent.highlights.slice(0, 3).map((highlight, index) => (
+                <li key={index} className="flex items-start gap-2 text-sm">
+                  <span className="text-purple-500 mt-0.5">•</span>
+                  <span className="text-foreground/80">{highlight}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Tools */}
+            <div className="flex flex-wrap gap-2">
+              {aiContent.tools.map((tool) => (
+                <IOSChip key={tool.name} variant="default" size="sm">
+                  {tool.icon && <span>{tool.icon}</span>}
+                  {tool.name}
+                </IOSChip>
+              ))}
+            </div>
+          </IOSCard>
         </div>
 
         {/* Tools Section */}

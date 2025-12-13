@@ -11,11 +11,11 @@ export const profile: Profile = {
   initials: 'YA',
   title: 'Dev React Native',
   subtitle: 'Paris, France',
-  bio: "Développeur Frontend React passionné. Après une expérience stimulante en start-up, j'ai fait de ma passion pour le code mon métier. Mobile & Web, je transforme vos idées en applications.",
+  bio: "Développeur Frontend React passionné par l'UI/UX et le sens du détail. Mon parcours atypique, enrichi par plusieurs années de management, m'a appris à allier rigueur technique, empathie et efficacité. J'aide les entrepreneurs à transformer leurs idées en applications solides, utiles et centrées sur l'expérience utilisateur.",
   avatar: '/images/avatar.jpg',
   isAvailable: true,
   availabilityText: 'Disponible pour de nouveaux projets',
-  availabilityOptions: ['Freelance', 'Mission longue', 'CDI'],
+  availabilityOptions: ['CDI', 'Freelance', 'Mission longue'],
   stats: [
     { label: 'Années XP', value: '3+' },
     { label: 'Projets', value: '15+' },
