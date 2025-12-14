@@ -6,6 +6,7 @@
  */
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { ChevronRight, Apple, Smartphone, Globe, Star, Download, ExternalLink, Github } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
@@ -68,10 +69,12 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
               {/* Header avec Image ou Gradient */}
               <div className={`h-32 relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}>
                 {project.image ? (
-                  <img
+                  <Image
                     src={project.image}
                     alt={project.name}
-                    className="w-full h-full object-cover object-top"
+                    fill
+                    className="object-cover object-top"
+                    sizes="100vw"
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -169,10 +172,12 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
           className={`mx-5 mt-4 h-48 rounded-3xl relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}
         >
           {project.image ? (
-            <img
+            <Image
               src={project.image}
               alt={project.name}
-              className="w-full h-full object-cover object-top"
+              fill
+              className="object-cover object-top"
+              sizes="100vw"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">

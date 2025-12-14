@@ -8,7 +8,7 @@ import {
   Page,
   View,
   Text,
-  Image,
+  Image as PdfImage,
   StyleSheet,
   Link,
 } from '@react-pdf/renderer';
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
 const Header = () => (
   <View style={styles.header}>
     <View style={styles.avatarContainer}>
-      <Image src="/images/avatar.jpg" style={styles.avatar} />
+      <PdfImage src="/images/avatar.jpg" style={styles.avatar} />
     </View>
     <View style={styles.headerInfo}>
       <Text style={styles.name}>

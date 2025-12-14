@@ -5,21 +5,15 @@
  * Écran de contact avec formulaire et liens sociaux
  */
 
-import { useState } from 'react';
-import { Mail, Github, Linkedin, Twitter, Send, CheckCircle, Phone, Briefcase } from 'lucide-react';
+import { Mail, Github, Linkedin, Twitter, Phone, Briefcase } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import {
   IOSCard,
-  IOSButton,
-  IOSInput,
-  IOSTextarea,
   IOSBadge,
   IOSNavigationBar,
 } from '../ios';
 import { socialLinks, profile, uiTexts } from '@/data';
-import { toast } from '@/hooks/use-toast';
-
-const MIN_SUBMISSION_INTERVAL_MS = 5000;
+import { ContactFormCard } from '@/components/contact/ContactFormCard';
 
 // Map icon names to components
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
@@ -46,70 +40,6 @@ interface ContactScreenProps {
 }
 
 const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-    // Honeypot (doit rester vide)
-    company: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [lastSubmittedAt, setLastSubmittedAt] = useState<number | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const now = Date.now();
-    if (lastSubmittedAt && now - lastSubmittedAt < MIN_SUBMISSION_INTERVAL_MS) {
-      toast({
-        title: 'Veuillez patienter',
-        description: 'Merci de patienter quelques secondes avant de renvoyer un message.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    setLastSubmittedAt(now);
-
-    try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setIsSubmitted(true);
-        toast({
-          title: uiTexts.messages.messageSent,
-          description: uiTexts.messages.messageSentDescription,
-        });
-
-        setTimeout(() => {
-          setIsSubmitted(false);
-          setFormData({ name: '', email: '', message: '', company: '' });
-        }, 3000);
-      } else {
-        const data = await response.json();
-        toast({
-          title: 'Erreur',
-          description: data.error || 'Une erreur est survenue',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      toast({
-        title: 'Erreur',
-        description: 'Impossible d\'envoyer le message',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="h-full bg-secondary flex flex-col">
       {!hideStatusBar && <StatusBar />}
@@ -160,88 +90,7 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
 
         {/* Contact Form */}
         <div className="px-5 mt-4">
-          <IOSCard variant="glass" padding="lg">
-            <h3 className="font-semibold text-foreground mb-4">
-              {uiTexts.sections.sendMessage}
-            </h3>
-
-            {isSubmitted ? (
-              <div className="py-8 text-center animate-ios-spring">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-success/10 flex items-center justify-center">
-                  <CheckCircle className="w-8 h-8 text-success" />
-                </div>
-                <p className="font-semibold text-foreground">
-                  {uiTexts.messages.messageSent}
-                </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {uiTexts.messages.willReplyShort}
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Honeypot field (anti-spam) */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    left: '-10000px',
-                    top: 'auto',
-                    width: '1px',
-                    height: '1px',
-                    overflow: 'hidden',
-                  }}
-                  aria-hidden="true"
-                >
-                  <label>
-                    Company
-                    <input
-                      type="text"
-                      name="company"
-                      tabIndex={-1}
-                      autoComplete="off"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    />
-                  </label>
-                </div>
-
-                <IOSInput
-                  type="text"
-                  label={uiTexts.form.name}
-                  placeholder={uiTexts.form.namePlaceholder}
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                />
-
-                <IOSInput
-                  type="email"
-                  label={uiTexts.form.email}
-                  placeholder={uiTexts.form.emailPlaceholder}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-
-                <IOSTextarea
-                  label={uiTexts.form.message}
-                  placeholder={uiTexts.form.messagePlaceholder}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  rows={4}
-                  required
-                />
-
-                <IOSButton
-                  type="submit"
-                  fullWidth
-                  isLoading={isSubmitting}
-                  leftIcon={<Send className="w-5 h-5" />}
-                >
-                  {uiTexts.buttons.send}
-                </IOSButton>
-              </form>
-            )}
-          </IOSCard>
+          <ContactFormCard titleClassName="font-semibold text-foreground mb-4" />
         </div>
 
         {/* Availability */}

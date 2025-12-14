@@ -1,22 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import PortfolioApp from "@/components/PortfolioApp";
 import TouchIndicator from "@/components/TouchIndicator";
 import PDFDownloadButton from "@/components/pdf/PDFDownloadButton";
 import { useIsRealMobile } from "@/hooks/use-mobile";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { ContactFormCard } from "@/components/contact/ContactFormCard";
 import {
   IOSCard,
   IOSButton,
   IOSBadge,
   IOSChip,
   IOSAvailabilityBadge,
-  IOSInput,
-  IOSTextarea,
 } from "@/components/ios";
-import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase, Download, FileText, Send, CheckCircle } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase } from "lucide-react";
 import { uiTexts } from "@/data";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
@@ -34,19 +33,12 @@ const iconMap: Record<string, React.ReactNode> = {
   Briefcase: <Briefcase className="w-5 h-5" />,
 };
 
-const MIN_SUBMISSION_INTERVAL_MS = 5000;
-
 export default function Home() {
   const isRealMobile = useIsRealMobile();
   const [viewMode, setViewMode] = useState<"device" | "web">("device");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Mobile réel → fullscreen automatique (pas de cadre iPhone)
-  if (mounted && isRealMobile) {
+  if (isRealMobile) {
     return (
       <main className="min-h-screen bg-background">
         <PortfolioApp showFrame={false} />
@@ -82,11 +74,12 @@ export default function Home() {
           <Monitor className="w-4 h-4" />
           Web
         </button>
+        <ThemeToggle />
       </div>
 
       {/* Device View */}
       {viewMode === "device" && (
-        <div className={`flex items-center justify-center min-h-screen py-8 px-4 ${mounted ? "animate-ios-fade-in" : "opacity-0"}`}>
+        <div className="flex items-center justify-center min-h-screen py-8 px-4 animate-ios-fade-in">
           <div className="relative">
             {/* Background Decorations */}
             <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]">
@@ -106,165 +99,13 @@ export default function Home() {
 
       {/* Web View - Full Width */}
       {viewMode === "web" && (
-        <div className={`min-h-screen ${mounted ? "animate-ios-fade-in" : "opacity-0"}`}>
+        <div className="min-h-screen animate-ios-fade-in">
           <WebView />
         </div>
       )}
     </main>
   );
 }
-
-// Contact Form Component
-const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-    // Honeypot (doit rester vide)
-    company: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [lastSubmittedAt, setLastSubmittedAt] = useState<number | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const now = Date.now();
-    if (lastSubmittedAt && now - lastSubmittedAt < MIN_SUBMISSION_INTERVAL_MS) {
-      toast({
-        title: 'Veuillez patienter',
-        description: 'Merci de patienter quelques secondes avant de renvoyer un message.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    setLastSubmittedAt(now);
-
-    try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setIsSubmitted(true);
-        toast({
-          title: uiTexts.messages.messageSent,
-          description: uiTexts.messages.messageSentDescription,
-        });
-
-        setTimeout(() => {
-          setIsSubmitted(false);
-          setFormData({ name: '', email: '', message: '', company: '' });
-        }, 3000);
-      } else {
-        const data = await response.json();
-        toast({
-          title: 'Erreur',
-          description: data.error || 'Une erreur est survenue',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      toast({
-        title: 'Erreur',
-        description: "Impossible d'envoyer le message",
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <IOSCard variant="glass" padding="lg">
-      <h3 className="text-lg font-semibold text-foreground mb-4">
-        {uiTexts.sections.sendMessage}
-      </h3>
-
-      {isSubmitted ? (
-        <div className="py-8 text-center animate-ios-spring">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
-            <CheckCircle className="w-8 h-8 text-green-500" />
-          </div>
-          <p className="font-semibold text-foreground">
-            {uiTexts.messages.messageSent}
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            {uiTexts.messages.willReplyShort}
-          </p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Honeypot field (anti-spam) */}
-          <div
-            style={{
-              position: 'absolute',
-              left: '-10000px',
-              top: 'auto',
-              width: '1px',
-              height: '1px',
-              overflow: 'hidden',
-            }}
-            aria-hidden="true"
-          >
-            <label>
-              Company
-              <input
-                type="text"
-                name="company"
-                tabIndex={-1}
-                autoComplete="off"
-                value={formData.company}
-                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              />
-            </label>
-          </div>
-
-          <IOSInput
-            type="text"
-            label={uiTexts.form.name}
-            placeholder={uiTexts.form.namePlaceholder}
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            required
-          />
-
-          <IOSInput
-            type="email"
-            label={uiTexts.form.email}
-            placeholder={uiTexts.form.emailPlaceholder}
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required
-          />
-
-          <IOSTextarea
-            label={uiTexts.form.message}
-            placeholder={uiTexts.form.messagePlaceholder}
-            value={formData.message}
-            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-            rows={4}
-            required
-          />
-
-          <IOSButton
-            type="submit"
-            fullWidth
-            isLoading={isSubmitting}
-            leftIcon={<Send className="w-5 h-5" />}
-          >
-            {uiTexts.buttons.send}
-          </IOSButton>
-        </form>
-      )}
-    </IOSCard>
-  );
-};
 
 // Full Web View Component
 const WebView = () => {
@@ -590,7 +431,7 @@ const WebView = () => {
             </div>
 
             {/* Droite: Formulaire */}
-            <ContactForm />
+            <ContactFormCard />
           </div>
         </div>
       </section>

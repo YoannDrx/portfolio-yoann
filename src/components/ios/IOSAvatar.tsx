@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import type { IOSAvatarProps, AvatarStatus } from '@/design-system/types';
 
@@ -32,6 +33,15 @@ const statusColorClasses: Record<AvatarStatus, string> = {
   busy: 'bg-red-500',
 } as const;
 
+const sizePixels = {
+  xs: 32,
+  sm: 40,
+  md: 48,
+  lg: 64,
+  xl: 80,
+  '2xl': 112,
+} as const;
+
 const IOSAvatar = React.forwardRef<HTMLDivElement, IOSAvatarProps>(
   (
     {
@@ -53,6 +63,7 @@ const IOSAvatar = React.forwardRef<HTMLDivElement, IOSAvatarProps>(
       <div ref={ref} className={cn('relative inline-block', className)} {...props}>
         <div
           className={cn(
+            'relative',
             'rounded-full overflow-hidden',
             'bg-gradient-to-br from-primary to-primary/80',
             'flex items-center justify-center',
@@ -63,10 +74,12 @@ const IOSAvatar = React.forwardRef<HTMLDivElement, IOSAvatarProps>(
           {showInitials ? (
             <span className="font-bold text-primary-foreground">{initials}</span>
           ) : (
-            <img
+            <Image
               src={src}
               alt={alt || 'Avatar'}
-              className="w-full h-full object-cover"
+              fill
+              sizes={`${sizePixels[size]}px`}
+              className="object-cover"
               onError={() => setImageError(true)}
             />
           )}

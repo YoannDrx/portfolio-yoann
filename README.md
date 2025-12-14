@@ -18,10 +18,10 @@ git clone git@github.com:YoannDrx/portfolio-yoann.git
 cd portfolio-yoann
 
 # Installer les dépendances
-npm install
+pnpm install
 
 # Lancer en développement
-npm run dev
+pnpm dev
 ```
 
 ## Variables d'environnement
@@ -38,7 +38,7 @@ CONTACT_EMAIL="ton@email.com"
 Le projet est configuré pour Vercel :
 
 ```bash
-npm run build
+pnpm build
 ```
 
 ## URL de production

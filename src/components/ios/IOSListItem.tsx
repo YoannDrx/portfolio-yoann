@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { IOSListItemProps } from '@/design-system/types';
@@ -91,9 +92,12 @@ const IOSListItem = React.forwardRef<HTMLDivElement, IOSListItemProps>(
         {(leftIcon || leftImage) && (
           <div className="flex-shrink-0">
             {leftImage ? (
-              <img
+              <Image
                 src={leftImage}
                 alt=""
+                width={40}
+                height={40}
+                sizes="40px"
                 className="w-10 h-10 rounded-lg object-cover"
               />
             ) : (
