@@ -12,8 +12,10 @@ import {
   IOSBadge,
   IOSNavigationBar,
 } from '../ios';
-import { socialLinks, profile, uiTexts } from '@/data';
+import { getProfile, getSocialLinks, getUiTexts } from '@/data';
 import { ContactFormCard } from '@/components/contact/ContactFormCard';
+import { LocaleToggle } from '@/components/LocaleToggle';
+import { useI18n } from '@/i18n/I18nProvider';
 
 // Map icon names to components
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
@@ -40,6 +42,11 @@ interface ContactScreenProps {
 }
 
 const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
+  const { locale } = useI18n();
+  const uiTexts = getUiTexts(locale);
+  const profile = getProfile(locale);
+  const socialLinks = getSocialLinks(locale);
+
   return (
     <div className="h-full bg-secondary flex flex-col">
       {!hideStatusBar && <StatusBar />}
@@ -49,6 +56,7 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
         <IOSNavigationBar
           title={uiTexts.nav.contact}
           subtitle={uiTexts.stats.discussProject}
+          rightAction={<LocaleToggle />}
         />
 
         {/* Social Links - Icônes colorées sur fond glass */}

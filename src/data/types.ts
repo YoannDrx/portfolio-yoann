@@ -96,7 +96,7 @@ export interface Tool {
 
 // ============ NARRATIVE SKILLS ============
 
-export type SkillLevel = 'Expert' | 'Avancé' | 'Confirmé' | 'Intermédiaire';
+export type SkillLevel = 'Expert' | 'Avancé' | 'Confirmé' | 'Intermédiaire' | 'Advanced' | 'Proficient' | 'Intermediate';
 
 export interface NarrativeSkillCard {
   id: string;

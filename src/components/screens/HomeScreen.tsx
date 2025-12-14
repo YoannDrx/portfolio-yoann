@@ -10,7 +10,9 @@ import Image from 'next/image';
 import { Sparkles } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSListItem, IOSAvailabilityBadge, IOSChip } from '../ios';
-import { profile, navigationItems } from '@/data';
+import { getNavigationItems, getProfile, getUiTexts } from '@/data';
+import { LocaleToggle } from '@/components/LocaleToggle';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface HomeScreenProps {
   onNavigate: (tab: string) => void;
@@ -18,11 +20,20 @@ interface HomeScreenProps {
 }
 
 const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
+  const { locale } = useI18n();
+  const profile = getProfile(locale);
+  const navigationItems = getNavigationItems(locale);
+  const uiTexts = getUiTexts(locale);
+
   return (
     <div className="h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto px-5 pb-32">
+        <div className="flex justify-end pt-2">
+          <LocaleToggle />
+        </div>
+
         {/* Hero Section */}
         <div className="pt-4 animate-ios-spring">
           <div className="relative">
@@ -74,11 +85,11 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
           ))}
         </div>
 
-        {/* Quick Links */}
-        <div className="mt-8 space-y-3 stagger-children">
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide px-1">
-            Explorer
-          </h3>
+	          {/* Quick Links */}
+	        <div className="mt-8 space-y-3 stagger-children">
+	          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide px-1">
+	            {uiTexts.sections.explorer}
+	          </h3>
 
           {navigationItems.map((item) => (
             <IOSCard

@@ -16,6 +16,32 @@ const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 const RATE_LIMIT_MAX = 5;
 const rateLimitStore = new Map<string, { count: number; windowStart: number }>();
 
+function getLocale(request: NextRequest) {
+  return request.headers.get("x-locale") === "en" ? "en" : "fr";
+}
+
+function getApiMessages(locale: "fr" | "en") {
+  if (locale === "en") {
+    return {
+      tooManyRequests: "Too many requests. Please try again later.",
+      invalidRequest: "Invalid request",
+      invalidData: "Invalid data",
+      emailNotConfigured: "Email service is not configured",
+      internalError: "Internal server error",
+      newMessageSubject: (name: string) => `💬 New message from ${name}`,
+    } as const;
+  }
+
+  return {
+    tooManyRequests: "Trop de demandes. Réessayez plus tard.",
+    invalidRequest: "Requête invalide",
+    invalidData: "Données invalides",
+    emailNotConfigured: "Service email non configuré",
+    internalError: "Erreur interne du serveur",
+    newMessageSubject: (name: string) => `💬 Nouveau message de ${name}`,
+  } as const;
+}
+
 function getClientIp(request: NextRequest): string {
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) return forwardedFor.split(",")[0]?.trim() ?? "unknown";
@@ -38,11 +64,14 @@ function isRateLimited(clientId: string): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  const locale = getLocale(request);
+  const messages = getApiMessages(locale);
+
   try {
     const clientIp = getClientIp(request);
     if (isRateLimited(clientIp)) {
       return NextResponse.json(
-        { error: "Trop de demandes. Réessayez plus tard." },
+        { error: messages.tooManyRequests },
         { status: 429 }
       );
     }
@@ -52,7 +81,7 @@ export async function POST(request: NextRequest) {
       rawBody = await request.json();
     } catch {
       return NextResponse.json(
-        { error: "Requête invalide" },
+        { error: messages.invalidRequest },
         { status: 400 }
       );
     }
@@ -60,7 +89,7 @@ export async function POST(request: NextRequest) {
     const payload = ContactPayloadSchema.safeParse(rawBody);
     if (!payload.success) {
       return NextResponse.json(
-        { error: "Données invalides" },
+        { error: messages.invalidData },
         { status: 400 }
       );
     }
@@ -75,7 +104,7 @@ export async function POST(request: NextRequest) {
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "Service email non configuré" },
+        { error: messages.emailNotConfigured },
         { status: 503 }
       );
     }
@@ -104,7 +133,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: [toEmail],
-      subject: subject?.trim() || `💬 Nouveau message de ${name}`,
+      subject: subject?.trim() || messages.newMessageSubject(name),
       replyTo: email,
       html: emailHtml,
     });
@@ -118,7 +147,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Erreur serveur:", error);
     return NextResponse.json(
-      { error: "Erreur interne du serveur" },
+      { error: messages.internalError },
       { status: 500 }
     );
   }

@@ -4,7 +4,8 @@ import { useState } from "react";
 import { CheckCircle, Send } from "lucide-react";
 import { IOSButton, IOSCard, IOSInput, IOSTextarea } from "@/components/ios";
 import { toast } from "@/hooks/use-toast";
-import { uiTexts } from "@/data";
+import { getUiTexts } from "@/data";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const MIN_SUBMISSION_INTERVAL_MS = 5000;
 
@@ -22,6 +23,9 @@ export type ContactFormCardProps = {
 };
 
 export function ContactFormCard({ className, titleClassName }: ContactFormCardProps) {
+  const { locale } = useI18n();
+  const uiTexts = getUiTexts(locale);
+
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
@@ -38,9 +42,8 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
     const now = Date.now();
     if (lastSubmittedAt && now - lastSubmittedAt < MIN_SUBMISSION_INTERVAL_MS) {
       toast({
-        title: "Veuillez patienter",
-        description:
-          "Merci de patienter quelques secondes avant de renvoyer un message.",
+        title: uiTexts.messages.pleaseWaitTitle,
+        description: uiTexts.messages.pleaseWaitDescription,
         variant: "destructive",
       });
       return;
@@ -52,7 +55,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
     try {
       const response = await fetch("/api/send-email", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-locale": locale },
         body: JSON.stringify(formData),
       });
 
@@ -70,15 +73,15 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
       } else {
         const data = await response.json();
         toast({
-          title: "Erreur",
-          description: data.error || "Une erreur est survenue",
+          title: uiTexts.messages.errorTitle,
+          description: data.error || uiTexts.messages.genericError,
           variant: "destructive",
         });
       }
     } catch {
       toast({
-        title: "Erreur",
-        description: "Impossible d'envoyer le message",
+        title: uiTexts.messages.errorTitle,
+        description: uiTexts.messages.cannotSend,
         variant: "destructive",
       });
     } finally {
@@ -178,4 +181,3 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
     </IOSCard>
   );
 }
-

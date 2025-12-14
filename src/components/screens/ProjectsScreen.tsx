@@ -10,16 +10,18 @@ import Image from 'next/image';
 import { ChevronRight, Apple, Smartphone, Globe, Star, Download, ExternalLink, Github } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
-import { projects, getProjectsCount, uiTexts } from '@/data';
+import { getProjects, getProjectsCount, getUiTexts } from '@/data';
+import { LocaleToggle } from '@/components/LocaleToggle';
+import { useI18n } from '@/i18n/I18nProvider';
 import type { Project, ProjectType } from '@/data';
 
-const getProjectTypeLabel = (type: ProjectType) => {
-  const labels: Record<ProjectType, string> = {
-    freelance: 'Client Freelance',
-    cdi: 'CDI',
-    personal: 'Projet Perso',
+const getProjectTypeLabel = (type: ProjectType, locale: string) => {
+  const labels: Record<ProjectType, { fr: string; en: string }> = {
+    freelance: { fr: 'Client Freelance', en: 'Freelance client' },
+    cdi: { fr: 'CDI', en: 'Full-time' },
+    personal: { fr: 'Projet Perso', en: 'Personal project' },
   };
-  return labels[type];
+  return locale === 'en' ? labels[type].en : labels[type].fr;
 };
 
 const getProjectTypeColor = (type: ProjectType) => {
@@ -37,6 +39,9 @@ interface ProjectsScreenProps {
 }
 
 const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenProps) => {
+  const { locale } = useI18n();
+  const uiTexts = getUiTexts(locale);
+  const projects = getProjects(locale);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   if (selectedProject) {
@@ -53,7 +58,8 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
         {/* Header */}
         <IOSNavigationBar
           title={uiTexts.nav.projects}
-          subtitle={`${getProjectsCount()} ${uiTexts.stats.publishedApps}`}
+          subtitle={`${getProjectsCount(locale)} ${uiTexts.stats.publishedApps}`}
+          rightAction={<LocaleToggle />}
         />
 
         {/* Project Cards */}
@@ -111,9 +117,9 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="font-semibold text-foreground flex-1">{project.name}</h3>
                   <div className="flex flex-col items-end gap-1.5">
-                    <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-                      {getProjectTypeLabel(project.projectType)}
-                    </span>
+	                    <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
+	                      {getProjectTypeLabel(project.projectType, locale)}
+	                    </span>
                     <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
                 </div>
@@ -154,6 +160,9 @@ interface ProjectDetailProps {
 }
 
 const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetailProps) => {
+  const { locale } = useI18n();
+  const uiTexts = getUiTexts(locale);
+
   return (
     <div className="h-full bg-secondary flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
@@ -190,7 +199,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
         <div className="px-5 mt-6">
           <div className="flex items-center gap-2 mb-2">
             <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-              {getProjectTypeLabel(project.projectType)}
+              {getProjectTypeLabel(project.projectType, locale)}
             </span>
             <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-muted text-muted-foreground">
               {project.year}
@@ -257,7 +266,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
             <div className="mt-6 space-y-4">
               {project.stack.frontend && project.stack.frontend.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-primary mb-2">Frontend</h4>
+                  <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.frontend}</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {project.stack.frontend.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-blue-500/10 text-blue-600">
@@ -269,7 +278,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
               )}
               {project.stack.backend && project.stack.backend.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-primary mb-2">Backend</h4>
+                  <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.backend}</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {project.stack.backend.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-600">
@@ -281,7 +290,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
               )}
               {project.stack.database && project.stack.database.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-primary mb-2">Database</h4>
+                  <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.database}</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {project.stack.database.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-600">
@@ -293,7 +302,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
               )}
               {project.stack.devops && project.stack.devops.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-primary mb-2">DevOps</h4>
+                  <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.devops}</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {project.stack.devops.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-orange-500/10 text-orange-600">
@@ -305,7 +314,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
               )}
               {project.stack.testing && project.stack.testing.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-primary mb-2">Testing</h4>
+                  <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.testing}</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {project.stack.testing.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-red-500/10 text-red-600">
@@ -319,11 +328,11 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
           )}
 
           {/* Highlights */}
-          {project.highlights && project.highlights.length > 0 && (
-            <div className="mt-8">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                Points forts
-              </h3>
+	          {project.highlights && project.highlights.length > 0 && (
+	            <div className="mt-8">
+	              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+	                {uiTexts.sections.highlights}
+	              </h3>
               <div className="space-y-3">
                 {project.highlights.map((highlight) => (
                   <div key={highlight.title} className="p-3 bg-muted/30 rounded-xl">
@@ -337,8 +346,8 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
 
           {/* CTA - Boutons fonctionnels */}
           <div className="mt-8 space-y-3">
-            {project.links?.website ? (
-              <a
+	            {project.links?.website ? (
+	              <a
                 href={project.links.website}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -348,29 +357,29 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
                   {uiTexts.buttons.viewProject}
                 </IOSButton>
               </a>
-            ) : (
-              <IOSButton
+	            ) : (
+	              <IOSButton
                 fullWidth
                 leftIcon={<ExternalLink className="w-5 h-5" />}
                 disabled
                 className="opacity-50 cursor-not-allowed"
-              >
-                Projet privé
-              </IOSButton>
-            )}
+	              >
+	                {uiTexts.labels.privateProject}
+	              </IOSButton>
+	            )}
 
-            {project.links?.github && (
-              <a
+	            {project.links?.github && (
+	              <a
                 href={project.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full"
               >
-                <IOSButton variant="secondary" fullWidth leftIcon={<Github className="w-5 h-5" />}>
-                  Voir le code
-                </IOSButton>
-              </a>
-            )}
+	                <IOSButton variant="secondary" fullWidth leftIcon={<Github className="w-5 h-5" />}>
+	                  {uiTexts.buttons.viewCode}
+	                </IOSButton>
+	              </a>
+	            )}
 
             {project.links?.appStore && (
               <a

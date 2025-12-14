@@ -8,17 +8,19 @@
 import * as React from 'react';
 import { Home, FolderOpen, Layers, FileText, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { uiTexts } from '@/data';
+import { getUiTexts } from '@/data';
+import { useI18n } from '@/i18n/I18nProvider';
 import type { TabItem, IOSTabBarProps } from '@/design-system/types';
 
-// Default tabs configuration
-const defaultTabs: TabItem[] = [
-  { id: 'home', label: uiTexts.nav.home, icon: <Home /> },
-  { id: 'projects', label: uiTexts.nav.projects, icon: <FolderOpen /> },
-  { id: 'skills', label: uiTexts.nav.skills, icon: <Layers /> },
-  { id: 'resume', label: 'CV', icon: <FileText /> },
-  { id: 'contact', label: uiTexts.nav.contact, icon: <Mail /> },
-];
+function getDefaultTabs(labels: ReturnType<typeof getUiTexts>): TabItem[] {
+  return [
+    { id: 'home', label: labels.nav.home, icon: <Home /> },
+    { id: 'projects', label: labels.nav.projects, icon: <FolderOpen /> },
+    { id: 'skills', label: labels.nav.skills, icon: <Layers /> },
+    { id: 'resume', label: labels.nav.resume, icon: <FileText /> },
+    { id: 'contact', label: labels.nav.contact, icon: <Mail /> },
+  ];
+}
 
 interface TabBarProps {
   activeTab: string;
@@ -31,10 +33,14 @@ interface TabBarProps {
 const TabBar: React.FC<TabBarProps> = ({
   activeTab,
   onTabChange,
-  tabs = defaultTabs,
+  tabs,
   variant = 'default',
   isFullscreen = false,
 }) => {
+  const { locale } = useI18n();
+  const uiTexts = getUiTexts(locale);
+  const resolvedTabs = tabs ?? getDefaultTabs(uiTexts);
+
   return (
     <div
       className={cn(
@@ -42,11 +48,11 @@ const TabBar: React.FC<TabBarProps> = ({
         isFullscreen ? 'fixed bottom-0' : 'absolute bottom-0'
       )}
     >
-      {/* Border top */}
-      <div className="border-t border-border/50">
-        <div className="flex items-center justify-around py-2 pb-6">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
+	      {/* Border top */}
+	      <div className="border-t border-border/50">
+	        <div className="flex items-center justify-around py-2 pb-6">
+	          {resolvedTabs.map((tab) => {
+	            const isActive = activeTab === tab.id;
 
             return (
               <button

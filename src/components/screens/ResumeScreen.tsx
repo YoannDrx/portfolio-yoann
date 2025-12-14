@@ -8,7 +8,9 @@
 import dynamic from 'next/dynamic';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSBadge, IOSNavigationBar, IOSButton } from '../ios';
-import { experiences, education } from '@/data/resume';
+import { getEducation, getExperiences, getUiTexts } from '@/data';
+import { LocaleToggle } from '@/components/LocaleToggle';
+import { useI18n } from '@/i18n/I18nProvider';
 import { Briefcase, GraduationCap, MapPin, ExternalLink, Download } from 'lucide-react';
 
 // Lazy loading du bouton PDF
@@ -22,15 +24,16 @@ const PDFDownloadButton = dynamic(() => import('../pdf/PDFDownloadButton'), {
   ),
 });
 
-const getEmploymentTypeLabel = (type: string) => {
-  const labels: Record<string, string> = {
-    cdi: 'CDI',
-    freelance: 'Freelance',
-    independant: 'Indépendant',
-    cdd: 'CDD',
-    intermittent: 'Intermittent',
+const getEmploymentTypeLabel = (type: string, locale: string) => {
+  const labels: Record<string, { fr: string; en: string }> = {
+    cdi: { fr: 'CDI', en: 'Full-time' },
+    freelance: { fr: 'Freelance', en: 'Freelance' },
+    independant: { fr: 'Indépendant', en: 'Independent' },
+    cdd: { fr: 'CDD', en: 'Fixed-term' },
+    intermittent: { fr: 'Intermittent', en: 'Intermittent' },
   };
-  return labels[type] || type;
+  const fallback = labels[type] ? (locale === 'en' ? labels[type].en : labels[type].fr) : type;
+  return fallback;
 };
 
 const getEmploymentTypeColor = (type: string) => {
@@ -49,6 +52,11 @@ interface ResumeScreenProps {
 }
 
 const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
+  const { locale } = useI18n();
+  const uiTexts = getUiTexts(locale);
+  const experiences = getExperiences(locale);
+  const education = getEducation(locale);
+
   // Filtrer les expériences de développement (les 9 premières, sans Cyclofix)
   const devExperiences = experiences.slice(0, 9);
 
@@ -58,19 +66,26 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}
-        <IOSNavigationBar
-          title="CV"
-          subtitle="Parcours & Formation"
-          rightAction={<PDFDownloadButton />}
+	        <IOSNavigationBar
+	          title={uiTexts.nav.resume}
+	          subtitle={uiTexts.sections.experienceAndEducation}
+	          rightAction={
+	            <div className="flex items-center gap-2">
+	              <LocaleToggle />
+              <PDFDownloadButton />
+            </div>
+          }
         />
 
         {/* Experience Section */}
         <div className="px-5 mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
-              <Briefcase className="w-4 h-4 text-white" />
-            </div>
-            <h2 className="text-lg font-semibold text-foreground">Expérience</h2>
+	            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
+	              <Briefcase className="w-4 h-4 text-white" />
+	            </div>
+	            <h2 className="text-lg font-semibold text-foreground">
+	              {uiTexts.sections.experience}
+	            </h2>
           </div>
 
           {/* Timeline */}
@@ -96,20 +111,20 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
                             {exp.role}
                           </p>
                         </div>
-                        <IOSBadge
-                          variant="default"
-                          size="sm"
-                          className={getEmploymentTypeColor(exp.type)}
-                        >
-                          {getEmploymentTypeLabel(exp.type)}
-                        </IOSBadge>
+	                        <IOSBadge
+	                          variant="default"
+	                          size="sm"
+	                          className={getEmploymentTypeColor(exp.type)}
+	                        >
+	                          {getEmploymentTypeLabel(exp.type, locale)}
+	                        </IOSBadge>
                       </div>
 
                       {/* Date & Location */}
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="font-medium">
-                          {exp.startDate} → {exp.endDate || 'Présent'}
-                        </span>
+	                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+	                        <span className="font-medium">
+	                          {exp.startDate} → {exp.endDate || uiTexts.labels.present}
+	                        </span>
                         <div className="flex items-center gap-1">
                           <MapPin className="w-3 h-3" />
                           <span>{exp.location}</span>
@@ -134,17 +149,17 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
                       </div>
 
                       {/* Link */}
-                      {exp.url && (
-                        <a
+	                      {exp.url && (
+	                        <a
                           href={exp.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-1"
-                        >
-                          <ExternalLink className="w-3 h-3" />
-                          Voir le site
-                        </a>
-                      )}
+	                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-1"
+	                        >
+	                          <ExternalLink className="w-3 h-3" />
+	                          {uiTexts.buttons.viewWebsite}
+	                        </a>
+	                      )}
                     </div>
                   </IOSCard>
                 </div>
@@ -153,13 +168,15 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
           </div>
         </div>
 
-        {/* Formation Section */}
-        <div className="px-5 mb-6">
-          <div className="flex items-center gap-2 mb-4">
+	        {/* Formation Section */}
+	        <div className="px-5 mb-6">
+	          <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center">
               <GraduationCap className="w-4 h-4 text-white" />
             </div>
-            <h2 className="text-lg font-semibold text-foreground">Formation</h2>
+	            <h2 className="text-lg font-semibold text-foreground">
+	              {uiTexts.sections.education}
+	            </h2>
           </div>
 
           <div className="space-y-3 stagger-children">
@@ -188,17 +205,17 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
           </div>
         </div>
 
-        {/* Availability Badge */}
-        <div className="px-5 mt-6 mb-4">
-          <IOSCard variant="elevated" padding="sm">
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-sm font-medium text-foreground">
-                Disponible pour de nouveaux projets
-              </span>
-            </div>
-          </IOSCard>
-        </div>
+	        {/* Availability Badge */}
+	        <div className="px-5 mt-6 mb-4">
+	          <IOSCard variant="elevated" padding="sm">
+	            <div className="flex items-center gap-3">
+	              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+	              <span className="text-sm font-medium text-foreground">
+	                {uiTexts.labels.availableForProjects}
+	              </span>
+	            </div>
+	          </IOSCard>
+	        </div>
       </div>
     </div>
   );

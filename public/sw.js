@@ -3,7 +3,7 @@
  * Stratégies de cache intelligentes pour PWA offline
  */
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAMES = {
   core: `portfolio-yoann-core-${CACHE_VERSION}`,
   images: `portfolio-yoann-images-${CACHE_VERSION}`,
@@ -12,7 +12,10 @@ const CACHE_NAMES = {
 
 // Assets critiques à pré-cacher (120 KB)
 const CORE_ASSETS = [
-  '/',
+  '/fr',
+  '/en',
+  '/fr/offline',
+  '/en/offline',
   '/offline',
   '/manifest.json',
   '/favicon.svg',
@@ -159,6 +162,10 @@ async function networkFirstWithOffline(request) {
       return cached;
     }
     // Aucun cache : retourner la page offline
+    const { pathname } = new URL(request.url);
+    const offlinePath = pathname.startsWith('/en') ? '/en/offline' : '/fr/offline';
+    const offlineResponse = await caches.match(offlinePath);
+    if (offlineResponse) return offlineResponse;
     return caches.match('/offline');
   }
 }

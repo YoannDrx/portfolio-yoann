@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import IPhoneFrame from "./device/iPhoneFrame";
 import TabBar from "./device/TabBar";
 import HomeScreen from "./screens/HomeScreen";
@@ -33,50 +33,49 @@ interface PortfolioAppProps {
 
 const PortfolioApp = ({ showFrame = true }: PortfolioAppProps) => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<TabId>(() => {
-    if (typeof window === "undefined") return "home";
-    const params = new URLSearchParams(window.location.search);
-    return normalizeTab(params.get("tab")) ?? "home";
-  });
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
+  const rawTab = searchParams.get("tab");
+  const activeTab = normalizeTab(rawTab) ?? "home";
 
   // En mode fullscreen, on cache la StatusBar des screens
   const hideStatusBar = !showFrame;
 
-  // URL -> state (deep-linking, back/forward buttons)
+  // Normaliser les valeurs legacy (tab=cv) et la casse (tab=Projects -> tab=projects)
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!rawTab) return;
 
-    const onPopState = () => {
-      const params = new URLSearchParams(window.location.search);
-      const nextTab = normalizeTab(params.get("tab")) ?? "home";
-      setActiveTab((prev) => (prev === nextTab ? prev : nextTab));
-    };
+    const normalized = normalizeTab(rawTab);
+    if (!normalized || normalized === "home") return;
 
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, []);
+    const desiredTabParam = normalized;
+    if (rawTab === desiredTabParam) return;
 
-  // state -> URL (shareable navigation)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
 
-    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    const url = new URL(window.location.href);
+    const nextParams = new URLSearchParams(searchParamsString);
+    nextParams.set("tab", desiredTabParam);
 
-    if (activeTab === "home") {
-      url.searchParams.delete("tab");
-    } else {
-      url.searchParams.set("tab", activeTab);
-    }
-
-    const desired = `${url.pathname}${url.search}${url.hash}`;
+    const nextSearch = nextParams.toString();
+    const desired = `${pathname}${nextSearch ? `?${nextSearch}` : ""}${hash}`;
+    const current = `${pathname}${searchParamsString ? `?${searchParamsString}` : ""}${hash}`;
     if (desired === current) return;
 
     router.replace(desired, { scroll: false });
-  }, [activeTab, router]);
+  }, [pathname, rawTab, router, searchParamsString]);
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(normalizeTab(tab) ?? "home");
+    const nextTab = normalizeTab(tab) ?? "home";
+    const nextParams = new URLSearchParams(searchParamsString);
+    if (nextTab === "home") {
+      nextParams.delete("tab");
+    } else {
+      nextParams.set("tab", nextTab);
+    }
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    const nextSearch = nextParams.toString();
+    router.replace(`${pathname}${nextSearch ? `?${nextSearch}` : ""}${hash}`, { scroll: false });
   };
 
   const renderScreen = () => {

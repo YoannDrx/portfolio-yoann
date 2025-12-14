@@ -3,7 +3,7 @@
   "name": "Portfolio Yoann",
   "short_name": "Portfolio",
   "description": "Développeur Mobile & Web - React Native, iOS, Android",
-  "start_url": "/",
+  "start_url": "/fr",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
@@ -69,7 +69,7 @@
       "name": "Mes Projets",
       "short_name": "Projets",
       "description": "Voir mes réalisations",
-      "url": "/?tab=projects",
+      "url": "/fr?tab=projects",
       "icons": [
         {
           "src": "/icon-192x192.png",
@@ -82,7 +82,7 @@
       "name": "Me Contacter",
       "short_name": "Contact",
       "description": "Discutons de votre projet",
-      "url": "/?tab=contact",
+      "url": "/fr?tab=contact",
       "icons": [
         {
           "src": "/icon-192x192.png",
@@ -95,7 +95,7 @@
       "name": "Mon CV",
       "short_name": "CV",
       "description": "Parcours et formation",
-      "url": "/?tab=resume",
+      "url": "/fr?tab=resume",
       "icons": [
         {
           "src": "/icon-192x192.png",
