@@ -23,6 +23,8 @@ const IOSListItem = React.forwardRef<HTMLDivElement, IOSListItemProps>(
       disabled = false,
       onPress,
       onClick,
+      onKeyDown,
+      onKeyUp,
       ...props
     },
     ref
@@ -34,6 +36,30 @@ const IOSListItem = React.forwardRef<HTMLDivElement, IOSListItemProps>(
     };
 
     const isClickable = !!onPress || !!onClick;
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown?.(e);
+      if (e.defaultPrevented || !isClickable || disabled) return;
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.currentTarget.click();
+      }
+
+      if (e.key === ' ') {
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyUp?.(e);
+      if (e.defaultPrevented || !isClickable || disabled) return;
+
+      if (e.key === ' ') {
+        e.preventDefault();
+        e.currentTarget.click();
+      }
+    };
 
     return (
       <div
@@ -53,10 +79,12 @@ const IOSListItem = React.forwardRef<HTMLDivElement, IOSListItemProps>(
           disabled && 'opacity-50 cursor-not-allowed',
           className
         )}
-        onClick={handleClick}
+        onClick={isClickable ? handleClick : undefined}
         role={isClickable ? 'button' : undefined}
         tabIndex={isClickable && !disabled ? 0 : undefined}
         aria-disabled={disabled}
+        onKeyDown={isClickable ? handleKeyDown : onKeyDown}
+        onKeyUp={isClickable ? handleKeyUp : onKeyUp}
         {...props}
       >
         {/* Left Section */}

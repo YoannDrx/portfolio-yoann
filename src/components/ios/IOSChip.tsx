@@ -106,6 +106,8 @@ const IOSChip = React.forwardRef<HTMLSpanElement, IOSChipProps>(
       onToggle,
       children,
       onClick,
+      onKeyDown,
+      onKeyUp,
       ...props
     },
     ref
@@ -116,6 +118,30 @@ const IOSChip = React.forwardRef<HTMLSpanElement, IOSChipProps>(
     const handleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
       onClick?.(e);
       onToggle?.();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>) => {
+      onKeyDown?.(e);
+      if (e.defaultPrevented || !isInteractive) return;
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.currentTarget.click();
+      }
+
+      if (e.key === ' ') {
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyUp = (e: React.KeyboardEvent<HTMLSpanElement>) => {
+      onKeyUp?.(e);
+      if (e.defaultPrevented || !isInteractive) return;
+
+      if (e.key === ' ') {
+        e.preventDefault();
+        e.currentTarget.click();
+      }
     };
 
     return (
@@ -132,6 +158,8 @@ const IOSChip = React.forwardRef<HTMLSpanElement, IOSChipProps>(
           className
         )}
         onClick={isInteractive ? handleClick : undefined}
+        onKeyDown={isInteractive ? handleKeyDown : onKeyDown}
+        onKeyUp={isInteractive ? handleKeyUp : onKeyUp}
         {...props}
       >
         {leftIcon && <span className="shrink-0">{leftIcon}</span>}

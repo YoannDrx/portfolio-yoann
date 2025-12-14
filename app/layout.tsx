@@ -2,12 +2,20 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { siteConfig } from "@/data";
 
 export const metadata: Metadata = {
-  title: "Yoann Andrieux - Portfolio",
-  description: "Développeur Mobile & Web - React Native, iOS, Android, Web",
-  keywords: ["développeur", "mobile", "web", "react native", "ios", "android", "portfolio"],
-  authors: [{ name: "Yoann Andrieux" }],
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: "Yoann Andrieux — Développeur React Native",
+    template: "%s — Yoann Andrieux",
+  },
+  description: siteConfig.seo.description,
+  keywords: siteConfig.seo.keywords,
+  authors: [{ name: "Yoann Andrieux", url: siteConfig.url }],
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -18,9 +26,17 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Yoann Andrieux - Portfolio",
-    description: "Développeur Mobile & Web - React Native, iOS, Android, Web",
+    title: "Yoann Andrieux — Développeur React Native",
+    description: siteConfig.seo.description,
+    url: siteConfig.url,
+    siteName: "Yoann Andrieux",
+    locale: siteConfig.locale,
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yoann Andrieux — Développeur React Native",
+    description: siteConfig.seo.description,
   },
 };
 

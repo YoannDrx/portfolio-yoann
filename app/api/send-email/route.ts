@@ -1,26 +1,75 @@
 import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/components";
 import ContactFormEmail from "@/emails/contact-form.email";
+import { z } from "zod";
+
+const ContactPayloadSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  email: z.string().trim().email().max(254),
+  message: z.string().trim().min(1).max(4000),
+  subject: z.string().trim().max(150).optional(),
+  // Honeypot field (must stay empty)
+  company: z.string().optional(),
+});
+
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX = 5;
+const rateLimitStore = new Map<string, { count: number; windowStart: number }>();
+
+function getClientIp(request: NextRequest): string {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  if (forwardedFor) return forwardedFor.split(",")[0]?.trim() ?? "unknown";
+  return request.headers.get("x-real-ip") ?? "unknown";
+}
+
+function isRateLimited(clientId: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitStore.get(clientId);
+
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitStore.set(clientId, { count: 1, windowStart: now });
+    return false;
+  }
+
+  if (entry.count >= RATE_LIMIT_MAX) return true;
+
+  rateLimitStore.set(clientId, { ...entry, count: entry.count + 1 });
+  return false;
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, message, subject } = await request.json();
-
-    // Validation
-    if (!name || !email || !message) {
+    const clientIp = getClientIp(request);
+    if (isRateLimited(clientIp)) {
       return NextResponse.json(
-        { error: "Nom, email et message sont requis" },
+        { error: "Trop de demandes. Réessayez plus tard." },
+        { status: 429 }
+      );
+    }
+
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Requête invalide" },
         { status: 400 }
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    const payload = ContactPayloadSchema.safeParse(rawBody);
+    if (!payload.success) {
       return NextResponse.json(
-        { error: "Format email invalide" },
+        { error: "Données invalides" },
         { status: 400 }
       );
+    }
+
+    const { name, email, message, subject, company } = payload.data;
+
+    // Honeypot: if filled, pretend success but don't send anything
+    if (company && company.trim().length > 0) {
+      return NextResponse.json({ success: true });
     }
 
     const apiKey = process.env.RESEND_API_KEY;
@@ -55,7 +104,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: [toEmail],
-      subject: subject || `💬 Nouveau message de ${name}`,
+      subject: subject?.trim() || `💬 Nouveau message de ${name}`,
       replyTo: email,
       html: emailHtml,
     });

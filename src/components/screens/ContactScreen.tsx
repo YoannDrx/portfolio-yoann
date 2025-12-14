@@ -19,6 +19,8 @@ import {
 import { socialLinks, profile, uiTexts } from '@/data';
 import { toast } from '@/hooks/use-toast';
 
+const MIN_SUBMISSION_INTERVAL_MS = 5000;
+
 // Map icon names to components
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
   Github,
@@ -48,13 +50,28 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
     name: '',
     email: '',
     message: '',
+    // Honeypot (doit rester vide)
+    company: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [lastSubmittedAt, setLastSubmittedAt] = useState<number | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const now = Date.now();
+    if (lastSubmittedAt && now - lastSubmittedAt < MIN_SUBMISSION_INTERVAL_MS) {
+      toast({
+        title: 'Veuillez patienter',
+        description: 'Merci de patienter quelques secondes avant de renvoyer un message.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
+    setLastSubmittedAt(now);
 
     try {
       const response = await fetch('/api/send-email', {
@@ -72,7 +89,7 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
 
         setTimeout(() => {
           setIsSubmitted(false);
-          setFormData({ name: '', email: '', message: '' });
+          setFormData({ name: '', email: '', message: '', company: '' });
         }, 3000);
       } else {
         const data = await response.json();
@@ -162,6 +179,31 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Honeypot field (anti-spam) */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '-10000px',
+                    top: 'auto',
+                    width: '1px',
+                    height: '1px',
+                    overflow: 'hidden',
+                  }}
+                  aria-hidden="true"
+                >
+                  <label>
+                    Company
+                    <input
+                      type="text"
+                      name="company"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formData.company}
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    />
+                  </label>
+                </div>
+
                 <IOSInput
                   type="text"
                   label={uiTexts.form.name}

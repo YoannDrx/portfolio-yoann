@@ -95,7 +95,7 @@
       "name": "Mon CV",
       "short_name": "CV",
       "description": "Parcours et formation",
-      "url": "/?tab=cv",
+      "url": "/?tab=resume",
       "icons": [
         {
           "src": "/icon-192x192.png",
