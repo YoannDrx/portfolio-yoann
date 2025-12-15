@@ -205,7 +205,7 @@ const WebView = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 px-6 bg-secondary">
+      <section id="projects" className="py-20 px-6 bg-gradient-to-br from-blue-50/80 via-background to-indigo-50/50 dark:from-blue-950/30 dark:via-background dark:to-indigo-950/20">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-foreground mb-4 text-center">{uiTexts.nav.projects}</h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
@@ -350,7 +350,7 @@ const WebView = () => {
       </section>
 
       {/* Resume Section */}
-      <section id="resume" className="py-20 px-6 bg-secondary">
+      <section id="resume" className="py-20 px-6 bg-gradient-to-br from-teal-50/70 via-background to-emerald-50/50 dark:from-teal-950/30 dark:via-background dark:to-emerald-950/20">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-4xl font-bold text-foreground">{uiTexts.sections.experience}</h2>
@@ -411,7 +411,7 @@ const WebView = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 bg-secondary">
+      <section id="contact" className="py-20 px-6 bg-gradient-to-br from-violet-50/70 via-background to-purple-50/50 dark:from-violet-950/30 dark:via-background dark:to-purple-950/20">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* Gauche: Titre, sous-titre, icônes */}
