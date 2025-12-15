@@ -222,44 +222,58 @@ const WebView = () => {
                 key={project.id}
                 variant="glass"
                 padding="none"
-                className="overflow-hidden group cursor-pointer"
+                className="overflow-hidden group cursor-pointer h-full"
                 interactive
                 onPress={() => setSelectedProject(project)}
               >
-                <div className="relative h-48 overflow-hidden">
-                  {project.image ? (
-                    <Image
-                      src={project.image}
-                      alt={project.name}
-                      fill
-                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  ) : (
-                    <div className={`h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
-                      <span className="text-7xl group-hover:scale-110 transition-transform">{project.emoji}</span>
+                <div className="flex flex-col h-full">
+                  {/* Image clean sans overlay */}
+                  <div className="relative h-48 overflow-hidden flex-shrink-0">
+                    {project.image ? (
+                      <Image
+                        src={project.image}
+                        alt={project.name}
+                        fill
+                        className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className={`h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
+                        <span className="text-7xl group-hover:scale-110 transition-transform">{project.emoji}</span>
+                      </div>
+                    )}
+                  </div>
+                  {/* Contenu avec flex pour aligner le bouton en bas */}
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">{project.name}</h3>
+
+                    {/* Métadonnées sous le titre */}
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                      <span>{project.category}</span>
+                      <span className="text-border">•</span>
+                      <span className="font-medium text-foreground/70">{project.year}</span>
                     </div>
-                  )}
-                  {/* Badges overlay */}
-                  <div className="absolute top-3 left-3">
-                    <IOSBadge variant="default" size="sm" className="bg-black/40 backdrop-blur-sm text-white border-0">
-                      {project.year}
-                    </IOSBadge>
+
+                    {/* Plateformes et équipe */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex gap-1.5">
+                        {project.platforms.map((platform) => (
+                          <span key={platform} className="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                            {platform}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-muted-foreground/50">•</span>
+                      <span className="text-xs text-muted-foreground">{project.stats.teamSize}</span>
+                    </div>
+
+                    {/* Bouton aligné en bas */}
+                    <div className="mt-auto">
+                      <IOSButton variant="ghost" size="sm" leftIcon={<ExternalLink className="w-4 h-4" />}>
+                        {uiTexts.buttons.viewDetails}
+                      </IOSButton>
+                    </div>
                   </div>
-                  <div className="absolute top-3 right-3 flex gap-2">
-                    {project.platforms.map((platform) => (
-                      <IOSBadge key={platform} variant="default" size="sm" className="bg-primary/80 backdrop-blur-sm text-white border-0">
-                        {platform}
-                      </IOSBadge>
-                    ))}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-1">{project.name}</h3>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{project.description}</p>
-                  <IOSButton variant="ghost" size="sm" leftIcon={<ExternalLink className="w-4 h-4" />}>
-                    {uiTexts.buttons.viewDetails}
-                  </IOSButton>
                 </div>
               </IOSCard>
             ))}
@@ -337,7 +351,7 @@ const WebView = () => {
           </div>
 
           {/* Soft Skills */}
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {softSkills.map((skill) => (
               <IOSCard key={skill.id} variant="glass" padding="md">
                 <div className="flex items-center gap-3 mb-3">
@@ -365,7 +379,7 @@ const WebView = () => {
           </p>
 
           <div className="space-y-6">
-            {experiences.slice(0, 6).map((exp) => (
+            {experiences.slice(0, 9).map((exp) => (
               <IOSCard key={exp.id} variant="glass" padding="lg">
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                   <div>
@@ -440,26 +454,30 @@ const WebView = () => {
                 />
               )}
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-4">
                 {socialLinks.map((link) => {
                   const brandColors: Record<string, string> = {
-                    linkedin: 'bg-[#0A66C2]',
-                    github: 'bg-zinc-800 dark:bg-zinc-700',
-                    malt: 'bg-[#FC5757]',
-                    email: 'bg-emerald-500',
-                    phone: 'bg-violet-500',
+                    linkedin: 'text-[#0A66C2]',
+                    github: 'text-zinc-800 dark:text-zinc-200',
+                    malt: 'text-[#FC5757]',
+                    email: 'text-emerald-500',
+                    phone: 'text-violet-500',
                   };
-                  const bgColor = brandColors[link.id] || link.color;
+                  const iconColor = brandColors[link.id] || 'text-foreground';
                   return (
                     <a
                       key={link.id}
                       href={link.href}
                       target={link.href.startsWith('http') ? '_blank' : undefined}
                       rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className={`w-12 h-12 rounded-xl ${bgColor} text-white flex items-center justify-center hover:opacity-90 hover:scale-110 hover:-translate-y-0.5 transition-all duration-200`}
+                      className="group"
                       title={link.name}
                     >
-                      {iconMap[link.icon]}
+                      <div className="w-12 h-12 rounded-2xl bg-card/80 backdrop-blur-sm border border-border/50 flex items-center justify-center shadow-sm transform transition-all duration-200 ease-out group-hover:scale-110 group-hover:shadow-lg group-hover:-translate-y-1 group-hover:border-border group-active:scale-95">
+                        <span className={`${iconColor} transition-transform duration-200 group-hover:scale-110`}>
+                          {iconMap[link.icon]}
+                        </span>
+                      </div>
                     </a>
                   );
                 })}
