@@ -142,7 +142,11 @@ const WebView = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      {/* Wrapper avec transform pour l'effet push */}
+      <div className={`transition-transform duration-300 ease-out ${
+        selectedProject ? '-translate-x-[288px]' : 'translate-x-0'
+      }`}>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-6 py-20">
         <div className="absolute inset-0 overflow-hidden">
@@ -486,6 +490,7 @@ const WebView = () => {
           <PDFDownloadButton />
         </div>
       </footer>
+      </div>
 
       {/* Side Panel pour détails projet */}
       <IOSSidePanel
