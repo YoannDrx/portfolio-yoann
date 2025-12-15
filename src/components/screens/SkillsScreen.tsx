@@ -11,7 +11,6 @@ import { ChevronRight } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar, IOSChip } from '../ios';
 import { getAiContent, getSkillStoryIntro, getSoftSkills, getTechnicalSkills, getTools, getUiTexts } from '@/data';
-import { LocaleToggle } from '@/components/LocaleToggle';
 import { useI18n } from '@/i18n/I18nProvider';
 import type { NarrativeSkillCard, SoftSkillCard } from '@/data/types';
 
@@ -362,7 +361,6 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
 	        <IOSNavigationBar
 	          title={uiTexts.nav.skills}
 	          subtitle={uiTexts.stats.stackExpertise}
-	          rightAction={<LocaleToggle />}
 	        />
 
         {/* Intro narrative */}

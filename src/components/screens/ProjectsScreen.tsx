@@ -11,7 +11,6 @@ import { ChevronRight, Apple, Smartphone, Globe, Star, Download, ExternalLink, G
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
 import { getProjects, getProjectsCount, getUiTexts } from '@/data';
-import { LocaleToggle } from '@/components/LocaleToggle';
 import { useI18n } from '@/i18n/I18nProvider';
 import type { Project, ProjectType } from '@/data';
 
@@ -59,7 +58,6 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
         <IOSNavigationBar
           title={uiTexts.nav.projects}
           subtitle={`${getProjectsCount(locale)} ${uiTexts.stats.publishedApps}`}
-          rightAction={<LocaleToggle />}
         />
 
         {/* Project Cards */}

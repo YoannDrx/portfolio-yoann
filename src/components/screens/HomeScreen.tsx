@@ -12,6 +12,7 @@ import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSListItem, IOSAvailabilityBadge, IOSChip } from '../ios';
 import { getNavigationItems, getProfile, getUiTexts } from '@/data';
 import { LocaleToggle } from '@/components/LocaleToggle';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { useI18n } from '@/i18n/I18nProvider';
 
 interface HomeScreenProps {
@@ -30,7 +31,8 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto px-5 pb-32">
-        <div className="flex justify-end pt-2">
+        <div className="flex justify-end items-center gap-1 pt-2">
+          <ThemeToggle />
           <LocaleToggle />
         </div>
 

@@ -9,7 +9,6 @@ import dynamic from 'next/dynamic';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSBadge, IOSNavigationBar, IOSButton } from '../ios';
 import { getEducation, getExperiences, getUiTexts } from '@/data';
-import { LocaleToggle } from '@/components/LocaleToggle';
 import { useI18n } from '@/i18n/I18nProvider';
 import { Briefcase, GraduationCap, MapPin, ExternalLink, Download } from 'lucide-react';
 
@@ -69,12 +68,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 	        <IOSNavigationBar
 	          title={uiTexts.nav.resume}
 	          subtitle={uiTexts.sections.experienceAndEducation}
-	          rightAction={
-	            <div className="flex items-center gap-2">
-	              <LocaleToggle />
-              <PDFDownloadButton />
-            </div>
-          }
+	          rightAction={<PDFDownloadButton />}
         />
 
         {/* Experience Section */}

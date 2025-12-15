@@ -14,7 +14,6 @@ import {
 } from '../ios';
 import { getProfile, getSocialLinks, getUiTexts } from '@/data';
 import { ContactFormCard } from '@/components/contact/ContactFormCard';
-import { LocaleToggle } from '@/components/LocaleToggle';
 import { useI18n } from '@/i18n/I18nProvider';
 
 // Map icon names to components
@@ -56,7 +55,6 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
         <IOSNavigationBar
           title={uiTexts.nav.contact}
           subtitle={uiTexts.stats.discussProject}
-          rightAction={<LocaleToggle />}
         />
 
         {/* Social Links - Icônes colorées sur fond glass */}
