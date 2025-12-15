@@ -36,11 +36,9 @@ export const IOSSidePanel = ({
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
     }
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
     };
   }, [isOpen, handleEscape]);
 
@@ -48,7 +46,7 @@ export const IOSSidePanel = ({
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
@@ -66,7 +64,7 @@ export const IOSSidePanel = ({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-secondary/80 backdrop-blur-sm
+          className="absolute top-4 left-4 z-20 w-10 h-10 rounded-full bg-secondary/80 backdrop-blur-sm
             hover:bg-secondary flex items-center justify-center transition-all
             hover:scale-105 active:scale-95"
           aria-label="Fermer"
