@@ -149,7 +149,7 @@ const TechSkillDetail = ({
   const uiTexts = getUiTexts(locale);
 
   return (
-    <div className="h-full bg-secondary flex flex-col animate-ios-push">
+    <div className="h-full bg-background flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
 
       {/* Back Button */}
@@ -217,7 +217,7 @@ const SoftSkillDetail = ({
   const uiTexts = getUiTexts(locale);
 
   return (
-    <div className="h-full bg-secondary flex flex-col animate-ios-push">
+    <div className="h-full bg-background flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
 
       {/* Back Button */}
@@ -257,7 +257,7 @@ const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideS
   const aiContent = getAiContent(locale);
 
   return (
-    <div className="h-full bg-secondary flex flex-col animate-ios-push">
+    <div className="h-full bg-background flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
 
       {/* Back Button */}
@@ -353,7 +353,7 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
 
   // Vue liste
   return (
-    <div className="h-full bg-secondary flex flex-col">
+    <div className="h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
 	      <div className="flex-1 overflow-y-auto pb-32">

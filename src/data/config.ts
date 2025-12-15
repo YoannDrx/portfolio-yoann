@@ -150,7 +150,7 @@ const uiTextsByLocale = {
       cannotSend: "Impossible d'envoyer le message",
     },
     stats: {
-      rating: 'Note',
+      team: 'Équipe',
       downloads: 'Téléchargements',
       platforms: 'Plateformes',
       publishedApps: 'applications publiées',
@@ -235,7 +235,7 @@ const uiTextsByLocale = {
       cannotSend: "Couldn't send the message",
     },
     stats: {
-      rating: 'Rating',
+      team: 'Team',
       downloads: 'Downloads',
       platforms: 'Platforms',
       publishedApps: 'apps shipped',

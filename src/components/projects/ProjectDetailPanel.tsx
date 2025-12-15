@@ -6,7 +6,7 @@
  */
 
 import Image from 'next/image';
-import { Star, Download, Globe, Apple, Smartphone, ExternalLink, Github } from 'lucide-react';
+import { Users, Download, Globe, Apple, Smartphone, ExternalLink, Github } from 'lucide-react';
 import { IOSButton, IOSBadge } from '@/components/ios';
 import { getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
@@ -87,10 +87,10 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
         <div className="flex items-center gap-6 mt-6 py-4 border-y border-border">
           <div className="text-center">
             <div className="flex items-center justify-center gap-1">
-              <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-              <span className="text-xl font-bold text-foreground">{project.stats.rating}</span>
+              <Users className="w-5 h-5 text-primary" />
+              <span className="text-xl font-bold text-foreground">{project.stats.teamSize}</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.rating}</p>
+            <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.team}</p>
           </div>
           <div className="w-px h-10 bg-border" />
           <div className="text-center">

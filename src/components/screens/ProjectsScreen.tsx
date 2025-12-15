@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ChevronRight, Apple, Smartphone, Globe, Star, Download, ExternalLink, Github } from 'lucide-react';
+import { ChevronRight, Apple, Smartphone, Globe, Users, Download, ExternalLink, Github } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
 import { getProjects, getProjectsCount, getUiTexts } from '@/data';
@@ -50,7 +50,7 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
   }
 
   return (
-    <div className="h-full bg-secondary flex flex-col">
+    <div className="h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
@@ -130,9 +130,9 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
                 {/* Stats */}
                 <div className="flex items-center gap-4 mt-3">
                   <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                    <Users className="w-4 h-4 text-primary" />
                     <span className="text-sm font-medium text-foreground">
-                      {project.stats.rating}
+                      {project.stats.teamSize}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -162,7 +162,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
   const uiTexts = getUiTexts(locale);
 
   return (
-    <div className="h-full bg-secondary flex flex-col animate-ios-push">
+    <div className="h-full bg-background flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
 
       {/* Back Button - Added padding bottom */}
@@ -213,12 +213,12 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
           <div className="flex items-center gap-6 mt-6">
             <div className="text-center">
               <div className="flex items-center justify-center gap-1">
-                <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                <Users className="w-5 h-5 text-primary" />
                 <span className="text-xl font-bold text-foreground">
-                  {project.stats.rating}
+                  {project.stats.teamSize}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.rating}</p>
+              <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.team}</p>
             </div>
             <div className="w-px h-10 bg-border" />
             <div className="text-center">

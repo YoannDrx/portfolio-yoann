@@ -30,7 +30,7 @@ export type Platform = 'ios' | 'android' | 'web';
 export type ProjectType = 'freelance' | 'cdi' | 'personal';
 
 export interface ProjectStats {
-  rating: number;
+  teamSize: string;
   downloads: string;
 }
 

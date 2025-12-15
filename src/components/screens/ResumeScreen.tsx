@@ -60,7 +60,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
   const devExperiences = experiences.slice(0, 9);
 
   return (
-    <div className="h-full bg-secondary flex flex-col">
+    <div className="h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">

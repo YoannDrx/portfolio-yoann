@@ -22,7 +22,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-sky-400 to-blue-600",
       emoji: "🏦",
       image: "/images/projects/klesia-landing.png",
-      stats: { rating: 4.6, downloads: "100K+" },
+      stats: { teamSize: "3 devs", downloads: "100K+" },
       features: ["React Native 0.77", "TypeScript", "Redux Toolkit", "RxJS", "Clean Architecture", "iOS", "Android"],
       stack: {
         frontend: ["React Native 0.77", "React 18", "TypeScript 5.6", "Redux Toolkit", "RxJS", "React Navigation v6", "Reanimated 3", "Moti"],
@@ -57,7 +57,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-yellow-300 to-orange-400",
       emoji: "🥚",
       image: "/images/projects/eggscuseme-landing.jpg",
-      stats: { rating: 4.9, downloads: "Freemium" },
+      stats: { teamSize: "Solo", downloads: "Freemium" },
       features: [
         "Next.js 16",
         "React 19",
@@ -112,7 +112,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-teal-400 to-emerald-500",
       emoji: "💼",
       image: "/images/projects/jaji-landing.png",
-      stats: { rating: 4.7, downloads: "50K+" },
+      stats: { teamSize: "3 devs", downloads: "50K+" },
       features: ["React Native", "TypeScript", "Redux Toolkit", "RxJS", "Agile/Scrum/SAFe", "Firebase", "Clean Architecture"],
       stack: {
         frontend: ["React Native 0.77", "React 18", "TypeScript", "Redux Toolkit", "RxJS Observables", "React Navigation v6", "i18next"],
@@ -147,7 +147,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
       image: "/images/projects/mycryptopilot-landing.jpg",
-      stats: { rating: 4.9, downloads: "SaaS" },
+      stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Crypto", "Discord.js"],
       stack: {
         frontend: ["Next.js 15 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Recharts", "Motion"],
@@ -181,7 +181,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-indigo-400 to-purple-500",
       emoji: "🧠",
-      stats: { rating: 4.8, downloads: "App" },
+      stats: { teamSize: "Solo", downloads: "App" },
       features: ["Next.js", "React", "TypeScript", "Tailwind"],
       links: {
         website: "https://moodtrace.app/",
@@ -199,7 +199,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
       emoji: "🎯",
-      stats: { rating: 4.7, downloads: "SaaS" },
+      stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Better Auth", "Mapbox GL"],
       stack: {
         frontend: ["Next.js 15 (Turbopack)", "React 19", "TypeScript 5.8", "TailwindCSS v4", "Mapbox GL", "Recharts", "Motion"],
@@ -229,7 +229,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-rose-400 to-pink-500",
       emoji: "🎨",
       image: "/images/projects/caroline-senyk-landing.jpg",
-      stats: { rating: 5.0, downloads: "B2C" },
+      stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js 16", "React 19", "Bootstrap 5", "Prisma", "i18n", "Resend"],
       stack: {
         frontend: ["Next.js 16", "React 19", "Bootstrap 5", "SASS", "Swiper", "React Slick"],
@@ -258,7 +258,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-slate-400 to-gray-500",
       emoji: "⚖️",
       image: "/images/projects/weil-paris-landing.jpg",
-      stats: { rating: 5.0, downloads: "B2B" },
+      stats: { teamSize: "Solo", downloads: "B2B" },
       features: ["Next.js 13", "React 18", "TailwindCSS", "DaisyUI", "Supabase", "i18n"],
       stack: {
         frontend: ["Next.js 13", "React 18", "TailwindCSS", "DaisyUI", "React Hook Form"],
@@ -285,7 +285,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-orange-400 to-red-500",
       emoji: "🔥",
       image: "/images/projects/agence-neon-landing.jpg",
-      stats: { rating: 4.9, downloads: "B2B" },
+      stats: { teamSize: "3 devs", downloads: "B2B" },
       features: ["Next.js", "SEO", "Google Analytics", "Bootstrap"],
     },
     {
@@ -301,7 +301,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
       image: "/images/projects/loic-ghanem-landing.jpg",
-      stats: { rating: 5.0, downloads: "B2C" },
+      stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js 16", "React 19", "Three.js", "TailwindCSS", "Prisma", "Better Auth"],
       stack: {
         frontend: ["Next.js 16", "React 19", "TailwindCSS", "Three.js", "React Three Fiber", "Framer Motion", "Mapbox GL"],
@@ -332,7 +332,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-blue-400 to-cyan-500",
       emoji: "📧",
       image: "/images/projects/mail-certificate-landing.jpg",
-      stats: { rating: 4.8, downloads: "B2B" },
+      stats: { teamSize: "2 devs", downloads: "B2B" },
       features: ["React 16", "Bootstrap", "Stripe", "Twilio 2FA", "Draft.js", "Styled Components"],
       stack: {
         frontend: ["React 16 (CRA)", "Bootstrap 4", "Reactstrap", "Styled Components", "Draft.js WYSIWYG"],
@@ -359,7 +359,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-pink-400 to-rose-500",
       emoji: "💝",
       image: "/images/projects/nos-instants-precieux-landing.jpg",
-      stats: { rating: 4.8, downloads: "B2C" },
+      stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js", "Bootstrap", "SEO", "Marketing"],
     },
     {
@@ -373,7 +373,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-green-400 to-lime-500",
       emoji: "🏍️",
       image: "/images/projects/test-and-ride-dashboard.jpg",
-      stats: { rating: 4.6, downloads: "10K+" },
+      stats: { teamSize: "2 devs", downloads: "10K+" },
       features: ["React Native", "Expo", "Node.js", "MongoDB", "API Airtable"],
     },
     {
@@ -387,7 +387,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-yellow-400 to-amber-500",
       emoji: "🍔",
       image: "/images/projects/crazee-burger.jpg",
-      stats: { rating: 4.5, downloads: "MVP" },
+      stats: { teamSize: "Solo", downloads: "MVP" },
       features: ["React.js", "Firebase", "Styled Components", "React Router"],
     },
   ],
@@ -406,7 +406,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-sky-400 to-blue-600",
       emoji: "🏦",
       image: "/images/projects/klesia-landing.png",
-      stats: { rating: 4.6, downloads: "100K+" },
+      stats: { teamSize: "3 devs", downloads: "100K+" },
       features: ["React Native 0.77", "TypeScript", "Redux Toolkit", "RxJS", "Clean Architecture", "iOS", "Android"],
       stack: {
         frontend: ["React Native 0.77", "React 18", "TypeScript 5.6", "Redux Toolkit", "RxJS", "React Navigation v6", "Reanimated 3", "Moti"],
@@ -441,7 +441,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-yellow-300 to-orange-400",
       emoji: "🥚",
       image: "/images/projects/eggscuseme-landing.jpg",
-      stats: { rating: 4.9, downloads: "Freemium" },
+      stats: { teamSize: "Solo", downloads: "Freemium" },
       features: [
         "Next.js 16",
         "React 19",
@@ -496,7 +496,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-teal-400 to-emerald-500",
       emoji: "💼",
       image: "/images/projects/jaji-landing.png",
-      stats: { rating: 4.7, downloads: "50K+" },
+      stats: { teamSize: "3 devs", downloads: "50K+" },
       features: ["React Native", "TypeScript", "Redux Toolkit", "RxJS", "Agile/Scrum/SAFe", "Firebase", "Clean Architecture"],
       stack: {
         frontend: ["React Native 0.77", "React 18", "TypeScript", "Redux Toolkit", "RxJS Observables", "React Navigation v6", "i18next"],
@@ -531,7 +531,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
       image: "/images/projects/mycryptopilot-landing.jpg",
-      stats: { rating: 4.9, downloads: "SaaS" },
+      stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Crypto", "Discord.js"],
       stack: {
         frontend: ["Next.js 15 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Recharts", "Motion"],
@@ -565,7 +565,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-indigo-400 to-purple-500",
       emoji: "🧠",
-      stats: { rating: 4.8, downloads: "App" },
+      stats: { teamSize: "Solo", downloads: "App" },
       features: ["Next.js", "React", "TypeScript", "Tailwind"],
       links: {
         website: "https://moodtrace.app/",
@@ -583,7 +583,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
       emoji: "🎯",
-      stats: { rating: 4.7, downloads: "SaaS" },
+      stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Better Auth", "Mapbox GL"],
       stack: {
         frontend: ["Next.js 15 (Turbopack)", "React 19", "TypeScript 5.8", "TailwindCSS v4", "Mapbox GL", "Recharts", "Motion"],
@@ -613,7 +613,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-rose-400 to-pink-500",
       emoji: "🎨",
       image: "/images/projects/caroline-senyk-landing.jpg",
-      stats: { rating: 5.0, downloads: "B2C" },
+      stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js 16", "React 19", "Bootstrap 5", "Prisma", "i18n", "Resend"],
       stack: {
         frontend: ["Next.js 16", "React 19", "Bootstrap 5", "SASS", "Swiper", "React Slick"],
@@ -642,7 +642,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-slate-400 to-gray-500",
       emoji: "⚖️",
       image: "/images/projects/weil-paris-landing.jpg",
-      stats: { rating: 5.0, downloads: "B2B" },
+      stats: { teamSize: "Solo", downloads: "B2B" },
       features: ["Next.js 13", "React 18", "TailwindCSS", "DaisyUI", "Supabase", "i18n"],
       stack: {
         frontend: ["Next.js 13", "React 18", "TailwindCSS", "DaisyUI", "React Hook Form"],
@@ -669,7 +669,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-orange-400 to-red-500",
       emoji: "🔥",
       image: "/images/projects/agence-neon-landing.jpg",
-      stats: { rating: 4.9, downloads: "B2B" },
+      stats: { teamSize: "3 devs", downloads: "B2B" },
       features: ["Next.js", "SEO", "Google Analytics", "Bootstrap"],
     },
     {
@@ -685,7 +685,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
       image: "/images/projects/loic-ghanem-landing.jpg",
-      stats: { rating: 5.0, downloads: "B2C" },
+      stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js 16", "React 19", "Three.js", "TailwindCSS", "Prisma", "Better Auth"],
       stack: {
         frontend: ["Next.js 16", "React 19", "TailwindCSS", "Three.js", "React Three Fiber", "Framer Motion", "Mapbox GL"],
@@ -716,7 +716,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-blue-400 to-cyan-500",
       emoji: "📧",
       image: "/images/projects/mail-certificate-landing.jpg",
-      stats: { rating: 4.8, downloads: "B2B" },
+      stats: { teamSize: "2 devs", downloads: "B2B" },
       features: ["React 16", "Bootstrap", "Stripe", "Twilio 2FA", "Draft.js", "Styled Components"],
       stack: {
         frontend: ["React 16 (CRA)", "Bootstrap 4", "Reactstrap", "Styled Components", "Draft.js WYSIWYG"],
@@ -743,7 +743,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-pink-400 to-rose-500",
       emoji: "💝",
       image: "/images/projects/nos-instants-precieux-landing.jpg",
-      stats: { rating: 4.8, downloads: "B2C" },
+      stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js", "Bootstrap", "SEO", "Marketing"],
     },
     {
@@ -757,7 +757,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-green-400 to-lime-500",
       emoji: "🏍️",
       image: "/images/projects/test-and-ride-dashboard.jpg",
-      stats: { rating: 4.6, downloads: "10K+" },
+      stats: { teamSize: "2 devs", downloads: "10K+" },
       features: ["React Native", "Expo", "Node.js", "MongoDB", "Airtable API"],
     },
     {
@@ -771,7 +771,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-yellow-400 to-amber-500",
       emoji: "🍔",
       image: "/images/projects/crazee-burger.jpg",
-      stats: { rating: 4.5, downloads: "MVP" },
+      stats: { teamSize: "Solo", downloads: "MVP" },
       features: ["React.js", "Firebase", "Styled Components", "React Router"],
     },
   ],
