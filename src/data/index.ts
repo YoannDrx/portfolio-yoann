@@ -9,11 +9,12 @@
 export * from './types';
 
 // Profile
-export { profile, navigationItems } from './profile';
+export { profile, navigationItems, getProfile, getNavigationItems } from './profile';
 
 // Projects
 export {
   projects,
+  getProjects,
   getProjectsCount,
   getProjectById,
   getProjectsByPlatform,
@@ -27,24 +28,30 @@ export {
   getCategoryAverageLevel,
   // Narrative skills
   skillStoryIntro,
+  getSkillStoryIntro,
   technicalSkills,
+  getTechnicalSkills,
   softSkills,
+  getSoftSkills,
+  getTools,
 } from './skills';
 
 // Resume (CV)
 export {
   experiences,
   education,
+  getExperiences,
+  getEducation,
   getExperiencesByType,
   getDevExperiences,
   getTotalYearsOfExperience,
 } from './resume';
 
 // Social
-export { socialLinks, getSocialLinkById, getContactEmail } from './social';
+export { socialLinks, getSocialLinks, getSocialLinkById, getContactEmail } from './social';
 
 // Config
-export { siteConfig, uiTexts } from './config';
+export { siteConfig, getSiteConfig, uiTexts, getUiTexts } from './config';
 
 // AI Content
-export { aiContent, type AIContent, type AITool } from './ai';
+export { aiContent, getAiContent, type AIContent, type AITool } from './ai';

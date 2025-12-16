@@ -62,8 +62,23 @@ const StatusBar: React.FC<IOSStatusBarProps> = ({
       );
     };
 
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+    updateTime();
+
+    // Update at the next minute boundary, then every minute
+    let intervalId: number | undefined;
+    const now = new Date();
+    const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    const timeoutId = window.setTimeout(() => {
+      updateTime();
+      intervalId = window.setInterval(updateTime, 60_000);
+    }, msToNextMinute);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      if (intervalId !== undefined) {
+        window.clearInterval(intervalId);
+      }
+    };
   }, [time]);
 
   const displayTime = time ?? currentTime;

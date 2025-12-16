@@ -53,18 +53,27 @@ const IOSInput = React.forwardRef<HTMLInputElement, IOSInputProps & IOSInputVari
       helperText,
       errorText,
       disabled,
+      id: idProp,
+      'aria-describedby': ariaDescribedByProp,
       ...props
     },
     ref
   ) => {
+    const autoId = React.useId();
+    const inputId = idProp ?? autoId;
     const currentState = disabled ? 'disabled' : state;
-    const showError = currentState === 'error' && errorText;
+    const showError = currentState === 'error' && !!errorText;
     const displayHelperText = showError ? errorText : helperText;
+    const helperTextId = displayHelperText ? `${inputId}-help` : undefined;
+    const ariaDescribedBy = [ariaDescribedByProp, helperTextId].filter(Boolean).join(' ') || undefined;
 
     return (
       <div className="w-full">
         {label && (
-          <label className="text-sm font-medium text-foreground mb-1.5 block">
+          <label
+            htmlFor={inputId}
+            className="text-sm font-medium text-foreground mb-1.5 block"
+          >
             {label}
           </label>
         )}
@@ -78,6 +87,7 @@ const IOSInput = React.forwardRef<HTMLInputElement, IOSInputProps & IOSInputVari
 
           <input
             ref={ref}
+            id={inputId}
             className={cn(
               iosInputVariants({ state: currentState, size }),
               leftIcon && 'pl-10',
@@ -85,6 +95,8 @@ const IOSInput = React.forwardRef<HTMLInputElement, IOSInputProps & IOSInputVari
               className
             )}
             disabled={disabled}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={showError || undefined}
             {...props}
           />
 
@@ -97,6 +109,7 @@ const IOSInput = React.forwardRef<HTMLInputElement, IOSInputProps & IOSInputVari
 
         {displayHelperText && (
           <p
+            id={helperTextId}
             className={cn(
               'text-sm mt-1.5',
               showError ? 'text-error' : 'text-muted-foreground'

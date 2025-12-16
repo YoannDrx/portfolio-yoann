@@ -108,6 +108,8 @@ const IOSCard = React.forwardRef<HTMLDivElement, IOSCardProps & IOSCardVariantPr
       children,
       onClick,
       onPress,
+      onKeyDown,
+      onKeyUp,
       ...props
     },
     ref
@@ -118,6 +120,31 @@ const IOSCard = React.forwardRef<HTMLDivElement, IOSCardProps & IOSCardVariantPr
     };
 
     const isInteractive = interactive || !!onPress || !!onClick;
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown?.(e);
+      if (e.defaultPrevented || !isInteractive) return;
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.currentTarget.click();
+      }
+
+      if (e.key === ' ') {
+        // Empêche le scroll page quand la carte est focus
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyUp?.(e);
+      if (e.defaultPrevented || !isInteractive) return;
+
+      if (e.key === ' ') {
+        e.preventDefault();
+        e.currentTarget.click();
+      }
+    };
 
     const getPaddingClass = () => {
       const paddingValue = padding as string;
@@ -145,6 +172,8 @@ const IOSCard = React.forwardRef<HTMLDivElement, IOSCardProps & IOSCardVariantPr
         onClick={isInteractive ? handleClick : undefined}
         role={isInteractive ? 'button' : undefined}
         tabIndex={isInteractive ? 0 : undefined}
+        onKeyDown={isInteractive ? handleKeyDown : onKeyDown}
+        onKeyUp={isInteractive ? handleKeyUp : onKeyUp}
         {...props}
       >
         {header && (

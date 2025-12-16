@@ -8,25 +8,131 @@ import {
   Page,
   View,
   Text,
-  Image,
+  Image as PdfImage,
   StyleSheet,
   Link,
 } from '@react-pdf/renderer';
-import { profile } from '@/data/profile';
-import { experiences, education } from '@/data/resume';
-import { technicalSkills, softSkills } from '@/data/skills';
+import type { Locale } from '@/i18n/locales';
+import {
+  getEducation,
+  getExperiences,
+  getProfile,
+  getSoftSkills,
+  getTechnicalSkills,
+  type Education,
+  type Experience,
+  type NarrativeSkillCard,
+  type Profile,
+  type SoftSkillCard,
+} from '@/data';
 import { pdfColors, pdfFontSizes, pdfSpacing } from './styles/pdfTheme';
 
 // Helpers
-const getEmploymentTypeLabel = (type: string) => {
-  const labels: Record<string, string> = {
-    cdi: 'CDI',
-    freelance: 'Freelance',
-    independant: 'Indep.',
-    cdd: 'CDD',
-    intermittent: 'Intermittent',
+type CvLanguage = {
+  id: string;
+  name: string;
+  level: string;
+};
+
+type CvInterest = {
+  id: string;
+  title: string;
+  detail?: string;
+};
+
+type CvLabels = {
+  present: string;
+  sectionTitles: {
+    experiences: string;
+    skills: string;
+    education: string;
+    languages: string;
+    interests: string;
   };
-  return labels[type] || type;
+  availability: string;
+  document: {
+    title: string;
+    subject: string;
+  };
+  employmentTypes: Record<string, string>;
+  languages: CvLanguage[];
+  interests: CvInterest[];
+};
+
+const cvLabelsByLocale: Record<Locale, CvLabels> = {
+  fr: {
+    present: 'Présent',
+    sectionTitles: {
+      experiences: 'Expériences',
+      skills: 'Compétences',
+      education: 'Formation',
+      languages: 'Langues',
+      interests: 'Intérêts',
+    },
+    availability: 'Disponible',
+    document: {
+      title: 'CV Yoann Andrieux - Dev React Native',
+      subject: 'CV Développeur React Native',
+    },
+    employmentTypes: {
+      cdi: 'CDI',
+      freelance: 'Freelance',
+      independant: 'Indep.',
+      cdd: 'CDD',
+      intermittent: 'Intermittent',
+    },
+    languages: [
+      { id: 'fr', name: 'Français', level: 'Natif' },
+      { id: 'en', name: 'Anglais', level: 'Professionnel' },
+    ],
+    interests: [
+      { id: 'music', title: 'Musique', detail: 'Bassiste pro' },
+      { id: 'running', title: 'Running' },
+      { id: 'nature', title: 'Nature & randonnée' },
+      { id: 'travel', title: 'Voyage & culture' },
+    ],
+  },
+  en: {
+    present: 'Present',
+    sectionTitles: {
+      experiences: 'Experience',
+      skills: 'Skills',
+      education: 'Education',
+      languages: 'Languages',
+      interests: 'Interests',
+    },
+    availability: 'Available',
+    document: {
+      title: 'Resume Yoann Andrieux - React Native Developer',
+      subject: 'Resume — React Native Developer',
+    },
+    employmentTypes: {
+      cdi: 'Full-time',
+      freelance: 'Freelance',
+      independant: 'Self-employed',
+      cdd: 'Fixed-term',
+      intermittent: 'Intermittent',
+    },
+    languages: [
+      { id: 'fr', name: 'French', level: 'Native' },
+      { id: 'en', name: 'English', level: 'Professional' },
+    ],
+    interests: [
+      { id: 'music', title: 'Music', detail: 'Professional bassist' },
+      { id: 'running', title: 'Running' },
+      { id: 'nature', title: 'Nature & hiking' },
+      { id: 'travel', title: 'Travel & culture' },
+    ],
+  },
+};
+
+function getCvLabels(locale: Locale): CvLabels {
+  return cvLabelsByLocale[locale] ?? cvLabelsByLocale.fr;
+}
+
+const getEmploymentTypeLabel = (type: string, locale: Locale) => {
+  const { employmentTypes } = getCvLabels(locale);
+  return employmentTypes[type] || type;
 };
 
 const getBadgeColors = (type: string) => {
@@ -54,23 +160,6 @@ const getLevelStars = (level: string, skillId?: string) => {
   if (skillId === 'react-native') return Math.min(stars + 1, 5);
   return stars;
 };
-
-// Sélection des 7 expériences clés pour le CV 1 page
-const selectedExperiences = experiences.slice(0, 7);
-
-// Langues
-const languages = [
-  { id: 'fr', name: 'Français', level: 'Natif' },
-  { id: 'en', name: 'Anglais', level: 'Professionnel' },
-];
-
-// Intérêts
-const interests = [
-  { id: 'music', title: 'Musique', detail: 'Bassiste pro' },
-  { id: 'running', title: 'Running' },
-  { id: 'nature', title: 'Nature & randonnée' },
-  { id: 'travel', title: 'Voyage & culture' },
-];
 
 // Styles
 const styles = StyleSheet.create({
@@ -401,11 +490,18 @@ const styles = StyleSheet.create({
   },
 });
 
-// Composants
-const Header = () => (
+type CVDocumentProps = {
+  locale?: Locale;
+};
+
+type HeaderProps = {
+  profile: Profile;
+};
+
+const Header = ({ profile }: HeaderProps) => (
   <View style={styles.header}>
     <View style={styles.avatarContainer}>
-      <Image src="/images/avatar.jpg" style={styles.avatar} />
+      <PdfImage src="/images/avatar.jpg" style={styles.avatar} />
     </View>
     <View style={styles.headerInfo}>
       <Text style={styles.name}>
@@ -434,8 +530,15 @@ const Header = () => (
   </View>
 );
 
-const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
+type ExperienceItemProps = {
+  exp: Experience;
+  locale: Locale;
+  presentLabel: string;
+};
+
+const ExperienceItem = ({ exp, locale, presentLabel }: ExperienceItemProps) => {
   const badgeColors = getBadgeColors(exp.type);
+
   return (
     <View style={styles.experienceCard}>
       <View style={styles.experienceHeader}>
@@ -445,14 +548,14 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
         </View>
         <View style={[styles.badge, { backgroundColor: badgeColors.bg }]}>
           <Text style={[styles.badgeText, { color: badgeColors.text }]}>
-            {getEmploymentTypeLabel(exp.type)}
+            {getEmploymentTypeLabel(exp.type, locale)}
           </Text>
         </View>
       </View>
 
       <View style={styles.experienceMeta}>
         <Text style={styles.metaText}>
-          {exp.startDate} - {exp.endDate || 'Présent'}
+          {exp.startDate} - {exp.endDate || presentLabel}
         </Text>
         <Text style={styles.metaText}>{exp.location}</Text>
       </View>
@@ -473,21 +576,42 @@ const ExperienceItem = ({ exp }: { exp: (typeof experiences)[0] }) => {
   );
 };
 
-const ExperiencesSection = () => (
+type ExperiencesSectionProps = {
+  experiences: Experience[];
+  locale: Locale;
+  presentLabel: string;
+  title: string;
+};
+
+const ExperiencesSection = ({
+  experiences,
+  locale,
+  presentLabel,
+  title,
+}: ExperiencesSectionProps) => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
       <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosBlue }]}>
         <Text style={{ color: 'white', fontSize: 10 }}>E</Text>
       </View>
-      <Text style={styles.sectionTitle}>Expériences</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
     </View>
-    {selectedExperiences.map((exp) => (
-      <ExperienceItem key={exp.id} exp={exp} />
+    {experiences.map((exp) => (
+      <ExperienceItem
+        key={exp.id}
+        exp={exp}
+        locale={locale}
+        presentLabel={presentLabel}
+      />
     ))}
   </View>
 );
 
-const SoftSkillsSection = () => (
+type SoftSkillsSectionProps = {
+  softSkills: SoftSkillCard[];
+};
+
+const SoftSkillsSection = ({ softSkills }: SoftSkillsSectionProps) => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
       <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosOrange }]}>
@@ -508,15 +632,20 @@ const SoftSkillsSection = () => (
   </View>
 );
 
-const SkillsSection = () => (
+type SkillsSectionProps = {
+  skills: NarrativeSkillCard[];
+  title: string;
+};
+
+const SkillsSection = ({ skills, title }: SkillsSectionProps) => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
       <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosTeal }]}>
         <Text style={{ color: 'white', fontSize: 10 }}>C</Text>
       </View>
-      <Text style={styles.sectionTitle}>Compétences</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
     </View>
-    {technicalSkills.map((skill) => {
+    {skills.map((skill) => {
       const stars = getLevelStars(skill.level, skill.id);
       return (
         <View key={skill.id} style={styles.skillItem}>
@@ -525,7 +654,10 @@ const SkillsSection = () => (
             {[1, 2, 3, 4, 5].map((i) => (
               <View
                 key={i}
-                style={[styles.star, i <= stars ? styles.starFilled : styles.starEmpty]}
+                style={[
+                  styles.star,
+                  i <= stars ? styles.starFilled : styles.starEmpty,
+                ]}
               />
             ))}
           </View>
@@ -535,13 +667,18 @@ const SkillsSection = () => (
   </View>
 );
 
-const EducationSection = () => (
+type EducationSectionProps = {
+  education: Education[];
+  title: string;
+};
+
+const EducationSection = ({ education, title }: EducationSectionProps) => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
       <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosPurple }]}>
         <Text style={{ color: 'white', fontSize: 10 }}>F</Text>
       </View>
-      <Text style={styles.sectionTitle}>Formation</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
     </View>
     {education.map((edu) => (
       <View key={edu.id} style={styles.educationCard}>
@@ -555,13 +692,18 @@ const EducationSection = () => (
   </View>
 );
 
-const LanguagesSection = () => (
+type LanguagesSectionProps = {
+  languages: CvLanguage[];
+  title: string;
+};
+
+const LanguagesSection = ({ languages, title }: LanguagesSectionProps) => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
       <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosIndigo }]}>
         <Text style={{ color: 'white', fontSize: 10 }}>L</Text>
       </View>
-      <Text style={styles.sectionTitle}>Langues</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
     </View>
     {languages.map((lang) => (
       <View key={lang.id} style={styles.languageItem}>
@@ -573,13 +715,18 @@ const LanguagesSection = () => (
   </View>
 );
 
-const InterestsSection = () => (
+type InterestsSectionProps = {
+  interests: CvInterest[];
+  title: string;
+};
+
+const InterestsSection = ({ interests, title }: InterestsSectionProps) => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
       <View style={[styles.sectionIcon, { backgroundColor: pdfColors.iosPink }]}>
         <Text style={{ color: 'white', fontSize: 10 }}>I</Text>
       </View>
-      <Text style={styles.sectionTitle}>Intérêts</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
     </View>
     {interests.map((interest) => (
       <View key={interest.id} style={styles.interestItem}>
@@ -590,7 +737,11 @@ const InterestsSection = () => (
   </View>
 );
 
-const Footer = () => (
+type FooterProps = {
+  availabilityLabel: string;
+};
+
+const Footer = ({ availabilityLabel }: FooterProps) => (
   <View style={styles.footer}>
     <View style={styles.footerLinks}>
       <Link src="https://www.linkedin.com/in/yoann-andrieux/" style={styles.footerLink}>
@@ -605,41 +756,56 @@ const Footer = () => (
     </View>
     <View style={styles.availableBadge}>
       <View style={styles.greenDot} />
-      <Text style={styles.availableText}>Disponible</Text>
+      <Text style={styles.availableText}>{availabilityLabel}</Text>
     </View>
   </View>
 );
 
 // Document principal
-const CVDocument = () => (
-  <Document
-    title="CV Yoann Andrieux - Dev React Native"
-    author="Yoann Andrieux"
-    subject="CV Développeur React Native"
-    keywords="React Native, React, Next.js, TypeScript, Mobile, Web"
-  >
-    <Page size="A4" style={styles.page}>
-      <Header />
+const CVDocument = ({ locale = 'fr' }: CVDocumentProps) => {
+  const labels = getCvLabels(locale);
 
-      <View style={styles.mainContainer}>
-        {/* Colonne principale - Expériences + Soft Skills */}
-        <View style={styles.mainColumn}>
-          <ExperiencesSection />
-          <SoftSkillsSection />
+  const profile = getProfile(locale);
+  const experiences = getExperiences(locale).slice(0, 7);
+  const education = getEducation(locale);
+  const technicalSkills = getTechnicalSkills(locale);
+  const softSkills = getSoftSkills(locale);
+
+  return (
+    <Document
+      title={labels.document.title}
+      author="Yoann Andrieux"
+      subject={labels.document.subject}
+      keywords="React Native, React, Next.js, TypeScript, Mobile, Web"
+    >
+      <Page size="A4" style={styles.page}>
+        <Header profile={profile} />
+
+        <View style={styles.mainContainer}>
+          {/* Colonne principale - Expériences + Soft Skills */}
+          <View style={styles.mainColumn}>
+            <ExperiencesSection
+              experiences={experiences}
+              locale={locale}
+              presentLabel={labels.present}
+              title={labels.sectionTitles.experiences}
+            />
+            <SoftSkillsSection softSkills={softSkills} />
+          </View>
+
+          {/* Sidebar - Compétences, Formation, Langues, Intérêts */}
+          <View style={styles.sidebar}>
+            <SkillsSection skills={technicalSkills} title={labels.sectionTitles.skills} />
+            <EducationSection education={education} title={labels.sectionTitles.education} />
+            <LanguagesSection languages={labels.languages} title={labels.sectionTitles.languages} />
+            <InterestsSection interests={labels.interests} title={labels.sectionTitles.interests} />
+          </View>
         </View>
 
-        {/* Sidebar - Compétences, Formation, Langues, Intérêts */}
-        <View style={styles.sidebar}>
-          <SkillsSection />
-          <EducationSection />
-          <LanguagesSection />
-          <InterestsSection />
-        </View>
-      </View>
-
-      <Footer />
-    </Page>
-  </Document>
-);
+        <Footer availabilityLabel={labels.availability} />
+      </Page>
+    </Document>
+  );
+};
 
 export default CVDocument;

@@ -23,23 +23,35 @@ const IOSTextarea = React.forwardRef<HTMLTextAreaElement, IOSTextareaProps>(
       label,
       helperText,
       errorText,
+      disabled,
+      id: idProp,
+      'aria-describedby': ariaDescribedByProp,
       ...props
     },
     ref
   ) => {
-    const showError = state === 'error' && errorText;
+    const autoId = React.useId();
+    const textareaId = idProp ?? autoId;
+    const currentState = disabled ? 'disabled' : state;
+    const showError = currentState === 'error' && !!errorText;
     const displayHelperText = showError ? errorText : helperText;
+    const helperTextId = displayHelperText ? `${textareaId}-help` : undefined;
+    const ariaDescribedBy = [ariaDescribedByProp, helperTextId].filter(Boolean).join(' ') || undefined;
 
     return (
       <div className="w-full">
         {label && (
-          <label className="text-sm font-medium text-foreground mb-1.5 block">
+          <label
+            htmlFor={textareaId}
+            className="text-sm font-medium text-foreground mb-1.5 block"
+          >
             {label}
           </label>
         )}
 
         <textarea
           ref={ref}
+          id={textareaId}
           rows={rows}
           className={cn(
             'w-full px-4 py-3 rounded-xl',
@@ -49,14 +61,18 @@ const IOSTextarea = React.forwardRef<HTMLTextAreaElement, IOSTextareaProps>(
             'border-0 resize-none',
             'focus:ring-2 focus:outline-none',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            stateClasses[state],
+            stateClasses[currentState],
             className
           )}
+          disabled={disabled}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={showError || undefined}
           {...props}
         />
 
         {displayHelperText && (
           <p
+            id={helperTextId}
             className={cn(
               'text-sm mt-1.5',
               showError ? 'text-error' : 'text-muted-foreground'

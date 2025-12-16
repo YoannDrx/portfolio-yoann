@@ -30,7 +30,7 @@ export type Platform = 'ios' | 'android' | 'web';
 export type ProjectType = 'freelance' | 'cdi' | 'personal';
 
 export interface ProjectStats {
-  rating: number;
+  teamSize: string;
   downloads: string;
 }
 
@@ -96,7 +96,7 @@ export interface Tool {
 
 // ============ NARRATIVE SKILLS ============
 
-export type SkillLevel = 'Expert' | 'Avancé' | 'Confirmé' | 'Intermédiaire';
+export type SkillLevel = 'Expert' | 'Avancé' | 'Confirmé' | 'Intermédiaire' | 'Advanced' | 'Proficient' | 'Intermediate';
 
 export interface NarrativeSkillCard {
   id: string;

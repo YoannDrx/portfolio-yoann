@@ -22,6 +22,9 @@ export { IOSSafeArea, IOSSafeAreaView, IOSSafeAreaContent, iosSafeAreaVariants }
 export { IOSListItem } from './IOSListItem';
 export { IOSNavigationBar } from './IOSNavigationBar';
 
+// Overlays & Panels
+export { IOSSidePanel } from './IOSSidePanel';
+
 // Feedback
 export { IOSSpinner } from './IOSSpinner';
 export { IOSProgressBar } from './IOSProgressBar';
