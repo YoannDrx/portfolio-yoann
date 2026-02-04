@@ -56,7 +56,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-yellow-300 to-orange-400",
       emoji: "🥚",
-      image: "/images/projects/eggscuseme-landing.jpg",
+      image: "/images/projects/eggscuseme-landing.png",
       stats: { teamSize: "Solo", downloads: "Freemium" },
       features: [
         "Next.js 16",
@@ -96,6 +96,38 @@ const projectsByLocale: Record<Locale, Project[]> = {
       links: {
         website: "https://eggscuseme.app/",
         github: "https://github.com/YoannDrx/EggscuseMe",
+      },
+    },
+    {
+      id: "000",
+      name: "Impulsion",
+      description: "Plateforme hybride de coaching sportif connectant coachs et athlètes",
+      longDescription:
+        "Impulsion est une plateforme hybride qui connecte coachs et athlètes. Elle permet de planifier des séances avec un calendrier drag & drop, d'annoter des vidéos, de calculer la charge d'entraînement (ACWR), et de suivre la progression des athlètes en temps réel. Inclut des visualisations 3D immersives et un système d'abonnement complet.",
+      category: "SaaS",
+      projectType: "personal",
+      year: "2025",
+      platforms: ["web"],
+      gradient: "from-lime-400 to-green-500",
+      emoji: "🏃",
+      image: "/images/projects/impulsion-landing.png",
+      stats: { teamSize: "Solo", downloads: "SaaS" },
+      features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma", "Stripe", "Three.js"],
+      stack: {
+        frontend: ["Next.js 16 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Three.js", "React Three Fiber", "Recharts", "Motion"],
+        backend: ["Prisma ORM", "Better Auth", "Stripe", "OpenAI SDK", "Resend", "React Email"],
+        database: ["PostgreSQL", "Prisma ORM 6.19", "Redis (ioredis)"],
+        devops: ["Vercel", "GitHub Actions CI/CD"],
+        testing: ["Vitest", "Playwright", "React Testing Library"],
+      },
+      highlights: [
+        { title: "Calendrier Drag & Drop", description: "Planification intuitive des séances d'entraînement" },
+        { title: "Annotations Vidéo", description: "Analyse vidéo avec annotations pour feedback personnalisé" },
+        { title: "Charge ACWR", description: "Calcul automatique du ratio charge aiguë/chronique" },
+        { title: "Visualisations 3D", description: "Interface immersive avec Three.js et React Three Fiber" },
+      ],
+      links: {
+        website: "https://impulsion.app/",
       },
     },
     // 2024
@@ -146,7 +178,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
-      image: "/images/projects/mycryptopilot-landing.jpg",
+      image: "/images/projects/mycryptopilot-landing.png",
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Crypto", "Discord.js"],
       stack: {
@@ -173,18 +205,34 @@ const projectsByLocale: Record<Locale, Project[]> = {
     },
     {
       id: "3",
-      name: "MoodTrace",
-      description: "Application de suivi émotionnel et bien-être mental",
+      name: "MoodDay",
+      description: "Application de suivi émotionnel et bien-être mental conçue avec des psychiatres",
+      longDescription:
+        "MoodDay est un compagnon digital conçu avec des psychiatres pour aider à mieux comprendre ses humeurs, suivre ses traitements et préparer ses consultations. L'application inclut un suivi d'humeur quotidien, la gestion des médicaments, des analyses et des rappels. Conforme RGPD avec données chiffrées et export PDF médical.",
       category: "WebApp PWA",
       projectType: "personal",
       year: "2025",
       platforms: ["web"],
-      gradient: "from-indigo-400 to-purple-500",
+      gradient: "from-teal-400 to-emerald-500",
       emoji: "🧠",
+      image: "/images/projects/moodday-landing.png",
       stats: { teamSize: "Solo", downloads: "App" },
-      features: ["Next.js", "React", "TypeScript", "Tailwind"],
+      features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma", "Better Auth"],
+      stack: {
+        frontend: ["Next.js 16 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Recharts", "Motion"],
+        backend: ["Prisma ORM", "Better Auth", "Resend", "React Email", "jsPDF"],
+        database: ["PostgreSQL", "Prisma ORM 6.x"],
+        devops: ["Vercel", "GitHub Actions CI/CD"],
+        testing: ["Vitest", "Playwright", "React Testing Library"],
+      },
+      highlights: [
+        { title: "Suivi d'humeur", description: "Enregistrement quotidien avec détection automatique des patterns" },
+        { title: "Gestion médicaments", description: "Suivi des traitements avec rappels personnalisés" },
+        { title: "Export PDF médical", description: "Génération de rapports pour préparer les consultations" },
+        { title: "Conforme RGPD", description: "Données chiffrées et sécurité renforcée" },
+      ],
       links: {
-        website: "https://moodtrace.app/",
+        website: "https://moodday.app/",
       },
     },
     {
@@ -199,6 +247,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
       emoji: "🎯",
+      image: "/images/projects/choosewisely-landing.png",
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Better Auth", "Mapbox GL"],
       stack: {
@@ -300,7 +349,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
-      image: "/images/projects/loic-ghanem-landing.jpg",
+      image: "/images/projects/portfolio-loic-landing.png",
       stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js 16", "React 19", "Three.js", "TailwindCSS", "Prisma", "Better Auth"],
       stack: {
@@ -440,7 +489,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-yellow-300 to-orange-400",
       emoji: "🥚",
-      image: "/images/projects/eggscuseme-landing.jpg",
+      image: "/images/projects/eggscuseme-landing.png",
       stats: { teamSize: "Solo", downloads: "Freemium" },
       features: [
         "Next.js 16",
@@ -480,6 +529,38 @@ const projectsByLocale: Record<Locale, Project[]> = {
       links: {
         website: "https://eggscuseme.app/",
         github: "https://github.com/YoannDrx/EggscuseMe",
+      },
+    },
+    {
+      id: "000",
+      name: "Impulsion",
+      description: "Hybrid coaching platform connecting coaches and athletes",
+      longDescription:
+        "Impulsion is a hybrid platform that connects coaches and athletes. It enables session planning with a drag & drop calendar, video annotations, training load calculation (ACWR), and real-time athlete progress tracking. Includes immersive 3D visualizations and a complete subscription system.",
+      category: "SaaS",
+      projectType: "personal",
+      year: "2025",
+      platforms: ["web"],
+      gradient: "from-lime-400 to-green-500",
+      emoji: "🏃",
+      image: "/images/projects/impulsion-landing.png",
+      stats: { teamSize: "Solo", downloads: "SaaS" },
+      features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma", "Stripe", "Three.js"],
+      stack: {
+        frontend: ["Next.js 16 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Three.js", "React Three Fiber", "Recharts", "Motion"],
+        backend: ["Prisma ORM", "Better Auth", "Stripe", "OpenAI SDK", "Resend", "React Email"],
+        database: ["PostgreSQL", "Prisma ORM 6.19", "Redis (ioredis)"],
+        devops: ["Vercel", "GitHub Actions CI/CD"],
+        testing: ["Vitest", "Playwright", "React Testing Library"],
+      },
+      highlights: [
+        { title: "Drag & Drop Calendar", description: "Intuitive training session planning" },
+        { title: "Video Annotations", description: "Video analysis with annotations for personalized feedback" },
+        { title: "ACWR Load", description: "Automatic acute/chronic workload ratio calculation" },
+        { title: "3D Visualizations", description: "Immersive interface with Three.js and React Three Fiber" },
+      ],
+      links: {
+        website: "https://impulsion.app/",
       },
     },
     // 2024
@@ -530,7 +611,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
-      image: "/images/projects/mycryptopilot-landing.jpg",
+      image: "/images/projects/mycryptopilot-landing.png",
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Crypto", "Discord.js"],
       stack: {
@@ -557,18 +638,34 @@ const projectsByLocale: Record<Locale, Project[]> = {
     },
     {
       id: "3",
-      name: "MoodTrace",
-      description: "Mood tracking and mental well-being app",
+      name: "MoodDay",
+      description: "Mood tracking and mental well-being app designed with psychiatrists",
+      longDescription:
+        "MoodDay is a digital companion designed with psychiatrists to help users better understand their moods, track treatments, and prepare for consultations. The app includes daily mood tracking, medication management, analytics, and reminders. GDPR compliant with encrypted data and medical PDF export.",
       category: "PWA",
       projectType: "personal",
       year: "2025",
       platforms: ["web"],
-      gradient: "from-indigo-400 to-purple-500",
+      gradient: "from-teal-400 to-emerald-500",
       emoji: "🧠",
+      image: "/images/projects/moodday-landing.png",
       stats: { teamSize: "Solo", downloads: "App" },
-      features: ["Next.js", "React", "TypeScript", "Tailwind"],
+      features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma", "Better Auth"],
+      stack: {
+        frontend: ["Next.js 16 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Recharts", "Motion"],
+        backend: ["Prisma ORM", "Better Auth", "Resend", "React Email", "jsPDF"],
+        database: ["PostgreSQL", "Prisma ORM 6.x"],
+        devops: ["Vercel", "GitHub Actions CI/CD"],
+        testing: ["Vitest", "Playwright", "React Testing Library"],
+      },
+      highlights: [
+        { title: "Mood tracking", description: "Daily recording with automatic pattern detection" },
+        { title: "Medication management", description: "Treatment tracking with personalized reminders" },
+        { title: "Medical PDF export", description: "Report generation for consultation preparation" },
+        { title: "GDPR compliant", description: "Encrypted data and enhanced security" },
+      ],
       links: {
-        website: "https://moodtrace.app/",
+        website: "https://moodday.app/",
       },
     },
     {
@@ -583,6 +680,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
       emoji: "🎯",
+      image: "/images/projects/choosewisely-landing.png",
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Better Auth", "Mapbox GL"],
       stack: {
@@ -684,7 +782,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
-      image: "/images/projects/loic-ghanem-landing.jpg",
+      image: "/images/projects/portfolio-loic-landing.png",
       stats: { teamSize: "Solo", downloads: "B2C" },
       features: ["Next.js 16", "React 19", "Three.js", "TailwindCSS", "Prisma", "Better Auth"],
       stack: {
