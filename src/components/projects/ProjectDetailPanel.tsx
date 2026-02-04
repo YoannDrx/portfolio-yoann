@@ -8,6 +8,7 @@
 import Image from 'next/image';
 import { Users, Download, Globe, Apple, Smartphone, ExternalLink, Github } from 'lucide-react';
 import { IOSButton, IOSBadge } from '@/components/ios';
+import { ImageGallery } from './ImageGallery';
 import { getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
 import type { Project, ProjectType } from '@/data';
@@ -38,29 +39,22 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
 
+  // Use images array if available, otherwise fallback to single image
+  const galleryImages = project.images && project.images.length > 0
+    ? project.images
+    : project.image
+      ? [project.image]
+      : [];
+
   return (
     <div className="min-h-full bg-background">
-      {/* Hero Image */}
-      <div
-        className={`h-56 relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}
-      >
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={project.name}
-            fill
-            className="object-cover object-top"
-            sizes="(max-width: 768px) 100vw, 576px"
-            priority
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-8xl">{project.emoji}</span>
-          </div>
-        )}
-        {/* Gradient overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-      </div>
+      {/* Hero Image Gallery */}
+      <ImageGallery
+        images={galleryImages}
+        projectName={project.name}
+        gradient={project.gradient}
+        emoji={project.emoji}
+      />
 
       {/* Content */}
       <div className="px-6 pb-8 -mt-8 relative">

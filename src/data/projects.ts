@@ -57,6 +57,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-yellow-300 to-orange-400",
       emoji: "🥚",
       image: "/images/projects/eggscuseme-landing.png",
+      images: ["/images/projects/eggscuseme-landing.png", "/images/projects/eggscuseme-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "Freemium" },
       features: [
         "Next.js 16",
@@ -179,6 +180,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
       image: "/images/projects/mycryptopilot-landing.png",
+      images: ["/images/projects/mycryptopilot-landing.png", "/images/projects/mycryptopilot-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Crypto", "Discord.js"],
       stack: {
@@ -216,6 +218,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-teal-400 to-emerald-500",
       emoji: "🧠",
       image: "/images/projects/moodday-landing.png",
+      images: ["/images/projects/moodday-landing.png", "/images/projects/moodday-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "App" },
       features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma", "Better Auth"],
       stack: {
@@ -237,17 +240,18 @@ const projectsByLocale: Record<Locale, Project[]> = {
     },
     {
       id: "4",
-      name: "ChooseWisely",
-      description: "Application web SaaS avec authentification et paiements",
+      name: "HomeGo",
+      description: "Plateforme immobilière nouvelle génération avec données DVF et analyse IA",
       longDescription:
-        "ChooseWisely est une application SaaS permettant de prendre des décisions éclairées avec cartographie interactive (Mapbox), génération de rapports PDF, et intelligence artificielle. Inclut un système complet d'authentification, de paiements Stripe et de gestion d'organisations.",
+        "HomeGo est une plateforme immobilière permettant d'investir intelligemment avec agrégation d'annonces, analyse des prix via données DVF certifiées, et négociation assistée par IA. Inclut un tableau de bord intelligent, des alertes personnalisées, et un simulateur de capacité d'emprunt.",
       category: "SaaS",
       projectType: "personal",
       year: "2024",
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
-      emoji: "🎯",
-      image: "/images/projects/choosewisely-landing.png",
+      emoji: "🏠",
+      image: "/images/projects/homego-landing.png",
+      images: ["/images/projects/homego-landing.png", "/images/projects/homego-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Better Auth", "Mapbox GL"],
       stack: {
@@ -258,10 +262,10 @@ const projectsByLocale: Record<Locale, Project[]> = {
         testing: ["Vitest", "Playwright", "React Testing Library"],
       },
       highlights: [
-        { title: "Cartographie Interactive", description: "Intégration Mapbox GL pour visualisation géographique des données" },
-        { title: "Export PDF", description: "Génération de rapports PDF avec jsPDF et autotable" },
-        { title: "IA Intégrée", description: "Assistance OpenAI pour aide à la décision" },
-        { title: "Multi-tenant", description: "Système d'organisations avec rôles et permissions" },
+        { title: "Données DVF", description: "Analyse des prix du marché avec données certifiées" },
+        { title: "Tableau de bord intelligent", description: "Vue d'ensemble avec favoris, alertes et tendances du marché" },
+        { title: "IA Intégrée", description: "Assistance OpenAI pour négociation et analyse" },
+        { title: "Simulateur Emprunt", description: "Calcul de capacité d'emprunt et financement" },
       ],
     },
     // 2023-2024
@@ -490,6 +494,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-yellow-300 to-orange-400",
       emoji: "🥚",
       image: "/images/projects/eggscuseme-landing.png",
+      images: ["/images/projects/eggscuseme-landing.png", "/images/projects/eggscuseme-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "Freemium" },
       features: [
         "Next.js 16",
@@ -612,6 +617,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
       image: "/images/projects/mycryptopilot-landing.png",
+      images: ["/images/projects/mycryptopilot-landing.png", "/images/projects/mycryptopilot-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Crypto", "Discord.js"],
       stack: {
@@ -649,6 +655,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       gradient: "from-teal-400 to-emerald-500",
       emoji: "🧠",
       image: "/images/projects/moodday-landing.png",
+      images: ["/images/projects/moodday-landing.png", "/images/projects/moodday-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "App" },
       features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma", "Better Auth"],
       stack: {
@@ -670,17 +677,18 @@ const projectsByLocale: Record<Locale, Project[]> = {
     },
     {
       id: "4",
-      name: "ChooseWisely",
-      description: "SaaS web app with authentication and payments",
+      name: "HomeGo",
+      description: "Next-gen real estate platform with DVF data and AI analysis",
       longDescription:
-        "ChooseWisely is a SaaS app that helps users make better decisions with interactive maps (Mapbox), PDF report generation, and AI assistance. It includes a full authentication system, Stripe payments, and organization management.",
+        "HomeGo is a real estate platform for smart investing with listing aggregation, market price analysis via certified DVF data, and AI-assisted negotiation. Includes an intelligent dashboard, personalized alerts, and a borrowing capacity simulator.",
       category: "SaaS",
       projectType: "personal",
       year: "2024",
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
-      emoji: "🎯",
-      image: "/images/projects/choosewisely-landing.png",
+      emoji: "🏠",
+      image: "/images/projects/homego-landing.png",
+      images: ["/images/projects/homego-landing.png", "/images/projects/homego-dashboard.png"],
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: ["Next.js 15", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Better Auth", "Mapbox GL"],
       stack: {
@@ -691,10 +699,10 @@ const projectsByLocale: Record<Locale, Project[]> = {
         testing: ["Vitest", "Playwright", "React Testing Library"],
       },
       highlights: [
-        { title: "Interactive mapping", description: "Mapbox GL integration to visualize geographic data" },
-        { title: "PDF export", description: "PDF report generation with jsPDF and autotable" },
-        { title: "Built-in AI", description: "OpenAI-powered assistant for decision making" },
-        { title: "Multi-tenant", description: "Organizations system with roles and permissions" },
+        { title: "DVF Data", description: "Market price analysis with certified data" },
+        { title: "Smart Dashboard", description: "Overview with favorites, alerts and market trends" },
+        { title: "Built-in AI", description: "OpenAI assistant for negotiation and analysis" },
+        { title: "Loan Simulator", description: "Borrowing capacity and financing calculator" },
       ],
     },
     // 2023-2024

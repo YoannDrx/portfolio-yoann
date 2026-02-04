@@ -58,6 +58,7 @@ export interface Project {
   gradient: string;
   emoji: string;
   image?: string;
+  images?: string[]; // Multiple images for gallery/carousel
   stats: ProjectStats;
   features: string[];
   // Enriched project data

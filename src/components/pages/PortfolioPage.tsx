@@ -20,7 +20,26 @@ import {
 import { ProjectDetailPanel } from "@/components/projects/ProjectDetailPanel";
 import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase } from "lucide-react";
 import { getAiContent, getEducation, getExperiences, getProfile, getProjects, getSocialLinks, getSoftSkills, getTechnicalSkills, getUiTexts } from "@/data";
-import type { Project } from "@/data";
+import type { Project, ProjectType } from "@/data";
+
+// Helper functions for project type labels and colors
+const getProjectTypeLabel = (type: ProjectType, locale: string) => {
+  const labels: Record<ProjectType, { fr: string; en: string }> = {
+    freelance: { fr: 'Freelance', en: 'Freelance' },
+    cdi: { fr: 'CDI', en: 'Full-time' },
+    personal: { fr: 'Projet Perso', en: 'Personal' },
+  };
+  return locale === 'en' ? labels[type].en : labels[type].fr;
+};
+
+const getProjectTypeColor = (type: ProjectType) => {
+  const colors: Record<ProjectType, string> = {
+    freelance: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
+    cdi: 'bg-green-500/20 text-green-600 dark:text-green-400',
+    personal: 'bg-purple-500/20 text-purple-600 dark:text-purple-400',
+  };
+  return colors[type];
+};
 import { skillCategories } from "@/data/skills";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -245,14 +264,20 @@ const WebView = () => {
                   </div>
                   {/* Contenu avec flex pour aligner le bouton en bas */}
                   <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-2">{project.name}</h3>
-
-                    {/* Métadonnées sous le titre */}
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                      <span>{project.category}</span>
-                      <span className="text-border">•</span>
-                      <span className="font-medium text-foreground/70">{project.year}</span>
+                    {/* Type de projet + Année */}
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
+                        {getProjectTypeLabel(project.projectType, locale)}
+                      </span>
+                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-muted text-muted-foreground">
+                        {project.year}
+                      </span>
                     </div>
+
+                    <h3 className="text-xl font-semibold text-foreground mb-1">{project.name}</h3>
+
+                    {/* Catégorie */}
+                    <p className="text-sm text-primary font-medium mb-3">{project.category}</p>
 
                     {/* Plateformes et équipe */}
                     <div className="flex items-center gap-3 mb-4">

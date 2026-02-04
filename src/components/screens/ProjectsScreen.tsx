@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { ChevronRight, Apple, Smartphone, Globe, Users, Download, ExternalLink, Github } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
+import { ImageGallery } from '../projects/ImageGallery';
 import { getProjects, getProjectsCount, getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
 import type { Project, ProjectType } from '@/data';
@@ -174,21 +175,22 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
       </div>
 
       <div className="flex-1 overflow-y-auto pb-32">
-        {/* Hero */}
-        <div
-          className={`mx-5 mt-4 h-48 rounded-3xl relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}
-        >
-          {project.image ? (
-            <Image
-              src={project.image}
-              alt={project.name}
-              fill
-              className="object-cover object-top"
-              sizes="100vw"
+        {/* Hero - Image Gallery */}
+        <div className="mx-5 mt-4">
+          {(project.images && project.images.length > 0) || project.image ? (
+            <ImageGallery
+              images={project.images && project.images.length > 0 ? project.images : project.image ? [project.image] : []}
+              projectName={project.name}
+              gradient={project.gradient}
+              emoji={project.emoji}
+              forceStackLayout={true}
+              heightClass="h-40"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-8xl animate-float">{project.emoji}</span>
+            <div className={`h-40 rounded-2xl relative overflow-hidden bg-gradient-to-br ${project.gradient}`}>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-8xl animate-float">{project.emoji}</span>
+              </div>
             </div>
           )}
         </div>
