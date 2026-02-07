@@ -131,6 +131,39 @@ const projectsByLocale: Record<Locale, Project[]> = {
         website: "https://impulsion.app/",
       },
     },
+    {
+      id: "0000",
+      name: "Jobio",
+      description: "CRM de prospection freelance intelligent avec IA intégrée",
+      longDescription:
+        "Jobio est un CRM de prospection freelance qui centralise la gestion des missions, profils, plateformes et contacts. Il intègre un tableau Kanban drag & drop avec 8 statuts, un assistant IA pour générer des candidatures et auditer les profils LinkedIn, un gestionnaire de plateformes freelance (Malt, Upwork...), un CRM contacts, des relances automatiques, et des analytics de conversion. Inclut un système d'abonnement Stripe avec 3 plans (Free, Pro, Ultra).",
+      category: "SaaS",
+      projectType: "personal",
+      year: "2025",
+      platforms: ["web"],
+      gradient: "from-indigo-400 to-purple-600",
+      emoji: "💼",
+      image: "/images/projects/jobio-landing.png",
+      stats: { teamSize: "Solo", downloads: "SaaS" },
+      features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma 6", "Stripe", "OpenAI", "Better Auth"],
+      stack: {
+        frontend: ["Next.js 16 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Zustand", "TanStack Query", "Recharts", "Motion", "@hello-pangea/dnd"],
+        backend: ["Prisma ORM", "Better Auth", "Stripe", "OpenAI SDK (Vercel AI)", "next-safe-action", "Resend", "React Email"],
+        database: ["PostgreSQL (NeonDB)", "Prisma ORM 6.19"],
+        devops: ["Vercel", "GitHub Actions CI/CD"],
+        testing: ["Vitest", "Playwright", "React Testing Library"],
+      },
+      highlights: [
+        { title: "Mission Tracker Kanban", description: "Tableau drag & drop avec 8 statuts pour suivre le pipeline de prospection" },
+        { title: "Assistant IA Métier", description: "Génération de candidatures, évaluation d'offres, audit LinkedIn, posts LinkedIn" },
+        { title: "Gestionnaire de Plateformes", description: "Suivi centralisé des inscriptions et performances par plateforme freelance" },
+        { title: "Analytics de Conversion", description: "KPIs, snapshots quotidiens, métriques par plateforme, taux de conversion" },
+        { title: "Abonnement Stripe", description: "3 plans (Free, Pro 9.99€, Ultra 19.99€) avec essai gratuit 14 jours" },
+      ],
+      links: {
+        website: "https://www.jobio.fr/",
+      },
+    },
     // 2024
     {
       id: "1",
@@ -566,6 +599,39 @@ const projectsByLocale: Record<Locale, Project[]> = {
       ],
       links: {
         website: "https://impulsion.app/",
+      },
+    },
+    {
+      id: "0000",
+      name: "Jobio",
+      description: "Intelligent freelance prospection CRM with built-in AI",
+      longDescription:
+        "Jobio is a freelance prospection CRM that centralizes mission, profile, platform and contact management. It features a drag & drop Kanban board with 8 statuses, an AI assistant to generate applications and audit LinkedIn profiles, a freelance platform manager (Malt, Upwork...), a contact CRM, automatic follow-ups, and conversion analytics. Includes a Stripe subscription system with 3 plans (Free, Pro, Ultra).",
+      category: "SaaS",
+      projectType: "personal",
+      year: "2025",
+      platforms: ["web"],
+      gradient: "from-indigo-400 to-purple-600",
+      emoji: "💼",
+      image: "/images/projects/jobio-landing.png",
+      stats: { teamSize: "Solo", downloads: "SaaS" },
+      features: ["Next.js 16", "React 19", "TypeScript", "TailwindCSS v4", "PostgreSQL", "Prisma 6", "Stripe", "OpenAI", "Better Auth"],
+      stack: {
+        frontend: ["Next.js 16 (Turbopack)", "React 19", "TypeScript 5.9", "TailwindCSS v4", "Shadcn/UI", "Zustand", "TanStack Query", "Recharts", "Motion", "@hello-pangea/dnd"],
+        backend: ["Prisma ORM", "Better Auth", "Stripe", "OpenAI SDK (Vercel AI)", "next-safe-action", "Resend", "React Email"],
+        database: ["PostgreSQL (NeonDB)", "Prisma ORM 6.19"],
+        devops: ["Vercel", "GitHub Actions CI/CD"],
+        testing: ["Vitest", "Playwright", "React Testing Library"],
+      },
+      highlights: [
+        { title: "Mission Tracker Kanban", description: "Drag & drop board with 8 statuses to track the prospection pipeline" },
+        { title: "AI Business Assistant", description: "Application generation, offer evaluation, LinkedIn audit, LinkedIn posts" },
+        { title: "Platform Manager", description: "Centralized tracking of registrations and performance across freelance platforms" },
+        { title: "Conversion Analytics", description: "KPIs, daily snapshots, per-platform metrics, conversion rate" },
+        { title: "Stripe Subscription", description: "3 plans (Free, Pro €9.99, Ultra €19.99) with 14-day free trial" },
+      ],
+      links: {
+        website: "https://www.jobio.fr/",
       },
     },
     // 2024
