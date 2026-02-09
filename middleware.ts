@@ -8,7 +8,7 @@ function isLocale(value: string): value is (typeof LOCALES)[number] {
   return (LOCALES as readonly string[]).includes(value);
 }
 
-const EXCLUDED_PREFIXES = ["/api", "/_next"];
+const EXCLUDED_PREFIXES = ["/api", "/_next", "/admin"];
 const EXCLUDED_PATHS = new Set([
   "/offline",
   "/opengraph-image",
@@ -50,6 +50,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|admin|.*\\..*).*)"],
 };
-

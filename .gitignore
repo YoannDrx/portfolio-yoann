@@ -44,6 +44,9 @@ next-env.d.ts
 /playwright/.cache/
 .playwright-mcp
 
+# local admin dashboard storage
+/data/admin-store.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
