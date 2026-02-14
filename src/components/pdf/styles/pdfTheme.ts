@@ -45,6 +45,20 @@ export const pdfColors = {
     border: '#E5E5EA',
     sidebar: '#F8F8FA',
   },
+
+  // Dark sidebar split theme
+  sidebar: {
+    bg: '#0F172A',          // slate-900
+    text: '#F8FAFC',        // slate-50
+    muted: '#94A3B8',       // slate-400
+    accent: '#60A5FA',      // blue-400
+    divider: '#1E293B',     // slate-800
+    accentLine: '#3B82F6',  // blue-500
+  },
+  experience: {
+    cdi: '#10B981',         // emerald-500
+    freelance: '#3B82F6',   // blue-500
+  },
 };
 
 export const pdfFontSizes = {

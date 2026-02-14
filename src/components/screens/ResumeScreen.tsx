@@ -56,8 +56,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
   const experiences = getWorkExperiences(locale);
   const education = getEducation(locale);
 
-  // Filtrer les expériences de développement (les 9 premières, sans Cyclofix)
-  const devExperiences = experiences.slice(0, 9);
+  const devExperiences = experiences;
 
   return (
     <div className="h-full bg-background flex flex-col">
@@ -76,7 +75,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
           <div className="flex items-center gap-2 mb-4">
 	            <Briefcase className="w-5 h-5 text-primary/60" />
 	            <h2 className="text-lg font-semibold text-foreground">
-	              {uiTexts.sections.experience}
+	              {uiTexts.sections.career}
 	            </h2>
           </div>
 

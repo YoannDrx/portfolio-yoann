@@ -423,7 +423,7 @@ const WebView = () => {
       <section id="resume" className="py-20 px-6 bg-gradient-to-br from-teal-50/70 via-background to-emerald-50/50 dark:from-teal-950/30 dark:via-background dark:to-emerald-950/20">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-4xl font-bold text-foreground">{uiTexts.sections.experience}</h2>
+            <h2 className="text-4xl font-bold text-foreground">{uiTexts.sections.career}</h2>
             <PDFDownloadButton />
           </div>
           <p className="text-muted-foreground mb-12 max-w-2xl">
@@ -431,34 +431,58 @@ const WebView = () => {
           </p>
 
           <div className="space-y-6">
-            {workExperiences.slice(0, 9).map((exp) => (
-              <IOSCard key={exp.id} variant="subtle" padding="lg" className="card-premium-hover">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-semibold text-foreground tracking-tight">{exp.company}</h3>
-                    <p className="text-primary font-medium">{exp.role}</p>
+            {workExperiences.map((exp) => (
+              <IOSCard key={exp.id} variant="subtle" padding="lg" className="card-premium-hover relative">
+                {/* Accent bar gauche par type */}
+                <div className={`absolute left-0 top-0 bottom-0 w-[2px] rounded-l-xl ${
+                  exp.type === 'cdi'
+                    ? 'bg-gradient-to-b from-green-400 to-green-500'
+                    : 'bg-gradient-to-b from-blue-400 to-blue-500'
+                }`} />
+
+                <div className="pl-3">
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-xl font-semibold text-foreground tracking-tight">{exp.company}</h3>
+                        <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-md ${
+                          exp.type === 'cdi'
+                            ? 'bg-green-500/20 text-green-600 dark:text-green-400'
+                            : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                        }`}>
+                          {exp.type === 'cdi' ? (locale === 'en' ? 'Full-time' : 'CDI') : 'Freelance'}
+                        </span>
+                      </div>
+                      <p className="text-primary font-medium">{exp.role}</p>
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-2 md:mt-0 md:text-right">
+                      <p className="font-medium">
+                        {exp.startDate} - {exp.endDate || uiTexts.labels.present}
+                      </p>
+                      <p>{exp.location}{exp.remote === 'remote' ? ' · Remote' : exp.remote === 'hybrid' ? ' · Hybride' : ''}</p>
+                    </div>
                   </div>
-	                  <div className="text-sm text-muted-foreground mt-2 md:mt-0 md:text-right">
-	                    <p className="font-medium">
-	                      {exp.startDate} - {exp.endDate || uiTexts.labels.present}
-	                    </p>
-	                    <p>{exp.location}</p>
-	                  </div>
-                </div>
-                <ul className="space-y-2 mb-4">
-                  {exp.description.slice(0, 3).map((desc, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <span className="mt-[7px] w-1 h-1 rounded-full bg-foreground/20 flex-shrink-0" />
-                      <span>{desc}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex flex-wrap gap-2">
-                  {exp.skills.slice(0, 6).map((skill) => (
-                    <IOSBadge key={skill} variant="default" size="sm" className="!bg-muted/50 !text-muted-foreground border border-border/30">
-                      {skill}
-                    </IOSBadge>
-                  ))}
+                  <ul className="space-y-2 mb-4">
+                    {exp.description.slice(0, 3).map((desc, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <span className="mt-[7px] w-1 h-1 rounded-full bg-foreground/20 flex-shrink-0" />
+                        <span>{desc}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex flex-wrap gap-2">
+                    {exp.skills.slice(0, 6).map((skill) => (
+                      <IOSBadge key={skill} variant="default" size="sm" className="!bg-muted/50 !text-muted-foreground border border-border/30">
+                        {skill}
+                      </IOSBadge>
+                    ))}
+                  </div>
+                  {exp.url && (
+                    <a href={exp.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-3">
+                      <ExternalLink className="w-3 h-3" />
+                      {uiTexts.buttons.viewWebsite}
+                    </a>
+                  )}
                 </div>
               </IOSCard>
             ))}
