@@ -20,7 +20,7 @@ import {
 import { ExperienceDetailPanel } from "@/components/experiences/ExperienceDetailPanel";
 import { ExperienceFilterBar } from "@/components/experiences/ExperienceFilterBar";
 import { ExperienceSectionHeader } from "@/components/experiences/ExperienceSectionHeader";
-import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase } from "lucide-react";
+import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase, ChevronRight } from "lucide-react";
 import { getAiContent, getEducation, getWorkExperiences, getProfile, getExperiences, getSocialLinks, getSoftSkills, getTechnicalSkills, getUiTexts } from "@/data";
 import { useExperienceFilter } from "@/hooks/use-experience-filter";
 import type { Experience, ExperienceType } from "@/data";
@@ -224,9 +224,9 @@ const WebView = () => {
           {/* Stats */}
           <div className="flex justify-center gap-8 md:gap-12 mt-16">
             {profile.stats.map((stat) => (
-              <IOSCard key={stat.label} variant="glass" padding="md" className="text-center min-w-[100px]">
-                <p className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</p>
-                <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+              <IOSCard key={stat.label} variant="subtle" padding="md" className="text-center card-premium-hover min-w-[120px]">
+                <p className="text-3xl md:text-4xl font-bold text-foreground tracking-tight tabular-nums">{stat.value}</p>
+                <p className="text-[11px] text-muted-foreground/70 font-medium mt-1.5 uppercase tracking-wider">{stat.label}</p>
               </IOSCard>
             ))}
           </div>
@@ -257,64 +257,74 @@ const WebView = () => {
                   {section.experiences.map((experience) => (
                     <IOSCard
                       key={experience.id}
-                      variant="glass"
+                      variant="subtle"
                       padding="none"
-                      className="overflow-hidden group cursor-pointer h-full"
+                      className="card-premium-hover overflow-hidden group cursor-pointer h-full relative"
                       interactive
                       onPress={() => setSelectedExperience(experience)}
                     >
+                      {/* Accent gradient line top */}
+                      <div className={`absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r ${experience.gradient} z-10`} />
+
                       <div className="flex flex-col h-full">
-                        {/* Image clean sans overlay */}
+                        {/* Image zone */}
                         <div className="relative h-48 overflow-hidden flex-shrink-0">
                           {experience.image ? (
-                            <Image
-                              src={experience.image}
-                              alt={experience.name}
-                              fill
-                              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            />
+                            <>
+                              <Image
+                                src={experience.image}
+                                alt={experience.name}
+                                fill
+                                className="object-cover object-top group-hover:scale-[1.07] transition-transform duration-700 ease-out"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+                            </>
                           ) : (
-                            <div className={`h-full bg-gradient-to-br ${experience.gradient} flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
-                              <span className="text-7xl group-hover:scale-110 transition-transform">{experience.emoji}</span>
+                            <div className="h-full relative overflow-hidden bg-muted/40 dark:bg-muted/20">
+                              <div className={`absolute inset-0 bg-gradient-to-br ${experience.gradient} opacity-[0.12] dark:opacity-[0.18]`} />
+                              <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                                <span className="text-[4rem] font-black text-foreground/[0.04] dark:text-foreground/[0.06] select-none leading-none tracking-tighter text-center px-4">
+                                  {experience.name}
+                                </span>
+                              </div>
                             </div>
                           )}
                         </div>
-                        {/* Contenu avec flex pour aligner le bouton en bas */}
-                        <div className="p-6 flex flex-col flex-1">
-                          {/* Type d'expérience + Année */}
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${getExperienceTypeColor(experience.experienceType)}`}>
+
+                        {/* Contenu */}
+                        <div className="p-5 flex flex-col flex-1">
+                          {/* Badges type/year + tech chips */}
+                          <div className="flex items-center gap-2 mb-3 flex-wrap">
+                            <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-md border border-current/20 ${getExperienceTypeColor(experience.experienceType)}`}>
                               {getExperienceTypeLabel(experience.experienceType, locale)}
                             </span>
-                            <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-muted text-muted-foreground">
+                            <span className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-muted text-muted-foreground">
                               {experience.year}
                             </span>
+                            <div className="w-px h-3 bg-border/60 mx-0.5" />
+                            {experience.features.slice(0, 3).map((tech) => (
+                              <span key={tech} className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-muted/60 text-muted-foreground/70 dark:bg-muted/40">
+                                {tech}
+                              </span>
+                            ))}
                           </div>
 
-                          <h3 className="text-xl font-semibold text-foreground mb-1">{experience.name}</h3>
+                          <h3 className="text-lg font-semibold text-foreground tracking-tight mb-0.5">{experience.name}</h3>
+                          <p className="text-sm text-primary font-medium mb-2">{experience.category}</p>
+                          <p className="text-sm text-muted-foreground/70 leading-relaxed line-clamp-2 mb-4">{experience.description}</p>
 
-                          {/* Catégorie */}
-                          <p className="text-sm text-primary font-medium mb-3">{experience.category}</p>
-
-                          {/* Plateformes et équipe */}
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className="flex gap-1.5">
-                              {experience.platforms.map((platform) => (
-                                <span key={platform} className="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
-                                  {platform}
-                                </span>
-                              ))}
+                          {/* Footer */}
+                          <div className="mt-auto pt-3 border-t border-border/30 flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground/50">
+                              <span>{experience.platforms.join(' · ')}</span>
+                              <span>·</span>
+                              <span>{experience.stats.teamSize}</span>
                             </div>
-                            <span className="text-muted-foreground/50">•</span>
-                            <span className="text-xs text-muted-foreground">{experience.stats.teamSize}</span>
-                          </div>
-
-                          {/* Bouton aligné en bas */}
-                          <div className="mt-auto">
-                            <IOSButton variant="ghost" size="sm" leftIcon={<ExternalLink className="w-4 h-4" />}>
-                              {uiTexts.buttons.viewDetails}
-                            </IOSButton>
+                            <div className="flex items-center text-xs text-muted-foreground/50 group-hover:text-primary/70 transition-colors">
+                              <span>{uiTexts.buttons.viewDetails}</span>
+                              <ChevronRight className="w-3.5 h-3.5 ml-0.5 transition-transform group-hover:translate-x-0.5" />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -338,25 +348,27 @@ const WebView = () => {
           {/* Technical Skills - Narrative cards */}
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {technicalSkills.map((skill) => (
-              <IOSCard key={skill.id} variant="glass" padding="lg">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}>
-                      <span className="text-xl">{skill.icon}</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-foreground">{skill.title}</h3>
+              <IOSCard key={skill.id} variant="subtle" padding="lg" className="card-premium-hover relative">
+                {/* Accent bar */}
+                <div className={`absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b ${skill.gradient}`} />
+
+                <div className="pl-3">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-semibold text-foreground tracking-tight">{skill.title}</h3>
+                    <span className="text-xs font-medium text-muted-foreground/60 px-2 py-0.5 rounded-md border border-border/50 bg-muted/30">
+                      {skill.level}
+                    </span>
                   </div>
-                  <IOSBadge variant="default" size="sm">{skill.level}</IOSBadge>
+                  <p className="text-sm text-muted-foreground/80 leading-relaxed mb-4">{skill.narrative}</p>
+                  <ul className="space-y-1.5">
+                    {skill.highlights.map((h, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-foreground/70">
+                        <span className="mt-[7px] w-1 h-1 rounded-full bg-foreground/25 flex-shrink-0" />
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <p className="text-muted-foreground leading-relaxed mb-4">{skill.narrative}</p>
-                <ul className="space-y-2">
-                  {skill.highlights.map((highlight, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-primary mt-0.5">•</span>
-                      <span className="text-foreground/80">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
               </IOSCard>
             ))}
           </div>
@@ -364,31 +376,29 @@ const WebView = () => {
           {/* AI Section */}
           <div className="mb-12">
             <h3 className="text-2xl font-bold text-foreground mb-6 text-center">{aiContent.title}</h3>
-            <IOSCard variant="glass" padding="lg" className="border-l-4 border-purple-500 max-w-3xl mx-auto">
-	                <div className="flex items-center gap-4 mb-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center">
-                  <span className="text-2xl">{aiContent.icon}</span>
+            <IOSCard variant="subtle" padding="lg" className="card-premium-hover relative max-w-3xl mx-auto">
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-purple-500/40" />
+              <div className="flex items-center gap-3 mb-4 pl-3">
+                <span className="text-xs font-bold px-2.5 py-1 rounded-lg border border-purple-500/20 bg-purple-500/[0.06] bg-clip-padding text-purple-600 dark:text-purple-400">
+                  AI
+                </span>
+                <div>
+                  <h4 className="text-lg font-semibold text-foreground">{aiContent.subtitle}</h4>
+                  <p className="text-xs text-muted-foreground/60">{uiTexts.descriptions.aiToolsIntegrated}</p>
                 </div>
-	                <div>
-	                  <h4 className="text-xl font-semibold text-foreground">{aiContent.subtitle}</h4>
-	                  <p className="text-sm text-muted-foreground">
-	                    {uiTexts.descriptions.aiToolsIntegrated}
-	                  </p>
-	                </div>
-	              </div>
+              </div>
               <p className="text-muted-foreground leading-relaxed mb-6">{aiContent.narrative}</p>
               <ul className="space-y-2 mb-6">
                 {aiContent.highlights.map((highlight, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm">
-                    <span className="text-purple-500 mt-0.5">•</span>
+                    <span className="mt-[7px] w-1 h-1 rounded-full bg-purple-500/40 flex-shrink-0" />
                     <span className="text-foreground/80">{highlight}</span>
                   </li>
                 ))}
               </ul>
               <div className="flex flex-wrap gap-2">
                 {aiContent.tools.map((tool) => (
-                  <IOSChip key={tool.name} variant="default" size="md">
-                    {tool.icon && <span>{tool.icon}</span>}
+                  <IOSChip key={tool.name} variant="default" size="md" className="!bg-purple-500/[0.06] !border-purple-500/15 !text-purple-700 dark:!text-purple-300">
                     {tool.name}
                   </IOSChip>
                 ))}
@@ -399,14 +409,10 @@ const WebView = () => {
           {/* Soft Skills */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {softSkills.map((skill) => (
-              <IOSCard key={skill.id} variant="glass" padding="md">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}>
-                    <span className="text-lg">{skill.icon}</span>
-                  </div>
-                  <h3 className="font-semibold text-foreground">{skill.title}</h3>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{skill.narrative}</p>
+              <IOSCard key={skill.id} variant="subtle" padding="md" className="card-premium-hover relative overflow-hidden">
+                <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${skill.gradient} opacity-50`} />
+                <h3 className="font-semibold text-foreground text-sm mb-2 tracking-tight">{skill.title}</h3>
+                <p className="text-sm text-muted-foreground/80 leading-relaxed">{skill.narrative}</p>
               </IOSCard>
             ))}
           </div>
@@ -426,10 +432,10 @@ const WebView = () => {
 
           <div className="space-y-6">
             {workExperiences.slice(0, 9).map((exp) => (
-              <IOSCard key={exp.id} variant="glass" padding="lg">
+              <IOSCard key={exp.id} variant="subtle" padding="lg" className="card-premium-hover">
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-foreground">{exp.company}</h3>
+                    <h3 className="text-xl font-semibold text-foreground tracking-tight">{exp.company}</h3>
                     <p className="text-primary font-medium">{exp.role}</p>
                   </div>
 	                  <div className="text-sm text-muted-foreground mt-2 md:mt-0 md:text-right">
@@ -442,14 +448,14 @@ const WebView = () => {
                 <ul className="space-y-2 mb-4">
                   {exp.description.slice(0, 3).map((desc, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <span className="text-primary mt-0.5">•</span>
+                      <span className="mt-[7px] w-1 h-1 rounded-full bg-foreground/20 flex-shrink-0" />
                       <span>{desc}</span>
                     </li>
                   ))}
                 </ul>
                 <div className="flex flex-wrap gap-2">
                   {exp.skills.slice(0, 6).map((skill) => (
-                    <IOSBadge key={skill} variant="default" size="sm">
+                    <IOSBadge key={skill} variant="default" size="sm" className="!bg-muted/50 !text-muted-foreground border border-border/30">
                       {skill}
                     </IOSBadge>
                   ))}
@@ -464,10 +470,10 @@ const WebView = () => {
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
             {education.map((edu) => (
-              <IOSCard key={edu.id} variant="glass" padding="md" className="text-center">
-                <p className="text-lg font-semibold text-foreground">{edu.degree}</p>
-                <p className="text-muted-foreground">{edu.school}</p>
-                <p className="text-sm text-primary font-medium mt-2">{edu.year}</p>
+              <IOSCard key={edu.id} variant="subtle" padding="md" className="card-premium-hover">
+                <p className="text-base font-semibold text-foreground tracking-tight">{edu.degree}</p>
+                <p className="text-sm text-muted-foreground/70 mt-0.5">{edu.school}</p>
+                <p className="text-xs text-primary/70 font-medium mt-2">{edu.year}</p>
               </IOSCard>
             ))}
           </div>

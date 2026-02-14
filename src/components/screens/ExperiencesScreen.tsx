@@ -86,13 +86,17 @@ const ExperiencesScreen = ({ onNavigate, hideStatusBar = false }: ExperiencesScr
                 {section.experiences.map((experience) => (
                   <IOSCard
                     key={experience.id}
-                    variant="glass"
+                    variant="subtle"
                     padding="none"
                     interactive
                     onPress={() => setSelectedExperience(experience)}
+                    className="card-premium-hover relative"
                   >
+                    {/* Accent gradient line top */}
+                    <div className={`absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r ${experience.gradient} z-10`} />
+
                     {/* Header avec Image ou Gradient */}
-                    <div className={`h-32 relative overflow-hidden ${!experience.image ? `bg-gradient-to-br ${experience.gradient}` : ''}`}>
+                    <div className="h-32 relative overflow-hidden">
                       {experience.image ? (
                         <Image
                           src={experience.image}
@@ -102,12 +106,17 @@ const ExperiencesScreen = ({ onNavigate, hideStatusBar = false }: ExperiencesScr
                           sizes="100vw"
                         />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-5xl">{experience.emoji}</span>
+                        <div className="absolute inset-0 bg-muted/30 dark:bg-muted/15">
+                          <div className={`absolute inset-0 bg-gradient-to-br ${experience.gradient} opacity-[0.10] dark:opacity-[0.15]`} />
+                          <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                            <span className="text-[2.5rem] font-black text-foreground/[0.04] dark:text-foreground/[0.06] select-none leading-none tracking-tighter text-center px-4">
+                              {experience.name}
+                            </span>
+                          </div>
                         </div>
                       )}
-                      {/* Overlay gradient pour lisibilité des tags */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+                      {/* Overlay gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                       {/* Year - coin gauche */}
                       <div className="absolute top-3 left-3">
                         <span className="px-2 py-1 text-[10px] font-semibold rounded-full bg-black/30 backdrop-blur-sm text-white">
@@ -117,51 +126,48 @@ const ExperiencesScreen = ({ onNavigate, hideStatusBar = false }: ExperiencesScr
                       {/* Platform Icons - coin droit */}
                       <div className="absolute top-3 right-3">
                         <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm">
-                          {experience.platforms.includes('web') && (
-                            <Globe className="w-3 h-3 text-white" />
-                          )}
-                          {experience.platforms.includes('ios') && (
-                            <Apple className="w-3 h-3 text-white" />
-                          )}
-                          {experience.platforms.includes('android') && (
-                            <Smartphone className="w-3 h-3 text-white" />
-                          )}
+                          {experience.platforms.includes('web') && <Globe className="w-3 h-3 text-white" />}
+                          {experience.platforms.includes('ios') && <Apple className="w-3 h-3 text-white" />}
+                          {experience.platforms.includes('android') && <Smartphone className="w-3 h-3 text-white" />}
                         </div>
                       </div>
                     </div>
 
                     {/* Content */}
                     <div className="p-4">
-                      {/* Titre + Tag aligné à droite */}
+                      {/* Titre + Tag */}
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="font-semibold text-foreground flex-1">{experience.name}</h3>
-                        <div className="flex flex-col items-end gap-1.5">
-                          <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getExperienceTypeColor(experience.experienceType)}`}>
-                            {getExperienceTypeLabel(experience.experienceType, locale)}
-                          </span>
-                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        </div>
+                        <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full flex-shrink-0 ${getExperienceTypeColor(experience.experienceType)}`}>
+                          {getExperienceTypeLabel(experience.experienceType, locale)}
+                        </span>
                       </div>
 
                       {/* Catégorie */}
-                      <p className="text-sm text-muted-foreground mt-0.5">
-                        {experience.category}
-                      </p>
+                      <p className="text-sm text-muted-foreground mt-0.5">{experience.category}</p>
 
-                      {/* Stats */}
-                      <div className="flex items-center gap-4 mt-3">
-                        <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4 text-primary" />
-                          <span className="text-sm font-medium text-foreground">
-                            {experience.stats.teamSize}
+                      {/* Tech chips */}
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {experience.features.slice(0, 3).map((tech) => (
+                          <span key={tech} className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-muted/60 text-muted-foreground/60 dark:bg-muted/40">
+                            {tech}
                           </span>
+                        ))}
+                      </div>
+
+                      {/* Footer stats + chevron */}
+                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/20">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1">
+                            <Users className="w-3.5 h-3.5 text-muted-foreground/50" />
+                            <span className="text-xs text-muted-foreground">{experience.stats.teamSize}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Download className="w-3.5 h-3.5 text-muted-foreground/50" />
+                            <span className="text-xs text-muted-foreground">{experience.stats.downloads}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Download className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm text-muted-foreground">
-                            {experience.stats.downloads}
-                          </span>
-                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground/40" />
                       </div>
                     </div>
                   </IOSCard>
@@ -210,10 +216,9 @@ const ExperienceDetail = ({ experience, onBack, hideStatusBar = false }: Experie
               heightClass="h-40"
             />
           ) : (
-            <div className={`h-40 rounded-2xl relative overflow-hidden bg-gradient-to-br ${experience.gradient}`}>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-8xl animate-float">{experience.emoji}</span>
-              </div>
+            <div className={`h-40 rounded-2xl relative overflow-hidden`}>
+              <div className={`absolute inset-0 bg-gradient-to-br ${experience.gradient} opacity-20`} />
+              <div className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${experience.gradient}`} />
             </div>
           )}
         </div>

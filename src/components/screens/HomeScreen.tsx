@@ -80,9 +80,9 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
         {/* Quick Stats */}
         <div className="grid grid-cols-3 gap-3 mt-8 stagger-children">
           {profile.stats.map((stat) => (
-            <IOSCard key={stat.label} variant="glass" padding="md" className="text-center">
-              <p className="text-2xl font-bold text-primary">{stat.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+            <IOSCard key={stat.label} variant="subtle" padding="md" className="text-center">
+              <p className="text-2xl font-bold text-foreground tracking-tight tabular-nums">{stat.value}</p>
+              <p className="text-[10px] text-muted-foreground/60 font-medium mt-1 uppercase tracking-wider">{stat.label}</p>
             </IOSCard>
           ))}
         </div>
@@ -96,20 +96,17 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
           {navigationItems.map((item) => (
             <IOSCard
               key={item.id}
-              variant="glass"
+              variant="subtle"
               padding="md"
               interactive
               onPress={() => onNavigate(item.id)}
+              className="card-premium-hover"
             >
               <IOSListItem
                 title={item.label}
                 subtitle={item.subtitle}
                 leftIcon={
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center`}
-                  >
-                    <span className="text-xl">{item.icon}</span>
-                  </div>
+                  <div className={`w-[3px] h-10 rounded-full bg-gradient-to-b ${item.gradient} self-center`} />
                 }
                 showChevron
                 className="p-0 bg-transparent"

@@ -69,14 +69,10 @@ const TechSkillCardCompact = ({
   skill: NarrativeSkillCard;
   onPress: () => void;
 }) => (
-  <IOSCard variant="glass" padding="md" interactive onPress={onPress}>
+  <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="card-premium-hover">
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3 min-w-0 flex-1">
-        <div
-          className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
-        >
-          <span className="text-xl">{skill.icon}</span>
-        </div>
+        <div className={`w-[3px] h-8 rounded-full bg-gradient-to-b ${skill.gradient} flex-shrink-0`} />
         <h3 className="font-semibold text-foreground truncate">{skill.title}</h3>
       </div>
       <div className="flex items-center gap-2 flex-shrink-0">
@@ -95,14 +91,10 @@ const SoftSkillCardCompact = ({
   skill: SoftSkillCard;
   onPress: () => void;
 }) => (
-  <IOSCard variant="glass" padding="md" interactive onPress={onPress}>
+  <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="card-premium-hover">
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3 min-w-0 flex-1">
-        <div
-          className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
-        >
-          <span className="text-xl">{skill.icon}</span>
-        </div>
+        <div className={`w-[3px] h-8 rounded-full bg-gradient-to-b ${skill.gradient} flex-shrink-0`} />
         <h3 className="font-semibold text-foreground truncate">{skill.title}</h3>
       </div>
       <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
@@ -116,14 +108,12 @@ const AICardCompact = ({ onPress }: { onPress: () => void }) => {
   const aiContent = getAiContent(locale);
 
   return (
-    <IOSCard variant="glass" padding="md" interactive onPress={onPress}>
+    <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="card-premium-hover">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div
-            className={`w-10 h-10 flex-shrink-0 rounded-xl bg-gradient-to-br ${aiContent.gradient} flex items-center justify-center`}
-          >
-            <span className="text-xl">{aiContent.icon}</span>
-          </div>
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md border border-purple-500/20 bg-purple-500/[0.06] text-purple-600 dark:text-purple-400 flex-shrink-0">
+            AI
+          </span>
           <h3 className="font-semibold text-foreground truncate">{aiContent.subtitle}</h3>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -162,23 +152,15 @@ const TechSkillDetail = ({
 
       <div className="flex-1 overflow-y-auto pb-32 px-5">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <div
-            className={`w-16 h-16 flex-shrink-0 rounded-2xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
-          >
-            <span className="text-3xl">{skill.icon}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-2xl font-bold text-foreground">{skill.title}</h1>
-            {skill.subtitle && (
-              <p className="text-sm text-muted-foreground">{skill.subtitle}</p>
-            )}
-            <LevelBadge level={skill.level} size="sm" />
-          </div>
+        <div className="mb-6">
+          <div className={`w-12 h-[3px] rounded-full bg-gradient-to-r ${skill.gradient} mb-3`} />
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">{skill.title}</h1>
+          {skill.subtitle && <p className="text-sm text-muted-foreground mt-1">{skill.subtitle}</p>}
+          <div className="mt-2"><LevelBadge level={skill.level} size="sm" /></div>
         </div>
 
         {/* Narrative */}
-        <IOSCard variant="glass" padding="md" className="mb-6">
+        <IOSCard variant="subtle" padding="md" className="mb-6">
           <p className="text-sm text-muted-foreground leading-relaxed">
             {skill.narrative}
           </p>
@@ -188,7 +170,7 @@ const TechSkillDetail = ({
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
           {uiTexts.sections.keyPoints}
         </h3>
-        <IOSCard variant="glass" padding="md">
+        <IOSCard variant="subtle" padding="md">
           <ul className="space-y-2">
             {skill.highlights.map((highlight, index) => (
               <li key={index} className="flex items-start gap-3 text-sm">
@@ -230,17 +212,13 @@ const SoftSkillDetail = ({
 
       <div className="flex-1 overflow-y-auto pb-32 px-5">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <div
-            className={`w-16 h-16 flex-shrink-0 rounded-2xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center`}
-          >
-            <span className="text-3xl">{skill.icon}</span>
-          </div>
-          <h1 className="text-2xl font-bold text-foreground flex-1 min-w-0">{skill.title}</h1>
+        <div className="mb-6">
+          <div className={`w-12 h-[3px] rounded-full bg-gradient-to-r ${skill.gradient} mb-3`} />
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">{skill.title}</h1>
         </div>
 
         {/* Narrative */}
-        <IOSCard variant="glass" padding="lg">
+        <IOSCard variant="subtle" padding="lg">
           <p className="text-muted-foreground leading-relaxed">
             {skill.narrative}
           </p>
@@ -270,20 +248,16 @@ const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideS
 
       <div className="flex-1 overflow-y-auto pb-32 px-5">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <div
-            className={`w-16 h-16 flex-shrink-0 rounded-2xl bg-gradient-to-br ${aiContent.gradient} flex items-center justify-center`}
-          >
-            <span className="text-3xl">{aiContent.icon}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-2xl font-bold text-foreground">{aiContent.subtitle}</h1>
-            <LevelBadge level={aiContent.level} size="sm" />
-          </div>
+        <div className="mb-6">
+          <span className="text-xs font-bold px-2.5 py-1 rounded-lg border border-purple-500/20 bg-purple-500/[0.06] text-purple-600 dark:text-purple-400 inline-block mb-3">
+            AI
+          </span>
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">{aiContent.subtitle}</h1>
+          <div className="mt-2"><LevelBadge level={aiContent.level} size="sm" /></div>
         </div>
 
         {/* Narrative */}
-        <IOSCard variant="glass" padding="md" className="mb-6">
+        <IOSCard variant="subtle" padding="md" className="mb-6">
           <p className="text-sm text-muted-foreground leading-relaxed">
             {aiContent.narrative}
           </p>
@@ -293,7 +267,7 @@ const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideS
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
           {uiTexts.sections.keyPoints}
         </h3>
-        <IOSCard variant="glass" padding="md" className="mb-6">
+        <IOSCard variant="subtle" padding="md" className="mb-6">
           <ul className="space-y-2">
             {aiContent.highlights.map((highlight, index) => (
               <li key={index} className="flex items-start gap-3 text-sm">
@@ -308,7 +282,7 @@ const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideS
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
           {uiTexts.sections.toolsUsed}
         </h3>
-        <IOSCard variant="glass" padding="md">
+        <IOSCard variant="subtle" padding="md">
           <div className="flex flex-wrap gap-2">
             {aiContent.tools.map((tool) => (
               <IOSChip key={tool.name} variant="default" size="md">
@@ -365,7 +339,7 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
 
         {/* Intro narrative */}
         <div className="px-5 mb-6">
-          <IOSCard variant="glass" padding="md">
+          <IOSCard variant="subtle" padding="md">
             <p className="text-sm text-muted-foreground leading-relaxed italic">
               "{skillStoryIntro}"
             </p>
@@ -425,7 +399,6 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
                 size="md"
                 className="bg-muted text-muted-foreground"
               >
-                {tool.icon && <span className="mr-1">{tool.icon}</span>}
                 {tool.name}
               </IOSBadge>
             ))}

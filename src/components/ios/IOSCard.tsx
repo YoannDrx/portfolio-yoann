@@ -37,6 +37,13 @@ const iosCardVariants = cva(
           'shadow-[0_8px_32px_-8px_rgba(0,0,0,0.1),inset_0_1px_0_0_rgba(255,255,255,0.4)]',
           'dark:shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.1)]',
         ],
+        // Premium subtle surface
+        subtle: [
+          'bg-card',
+          'border border-border/40 dark:border-white/[0.06]',
+          'shadow-[0_1px_2px_-1px_hsl(var(--foreground)/0.05),0_1px_3px_-1px_hsl(var(--foreground)/0.08)]',
+          'dark:shadow-[0_1px_3px_-1px_hsl(0_0%_0%/0.4),inset_0_1px_0_0_hsl(0_0%_100%/0.03)]',
+        ],
         // Gradient border card
         gradient: [
           'bg-card',

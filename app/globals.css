@@ -226,6 +226,23 @@
     transform: translate(-50%, -50%) scale(1);
   }
 
+  /* ============ PREMIUM HOVER ============ */
+  .card-premium-hover {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-premium-hover:hover {
+    border-color: hsl(var(--primary) / 0.15);
+    box-shadow: 0 4px 12px -4px hsl(var(--foreground) / 0.08),
+                0 8px 20px -8px hsl(var(--foreground) / 0.06);
+    transform: translateY(-2px);
+  }
+  .dark .card-premium-hover:hover {
+    border-color: hsl(0 0% 100% / 0.1);
+    box-shadow: 0 4px 12px -4px hsl(0 0% 0% / 0.5),
+                0 8px 20px -8px hsl(0 0% 0% / 0.4),
+                inset 0 1px 0 0 hsl(0 0% 100% / 0.05);
+  }
+
   /* ============ iOS NAVIGATION TITLES ============ */
   .ios-nav-title {
     @apply text-lg font-semibold text-foreground;

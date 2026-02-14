@@ -11,7 +11,7 @@ export type Size = 'sm' | 'md' | 'lg';
 export type ExtendedSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'outline';
 export type SemanticVariant = 'default' | 'success' | 'warning' | 'error' | 'info';
-export type CardVariant = 'elevated' | 'flat' | 'glass';
+export type CardVariant = 'elevated' | 'flat' | 'glass' | 'subtle';
 
 // ============ IOS BUTTON ============
 

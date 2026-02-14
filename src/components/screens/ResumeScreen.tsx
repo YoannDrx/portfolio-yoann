@@ -74,9 +74,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
         {/* Experience Section */}
         <div className="px-5 mb-6">
           <div className="flex items-center gap-2 mb-4">
-	            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
-	              <Briefcase className="w-4 h-4 text-white" />
-	            </div>
+	            <Briefcase className="w-5 h-5 text-primary/60" />
 	            <h2 className="text-lg font-semibold text-foreground">
 	              {uiTexts.sections.experience}
 	            </h2>
@@ -93,7 +91,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
                   {/* Timeline dot */}
                   <div className="absolute left-3.5 top-4 w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 border-2 border-white shadow-sm" />
 
-                  <IOSCard variant="glass" padding="sm">
+                  <IOSCard variant="subtle" padding="sm">
                     <div className="space-y-2">
                       {/* Header */}
                       <div className="flex items-start justify-between gap-2">
@@ -165,9 +163,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 	        {/* Formation Section */}
 	        <div className="px-5 mb-6">
 	          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center">
-              <GraduationCap className="w-4 h-4 text-white" />
-            </div>
+            <GraduationCap className="w-5 h-5 text-primary/60" />
 	            <h2 className="text-lg font-semibold text-foreground">
 	              {uiTexts.sections.education}
 	            </h2>
@@ -175,14 +171,12 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 
           <div className="space-y-3 stagger-children">
             {education.map((edu) => (
-              <IOSCard key={edu.id} variant="glass" padding="sm">
+              <IOSCard key={edu.id} variant="subtle" padding="sm">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-100 to-violet-100 flex items-center justify-center flex-shrink-0">
-                    <span className="text-lg">🎓</span>
-                  </div>
+                  <div className="w-[3px] h-10 rounded-full bg-gradient-to-b from-purple-400 to-violet-500 flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-medium text-foreground text-sm truncate">
+                      <h3 className="font-medium text-foreground text-sm truncate tracking-tight">
                         {edu.degree}
                       </h3>
                       <IOSBadge variant="default" size="sm" className="bg-muted text-muted-foreground flex-shrink-0">
