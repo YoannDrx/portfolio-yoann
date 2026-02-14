@@ -15,7 +15,7 @@ const EXCLUDED_PATHS = new Set([
   "/twitter-image",
 ]);
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (EXCLUDED_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {

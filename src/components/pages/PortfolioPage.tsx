@@ -18,8 +18,11 @@ import {
   IOSSidePanel,
 } from "@/components/ios";
 import { ProjectDetailPanel } from "@/components/projects/ProjectDetailPanel";
+import { ProjectFilterBar } from "@/components/projects/ProjectFilterBar";
+import { ProjectSectionHeader } from "@/components/projects/ProjectSectionHeader";
 import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase } from "lucide-react";
 import { getAiContent, getEducation, getExperiences, getProfile, getProjects, getSocialLinks, getSoftSkills, getTechnicalSkills, getUiTexts } from "@/data";
+import { useProjectFilter } from "@/hooks/use-project-filter";
 import type { Project, ProjectType } from "@/data";
 
 // Helper functions for project type labels and colors
@@ -160,6 +163,9 @@ const WebView = () => {
   // State pour le panneau de détail projet
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  // Filtres projets
+  const { activeFilter, setActiveFilter, sections, counts, showSectionHeaders } = useProjectFilter(projects);
+
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Wrapper avec transform pour l'effet push */}
@@ -231,76 +237,91 @@ const WebView = () => {
       <section id="projects" className="py-20 px-6 bg-gradient-to-br from-blue-50/80 via-background to-indigo-50/50 dark:from-blue-950/30 dark:via-background dark:to-indigo-950/20">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-foreground mb-4 text-center">{uiTexts.nav.projects}</h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
             {uiTexts.descriptions.projectsSubtitle}
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-            {projects.map((project) => (
-              <IOSCard
-                key={project.id}
-                variant="glass"
-                padding="none"
-                className="overflow-hidden group cursor-pointer h-full"
-                interactive
-                onPress={() => setSelectedProject(project)}
-              >
-                <div className="flex flex-col h-full">
-                  {/* Image clean sans overlay */}
-                  <div className="relative h-48 overflow-hidden flex-shrink-0">
-                    {project.image ? (
-                      <Image
-                        src={project.image}
-                        alt={project.name}
-                        fill
-                        className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    ) : (
-                      <div className={`h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
-                        <span className="text-7xl group-hover:scale-110 transition-transform">{project.emoji}</span>
+          <ProjectFilterBar
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
+            counts={counts}
+          />
+
+          <div className="mt-10 space-y-16">
+            {sections.map((section) => (
+              <div key={section.type}>
+                {showSectionHeaders && (
+                  <ProjectSectionHeader type={section.type} count={section.projects.length} />
+                )}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
+                  {section.projects.map((project) => (
+                    <IOSCard
+                      key={project.id}
+                      variant="glass"
+                      padding="none"
+                      className="overflow-hidden group cursor-pointer h-full"
+                      interactive
+                      onPress={() => setSelectedProject(project)}
+                    >
+                      <div className="flex flex-col h-full">
+                        {/* Image clean sans overlay */}
+                        <div className="relative h-48 overflow-hidden flex-shrink-0">
+                          {project.image ? (
+                            <Image
+                              src={project.image}
+                              alt={project.name}
+                              fill
+                              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                          ) : (
+                            <div className={`h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
+                              <span className="text-7xl group-hover:scale-110 transition-transform">{project.emoji}</span>
+                            </div>
+                          )}
+                        </div>
+                        {/* Contenu avec flex pour aligner le bouton en bas */}
+                        <div className="p-6 flex flex-col flex-1">
+                          {/* Type de projet + Année */}
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
+                              {getProjectTypeLabel(project.projectType, locale)}
+                            </span>
+                            <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-muted text-muted-foreground">
+                              {project.year}
+                            </span>
+                          </div>
+
+                          <h3 className="text-xl font-semibold text-foreground mb-1">{project.name}</h3>
+
+                          {/* Catégorie */}
+                          <p className="text-sm text-primary font-medium mb-3">{project.category}</p>
+
+                          {/* Plateformes et équipe */}
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="flex gap-1.5">
+                              {project.platforms.map((platform) => (
+                                <span key={platform} className="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                                  {platform}
+                                </span>
+                              ))}
+                            </div>
+                            <span className="text-muted-foreground/50">•</span>
+                            <span className="text-xs text-muted-foreground">{project.stats.teamSize}</span>
+                          </div>
+
+                          {/* Bouton aligné en bas */}
+                          <div className="mt-auto">
+                            <IOSButton variant="ghost" size="sm" leftIcon={<ExternalLink className="w-4 h-4" />}>
+                              {uiTexts.buttons.viewDetails}
+                            </IOSButton>
+                          </div>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                  {/* Contenu avec flex pour aligner le bouton en bas */}
-                  <div className="p-6 flex flex-col flex-1">
-                    {/* Type de projet + Année */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-                        {getProjectTypeLabel(project.projectType, locale)}
-                      </span>
-                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-muted text-muted-foreground">
-                        {project.year}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl font-semibold text-foreground mb-1">{project.name}</h3>
-
-                    {/* Catégorie */}
-                    <p className="text-sm text-primary font-medium mb-3">{project.category}</p>
-
-                    {/* Plateformes et équipe */}
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex gap-1.5">
-                        {project.platforms.map((platform) => (
-                          <span key={platform} className="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
-                            {platform}
-                          </span>
-                        ))}
-                      </div>
-                      <span className="text-muted-foreground/50">•</span>
-                      <span className="text-xs text-muted-foreground">{project.stats.teamSize}</span>
-                    </div>
-
-                    {/* Bouton aligné en bas */}
-                    <div className="mt-auto">
-                      <IOSButton variant="ghost" size="sm" leftIcon={<ExternalLink className="w-4 h-4" />}>
-                        {uiTexts.buttons.viewDetails}
-                      </IOSButton>
-                    </div>
-                  </div>
+                    </IOSCard>
+                  ))}
                 </div>
-              </IOSCard>
+              </div>
             ))}
           </div>
         </div>

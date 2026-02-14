@@ -11,7 +11,10 @@ import { ChevronRight, Apple, Smartphone, Globe, Users, Download, ExternalLink, 
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
 import { ImageGallery } from '../projects/ImageGallery';
+import { ProjectFilterBar } from '../projects/ProjectFilterBar';
+import { ProjectSectionHeader } from '../projects/ProjectSectionHeader';
 import { getProjects, getProjectsCount, getUiTexts } from '@/data';
+import { useProjectFilter } from '@/hooks/use-project-filter';
 import { useI18n } from '@/i18n/I18nProvider';
 import type { Project, ProjectType } from '@/data';
 
@@ -43,6 +46,7 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
   const uiTexts = getUiTexts(locale);
   const projects = getProjects(locale);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { activeFilter, setActiveFilter, sections, counts, showSectionHeaders } = useProjectFilter(projects);
 
   if (selectedProject) {
     return (
@@ -58,93 +62,112 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
         {/* Header */}
         <IOSNavigationBar
           title={uiTexts.nav.projects}
-          subtitle={`${getProjectsCount(locale)} ${uiTexts.stats.publishedApps}`}
+          subtitle={`${counts[activeFilter]} ${uiTexts.stats.publishedApps}`}
         />
 
+        {/* Filter Chips */}
+        <div className="py-2">
+          <ProjectFilterBar
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
+            counts={counts}
+            compact
+          />
+        </div>
+
         {/* Project Cards */}
-        <div className="px-5 space-y-4 stagger-children">
-          {projects.map((project) => (
-            <IOSCard
-              key={project.id}
-              variant="glass"
-              padding="none"
-              interactive
-              onPress={() => setSelectedProject(project)}
-            >
-              {/* Header avec Image ou Gradient */}
-              <div className={`h-32 relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}>
-                {project.image ? (
-                  <Image
-                    src={project.image}
-                    alt={project.name}
-                    fill
-                    className="object-cover object-top"
-                    sizes="100vw"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-5xl">{project.emoji}</span>
-                  </div>
-                )}
-                {/* Overlay gradient pour lisibilité des tags */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
-                {/* Year - coin gauche */}
-                <div className="absolute top-3 left-3">
-                  <span className="px-2 py-1 text-[10px] font-semibold rounded-full bg-black/30 backdrop-blur-sm text-white">
-                    {project.year}
-                  </span>
-                </div>
-                {/* Platform Icons - coin droit */}
-                <div className="absolute top-3 right-3">
-                  <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm">
-                    {project.platforms.includes('web') && (
-                      <Globe className="w-3 h-3 text-white" />
-                    )}
-                    {project.platforms.includes('ios') && (
-                      <Apple className="w-3 h-3 text-white" />
-                    )}
-                    {project.platforms.includes('android') && (
-                      <Smartphone className="w-3 h-3 text-white" />
-                    )}
-                  </div>
-                </div>
+        <div className="space-y-0 pb-32">
+          {sections.map((section) => (
+            <div key={section.type}>
+              {showSectionHeaders && (
+                <ProjectSectionHeader type={section.type} count={section.projects.length} compact />
+              )}
+              <div className="px-5 space-y-4 stagger-children">
+                {section.projects.map((project) => (
+                  <IOSCard
+                    key={project.id}
+                    variant="glass"
+                    padding="none"
+                    interactive
+                    onPress={() => setSelectedProject(project)}
+                  >
+                    {/* Header avec Image ou Gradient */}
+                    <div className={`h-32 relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}>
+                      {project.image ? (
+                        <Image
+                          src={project.image}
+                          alt={project.name}
+                          fill
+                          className="object-cover object-top"
+                          sizes="100vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-5xl">{project.emoji}</span>
+                        </div>
+                      )}
+                      {/* Overlay gradient pour lisibilité des tags */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+                      {/* Year - coin gauche */}
+                      <div className="absolute top-3 left-3">
+                        <span className="px-2 py-1 text-[10px] font-semibold rounded-full bg-black/30 backdrop-blur-sm text-white">
+                          {project.year}
+                        </span>
+                      </div>
+                      {/* Platform Icons - coin droit */}
+                      <div className="absolute top-3 right-3">
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm">
+                          {project.platforms.includes('web') && (
+                            <Globe className="w-3 h-3 text-white" />
+                          )}
+                          {project.platforms.includes('ios') && (
+                            <Apple className="w-3 h-3 text-white" />
+                          )}
+                          {project.platforms.includes('android') && (
+                            <Smartphone className="w-3 h-3 text-white" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4">
+                      {/* Titre + Tag aligné à droite */}
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-semibold text-foreground flex-1">{project.name}</h3>
+                        <div className="flex flex-col items-end gap-1.5">
+                          <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
+                            {getProjectTypeLabel(project.projectType, locale)}
+                          </span>
+                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                        </div>
+                      </div>
+
+                      {/* Catégorie */}
+                      <p className="text-sm text-muted-foreground mt-0.5">
+                        {project.category}
+                      </p>
+
+                      {/* Stats */}
+                      <div className="flex items-center gap-4 mt-3">
+                        <div className="flex items-center gap-1">
+                          <Users className="w-4 h-4 text-primary" />
+                          <span className="text-sm font-medium text-foreground">
+                            {project.stats.teamSize}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Download className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">
+                            {project.stats.downloads}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </IOSCard>
+                ))}
               </div>
-
-              {/* Content */}
-              <div className="p-4">
-                {/* Titre + Tag aligné à droite */}
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-foreground flex-1">{project.name}</h3>
-                  <div className="flex flex-col items-end gap-1.5">
-	                    <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-	                      {getProjectTypeLabel(project.projectType, locale)}
-	                    </span>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                  </div>
-                </div>
-
-                {/* Catégorie */}
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  {project.category}
-                </p>
-
-                {/* Stats */}
-                <div className="flex items-center gap-4 mt-3">
-                  <div className="flex items-center gap-1">
-                    <Users className="w-4 h-4 text-primary" />
-                    <span className="text-sm font-medium text-foreground">
-                      {project.stats.teamSize}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Download className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      {project.stats.downloads}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </IOSCard>
+            </div>
           ))}
         </div>
       </div>

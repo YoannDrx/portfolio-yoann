@@ -18,6 +18,7 @@ export {
   getProjectsCount,
   getProjectById,
   getProjectsByPlatform,
+  getProjectsByType,
 } from './projects';
 
 // Skills

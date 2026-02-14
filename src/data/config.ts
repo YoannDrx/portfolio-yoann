@@ -157,6 +157,12 @@ const uiTextsByLocale = {
       stackExpertise: 'Stack technique & expertise',
       discussProject: 'Discutons de votre projet',
     },
+    filters: {
+      all: 'Tous',
+      cdi: 'CDI',
+      freelance: 'Freelance',
+      personal: 'Projets Perso',
+    },
   },
   en: {
     nav: {
@@ -241,6 +247,12 @@ const uiTextsByLocale = {
       publishedApps: 'apps shipped',
       stackExpertise: 'Tech stack & expertise',
       discussProject: "Let's talk about your project",
+    },
+    filters: {
+      all: 'All',
+      cdi: 'Full-time',
+      freelance: 'Freelance',
+      personal: 'Personal',
     },
   },
 } as const;
