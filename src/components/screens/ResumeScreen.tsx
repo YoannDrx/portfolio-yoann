@@ -8,7 +8,7 @@
 import dynamic from 'next/dynamic';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSBadge, IOSNavigationBar, IOSButton } from '../ios';
-import { getEducation, getExperiences, getUiTexts } from '@/data';
+import { getEducation, getWorkExperiences, getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
 import { Briefcase, GraduationCap, MapPin, ExternalLink, Download } from 'lucide-react';
 
@@ -53,7 +53,7 @@ interface ResumeScreenProps {
 const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
-  const experiences = getExperiences(locale);
+  const experiences = getWorkExperiences(locale);
   const education = getEducation(locale);
 
   // Filtrer les expériences de développement (les 9 premières, sans Cyclofix)

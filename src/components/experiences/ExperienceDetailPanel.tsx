@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * ProjectDetailPanel
- * Contenu du panneau latéral pour afficher les détails d'un projet
+ * ExperienceDetailPanel
+ * Contenu du panneau latéral pour afficher les détails d'une expérience
  */
 
 import Image from 'next/image';
@@ -11,19 +11,19 @@ import { IOSButton, IOSBadge } from '@/components/ios';
 import { ImageGallery } from './ImageGallery';
 import { getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
-import type { Project, ProjectType } from '@/data';
+import type { Experience, ExperienceType } from '@/data';
 
-const getProjectTypeLabel = (type: ProjectType, locale: string) => {
-  const labels: Record<ProjectType, { fr: string; en: string }> = {
+const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
+  const labels: Record<ExperienceType, { fr: string; en: string }> = {
     freelance: { fr: 'Client Freelance', en: 'Freelance client' },
     cdi: { fr: 'CDI', en: 'Full-time' },
-    personal: { fr: 'Projet Perso', en: 'Personal project' },
+    personal: { fr: 'Perso', en: 'Personal project' },
   };
   return locale === 'en' ? labels[type].en : labels[type].fr;
 };
 
-const getProjectTypeColor = (type: ProjectType) => {
-  const colors: Record<ProjectType, string> = {
+const getExperienceTypeColor = (type: ExperienceType) => {
+  const colors: Record<ExperienceType, string> = {
     freelance: 'bg-blue-500/20 text-blue-600',
     cdi: 'bg-green-500/20 text-green-600',
     personal: 'bg-purple-500/20 text-purple-600',
@@ -31,19 +31,19 @@ const getProjectTypeColor = (type: ProjectType) => {
   return colors[type];
 };
 
-interface ProjectDetailPanelProps {
-  project: Project;
+interface ExperienceDetailPanelProps {
+  experience: Experience;
 }
 
-export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
+export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps) => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
 
   // Use images array if available, otherwise fallback to single image
-  const galleryImages = project.images && project.images.length > 0
-    ? project.images
-    : project.image
-      ? [project.image]
+  const galleryImages = experience.images && experience.images.length > 0
+    ? experience.images
+    : experience.image
+      ? [experience.image]
       : [];
 
   return (
@@ -51,30 +51,30 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
       {/* Hero Image Gallery */}
       <ImageGallery
         images={galleryImages}
-        projectName={project.name}
-        gradient={project.gradient}
-        emoji={project.emoji}
+        projectName={experience.name}
+        gradient={experience.gradient}
+        emoji={experience.emoji}
       />
 
       {/* Content */}
       <div className="px-6 pb-8 -mt-8 relative">
         {/* Badges */}
         <div className="flex items-center gap-2 mb-3">
-          <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-            {getProjectTypeLabel(project.projectType, locale)}
+          <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${getExperienceTypeColor(experience.experienceType)}`}>
+            {getExperienceTypeLabel(experience.experienceType, locale)}
           </span>
           <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-muted text-muted-foreground">
-            {project.year}
+            {experience.year}
           </span>
         </div>
 
         {/* Title & Category */}
-        <h2 className="text-3xl font-bold text-foreground">{project.name}</h2>
-        <p className="text-primary font-medium mt-1">{project.category}</p>
+        <h2 className="text-3xl font-bold text-foreground">{experience.name}</h2>
+        <p className="text-primary font-medium mt-1">{experience.category}</p>
 
         {/* Short Description */}
         <p className="text-muted-foreground mt-4 leading-relaxed">
-          {project.description}
+          {experience.description}
         </p>
 
         {/* Stats */}
@@ -82,31 +82,31 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
           <div className="text-center">
             <div className="flex items-center justify-center gap-1">
               <Users className="w-5 h-5 text-primary" />
-              <span className="text-xl font-bold text-foreground">{project.stats.teamSize}</span>
+              <span className="text-xl font-bold text-foreground">{experience.stats.teamSize}</span>
             </div>
             <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.team}</p>
           </div>
           <div className="w-px h-10 bg-border" />
           <div className="text-center">
-            <p className="text-xl font-bold text-foreground">{project.stats.downloads}</p>
+            <p className="text-xl font-bold text-foreground">{experience.stats.downloads}</p>
             <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.downloads}</p>
           </div>
           <div className="w-px h-10 bg-border" />
           <div className="text-center">
             <div className="flex items-center justify-center gap-1">
-              {project.platforms.includes('web') && <Globe className="w-5 h-5" />}
-              {project.platforms.includes('ios') && <Apple className="w-5 h-5" />}
-              {project.platforms.includes('android') && <Smartphone className="w-5 h-5" />}
+              {experience.platforms.includes('web') && <Globe className="w-5 h-5" />}
+              {experience.platforms.includes('ios') && <Apple className="w-5 h-5" />}
+              {experience.platforms.includes('android') && <Smartphone className="w-5 h-5" />}
             </div>
             <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.platforms}</p>
           </div>
         </div>
 
         {/* Long Description */}
-        {project.longDescription && (
+        {experience.longDescription && (
           <div className="mt-6 p-4 bg-muted/50 rounded-2xl">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {project.longDescription}
+              {experience.longDescription}
             </p>
           </div>
         )}
@@ -117,7 +117,7 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
             {uiTexts.sections.techStack}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {project.features.map((feature) => (
+            {experience.features.map((feature) => (
               <IOSBadge key={feature} variant="default" size="md">
                 {feature}
               </IOSBadge>
@@ -126,13 +126,13 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
         </div>
 
         {/* Detailed Stack by category */}
-        {project.stack && (
+        {experience.stack && (
           <div className="mt-6 space-y-4">
-            {project.stack.frontend && project.stack.frontend.length > 0 && (
+            {experience.stack.frontend && experience.stack.frontend.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-blue-600 mb-2">{uiTexts.stackLabels.frontend}</h4>
                 <div className="flex flex-wrap gap-1.5">
-                  {project.stack.frontend.map((tech) => (
+                  {experience.stack.frontend.map((tech) => (
                     <span key={tech} className="text-xs px-2 py-1 rounded-full bg-blue-500/10 text-blue-600">
                       {tech}
                     </span>
@@ -140,11 +140,11 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
                 </div>
               </div>
             )}
-            {project.stack.backend && project.stack.backend.length > 0 && (
+            {experience.stack.backend && experience.stack.backend.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-green-600 mb-2">{uiTexts.stackLabels.backend}</h4>
                 <div className="flex flex-wrap gap-1.5">
-                  {project.stack.backend.map((tech) => (
+                  {experience.stack.backend.map((tech) => (
                     <span key={tech} className="text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-600">
                       {tech}
                     </span>
@@ -152,11 +152,11 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
                 </div>
               </div>
             )}
-            {project.stack.database && project.stack.database.length > 0 && (
+            {experience.stack.database && experience.stack.database.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-purple-600 mb-2">{uiTexts.stackLabels.database}</h4>
                 <div className="flex flex-wrap gap-1.5">
-                  {project.stack.database.map((tech) => (
+                  {experience.stack.database.map((tech) => (
                     <span key={tech} className="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-600">
                       {tech}
                     </span>
@@ -164,11 +164,11 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
                 </div>
               </div>
             )}
-            {project.stack.devops && project.stack.devops.length > 0 && (
+            {experience.stack.devops && experience.stack.devops.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-orange-600 mb-2">{uiTexts.stackLabels.devops}</h4>
                 <div className="flex flex-wrap gap-1.5">
-                  {project.stack.devops.map((tech) => (
+                  {experience.stack.devops.map((tech) => (
                     <span key={tech} className="text-xs px-2 py-1 rounded-full bg-orange-500/10 text-orange-600">
                       {tech}
                     </span>
@@ -176,11 +176,11 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
                 </div>
               </div>
             )}
-            {project.stack.testing && project.stack.testing.length > 0 && (
+            {experience.stack.testing && experience.stack.testing.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-red-600 mb-2">{uiTexts.stackLabels.testing}</h4>
                 <div className="flex flex-wrap gap-1.5">
-                  {project.stack.testing.map((tech) => (
+                  {experience.stack.testing.map((tech) => (
                     <span key={tech} className="text-xs px-2 py-1 rounded-full bg-red-500/10 text-red-600">
                       {tech}
                     </span>
@@ -192,13 +192,13 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
         )}
 
         {/* Highlights */}
-        {project.highlights && project.highlights.length > 0 && (
+        {experience.highlights && experience.highlights.length > 0 && (
           <div className="mt-8">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
               {uiTexts.sections.highlights}
             </h3>
             <div className="space-y-3">
-              {project.highlights.map((highlight) => (
+              {experience.highlights.map((highlight) => (
                 <div key={highlight.title} className="p-3 bg-muted/30 rounded-xl">
                   <h4 className="text-sm font-semibold text-foreground">{highlight.title}</h4>
                   <p className="text-xs text-muted-foreground mt-1">{highlight.description}</p>
@@ -210,9 +210,9 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
 
         {/* CTA Buttons */}
         <div className="mt-8 space-y-3">
-          {project.links?.website ? (
+          {experience.links?.website ? (
             <a
-              href={project.links.website}
+              href={experience.links.website}
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full"
@@ -228,13 +228,13 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
               disabled
               className="opacity-50 cursor-not-allowed"
             >
-              {uiTexts.labels.privateProject}
+              {uiTexts.labels.privateExperience}
             </IOSButton>
           )}
 
-          {project.links?.github && (
+          {experience.links?.github && (
             <a
-              href={project.links.github}
+              href={experience.links.github}
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full"
@@ -246,11 +246,11 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
           )}
 
           {/* Store buttons in a row */}
-          {(project.links?.appStore || project.links?.playStore) && (
+          {(experience.links?.appStore || experience.links?.playStore) && (
             <div className="flex gap-3">
-              {project.links?.appStore && (
+              {experience.links?.appStore && (
                 <a
-                  href={project.links.appStore}
+                  href={experience.links.appStore}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1"
@@ -260,9 +260,9 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
                   </IOSButton>
                 </a>
               )}
-              {project.links?.playStore && (
+              {experience.links?.playStore && (
                 <a
-                  href={project.links.playStore}
+                  href={experience.links.playStore}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1"
@@ -280,4 +280,4 @@ export const ProjectDetailPanel = ({ project }: ProjectDetailPanelProps) => {
   );
 };
 
-export default ProjectDetailPanel;
+export default ExperienceDetailPanel;

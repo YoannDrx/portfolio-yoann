@@ -3,10 +3,10 @@
  * Liste des projets du portfolio (ordre chronologique décroissant)
  */
 
-import type { Project } from "./types";
+import type { Experience } from "./types";
 import type { Locale } from "@/i18n/locales";
 
-const projectsByLocale: Record<Locale, Project[]> = {
+const experiencesByLocale: Record<Locale, Experience[]> = {
   fr: [
     // 2025
     {
@@ -16,7 +16,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Application mobile enterprise-grade pour la gestion de retraite et prévoyance, développée en architecture multi-tenant. Architecture Clean/DDD avec 22+ modules métier (remboursements, contrats, bénéficiaires, cotisations...), 59+ composants UI custom, et 12 environnements de déploiement. Refactoring de code legacy, maintenance évolutive et développement de nouvelles fonctionnalités en équipe.",
       category: "Assurance",
-      projectType: "cdi",
+      experienceType: "cdi",
       year: "2025",
       platforms: ["ios", "android"],
       gradient: "from-sky-400 to-blue-600",
@@ -51,7 +51,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "EggscuseMe aide les utilisateurs à tracker leurs boîtes d'œufs avec des indicateurs de fraîcheur colorés, des recommandations de cuisson intelligentes, et des statistiques anti-gaspillage. L'app inclut un scanner de codes-barres et un scanner IA (Gemini Vision) pour extraire automatiquement les dates de ponte.",
       category: "WebApp PWA",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-yellow-300 to-orange-400",
@@ -106,7 +106,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Impulsion est une plateforme hybride qui connecte coachs et athlètes. Elle permet de planifier des séances avec un calendrier drag & drop, d'annoter des vidéos, de calculer la charge d'entraînement (ACWR), et de suivre la progression des athlètes en temps réel. Inclut des visualisations 3D immersives et un système d'abonnement complet.",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-lime-400 to-green-500",
@@ -138,7 +138,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Jobio est un CRM de prospection freelance qui centralise la gestion des missions, profils, plateformes et contacts. Il intègre un tableau Kanban drag & drop avec 8 statuts, un assistant IA pour générer des candidatures et auditer les profils LinkedIn, un CV Lab IA pour créer des CV sur mesure par mission, un système de séquences automatisées de relance, un calendrier intégré pour visualiser les échéances et relances, un gestionnaire de plateformes freelance (Malt, Upwork...), un CRM contacts, et des analytics de conversion. Inclut un système d'abonnement Stripe avec 3 plans (Free, Pro, Ultra).",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-indigo-400 to-purple-600",
@@ -171,7 +171,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Hyrun est un coach personnel IA pour athlètes hybrides (HYROX & running). L'app génère des plans d'entraînement intelligents avec gestion des phases (Base, Build, Peak, Taper), propose des substitutions d'exercices selon l'équipement disponible, unifie le calendrier d'entraînement avec logs détaillés (RPE, mood, douleur), et fournit des plans nutritionnels personnalisés par IA. Inclut un système de benchmarks running (5K, 10K, semi, marathon), un chat coach IA, et un suivi de progression avec graphiques.",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-600",
@@ -205,7 +205,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Application mobile React Native pour la gestion de mutuelle santé et services financiers. Architecture Clean/DDD avec développement de features métier (remboursements, contrats, bénéficiaires, documents), résolution de bugs en équipe Agile/Scrum/SAFe. Contribution à un design system de 59+ composants réutilisables et intégration Firebase complète (Analytics, Crashlytics, Push Notifications via Notifee).",
       category: "Fintech",
-      projectType: "cdi",
+      experienceType: "cdi",
       year: "2024",
       platforms: ["ios", "android"],
       gradient: "from-teal-400 to-emerald-500",
@@ -240,7 +240,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         'MyCryptoPilot est une plateforme de trading social "risk-first" permettant de suivre des traders vérifiés, recevoir leurs signaux en temps réel et consulter des performances vérifiées via APIs Binance & Bybit. Inclut paiements crypto natifs (Base/Tron), bot Discord 24/7, et calcul de KPIs (winrate, profit factor, drawdown).',
       category: "WebApp PWA",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-500",
@@ -278,7 +278,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "MoodDay est un compagnon digital conçu avec des psychiatres pour aider à mieux comprendre ses humeurs, suivre ses traitements et préparer ses consultations. L'application inclut un suivi d'humeur quotidien, la gestion des médicaments, des analyses et des rappels. Conforme RGPD avec données chiffrées et export PDF médical.",
       category: "WebApp PWA",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-teal-400 to-emerald-500",
@@ -311,7 +311,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "HomeGo est une plateforme immobilière permettant d'investir intelligemment avec agrégation d'annonces, analyse des prix via données DVF certifiées, et négociation assistée par IA. Inclut un tableau de bord intelligent, des alertes personnalisées, et un simulateur de capacité d'emprunt.",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2024",
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
@@ -342,7 +342,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Portfolio artistique avec galerie photo interactive, carousel, effets visuels créatifs (water wave), intégration vidéo YouTube, et système de contact. Multi-langues FR/EN avec CMS intégré pour gestion du contenu.",
       category: "Portfolio",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2024",
       platforms: ["web"],
       gradient: "from-rose-400 to-pink-500",
@@ -371,7 +371,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Site vitrine corporate pour cabinet d'avocats parisien avec design moderne, back-office de gestion du contenu (équipe, actualités), formulaire de contact avancé et optimisation SEO pour le secteur juridique.",
       category: "Corporate",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-slate-400 to-gray-500",
@@ -398,7 +398,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Agence Néon",
       description: "Site web et maintenance pour agence digitale parisienne",
       category: "Agence",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-orange-400 to-red-500",
@@ -414,7 +414,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Portfolio immersif pour compositeur de musique avec visualisations 3D (Three.js), lecteur audio personnalisé, galerie de projets avec intégration vidéo, cartographie des collaborations mondiales, et génération de CV PDF. Multi-langues et responsive.",
       category: "Portfolio",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2025",
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
@@ -445,7 +445,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Plateforme SaaS B2B permettant l'envoi de courriers recommandés numériques certifiés. Inclut système de paiement Stripe, double authentification 2FA via SMS/email (Twilio), éditeur de texte riche, et back-office complet de gestion.",
       category: "SaaS",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-blue-400 to-cyan-500",
@@ -472,7 +472,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Nos Instants Précieux",
       description: "Site web e-commerce avec stratégie SEO et marketing intégrée",
       category: "E-commerce",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-pink-400 to-rose-500",
@@ -486,7 +486,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Test and Ride",
       description: "Application mobile pour plateforme de test de véhicules avec intégration API",
       category: "Mobilité",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["ios", "android"],
       gradient: "from-green-400 to-lime-500",
@@ -500,7 +500,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Crazee Burger",
       description: "MVP de commande en ligne avec gestion des menus et panier",
       category: "Food Tech",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2023",
       platforms: ["web"],
       gradient: "from-yellow-400 to-amber-500",
@@ -519,7 +519,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Enterprise-grade mobile app for retirement and benefits management, built with multi-tenant architecture. Clean Architecture/DDD with 22+ business modules (reimbursements, contracts, beneficiaries, contributions...), 59+ custom UI components, and 12 deployment environments. Legacy code refactoring, progressive maintenance, and new feature development in team.",
       category: "Insurance",
-      projectType: "cdi",
+      experienceType: "cdi",
       year: "2025",
       platforms: ["ios", "android"],
       gradient: "from-sky-400 to-blue-600",
@@ -554,7 +554,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "EggscuseMe helps users track their egg cartons with color-coded freshness indicators, smart cooking recommendations, and anti-waste insights. The app includes a barcode scanner and an AI scanner (Gemini Vision) to automatically extract laying dates.",
       category: "PWA",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-yellow-300 to-orange-400",
@@ -609,7 +609,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Impulsion is a hybrid platform that connects coaches and athletes. It enables session planning with a drag & drop calendar, video annotations, training load calculation (ACWR), and real-time athlete progress tracking. Includes immersive 3D visualizations and a complete subscription system.",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-lime-400 to-green-500",
@@ -641,7 +641,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Jobio is a freelance prospection CRM that centralizes mission, profile, platform and contact management. It features a drag & drop Kanban board with 8 statuses, an AI assistant to generate applications and audit LinkedIn profiles, an AI CV Lab to create tailored resumes per mission, automated follow-up sequences, an integrated calendar to visualize deadlines and follow-ups, a freelance platform manager (Malt, Upwork...), a contact CRM, and conversion analytics. Includes a Stripe subscription system with 3 plans (Free, Pro, Ultra).",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-indigo-400 to-purple-600",
@@ -674,7 +674,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Hyrun is a personal AI coach for hybrid athletes (HYROX & running). The app generates smart training plans with periodization phases (Base, Build, Peak, Taper), offers exercise substitutions based on available equipment, provides a unified training calendar with detailed logs (RPE, mood, pain), and delivers AI-powered personalized nutrition plans. Includes running benchmarks (5K, 10K, half marathon, marathon), an AI coach chat, and progress tracking with charts.",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-600",
@@ -708,7 +708,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "React Native mobile app for health insurance and financial services management. Clean Architecture/DDD with business feature development (reimbursements, contracts, beneficiaries, documents), bug resolution in Agile/Scrum/SAFe team. Contribution to a 59+ reusable component design system and full Firebase integration (Analytics, Crashlytics, Push Notifications via Notifee).",
       category: "Fintech",
-      projectType: "cdi",
+      experienceType: "cdi",
       year: "2024",
       platforms: ["ios", "android"],
       gradient: "from-teal-400 to-emerald-500",
@@ -743,7 +743,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         'MyCryptoPilot is a "risk-first" social trading platform to follow verified traders, receive real-time signals, and review verified performance via Binance & Bybit APIs. It includes native crypto payments (Base/Tron), a 24/7 Discord bot, and KPI computation (win rate, profit factor, drawdown).',
       category: "PWA",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-500",
@@ -781,7 +781,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "MoodDay is a digital companion designed with psychiatrists to help users better understand their moods, track treatments, and prepare for consultations. The app includes daily mood tracking, medication management, analytics, and reminders. GDPR compliant with encrypted data and medical PDF export.",
       category: "PWA",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2025",
       platforms: ["web"],
       gradient: "from-teal-400 to-emerald-500",
@@ -814,7 +814,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "HomeGo is a real estate platform for smart investing with listing aggregation, market price analysis via certified DVF data, and AI-assisted negotiation. Includes an intelligent dashboard, personalized alerts, and a borrowing capacity simulator.",
       category: "SaaS",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2024",
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
@@ -845,7 +845,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Artistic portfolio with an interactive photo gallery, carousel, creative visual effects (water wave), YouTube video integration, and a contact system. Full FR/EN multi-language with an integrated CMS to manage content.",
       category: "Portfolio",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2024",
       platforms: ["web"],
       gradient: "from-rose-400 to-pink-500",
@@ -874,7 +874,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Corporate website for a Paris-based law firm with a modern design, a content management back-office (team, news), an advanced contact form, and SEO optimization for the legal sector.",
       category: "Corporate",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-slate-400 to-gray-500",
@@ -901,7 +901,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Agence Néon",
       description: "Website and maintenance for a Paris-based digital agency",
       category: "Agency",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-orange-400 to-red-500",
@@ -917,7 +917,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "Immersive composer portfolio with 3D visualizations (Three.js), a custom audio player, a project gallery with video integration, a world map of collaborations, and PDF resume generation. Multi-language and responsive.",
       category: "Portfolio",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2025",
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
@@ -948,7 +948,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       longDescription:
         "B2B SaaS platform to send certified digital registered letters. Includes Stripe payments, two-factor authentication via SMS/email (Twilio), a rich text editor, and a complete management back office.",
       category: "SaaS",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-blue-400 to-cyan-500",
@@ -975,7 +975,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Nos Instants Précieux",
       description: "E-commerce website with built-in SEO and marketing strategy",
       category: "E-commerce",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["web"],
       gradient: "from-pink-400 to-rose-500",
@@ -989,7 +989,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Test and Ride",
       description: "Mobile app for a vehicle testing platform with API integrations",
       category: "Mobility",
-      projectType: "freelance",
+      experienceType: "freelance",
       year: "2023",
       platforms: ["ios", "android"],
       gradient: "from-green-400 to-lime-500",
@@ -1003,7 +1003,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       name: "Crazee Burger",
       description: "Online ordering MVP with menu and cart management",
       category: "Food Tech",
-      projectType: "personal",
+      experienceType: "personal",
       year: "2023",
       platforms: ["web"],
       gradient: "from-yellow-400 to-amber-500",
@@ -1015,30 +1015,30 @@ const projectsByLocale: Record<Locale, Project[]> = {
   ],
 };
 
-export const projects: Project[] = projectsByLocale.fr;
+export const experiences: Experience[] = experiencesByLocale.fr;
 
-export function getProjects(locale: Locale): Project[] {
-  return projectsByLocale[locale] ?? projectsByLocale.fr;
+export function getExperiences(locale: Locale): Experience[] {
+  return experiencesByLocale[locale] ?? experiencesByLocale.fr;
 }
 
 /**
  * Helper pour obtenir le nombre total de projets
  */
-export const getProjectsCount = (locale: Locale = "fr") => getProjects(locale).length;
+export const getExperiencesCount = (locale: Locale = "fr") => getExperiences(locale).length;
 
 /**
  * Helper pour obtenir un projet par son ID
  */
-export const getProjectById = (id: string, locale: Locale = "fr") => getProjects(locale).find((p) => p.id === id);
+export const getExperienceById = (id: string, locale: Locale = "fr") => getExperiences(locale).find((p) => p.id === id);
 
 /**
  * Helper pour filtrer les projets par plateforme
  */
-export const getProjectsByPlatform = (platform: "ios" | "android" | "web", locale: Locale = "fr") =>
-  getProjects(locale).filter((p) => p.platforms.includes(platform));
+export const getExperiencesByPlatform = (platform: "ios" | "android" | "web", locale: Locale = "fr") =>
+  getExperiences(locale).filter((p) => p.platforms.includes(platform));
 
 /**
  * Helper pour filtrer les projets par type
  */
-export const getProjectsByType = (type: "freelance" | "cdi" | "personal", locale: Locale = "fr") =>
-  getProjects(locale).filter((p) => p.projectType === type);
+export const getExperiencesByType = (type: "freelance" | "cdi" | "personal", locale: Locale = "fr") =>
+  getExperiences(locale).filter((p) => p.experienceType === type);

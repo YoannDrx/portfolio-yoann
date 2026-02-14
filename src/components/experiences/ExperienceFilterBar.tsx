@@ -3,23 +3,23 @@
 import { IOSChip } from '@/components/ios';
 import { getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
-import type { ProjectFilter } from '@/hooks/use-project-filter';
-import type { ProjectType } from '@/data';
+import type { ExperienceFilter } from '@/hooks/use-experience-filter';
+import type { ExperienceType } from '@/data';
 
-const FILTER_OPTIONS: ProjectFilter[] = ['all', 'cdi', 'freelance', 'personal'];
+const FILTER_OPTIONS: ExperienceFilter[] = ['all', 'cdi', 'freelance', 'personal'];
 
-interface ProjectFilterBarProps {
-  activeFilter: ProjectFilter;
-  onFilterChange: (filter: ProjectFilter) => void;
-  counts: Record<ProjectFilter, number>;
+interface ExperienceFilterBarProps {
+  activeFilter: ExperienceFilter;
+  onFilterChange: (filter: ExperienceFilter) => void;
+  counts: Record<ExperienceFilter, number>;
   compact?: boolean;
 }
 
-export function ProjectFilterBar({ activeFilter, onFilterChange, counts, compact }: ProjectFilterBarProps) {
+export function ExperienceFilterBar({ activeFilter, onFilterChange, counts, compact }: ExperienceFilterBarProps) {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
 
-  const getLabel = (filter: ProjectFilter) => {
+  const getLabel = (filter: ExperienceFilter) => {
     return uiTexts.filters[filter as keyof typeof uiTexts.filters];
   };
 

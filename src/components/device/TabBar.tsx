@@ -15,7 +15,7 @@ import type { TabItem, IOSTabBarProps } from '@/design-system/types';
 function getDefaultTabs(labels: ReturnType<typeof getUiTexts>): TabItem[] {
   return [
     { id: 'home', label: labels.nav.home, icon: <Home /> },
-    { id: 'projects', label: labels.nav.projects, icon: <FolderOpen /> },
+    { id: 'experiences', label: labels.nav.experiences, icon: <FolderOpen /> },
     { id: 'skills', label: labels.nav.skills, icon: <Layers /> },
     { id: 'resume', label: labels.nav.resume, icon: <FileText /> },
     { id: 'contact', label: labels.nav.contact, icon: <Mail /> },

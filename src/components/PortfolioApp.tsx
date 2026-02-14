@@ -5,12 +5,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import IPhoneFrame from "./device/iPhoneFrame";
 import TabBar from "./device/TabBar";
 import HomeScreen from "./screens/HomeScreen";
-import ProjectsScreen from "./screens/ProjectsScreen";
+import ExperiencesScreen from "./screens/ExperiencesScreen";
 import SkillsScreen from "./screens/SkillsScreen";
 import ResumeScreen from "./screens/ResumeScreen";
 import ContactScreen from "./screens/ContactScreen";
 
-const VALID_TABS = ["home", "projects", "skills", "resume", "contact"] as const;
+const VALID_TABS = ["home", "experiences", "skills", "resume", "contact"] as const;
 type TabId = (typeof VALID_TABS)[number];
 
 function normalizeTab(tab: string | null): TabId | null {
@@ -19,6 +19,7 @@ function normalizeTab(tab: string | null): TabId | null {
 
   // Backward compat (old manifest / shared links)
   if (normalized === "cv") return "resume";
+  if (normalized === "projects") return "experiences";
 
   if (VALID_TABS.includes(normalized as TabId)) {
     return normalized as TabId;
@@ -82,8 +83,8 @@ const PortfolioApp = ({ showFrame = true }: PortfolioAppProps) => {
     switch (activeTab) {
       case "home":
         return <HomeScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} />;
-      case "projects":
-        return <ProjectsScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} />;
+      case "experiences":
+        return <ExperiencesScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} />;
       case "skills":
         return <SkillsScreen hideStatusBar={hideStatusBar} />;
       case "resume":

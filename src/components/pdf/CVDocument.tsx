@@ -15,12 +15,12 @@ import {
 import type { Locale } from '@/i18n/locales';
 import {
   getEducation,
-  getExperiences,
+  getWorkExperiences,
   getProfile,
   getSoftSkills,
   getTechnicalSkills,
   type Education,
-  type Experience,
+  type WorkExperience,
   type NarrativeSkillCard,
   type Profile,
   type SoftSkillCard,
@@ -531,7 +531,7 @@ const Header = ({ profile }: HeaderProps) => (
 );
 
 type ExperienceItemProps = {
-  exp: Experience;
+  exp: WorkExperience;
   locale: Locale;
   presentLabel: string;
 };
@@ -577,7 +577,7 @@ const ExperienceItem = ({ exp, locale, presentLabel }: ExperienceItemProps) => {
 };
 
 type ExperiencesSectionProps = {
-  experiences: Experience[];
+  experiences: WorkExperience[];
   locale: Locale;
   presentLabel: string;
   title: string;
@@ -766,7 +766,7 @@ const CVDocument = ({ locale = 'fr' }: CVDocumentProps) => {
   const labels = getCvLabels(locale);
 
   const profile = getProfile(locale);
-  const experiences = getExperiences(locale).slice(0, 7);
+  const experiences = getWorkExperiences(locale).slice(0, 7);
   const education = getEducation(locale);
   const technicalSkills = getTechnicalSkills(locale);
   const softSkills = getSoftSkills(locale);

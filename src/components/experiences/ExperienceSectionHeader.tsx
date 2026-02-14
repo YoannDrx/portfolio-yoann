@@ -2,15 +2,15 @@
 
 import { getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
-import type { ProjectType } from '@/data';
+import type { ExperienceType } from '@/data';
 
-interface ProjectSectionHeaderProps {
-  type: ProjectType;
+interface ExperienceSectionHeaderProps {
+  type: ExperienceType;
   count: number;
   compact?: boolean;
 }
 
-export function ProjectSectionHeader({ type, count, compact }: ProjectSectionHeaderProps) {
+export function ExperienceSectionHeader({ type, count, compact }: ExperienceSectionHeaderProps) {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
 

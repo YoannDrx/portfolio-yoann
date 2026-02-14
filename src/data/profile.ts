@@ -20,7 +20,7 @@ const profiles: Record<Locale, Profile> = {
     availabilityOptions: ['CDI', 'Freelance', 'Mission longue'],
     stats: [
       { label: 'Années XP', value: '4+' },
-      { label: 'Projets', value: '15+' },
+      { label: 'Expériences', value: '15+' },
       { label: 'Clients', value: '10+' },
     ],
   },
@@ -37,7 +37,7 @@ const profiles: Record<Locale, Profile> = {
     availabilityOptions: ['Full-time', 'Freelance', 'Long-term'],
     stats: [
       { label: 'Years XP', value: '4+' },
-      { label: 'Projects', value: '15+' },
+      { label: 'Experiences', value: '15+' },
       { label: 'Clients', value: '10+' },
     ],
   },
@@ -52,8 +52,8 @@ export function getProfile(locale: Locale): Profile {
 const navigationItemsByLocale: Record<Locale, NavigationItem[]> = {
   fr: [
     {
-      id: 'projects',
-      label: 'Mes Projets',
+      id: 'experiences',
+      label: 'Mes Expériences',
       subtitle: 'Web & Mobile',
       icon: '📱',
       gradient: 'from-orange-400 to-pink-500',
@@ -82,8 +82,8 @@ const navigationItemsByLocale: Record<Locale, NavigationItem[]> = {
   ],
   en: [
     {
-      id: 'projects',
-      label: 'Projects',
+      id: 'experiences',
+      label: 'Experiences',
       subtitle: 'Web & Mobile',
       icon: '📱',
       gradient: 'from-orange-400 to-pink-500',

@@ -3,10 +3,10 @@
  * Expériences professionnelles et formations
  */
 
-import type { Experience, Education } from "./types";
+import type { WorkExperience, Education } from "./types";
 import type { Locale } from "@/i18n/locales";
 
-const experiencesByLocale: Record<Locale, Experience[]> = {
+const experiencesByLocale: Record<Locale, WorkExperience[]> = {
   fr: [
     {
       id: "1",
@@ -363,9 +363,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
   ],
 };
 
-export const experiences: Experience[] = experiencesByLocale.fr;
+export const workExperiences: WorkExperience[] = experiencesByLocale.fr;
 
-export function getExperiences(locale: Locale): Experience[] {
+export function getWorkExperiences(locale: Locale): WorkExperience[] {
   return experiencesByLocale[locale] ?? experiencesByLocale.fr;
 }
 
@@ -419,11 +419,11 @@ export function getEducation(locale: Locale): Education[] {
 }
 
 // Helpers
-export const getExperiencesByType = (type: Experience["type"], locale: Locale = "fr") =>
-  getExperiences(locale).filter((exp) => exp.type === type);
+export const getWorkExperiencesByType = (type: WorkExperience["type"], locale: Locale = "fr") =>
+  getWorkExperiences(locale).filter((exp) => exp.type === type);
 
-export const getDevExperiences = (locale: Locale = "fr") =>
-  getExperiences(locale).filter((exp) => exp.role.toLowerCase().includes("développeur") || exp.role.toLowerCase().includes("dev"));
+export const getDevWorkExperiences = (locale: Locale = "fr") =>
+  getWorkExperiences(locale).filter((exp) => exp.role.toLowerCase().includes("développeur") || exp.role.toLowerCase().includes("dev"));
 
 export const getTotalYearsOfExperience = (): number => {
   const devStart = new Date("2023-02-01");

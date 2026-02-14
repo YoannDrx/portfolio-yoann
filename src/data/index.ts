@@ -2,7 +2,7 @@
  * Data - Export Central
  *
  * Usage:
- * import { profile, projects, skillCategories } from '@/data';
+ * import { profile, experiences, skillCategories } from '@/data';
  */
 
 // Types
@@ -11,15 +11,15 @@ export * from './types';
 // Profile
 export { profile, navigationItems, getProfile, getNavigationItems } from './profile';
 
-// Projects
+// Experiences
 export {
-  projects,
-  getProjects,
-  getProjectsCount,
-  getProjectById,
-  getProjectsByPlatform,
-  getProjectsByType,
-} from './projects';
+  experiences,
+  getExperiences,
+  getExperiencesCount,
+  getExperienceById,
+  getExperiencesByPlatform,
+  getExperiencesByType,
+} from './experiences';
 
 // Skills
 export {
@@ -39,12 +39,12 @@ export {
 
 // Resume (CV)
 export {
-  experiences,
+  workExperiences,
   education,
-  getExperiences,
+  getWorkExperiences,
   getEducation,
-  getExperiencesByType,
-  getDevExperiences,
+  getWorkExperiencesByType,
+  getDevWorkExperiences,
   getTotalYearsOfExperience,
 } from './resume';
 

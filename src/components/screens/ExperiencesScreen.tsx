@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * ProjectsScreen
- * Écran listant les projets du portfolio avec vue détaillée
+ * ExperiencesScreen
+ * Écran listant les expériences du portfolio avec vue détaillée
  */
 
 import { useState } from 'react';
@@ -10,25 +10,25 @@ import Image from 'next/image';
 import { ChevronRight, Apple, Smartphone, Globe, Users, Download, ExternalLink, Github } from 'lucide-react';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSButton, IOSBadge, IOSNavigationBar } from '../ios';
-import { ImageGallery } from '../projects/ImageGallery';
-import { ProjectFilterBar } from '../projects/ProjectFilterBar';
-import { ProjectSectionHeader } from '../projects/ProjectSectionHeader';
-import { getProjects, getProjectsCount, getUiTexts } from '@/data';
-import { useProjectFilter } from '@/hooks/use-project-filter';
+import { ImageGallery } from '../experiences/ImageGallery';
+import { ExperienceFilterBar } from '../experiences/ExperienceFilterBar';
+import { ExperienceSectionHeader } from '../experiences/ExperienceSectionHeader';
+import { getExperiences, getExperiencesCount, getUiTexts } from '@/data';
+import { useExperienceFilter } from '@/hooks/use-experience-filter';
 import { useI18n } from '@/i18n/I18nProvider';
-import type { Project, ProjectType } from '@/data';
+import type { Experience, ExperienceType } from '@/data';
 
-const getProjectTypeLabel = (type: ProjectType, locale: string) => {
-  const labels: Record<ProjectType, { fr: string; en: string }> = {
+const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
+  const labels: Record<ExperienceType, { fr: string; en: string }> = {
     freelance: { fr: 'Client Freelance', en: 'Freelance client' },
     cdi: { fr: 'CDI', en: 'Full-time' },
-    personal: { fr: 'Projet Perso', en: 'Personal project' },
+    personal: { fr: 'Perso', en: 'Personal' },
   };
   return locale === 'en' ? labels[type].en : labels[type].fr;
 };
 
-const getProjectTypeColor = (type: ProjectType) => {
-  const colors: Record<ProjectType, string> = {
+const getExperienceTypeColor = (type: ExperienceType) => {
+  const colors: Record<ExperienceType, string> = {
     freelance: 'bg-blue-500/20 text-blue-600',
     cdi: 'bg-green-500/20 text-green-600',
     personal: 'bg-purple-500/20 text-purple-600',
@@ -36,21 +36,21 @@ const getProjectTypeColor = (type: ProjectType) => {
   return colors[type];
 };
 
-interface ProjectsScreenProps {
+interface ExperiencesScreenProps {
   onNavigate: (tab: string) => void;
   hideStatusBar?: boolean;
 }
 
-const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenProps) => {
+const ExperiencesScreen = ({ onNavigate, hideStatusBar = false }: ExperiencesScreenProps) => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
-  const projects = getProjects(locale);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const { activeFilter, setActiveFilter, sections, counts, showSectionHeaders } = useProjectFilter(projects);
+  const experiences = getExperiences(locale);
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  const { activeFilter, setActiveFilter, sections, counts, showSectionHeaders } = useExperienceFilter(experiences);
 
-  if (selectedProject) {
+  if (selectedExperience) {
     return (
-      <ProjectDetail project={selectedProject} onBack={() => setSelectedProject(null)} hideStatusBar={hideStatusBar} />
+      <ExperienceDetail experience={selectedExperience} onBack={() => setSelectedExperience(null)} hideStatusBar={hideStatusBar} />
     );
   }
 
@@ -61,13 +61,13 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header */}
         <IOSNavigationBar
-          title={uiTexts.nav.projects}
+          title={uiTexts.nav.experiences}
           subtitle={`${counts[activeFilter]} ${uiTexts.stats.publishedApps}`}
         />
 
         {/* Filter Chips */}
         <div className="py-2">
-          <ProjectFilterBar
+          <ExperienceFilterBar
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
             counts={counts}
@@ -75,35 +75,35 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
           />
         </div>
 
-        {/* Project Cards */}
+        {/* Experience Cards */}
         <div className="space-y-0 pb-32">
           {sections.map((section) => (
             <div key={section.type}>
               {showSectionHeaders && (
-                <ProjectSectionHeader type={section.type} count={section.projects.length} compact />
+                <ExperienceSectionHeader type={section.type} count={section.experiences.length} compact />
               )}
               <div className="px-5 space-y-4 stagger-children">
-                {section.projects.map((project) => (
+                {section.experiences.map((experience) => (
                   <IOSCard
-                    key={project.id}
+                    key={experience.id}
                     variant="glass"
                     padding="none"
                     interactive
-                    onPress={() => setSelectedProject(project)}
+                    onPress={() => setSelectedExperience(experience)}
                   >
                     {/* Header avec Image ou Gradient */}
-                    <div className={`h-32 relative overflow-hidden ${!project.image ? `bg-gradient-to-br ${project.gradient}` : ''}`}>
-                      {project.image ? (
+                    <div className={`h-32 relative overflow-hidden ${!experience.image ? `bg-gradient-to-br ${experience.gradient}` : ''}`}>
+                      {experience.image ? (
                         <Image
-                          src={project.image}
-                          alt={project.name}
+                          src={experience.image}
+                          alt={experience.name}
                           fill
                           className="object-cover object-top"
                           sizes="100vw"
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-5xl">{project.emoji}</span>
+                          <span className="text-5xl">{experience.emoji}</span>
                         </div>
                       )}
                       {/* Overlay gradient pour lisibilité des tags */}
@@ -111,19 +111,19 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
                       {/* Year - coin gauche */}
                       <div className="absolute top-3 left-3">
                         <span className="px-2 py-1 text-[10px] font-semibold rounded-full bg-black/30 backdrop-blur-sm text-white">
-                          {project.year}
+                          {experience.year}
                         </span>
                       </div>
                       {/* Platform Icons - coin droit */}
                       <div className="absolute top-3 right-3">
                         <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm">
-                          {project.platforms.includes('web') && (
+                          {experience.platforms.includes('web') && (
                             <Globe className="w-3 h-3 text-white" />
                           )}
-                          {project.platforms.includes('ios') && (
+                          {experience.platforms.includes('ios') && (
                             <Apple className="w-3 h-3 text-white" />
                           )}
-                          {project.platforms.includes('android') && (
+                          {experience.platforms.includes('android') && (
                             <Smartphone className="w-3 h-3 text-white" />
                           )}
                         </div>
@@ -134,10 +134,10 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
                     <div className="p-4">
                       {/* Titre + Tag aligné à droite */}
                       <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-semibold text-foreground flex-1">{project.name}</h3>
+                        <h3 className="font-semibold text-foreground flex-1">{experience.name}</h3>
                         <div className="flex flex-col items-end gap-1.5">
-                          <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-                            {getProjectTypeLabel(project.projectType, locale)}
+                          <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${getExperienceTypeColor(experience.experienceType)}`}>
+                            {getExperienceTypeLabel(experience.experienceType, locale)}
                           </span>
                           <ChevronRight className="w-4 h-4 text-muted-foreground" />
                         </div>
@@ -145,7 +145,7 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
 
                       {/* Catégorie */}
                       <p className="text-sm text-muted-foreground mt-0.5">
-                        {project.category}
+                        {experience.category}
                       </p>
 
                       {/* Stats */}
@@ -153,13 +153,13 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4 text-primary" />
                           <span className="text-sm font-medium text-foreground">
-                            {project.stats.teamSize}
+                            {experience.stats.teamSize}
                           </span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Download className="w-4 h-4 text-muted-foreground" />
                           <span className="text-sm text-muted-foreground">
-                            {project.stats.downloads}
+                            {experience.stats.downloads}
                           </span>
                         </div>
                       </div>
@@ -175,13 +175,13 @@ const ProjectsScreen = ({ onNavigate, hideStatusBar = false }: ProjectsScreenPro
   );
 };
 
-interface ProjectDetailProps {
-  project: Project;
+interface ExperienceDetailProps {
+  experience: Experience;
   onBack: () => void;
   hideStatusBar?: boolean;
 }
 
-const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetailProps) => {
+const ExperienceDetail = ({ experience, onBack, hideStatusBar = false }: ExperienceDetailProps) => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
 
@@ -200,19 +200,19 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Hero - Image Gallery */}
         <div className="mx-5 mt-4">
-          {(project.images && project.images.length > 0) || project.image ? (
+          {(experience.images && experience.images.length > 0) || experience.image ? (
             <ImageGallery
-              images={project.images && project.images.length > 0 ? project.images : project.image ? [project.image] : []}
-              projectName={project.name}
-              gradient={project.gradient}
-              emoji={project.emoji}
+              images={experience.images && experience.images.length > 0 ? experience.images : experience.image ? [experience.image] : []}
+              projectName={experience.name}
+              gradient={experience.gradient}
+              emoji={experience.emoji}
               forceStackLayout={true}
               heightClass="h-40"
             />
           ) : (
-            <div className={`h-40 rounded-2xl relative overflow-hidden bg-gradient-to-br ${project.gradient}`}>
+            <div className={`h-40 rounded-2xl relative overflow-hidden bg-gradient-to-br ${experience.gradient}`}>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-8xl animate-float">{project.emoji}</span>
+                <span className="text-8xl animate-float">{experience.emoji}</span>
               </div>
             </div>
           )}
@@ -221,17 +221,17 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
         {/* Info */}
         <div className="px-5 mt-6">
           <div className="flex items-center gap-2 mb-2">
-            <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-              {getProjectTypeLabel(project.projectType, locale)}
+            <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${getExperienceTypeColor(experience.experienceType)}`}>
+              {getExperienceTypeLabel(experience.experienceType, locale)}
             </span>
             <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-muted text-muted-foreground">
-              {project.year}
+              {experience.year}
             </span>
           </div>
-          <h1 className="ios-nav-title-large">{project.name}</h1>
-          <p className="text-primary font-medium mt-1">{project.category}</p>
+          <h1 className="ios-nav-title-large">{experience.name}</h1>
+          <p className="text-primary font-medium mt-1">{experience.category}</p>
           <p className="text-muted-foreground mt-3 leading-relaxed">
-            {project.description}
+            {experience.description}
           </p>
 
           {/* Stats */}
@@ -240,32 +240,32 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
               <div className="flex items-center justify-center gap-1">
                 <Users className="w-5 h-5 text-primary" />
                 <span className="text-xl font-bold text-foreground">
-                  {project.stats.teamSize}
+                  {experience.stats.teamSize}
                 </span>
               </div>
               <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.team}</p>
             </div>
             <div className="w-px h-10 bg-border" />
             <div className="text-center">
-              <p className="text-xl font-bold text-foreground">{project.stats.downloads}</p>
+              <p className="text-xl font-bold text-foreground">{experience.stats.downloads}</p>
               <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.downloads}</p>
             </div>
             <div className="w-px h-10 bg-border" />
             <div className="text-center">
               <div className="flex items-center justify-center gap-1">
-                {project.platforms.includes('web') && <Globe className="w-5 h-5" />}
-                {project.platforms.includes('ios') && <Apple className="w-5 h-5" />}
-                {project.platforms.includes('android') && <Smartphone className="w-5 h-5" />}
+                {experience.platforms.includes('web') && <Globe className="w-5 h-5" />}
+                {experience.platforms.includes('ios') && <Apple className="w-5 h-5" />}
+                {experience.platforms.includes('android') && <Smartphone className="w-5 h-5" />}
               </div>
               <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.platforms}</p>
             </div>
           </div>
 
           {/* Long Description */}
-          {project.longDescription && (
+          {experience.longDescription && (
             <div className="mt-6 p-4 bg-muted/50 rounded-2xl">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                {project.longDescription}
+                {experience.longDescription}
               </p>
             </div>
           )}
@@ -276,7 +276,7 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
               {uiTexts.sections.techStack}
             </h3>
             <div className="flex flex-wrap gap-2">
-              {project.features.map((feature) => (
+              {experience.features.map((feature) => (
                 <IOSBadge key={feature} variant="default" size="md">
                   {feature}
                 </IOSBadge>
@@ -285,13 +285,13 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
           </div>
 
           {/* Detailed Stack */}
-          {project.stack && (
+          {experience.stack && (
             <div className="mt-6 space-y-4">
-              {project.stack.frontend && project.stack.frontend.length > 0 && (
+              {experience.stack.frontend && experience.stack.frontend.length > 0 && (
                 <div>
                   <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.frontend}</h4>
                   <div className="flex flex-wrap gap-1.5">
-                    {project.stack.frontend.map((tech) => (
+                    {experience.stack.frontend.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-blue-500/10 text-blue-600">
                         {tech}
                       </span>
@@ -299,11 +299,11 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
                   </div>
                 </div>
               )}
-              {project.stack.backend && project.stack.backend.length > 0 && (
+              {experience.stack.backend && experience.stack.backend.length > 0 && (
                 <div>
                   <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.backend}</h4>
                   <div className="flex flex-wrap gap-1.5">
-                    {project.stack.backend.map((tech) => (
+                    {experience.stack.backend.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-600">
                         {tech}
                       </span>
@@ -311,11 +311,11 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
                   </div>
                 </div>
               )}
-              {project.stack.database && project.stack.database.length > 0 && (
+              {experience.stack.database && experience.stack.database.length > 0 && (
                 <div>
                   <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.database}</h4>
                   <div className="flex flex-wrap gap-1.5">
-                    {project.stack.database.map((tech) => (
+                    {experience.stack.database.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-600">
                         {tech}
                       </span>
@@ -323,11 +323,11 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
                   </div>
                 </div>
               )}
-              {project.stack.devops && project.stack.devops.length > 0 && (
+              {experience.stack.devops && experience.stack.devops.length > 0 && (
                 <div>
                   <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.devops}</h4>
                   <div className="flex flex-wrap gap-1.5">
-                    {project.stack.devops.map((tech) => (
+                    {experience.stack.devops.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-orange-500/10 text-orange-600">
                         {tech}
                       </span>
@@ -335,11 +335,11 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
                   </div>
                 </div>
               )}
-              {project.stack.testing && project.stack.testing.length > 0 && (
+              {experience.stack.testing && experience.stack.testing.length > 0 && (
                 <div>
                   <h4 className="text-xs font-semibold text-primary mb-2">{uiTexts.stackLabels.testing}</h4>
                   <div className="flex flex-wrap gap-1.5">
-                    {project.stack.testing.map((tech) => (
+                    {experience.stack.testing.map((tech) => (
                       <span key={tech} className="text-xs px-2 py-1 rounded-full bg-red-500/10 text-red-600">
                         {tech}
                       </span>
@@ -351,13 +351,13 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
           )}
 
           {/* Highlights */}
-	          {project.highlights && project.highlights.length > 0 && (
+	          {experience.highlights && experience.highlights.length > 0 && (
 	            <div className="mt-8">
 	              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
 	                {uiTexts.sections.highlights}
 	              </h3>
               <div className="space-y-3">
-                {project.highlights.map((highlight) => (
+                {experience.highlights.map((highlight) => (
                   <div key={highlight.title} className="p-3 bg-muted/30 rounded-xl">
                     <h4 className="text-sm font-semibold text-foreground">{highlight.title}</h4>
                     <p className="text-xs text-muted-foreground mt-1">{highlight.description}</p>
@@ -369,9 +369,9 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
 
           {/* CTA - Boutons fonctionnels */}
           <div className="mt-8 space-y-3">
-	            {project.links?.website ? (
+	            {experience.links?.website ? (
 	              <a
-                href={project.links.website}
+                href={experience.links.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full"
@@ -387,13 +387,13 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
                 disabled
                 className="opacity-50 cursor-not-allowed"
 	              >
-	                {uiTexts.labels.privateProject}
+	                {uiTexts.labels.privateExperience}
 	              </IOSButton>
 	            )}
 
-	            {project.links?.github && (
+	            {experience.links?.github && (
 	              <a
-                href={project.links.github}
+                href={experience.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full"
@@ -404,9 +404,9 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
 	              </a>
 	            )}
 
-            {project.links?.appStore && (
+            {experience.links?.appStore && (
               <a
-                href={project.links.appStore}
+                href={experience.links.appStore}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full"
@@ -417,9 +417,9 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
               </a>
             )}
 
-            {project.links?.playStore && (
+            {experience.links?.playStore && (
               <a
-                href={project.links.playStore}
+                href={experience.links.playStore}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full"
@@ -436,4 +436,4 @@ const ProjectDetail = ({ project, onBack, hideStatusBar = false }: ProjectDetail
   );
 };
 
-export default ProjectsScreen;
+export default ExperiencesScreen;

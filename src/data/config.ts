@@ -76,7 +76,7 @@ const uiTextsByLocale = {
   fr: {
     nav: {
       home: 'Accueil',
-      projects: 'Projets',
+      experiences: 'Expériences',
       skills: 'Compétences',
       resume: 'CV',
       contact: 'Contact',
@@ -110,12 +110,12 @@ const uiTextsByLocale = {
       send: 'Envoyer',
       back: 'Retour',
       retry: 'Réessayer',
-      viewMyProjects: 'Voir mes projets',
+      viewMyExperiences: 'Voir mes expériences',
       contactMe: 'Me contacter',
     },
     labels: {
       present: 'Présent',
-      privateProject: 'Projet privé',
+      privateExperience: 'Confidentiel',
       allRightsReserved: 'Tous droits réservés.',
       availableForProjects: 'Disponible pour de nouveaux projets',
     },
@@ -126,7 +126,7 @@ const uiTextsByLocale = {
       letsDiscuss: 'Discutons-en !',
     },
     descriptions: {
-      projectsSubtitle: 'Une sélection de mes projets web et mobile',
+      experiencesSubtitle: 'Une sélection de mes expériences web et mobile',
       myTechStack: 'Mon stack technique et mes expertises',
       myProfessionalBackground: 'Mon parcours professionnel',
       aiToolsIntegrated: 'Outils IA intégrés au workflow',
@@ -161,13 +161,13 @@ const uiTextsByLocale = {
       all: 'Tous',
       cdi: 'CDI',
       freelance: 'Freelance',
-      personal: 'Projets Perso',
+      personal: 'Perso',
     },
   },
   en: {
     nav: {
       home: 'Home',
-      projects: 'Projects',
+      experiences: 'Experiences',
       skills: 'Skills',
       resume: 'Resume',
       contact: 'Contact',
@@ -201,12 +201,12 @@ const uiTextsByLocale = {
       send: 'Send',
       back: 'Back',
       retry: 'Try again',
-      viewMyProjects: 'View my projects',
+      viewMyExperiences: 'View my experiences',
       contactMe: 'Contact me',
     },
     labels: {
       present: 'Present',
-      privateProject: 'Private project',
+      privateExperience: 'Confidential',
       allRightsReserved: 'All rights reserved.',
       availableForProjects: 'Available for new projects',
     },
@@ -217,7 +217,7 @@ const uiTextsByLocale = {
       letsDiscuss: "Let's discuss!",
     },
     descriptions: {
-      projectsSubtitle: 'A selection of my web and mobile projects',
+      experiencesSubtitle: 'A selection of my web and mobile experiences',
       myTechStack: 'My tech stack and expertise',
       myProfessionalBackground: 'My professional background',
       aiToolsIntegrated: 'AI tools integrated into workflow',

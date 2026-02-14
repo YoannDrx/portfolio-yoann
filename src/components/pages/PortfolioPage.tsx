@@ -17,26 +17,26 @@ import {
   IOSAvailabilityBadge,
   IOSSidePanel,
 } from "@/components/ios";
-import { ProjectDetailPanel } from "@/components/projects/ProjectDetailPanel";
-import { ProjectFilterBar } from "@/components/projects/ProjectFilterBar";
-import { ProjectSectionHeader } from "@/components/projects/ProjectSectionHeader";
+import { ExperienceDetailPanel } from "@/components/experiences/ExperienceDetailPanel";
+import { ExperienceFilterBar } from "@/components/experiences/ExperienceFilterBar";
+import { ExperienceSectionHeader } from "@/components/experiences/ExperienceSectionHeader";
 import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase } from "lucide-react";
-import { getAiContent, getEducation, getExperiences, getProfile, getProjects, getSocialLinks, getSoftSkills, getTechnicalSkills, getUiTexts } from "@/data";
-import { useProjectFilter } from "@/hooks/use-project-filter";
-import type { Project, ProjectType } from "@/data";
+import { getAiContent, getEducation, getWorkExperiences, getProfile, getExperiences, getSocialLinks, getSoftSkills, getTechnicalSkills, getUiTexts } from "@/data";
+import { useExperienceFilter } from "@/hooks/use-experience-filter";
+import type { Experience, ExperienceType } from "@/data";
 
-// Helper functions for project type labels and colors
-const getProjectTypeLabel = (type: ProjectType, locale: string) => {
-  const labels: Record<ProjectType, { fr: string; en: string }> = {
+// Helper functions for experience type labels and colors
+const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
+  const labels: Record<ExperienceType, { fr: string; en: string }> = {
     freelance: { fr: 'Freelance', en: 'Freelance' },
     cdi: { fr: 'CDI', en: 'Full-time' },
-    personal: { fr: 'Projet Perso', en: 'Personal' },
+    personal: { fr: 'Perso', en: 'Personal' },
   };
   return locale === 'en' ? labels[type].en : labels[type].fr;
 };
 
-const getProjectTypeColor = (type: ProjectType) => {
-  const colors: Record<ProjectType, string> = {
+const getExperienceTypeColor = (type: ExperienceType) => {
+  const colors: Record<ExperienceType, string> = {
     freelance: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
     cdi: 'bg-green-500/20 text-green-600 dark:text-green-400',
     personal: 'bg-purple-500/20 text-purple-600 dark:text-purple-400',
@@ -152,25 +152,25 @@ const WebView = () => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
   const profile = getProfile(locale);
-  const projects = getProjects(locale);
+  const experiences = getExperiences(locale);
   const technicalSkills = getTechnicalSkills(locale);
   const softSkills = getSoftSkills(locale);
   const aiContent = getAiContent(locale);
-  const experiences = getExperiences(locale);
+  const workExperiences = getWorkExperiences(locale);
   const education = getEducation(locale);
   const socialLinks = getSocialLinks(locale);
 
-  // State pour le panneau de détail projet
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  // State pour le panneau de détail expérience
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
 
-  // Filtres projets
-  const { activeFilter, setActiveFilter, sections, counts, showSectionHeaders } = useProjectFilter(projects);
+  // Filtres expériences
+  const { activeFilter, setActiveFilter, sections, counts, showSectionHeaders } = useExperienceFilter(experiences);
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Wrapper avec transform pour l'effet push */}
       <div className={`transition-transform duration-300 ease-out ${
-        selectedProject ? '-translate-x-[288px]' : 'translate-x-0'
+        selectedExperience ? '-translate-x-[288px]' : 'translate-x-0'
       }`}>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-6 py-20">
@@ -207,9 +207,9 @@ const WebView = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <IOSButton
               size="lg"
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('experiences')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              {uiTexts.buttons.viewMyProjects}
+              {uiTexts.buttons.viewMyExperiences}
             </IOSButton>
             <IOSButton
               variant="secondary"
@@ -233,15 +233,15 @@ const WebView = () => {
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-20 px-6 bg-gradient-to-br from-blue-50/80 via-background to-indigo-50/50 dark:from-blue-950/30 dark:via-background dark:to-indigo-950/20">
+      {/* Experiences Section */}
+      <section id="experiences" className="py-20 px-6 bg-gradient-to-br from-blue-50/80 via-background to-indigo-50/50 dark:from-blue-950/30 dark:via-background dark:to-indigo-950/20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-foreground mb-4 text-center">{uiTexts.nav.projects}</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-4 text-center">{uiTexts.nav.experiences}</h2>
           <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-            {uiTexts.descriptions.projectsSubtitle}
+            {uiTexts.descriptions.experiencesSubtitle}
           </p>
 
-          <ProjectFilterBar
+          <ExperienceFilterBar
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
             counts={counts}
@@ -251,63 +251,63 @@ const WebView = () => {
             {sections.map((section) => (
               <div key={section.type}>
                 {showSectionHeaders && (
-                  <ProjectSectionHeader type={section.type} count={section.projects.length} />
+                  <ExperienceSectionHeader type={section.type} count={section.experiences.length} />
                 )}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-                  {section.projects.map((project) => (
+                  {section.experiences.map((experience) => (
                     <IOSCard
-                      key={project.id}
+                      key={experience.id}
                       variant="glass"
                       padding="none"
                       className="overflow-hidden group cursor-pointer h-full"
                       interactive
-                      onPress={() => setSelectedProject(project)}
+                      onPress={() => setSelectedExperience(experience)}
                     >
                       <div className="flex flex-col h-full">
                         {/* Image clean sans overlay */}
                         <div className="relative h-48 overflow-hidden flex-shrink-0">
-                          {project.image ? (
+                          {experience.image ? (
                             <Image
-                              src={project.image}
-                              alt={project.name}
+                              src={experience.image}
+                              alt={experience.name}
                               fill
                               className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                           ) : (
-                            <div className={`h-full bg-gradient-to-br ${project.gradient} flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
-                              <span className="text-7xl group-hover:scale-110 transition-transform">{project.emoji}</span>
+                            <div className={`h-full bg-gradient-to-br ${experience.gradient} flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
+                              <span className="text-7xl group-hover:scale-110 transition-transform">{experience.emoji}</span>
                             </div>
                           )}
                         </div>
                         {/* Contenu avec flex pour aligner le bouton en bas */}
                         <div className="p-6 flex flex-col flex-1">
-                          {/* Type de projet + Année */}
+                          {/* Type d'expérience + Année */}
                           <div className="flex items-center gap-2 mb-2">
-                            <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${getProjectTypeColor(project.projectType)}`}>
-                              {getProjectTypeLabel(project.projectType, locale)}
+                            <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${getExperienceTypeColor(experience.experienceType)}`}>
+                              {getExperienceTypeLabel(experience.experienceType, locale)}
                             </span>
                             <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-muted text-muted-foreground">
-                              {project.year}
+                              {experience.year}
                             </span>
                           </div>
 
-                          <h3 className="text-xl font-semibold text-foreground mb-1">{project.name}</h3>
+                          <h3 className="text-xl font-semibold text-foreground mb-1">{experience.name}</h3>
 
                           {/* Catégorie */}
-                          <p className="text-sm text-primary font-medium mb-3">{project.category}</p>
+                          <p className="text-sm text-primary font-medium mb-3">{experience.category}</p>
 
                           {/* Plateformes et équipe */}
                           <div className="flex items-center gap-3 mb-4">
                             <div className="flex gap-1.5">
-                              {project.platforms.map((platform) => (
+                              {experience.platforms.map((platform) => (
                                 <span key={platform} className="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
                                   {platform}
                                 </span>
                               ))}
                             </div>
                             <span className="text-muted-foreground/50">•</span>
-                            <span className="text-xs text-muted-foreground">{project.stats.teamSize}</span>
+                            <span className="text-xs text-muted-foreground">{experience.stats.teamSize}</span>
                           </div>
 
                           {/* Bouton aligné en bas */}
@@ -425,7 +425,7 @@ const WebView = () => {
           </p>
 
           <div className="space-y-6">
-            {experiences.slice(0, 9).map((exp) => (
+            {workExperiences.slice(0, 9).map((exp) => (
               <IOSCard key={exp.id} variant="glass" padding="lg">
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                   <div>
@@ -556,13 +556,13 @@ const WebView = () => {
       </footer>
       </div>
 
-      {/* Side Panel pour détails projet */}
+      {/* Side Panel pour détails expérience */}
       <IOSSidePanel
-        isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
+        isOpen={!!selectedExperience}
+        onClose={() => setSelectedExperience(null)}
         width="xl"
       >
-        {selectedProject && <ProjectDetailPanel project={selectedProject} />}
+        {selectedExperience && <ExperienceDetailPanel experience={selectedExperience} />}
       </IOSSidePanel>
     </div>
   );

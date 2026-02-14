@@ -24,44 +24,44 @@ export interface Profile {
   stats: ProfileStat[];
 }
 
-// ============ PROJECTS ============
+// ============ EXPERIENCES ============
 
 export type Platform = 'ios' | 'android' | 'web';
-export type ProjectType = 'freelance' | 'cdi' | 'personal';
+export type ExperienceType = 'freelance' | 'cdi' | 'personal';
 
-export interface ProjectStats {
+export interface ExperienceStats {
   teamSize: string;
   downloads: string;
 }
 
-export interface ProjectLinks {
+export interface ExperienceLinks {
   appStore?: string;
   playStore?: string;
   website?: string;
   github?: string;
 }
 
-export interface ProjectHighlight {
+export interface ExperienceHighlight {
   title: string;
   description: string;
 }
 
-export interface Project {
+export interface Experience {
   id: string;
   name: string;
   description: string;
   longDescription?: string;
   category: string;
-  projectType: ProjectType;
+  experienceType: ExperienceType;
   year: string;
   platforms: Platform[];
   gradient: string;
   emoji: string;
   image?: string;
   images?: string[]; // Multiple images for gallery/carousel
-  stats: ProjectStats;
+  stats: ExperienceStats;
   features: string[];
-  // Enriched project data
+  // Enriched experience data
   stack?: {
     frontend?: string[];
     backend?: string[];
@@ -69,8 +69,8 @@ export interface Project {
     devops?: string[];
     testing?: string[];
   };
-  highlights?: ProjectHighlight[];
-  links?: ProjectLinks;
+  highlights?: ExperienceHighlight[];
+  links?: ExperienceLinks;
 }
 
 // ============ SKILLS ============
@@ -142,7 +142,7 @@ export interface NavigationItem {
 
 export type EmploymentType = 'cdi' | 'freelance' | 'independant' | 'cdd' | 'intermittent';
 
-export interface Experience {
+export interface WorkExperience {
   id: string;
   company: string;
   role: string;
