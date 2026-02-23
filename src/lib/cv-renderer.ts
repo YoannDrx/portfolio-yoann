@@ -1,8 +1,10 @@
 /**
  * CV Renderer
- * Génère un HTML standalone avec CSS inline pour le CV — Dark Sidebar Split Layout
+ * Generates a standalone HTML with inline CSS for the CV — Premium 2-page A4 Layout
  */
 
+import { readFileSync } from "fs";
+import { join } from "path";
 import type { Locale } from "@/i18n/locales";
 import {
   getEducation,
@@ -31,6 +33,8 @@ const labels = {
       languages: "Langues",
       interests: "Centres d'intérêt",
       softSkills: "Soft Skills",
+      managementAndOthers: "Management & Autres expériences",
+      cinemaEvents: "Cinéma & Événementiel",
     },
     employmentTypes: {
       cdi: "CDI",
@@ -40,6 +44,12 @@ const labels = {
       intermittent: "Intermittent",
       ponctuel: "Ponctuel",
       hors_tech: "Autre",
+      ops: "Ops",
+      cinema: "Cinéma",
+    } as Record<string, string>,
+    remoteLabels: {
+      remote: "Remote",
+      hybrid: "Hybride",
     } as Record<string, string>,
     languages: [
       { id: "fr", name: "Français", level: "Natif" },
@@ -64,6 +74,8 @@ const labels = {
       languages: "Languages",
       interests: "Interests",
       softSkills: "Soft Skills",
+      managementAndOthers: "Management & Other Experience",
+      cinemaEvents: "Cinema & Events",
     },
     employmentTypes: {
       cdi: "Full-time",
@@ -73,6 +85,12 @@ const labels = {
       intermittent: "Intermittent",
       ponctuel: "Short-term",
       hors_tech: "Other",
+      ops: "Ops",
+      cinema: "Cinema",
+    } as Record<string, string>,
+    remoteLabels: {
+      remote: "Remote",
+      hybrid: "Hybrid",
     } as Record<string, string>,
     languages: [
       { id: "fr", name: "French", level: "Native" },
@@ -97,6 +115,8 @@ function getBadgeStyle(type: string): { bg: string; text: string } {
     cdi: { bg: "#DCFCE7", text: "#16A34A" },
     freelance: { bg: "#DBEAFE", text: "#2563EB" },
     ponctuel: { bg: "#FEF3C7", text: "#D97706" },
+    ops: { bg: "#D1FAE5", text: "#059669" },
+    cinema: { bg: "#FEF3C7", text: "#D97706" },
     hors_tech: { bg: "#F3E8FF", text: "#7C3AED" },
   };
   return map[type] ?? { bg: "#E5E5EA", text: "#8E8E93" };
@@ -107,6 +127,8 @@ function getAccentColor(type: string): string {
     cdi: "#10B981",
     freelance: "#3B82F6",
     ponctuel: "#F59E0B",
+    ops: "#059669",
+    cinema: "#D97706",
     hors_tech: "#8B5CF6",
   };
   return map[type] ?? "#3B82F6";
@@ -135,6 +157,21 @@ function escapeHtml(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function loadProfileImageBase64(): string {
+  try {
+    const imagePath = join(
+      process.cwd(),
+      "public",
+      "images",
+      "yoann-profile-nobg.png"
+    );
+    const imageBuffer = readFileSync(imagePath);
+    return `data:image/png;base64,${imageBuffer.toString("base64")}`;
+  } catch {
+    return "https://yoann-andrieux.fr/images/yoann-profile-nobg.png";
+  }
+}
+
 export function renderCvHtml(locale: Locale): string {
   const l = getLabels(locale);
   const profile = getProfile(locale);
@@ -143,170 +180,271 @@ export function renderCvHtml(locale: Locale): string {
   const techSkills = getTechnicalSkills(locale);
   const softSkills = getSoftSkills(locale);
 
-  const renderSidebar = () => {
-    const skillBars = techSkills
-      .map((sk: NarrativeSkillCard) => {
-        const pct = getLevelPercent(sk.level, sk.id);
-        return `
-        <div style="margin-bottom:8px;">
-          <div style="font-size:7px;color:#F8FAFC;margin-bottom:3px;">${escapeHtml(sk.title)}</div>
-          <div style="height:4px;background:#334155;border-radius:2px;">
-            <div style="height:4px;background:#60A5FA;border-radius:2px;width:${pct}%;"></div>
-          </div>
-        </div>`;
-      })
-      .join("");
+  // Embed profile image as base64 data URL
+  const profileImageSrc = loadProfileImageBase64();
 
-    const eduItems = edu
-      .map(
-        (e: Education) => `
-        <div style="margin-bottom:8px;">
-          <div style="font-size:7px;font-weight:700;color:#F8FAFC;">${escapeHtml(e.degree)}</div>
-          <div style="font-size:6.5px;color:#94A3B8;">${escapeHtml(e.school)}</div>
-          <div style="font-size:6.5px;color:#60A5FA;">${escapeHtml(e.year)}</div>
-        </div>`
-      )
-      .join("");
+  // ── Split experiences into groups ──
+  const detailedIds = ["1", "1b", "2", "3", "4", "6", "7"];
+  const compactTechIds = ["4b", "4c", "5", "7b"];
 
-    const langItems = l.languages
-      .map(
-        (lang: CvLanguage) => `
-        <div style="margin-bottom:4px;">
-          <span style="font-size:7px;font-weight:700;color:#F8FAFC;">${escapeHtml(lang.name)}</span>
-          <span style="font-size:7px;color:#94A3B8;"> ${escapeHtml(lang.level)}</span>
-        </div>`
-      )
-      .join("");
+  const detailed = detailedIds
+    .map((id) => experiences.find((e) => e.id === id))
+    .filter(Boolean) as WorkExperience[];
+  const compactTech = compactTechIds
+    .map((id) => experiences.find((e) => e.id === id))
+    .filter(Boolean) as WorkExperience[];
 
-    const interestItems = l.interests
-      .map(
-        (i: CvInterest) => `
-        <div style="margin-bottom:3px;">
-          <div style="font-size:7px;color:#F8FAFC;">${escapeHtml(i.title)}</div>
-          ${i.detail ? `<div style="font-size:6.5px;color:#94A3B8;">${escapeHtml(i.detail)}</div>` : ""}
-        </div>`
-      )
-      .join("");
+  const cyclofix = experiences.find((e) => e.id === "8");
+  const courrier = experiences.find((e) => e.id === "9");
+  const cinemaIds = ["0a", "0d", "0c", "0b", "10b"];
+  const cinemaExps = cinemaIds
+    .map((id) => experiences.find((e) => e.id === id))
+    .filter(Boolean) as WorkExperience[];
+  const ourTheory = experiences.find((e) => e.id === "10a");
+  const ugcCgr = experiences.find((e) => e.id === "10c");
 
-    const divider =
-      '<div style="height:1px;background:#1E293B;margin:10px 0;"></div>';
+  // Bio: first 2 sentences for the header
+  const bioSentences = profile.bio.split(". ");
+  const bioShort =
+    bioSentences.slice(0, 2).join(". ") +
+    (bioSentences.length > 2 ? "." : "");
 
-    return `
-    <div style="width:185px;min-height:100%;background:#0F172A;padding:20px 18px 18px 18px;box-sizing:border-box;display:flex;flex-direction:column;">
-      <!-- Avatar -->
-      <div style="width:60px;height:60px;border-radius:30px;overflow:hidden;margin:0 auto 12px auto;">
-        <img src="https://yoann-andrieux.fr/images/avatar.jpg" style="width:60px;height:60px;object-fit:cover;" />
-      </div>
-      <!-- Name -->
-      <div style="font-size:16px;font-weight:700;color:#F8FAFC;text-align:center;">${escapeHtml(profile.firstName)}</div>
-      <div style="font-size:16px;font-weight:700;color:#F8FAFC;text-align:center;margin-bottom:2px;">${escapeHtml(profile.lastName)}</div>
-      <div style="font-size:10px;color:#60A5FA;text-align:center;margin-bottom:4px;">${escapeHtml(profile.title)}</div>
-      <div style="font-size:7px;color:#94A3B8;text-align:center;margin-bottom:12px;">${escapeHtml(profile.subtitle)}</div>
+  // Availability text from profile
+  const availDetail = profile.availabilityOptions.join(" / ");
 
-      ${divider}
-      <div style="font-size:8px;font-weight:700;color:#F8FAFC;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">${escapeHtml(l.contact)}</div>
-      <div style="font-size:7px;color:#94A3B8;margin-bottom:2px;">Email</div>
-      <div style="font-size:7px;color:#F8FAFC;margin-bottom:6px;">yoann.andrieux@gmail.com</div>
-      <div style="font-size:7px;color:#94A3B8;margin-bottom:2px;">Tel</div>
-      <div style="font-size:7px;color:#F8FAFC;margin-bottom:6px;">+33 6 63 43 46 65</div>
+  // ── Render helpers ──
 
-      ${divider}
-      <div style="font-size:8px;font-weight:700;color:#F8FAFC;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">${escapeHtml(l.sectionTitles.skills)}</div>
-      ${skillBars}
+  const renderAccentLine = () =>
+    `<div style="height:3px;background:#3B82F6;width:100%;flex-shrink:0;"></div>`;
 
-      ${divider}
-      <div style="font-size:8px;font-weight:700;color:#F8FAFC;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">${escapeHtml(l.sectionTitles.education)}</div>
-      ${eduItems}
-
-      ${divider}
-      <div style="font-size:8px;font-weight:700;color:#F8FAFC;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">${escapeHtml(l.sectionTitles.languages)}</div>
-      ${langItems}
-
-      ${divider}
-      <div style="font-size:8px;font-weight:700;color:#F8FAFC;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">${escapeHtml(l.sectionTitles.interests)}</div>
-      ${interestItems}
-
-      <!-- Available badge -->
-      <div style="margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:4px;">
-        <div style="width:6px;height:6px;border-radius:3px;background:#10B981;"></div>
-        <span style="font-size:7px;font-weight:700;color:#10B981;">${escapeHtml(l.availability)}</span>
-      </div>
+  const renderSectionTitle = (title: string) => `
+    <div style="margin-bottom:8px;">
+      <div style="font-size:11px;font-weight:700;color:#0F172A;margin-bottom:3px;">${escapeHtml(title)}</div>
+      <div style="width:30px;height:2px;background:#3B82F6;border-radius:1px;"></div>
     </div>`;
-  };
 
-  const renderExperience = (exp: WorkExperience) => {
+  const renderSubSectionTitle = (title: string) => `
+    <div style="font-size:8.5px;font-weight:700;color:#475569;margin:8px 0 5px 0;text-transform:uppercase;letter-spacing:0.5px;">${escapeHtml(title)}</div>`;
+
+  // Detailed experience: 3 bullets + up to 6 skills
+  const renderDetailedExp = (exp: WorkExperience, maxBullets = 3) => {
     const badge = getBadgeStyle(exp.type);
     const accent = getAccentColor(exp.type);
     const typeLabel = l.employmentTypes[exp.type] ?? exp.type;
-    const isCdi = exp.type === "cdi";
     const remoteLabel =
-      exp.remote === "remote"
-        ? " · Remote"
-        : exp.remote === "hybrid"
-          ? " · Hybride"
-          : "";
+      exp.remote && exp.remote !== "onsite"
+        ? ` · ${l.remoteLabels[exp.remote] ?? exp.remote}`
+        : "";
 
-    const descriptions = isCdi
-      ? exp.description
-          .slice(0, 2)
-          .map(
-            (d) =>
-              `<div style="font-size:6.5px;color:#475569;margin-bottom:1px;line-height:1.3;">• ${escapeHtml(d)}</div>`
-          )
-          .join("")
-      : "";
+    const descriptions = exp.description
+      .slice(0, maxBullets)
+      .map(
+        (d) =>
+          `<div style="font-size:6.5px;color:#475569;line-height:1.4;">&#8226; ${escapeHtml(d)}</div>`
+      )
+      .join("");
 
     const skills = exp.skills
-      .slice(0, 5)
+      .slice(0, 6)
       .map(
         (s) =>
-          `<span style="background:#F1F5F9;padding:1.5px 4px;border-radius:3px;font-size:5.5px;color:#475569;">${escapeHtml(s)}</span>`
+          `<span style="background:#F1F5F9;padding:1.5px 5px;border-radius:3px;font-size:5.5px;color:#475569;white-space:nowrap;">${escapeHtml(s)}</span>`
       )
       .join(" ");
 
     return `
-    <div style="display:flex;flex-direction:row;margin-bottom:5px;padding-bottom:5px;border-bottom:0.5px solid #E2E8F0;">
-      <div style="width:2px;border-radius:1px;background:${accent};margin-right:8px;min-height:100%;"></div>
+    <div style="display:flex;margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid #E2E8F0;">
+      <div style="width:2px;border-radius:1px;background:${accent};margin-right:8px;flex-shrink:0;"></div>
       <div style="flex:1;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-size:8.5px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>
-            <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:5.5px;font-weight:700;">${escapeHtml(typeLabel)}</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <span style="font-size:9px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>
+            <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:5.5px;font-weight:700;margin-left:5px;">${escapeHtml(typeLabel)}</span>
           </div>
           <span style="font-size:6.5px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
         </div>
-        <div style="font-size:7.5px;color:#3B82F6;font-weight:700;margin-bottom:1px;">${escapeHtml(exp.role)}</div>
+        <div style="font-size:7.5px;color:#3B82F6;font-weight:600;margin-bottom:1px;">${escapeHtml(exp.role)}</div>
         <div style="font-size:6.5px;color:#94A3B8;margin-bottom:3px;">${escapeHtml(exp.location)}${remoteLabel}</div>
         ${descriptions}
-        <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px;">${skills}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">${skills}</div>
       </div>
     </div>`;
   };
 
-  const renderSoftSkills = (skills: SoftSkillCard[]) => {
-    const cards = skills
+  // Semi-detailed: role + 1-2 bullets (for page 2 cinema/management items)
+  const renderSemiDetailedExp = (exp: WorkExperience) => {
+    const badge = getBadgeStyle(exp.type);
+    const accent = getAccentColor(exp.type);
+    const typeLabel = l.employmentTypes[exp.type] ?? exp.type;
+
+    const descriptions = exp.description
+      .slice(0, 2)
       .map(
-        (sk: SoftSkillCard) => `
-      <div style="width:47%;background:#F8FAFC;border-radius:6px;padding:8px;border:0.5px solid #E2E8F0;">
-        <div style="font-size:7px;font-weight:700;color:#0F172A;margin-bottom:3px;">${escapeHtml(sk.title)}</div>
-        <div style="font-size:5.5px;color:#64748B;line-height:1.3;">${escapeHtml(sk.narrative.split(".")[0] + ".")}</div>
-      </div>`
+        (d) =>
+          `<div style="font-size:6.5px;color:#475569;line-height:1.35;">&#8226; ${escapeHtml(d)}</div>`
       )
       .join("");
+
     return `
-    <div style="margin-top:8px;">
-      <div style="font-size:10px;font-weight:700;color:#0F172A;letter-spacing:0.5px;margin-bottom:4px;">${escapeHtml(l.sectionTitles.softSkills)}</div>
-      <div style="width:30px;height:2px;background:#3B82F6;margin-bottom:10px;border-radius:1px;"></div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;">${cards}</div>
+    <div style="display:flex;margin-bottom:6px;padding-bottom:6px;border-bottom:0.5px solid #E2E8F0;">
+      <div style="width:2px;border-radius:1px;background:${accent};margin-right:8px;flex-shrink:0;"></div>
+      <div style="flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <span style="font-size:8px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>
+            <span style="background:${badge.bg};color:${badge.text};padding:1px 4px;border-radius:3px;font-size:5px;font-weight:700;margin-left:4px;">${escapeHtml(typeLabel)}</span>
+          </div>
+          <span style="font-size:6px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
+        </div>
+        <div style="font-size:7px;color:#3B82F6;font-weight:600;margin-bottom:2px;">${escapeHtml(exp.role)}</div>
+        ${descriptions}
+      </div>
     </div>`;
   };
 
-  const footer = `
-  <div style="display:flex;justify-content:center;gap:20px;margin-top:auto;padding-top:10px;border-top:0.5px solid #E2E8F0;">
-    <a href="https://www.linkedin.com/in/yoann-andrieux/" style="font-size:7px;color:#3B82F6;text-decoration:none;">LinkedIn</a>
-    <a href="https://github.com/YoannDrx" style="font-size:7px;color:#3B82F6;text-decoration:none;">GitHub</a>
-    <a href="https://www.malt.fr/profile/yoannandrieux" style="font-size:7px;color:#3B82F6;text-decoration:none;">Malt</a>
-  </div>`;
+  // Compact tech: role + 1 line description
+  const renderCompactExp = (exp: WorkExperience) => {
+    const badge = getBadgeStyle(exp.type);
+    const accent = getAccentColor(exp.type);
+    const typeLabel = l.employmentTypes[exp.type] ?? exp.type;
+    const shortDesc = exp.description[0] ?? "";
+
+    return `
+    <div style="display:flex;margin-bottom:5px;padding-bottom:5px;border-bottom:0.5px solid #F1F5F9;">
+      <div style="width:2px;border-radius:1px;background:${accent};margin-right:8px;flex-shrink:0;"></div>
+      <div style="flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <span style="font-size:8px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>
+            <span style="background:${badge.bg};color:${badge.text};padding:1px 4px;border-radius:3px;font-size:5px;font-weight:700;margin-left:4px;">${escapeHtml(typeLabel)}</span>
+          </div>
+          <span style="font-size:6px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
+        </div>
+        <div style="font-size:6.5px;color:#3B82F6;font-weight:600;">${escapeHtml(exp.role)} <span style="color:#475569;font-weight:400;">&#8226; ${escapeHtml(shortDesc)}</span></div>
+      </div>
+    </div>`;
+  };
+
+  // Skill card: progress bar + 3 highlights
+  const renderSkillCard = (skill: NarrativeSkillCard) => {
+    const pct = getLevelPercent(skill.level, skill.id);
+    const highlights = skill.highlights
+      .slice(0, 3)
+      .map(
+        (h) =>
+          `<div style="font-size:6.5px;color:#475569;line-height:1.35;">&#8226; ${escapeHtml(h)}</div>`
+      )
+      .join("");
+
+    return `
+    <div style="width:48%;background:#F8FAFC;border:0.5px solid #E2E8F0;border-radius:6px;padding:8px 10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:8px;font-weight:700;color:#0F172A;">${escapeHtml(skill.title)}</span>
+        <span style="font-size:6px;color:#64748B;">${escapeHtml(skill.level)}</span>
+      </div>
+      <div style="height:3px;background:#E2E8F0;border-radius:2px;margin-bottom:5px;">
+        <div style="height:3px;background:#60A5FA;border-radius:2px;width:${pct}%;"></div>
+      </div>
+      ${highlights}
+    </div>`;
+  };
+
+  // Soft skill card: title + first 2 sentences of narrative
+  const renderSoftSkillCard = (skill: SoftSkillCard) => {
+    const sentences = skill.narrative.split(". ");
+    const shortNarrative =
+      sentences.slice(0, 2).join(". ") + (sentences.length > 2 ? "." : "");
+    return `
+    <div style="width:48%;background:#F8FAFC;border:0.5px solid #E2E8F0;border-radius:6px;padding:7px 9px;">
+      <div style="font-size:7px;font-weight:700;color:#0F172A;margin-bottom:3px;">${escapeHtml(skill.title)}</div>
+      <div style="font-size:6px;color:#64748B;line-height:1.4;">${escapeHtml(shortNarrative)}</div>
+    </div>`;
+  };
+
+  // Education card
+  const renderEducationCard = (e: Education) => `
+    <div style="flex:1;background:#F8FAFC;border:0.5px solid #E2E8F0;border-radius:6px;padding:8px 10px;text-align:center;">
+      <div style="font-size:7.5px;font-weight:700;color:#0F172A;margin-bottom:2px;">${escapeHtml(e.degree)}</div>
+      <div style="font-size:6.5px;color:#64748B;">${escapeHtml(e.school)}</div>
+      <div style="font-size:6.5px;color:#3B82F6;font-weight:600;">${escapeHtml(e.year)}</div>
+    </div>`;
+
+  // ── Header with photo (base64) + white border + blue glow ──
+
+  const renderHeader = () => {
+    const statsHtml = profile.stats
+      .map(
+        (s) => `
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:5px 12px;text-align:center;">
+        <div style="font-size:12px;font-weight:800;color:#F8FAFC;">${escapeHtml(s.value)}</div>
+        <div style="font-size:5.5px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.5px;">${escapeHtml(s.label)}</div>
+      </div>`
+      )
+      .join("");
+
+    return `
+    <div style="background:#0F172A;padding:16px 20px 14px 20px;flex-shrink:0;">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <!-- Photo: white border + blue glow box-shadow -->
+        <div style="flex-shrink:0;width:80px;height:80px;border-radius:50%;border:3px solid #FFFFFF;overflow:hidden;box-shadow:0 0 10px rgba(59,130,246,0.6),0 0 25px rgba(59,130,246,0.3),0 0 40px rgba(59,130,246,0.15);">
+          <img src="${profileImageSrc}"
+               style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
+        </div>
+        <!-- Name, title, availability -->
+        <div style="flex:1;">
+          <div style="font-size:20px;font-weight:800;color:#F8FAFC;line-height:1.1;">${escapeHtml(profile.firstName)} ${escapeHtml(profile.lastName)}</div>
+          <div style="font-size:11px;font-weight:600;color:#60A5FA;margin-bottom:2px;">${escapeHtml(profile.title)}</div>
+          <div style="font-size:8px;color:#94A3B8;margin-bottom:4px;">${escapeHtml(profile.subtitle)}</div>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:#10B981;flex-shrink:0;"></div>
+            <span style="font-size:7px;color:#10B981;font-weight:600;">${escapeHtml(l.availability)} &mdash; ${escapeHtml(availDetail)}</span>
+          </div>
+        </div>
+        <!-- Contact column -->
+        <div style="flex-shrink:0;text-align:right;">
+          <div style="font-size:7px;color:#94A3B8;margin-bottom:3px;">&#9993; yoann.andrieux@gmail.com</div>
+          <div style="font-size:7px;color:#94A3B8;margin-bottom:3px;">&#9742; +33 6 63 43 46 65</div>
+          <div style="font-size:7px;margin-bottom:2px;"><a href="https://www.linkedin.com/in/yoann-andrieux/" style="color:#60A5FA;text-decoration:none;">linkedin.com/in/yoann-andrieux</a></div>
+          <div style="font-size:7px;margin-bottom:2px;"><a href="https://github.com/YoannDrx" style="color:#60A5FA;text-decoration:none;">github.com/YoannDrx</a></div>
+          <div style="font-size:7px;"><a href="https://www.malt.fr/profile/yoannandrieux" style="color:#60A5FA;text-decoration:none;">malt.fr/profile/yoannandrieux</a></div>
+        </div>
+      </div>
+      <!-- Bio -->
+      <div style="font-size:7.5px;color:#CBD5E1;line-height:1.45;margin:10px 0 10px 0;">${escapeHtml(bioShort)}</div>
+      <!-- Stats badges -->
+      <div style="display:flex;gap:12px;">${statsHtml}</div>
+    </div>`;
+  };
+
+  // ── Languages & Interests ──
+
+  const langLine = l.languages
+    .map(
+      (lang) => `${escapeHtml(lang.name)} (${escapeHtml(lang.level)})`
+    )
+    .join(" &middot; ");
+  const interestLine = l.interests
+    .map((i) =>
+      i.detail
+        ? `${escapeHtml(i.title)} (${escapeHtml(i.detail)})`
+        : escapeHtml(i.title)
+    )
+    .join(" &middot; ");
+
+  // ── Footer ──
+
+  const renderFooter = () => `
+    <div style="text-align:center;padding-top:8px;border-top:0.5px solid #E2E8F0;font-size:6.5px;">
+      <span>LinkedIn : </span><a href="https://www.linkedin.com/in/yoann-andrieux/" style="color:#3B82F6;text-decoration:none;">linkedin.com/in/yoann-andrieux</a>
+      <span style="color:#94A3B8;"> | </span>
+      <span>GitHub : </span><a href="https://github.com/YoannDrx" style="color:#3B82F6;text-decoration:none;">github.com/YoannDrx</a>
+      <span style="color:#94A3B8;"> | </span>
+      <span>Malt : </span><a href="https://www.malt.fr/profile/yoannandrieux" style="color:#3B82F6;text-decoration:none;">malt.fr/profile/yoannandrieux</a>
+      <span style="color:#94A3B8;"> | </span>
+      <span>Portfolio : </span><a href="https://yoann-andrieux.fr" style="color:#3B82F6;text-decoration:none;">yoann-andrieux.fr</a>
+    </div>`;
+
+  // ── Assemble HTML ──
 
   return `<!DOCTYPE html>
 <html>
@@ -316,26 +454,61 @@ export function renderCvHtml(locale: Locale): string {
   <style>
     @page { size: A4; margin: 0; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Helvetica, Arial, sans-serif; font-size: 8px; }
-    .page { width: 210mm; height: 297mm; display: flex; flex-direction: column; }
-    .accent-line { height: 3px; background: #3B82F6; }
-    .container { display: flex; flex-direction: row; flex: 1; }
-    .main { flex: 1; padding: 16px 18px 18px 18px; display: flex; flex-direction: column; }
-    .section-title { font-size: 10px; font-weight: 700; color: #0F172A; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .section-bar { width: 30px; height: 2px; background: #3B82F6; margin-bottom: 10px; border-radius: 1px; }
+    body { font-family: Helvetica, Arial, sans-serif; font-size: 8px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; height: 297mm; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+    .page + .page { page-break-before: always; }
   </style>
 </head>
 <body>
+  <!-- ═══════════ PAGE 1 ═══════════ -->
   <div class="page">
-    <div class="accent-line"></div>
-    <div class="container">
-      ${renderSidebar()}
-      <div class="main">
-        <div class="section-title">${escapeHtml(l.sectionTitles.experiences)}</div>
-        <div class="section-bar"></div>
-        ${experiences.map(renderExperience).join("")}
-        ${renderSoftSkills(softSkills)}
-        ${footer}
+    ${renderAccentLine()}
+    ${renderHeader()}
+    <div style="padding:14px 20px 10px 20px;flex:1;display:flex;flex-direction:column;">
+      ${renderSectionTitle(l.sectionTitles.experiences)}
+      ${detailed.map((exp) => renderDetailedExp(exp, 3)).join("")}
+      ${compactTech.map(renderCompactExp).join("")}
+    </div>
+  </div>
+
+  <!-- ═══════════ PAGE 2 ═══════════ -->
+  <div class="page">
+    ${renderAccentLine()}
+    <div style="padding:12px 20px;flex:1;display:flex;flex-direction:column;">
+      ${renderSectionTitle(l.sectionTitles.managementAndOthers)}
+      ${cyclofix ? renderDetailedExp(cyclofix, 3) : ""}
+      ${courrier ? renderSemiDetailedExp(courrier) : ""}
+
+      ${renderSubSectionTitle(l.sectionTitles.cinemaEvents)}
+      ${cinemaExps.map(renderSemiDetailedExp).join("")}
+
+      ${ourTheory ? renderSemiDetailedExp(ourTheory) : ""}
+      ${ugcCgr ? renderSemiDetailedExp(ugcCgr) : ""}
+
+      ${renderSectionTitle(l.sectionTitles.skills)}
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        ${techSkills.map(renderSkillCard).join("")}
+      </div>
+
+      ${renderSectionTitle(l.sectionTitles.softSkills)}
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        ${softSkills.map(renderSoftSkillCard).join("")}
+      </div>
+
+      ${renderSectionTitle(l.sectionTitles.education)}
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        ${edu.map(renderEducationCard).join("")}
+      </div>
+
+      <div style="font-size:7px;color:#475569;margin-bottom:3px;">
+        <strong>${escapeHtml(l.sectionTitles.languages)} :</strong> ${langLine}
+      </div>
+      <div style="font-size:7px;color:#475569;margin-bottom:8px;">
+        <strong>${escapeHtml(l.sectionTitles.interests)} :</strong> ${interestLine}
+      </div>
+
+      <div style="margin-top:auto;">
+        ${renderFooter()}
       </div>
     </div>
   </div>
