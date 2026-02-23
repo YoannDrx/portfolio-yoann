@@ -185,12 +185,11 @@ export function renderCvHtml(locale: Locale): string {
 
   // ── Split experiences into groups ──
   const detailedIds = ["1", "1b", "2", "3", "4", "6", "7"];
-  const compactTechIds = ["4b", "4c", "5", "7b"];
-
   const detailed = detailedIds
     .map((id) => experiences.find((e) => e.id === id))
     .filter(Boolean) as WorkExperience[];
-  const compactTech = compactTechIds
+
+  const compactTech = ["4b", "5", "7b"]
     .map((id) => experiences.find((e) => e.id === id))
     .filter(Boolean) as WorkExperience[];
 
@@ -302,7 +301,7 @@ export function renderCvHtml(locale: Locale): string {
     </div>`;
   };
 
-  // Compact tech: role + 1 line description
+  // Compact: role + 1 line description
   const renderCompactExp = (exp: WorkExperience) => {
     const badge = getBadgeStyle(exp.type);
     const accent = getAccentColor(exp.type);
@@ -369,7 +368,7 @@ export function renderCvHtml(locale: Locale): string {
       <div style="font-size:6.5px;color:#3B82F6;font-weight:600;">${escapeHtml(e.year)}</div>
     </div>`;
 
-  // ── Header with photo (base64) + white border + blue glow ──
+  // ── Header — Full silhouette on left with white outline + blue glow ──
 
   const renderHeader = () => {
     const statsHtml = profile.stats
@@ -383,36 +382,49 @@ export function renderCvHtml(locale: Locale): string {
       .join("");
 
     return `
-    <div style="background:#0F172A;padding:16px 20px 14px 20px;flex-shrink:0;">
-      <div style="display:flex;align-items:flex-start;gap:16px;">
-        <!-- Photo: white border + blue glow box-shadow -->
-        <div style="flex-shrink:0;width:80px;height:80px;border-radius:50%;border:3px solid #FFFFFF;overflow:hidden;box-shadow:0 0 10px rgba(59,130,246,0.6),0 0 25px rgba(59,130,246,0.3),0 0 40px rgba(59,130,246,0.15);">
-          <img src="${profileImageSrc}"
-               style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" />
-        </div>
-        <!-- Name, title, availability -->
-        <div style="flex:1;">
-          <div style="font-size:20px;font-weight:800;color:#F8FAFC;line-height:1.1;">${escapeHtml(profile.firstName)} ${escapeHtml(profile.lastName)}</div>
-          <div style="font-size:11px;font-weight:600;color:#60A5FA;margin-bottom:2px;">${escapeHtml(profile.title)}</div>
-          <div style="font-size:8px;color:#94A3B8;margin-bottom:4px;">${escapeHtml(profile.subtitle)}</div>
-          <div style="display:flex;align-items:center;gap:5px;">
-            <div style="width:7px;height:7px;border-radius:50%;background:#10B981;flex-shrink:0;"></div>
-            <span style="font-size:7px;color:#10B981;font-weight:600;">${escapeHtml(l.availability)} &mdash; ${escapeHtml(availDetail)}</span>
-          </div>
-        </div>
-        <!-- Contact column -->
-        <div style="flex-shrink:0;text-align:right;">
-          <div style="font-size:7px;color:#94A3B8;margin-bottom:3px;">&#9993; yoann.andrieux@gmail.com</div>
-          <div style="font-size:7px;color:#94A3B8;margin-bottom:3px;">&#9742; +33 6 63 43 46 65</div>
-          <div style="font-size:7px;margin-bottom:2px;"><a href="https://www.linkedin.com/in/yoann-andrieux/" style="color:#60A5FA;text-decoration:none;">linkedin.com/in/yoann-andrieux</a></div>
-          <div style="font-size:7px;margin-bottom:2px;"><a href="https://github.com/YoannDrx" style="color:#60A5FA;text-decoration:none;">github.com/YoannDrx</a></div>
-          <div style="font-size:7px;"><a href="https://www.malt.fr/profile/yoannandrieux" style="color:#60A5FA;text-decoration:none;">malt.fr/profile/yoannandrieux</a></div>
-        </div>
+    <div style="background:#0F172A;padding:16px 20px 16px 20px;flex-shrink:0;position:relative;overflow:visible;min-height:155px;">
+      <!-- Silhouette: full-body, anchored bottom-left, white outline + blue glow -->
+      <div style="position:absolute;left:18px;bottom:0;height:90%;z-index:10;">
+        <!-- Back layer: white outline via brightness(0) invert(1) + blue glow via drop-shadow -->
+        <img src="${profileImageSrc}"
+             style="position:absolute;bottom:-2px;left:-2px;height:calc(100% + 4px);width:auto;filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(59,130,246,0.7)) drop-shadow(0 0 14px rgba(59,130,246,0.3));pointer-events:none;" />
+        <!-- Front layer: actual image -->
+        <img src="${profileImageSrc}"
+             style="position:relative;height:100%;width:auto;display:block;" />
       </div>
-      <!-- Bio -->
-      <div style="font-size:7.5px;color:#CBD5E1;line-height:1.45;margin:10px 0 10px 0;">${escapeHtml(bioShort)}</div>
-      <!-- Stats badges -->
-      <div style="display:flex;gap:12px;">${statsHtml}</div>
+
+      <!-- Right content (offset to clear the silhouette) -->
+      <div style="margin-left:105px;">
+        <!-- Name -->
+        <div style="font-size:22px;font-weight:800;color:#F8FAFC;line-height:1.1;">${escapeHtml(profile.firstName)} ${escapeHtml(profile.lastName)}</div>
+        <div style="font-size:11px;font-weight:600;color:#60A5FA;margin-bottom:2px;">${escapeHtml(profile.title)}</div>
+        <div style="font-size:8px;color:#94A3B8;margin-bottom:4px;">${escapeHtml(profile.subtitle)}</div>
+
+        <!-- Availability -->
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;">
+          <div style="width:7px;height:7px;border-radius:50%;background:#10B981;flex-shrink:0;"></div>
+          <span style="font-size:7px;color:#10B981;font-weight:600;">${escapeHtml(l.availability)} &mdash; ${escapeHtml(availDetail)}</span>
+        </div>
+
+        <!-- Bio -->
+        <div style="font-size:7.5px;color:#CBD5E1;line-height:1.45;margin-bottom:8px;">${escapeHtml(bioShort)}</div>
+
+        <!-- Contact line -->
+        <div style="font-size:7px;color:#94A3B8;margin-bottom:8px;">
+          &#9993; yoann.andrieux@gmail.com
+          <span style="margin:0 4px;">&#183;</span>
+          &#9742; +33 6 63 43 46 65
+          <span style="margin:0 4px;">&#183;</span>
+          <a href="https://www.linkedin.com/in/yoann-andrieux/" style="color:#60A5FA;text-decoration:none;">LinkedIn</a>
+          <span style="margin:0 4px;">&#183;</span>
+          <a href="https://github.com/YoannDrx" style="color:#60A5FA;text-decoration:none;">GitHub</a>
+          <span style="margin:0 4px;">&#183;</span>
+          <a href="https://www.malt.fr/profile/yoannandrieux" style="color:#60A5FA;text-decoration:none;">Malt</a>
+        </div>
+
+        <!-- Stats badges -->
+        <div style="display:flex;gap:10px;">${statsHtml}</div>
+      </div>
     </div>`;
   };
 
@@ -464,7 +476,7 @@ export function renderCvHtml(locale: Locale): string {
   <div class="page">
     ${renderAccentLine()}
     ${renderHeader()}
-    <div style="padding:14px 20px 10px 20px;flex:1;display:flex;flex-direction:column;">
+    <div style="padding:22px 20px 10px 20px;flex:1;display:flex;flex-direction:column;">
       ${renderSectionTitle(l.sectionTitles.experiences)}
       ${detailed.map((exp) => renderDetailedExp(exp, 3)).join("")}
       ${compactTech.map(renderCompactExp).join("")}

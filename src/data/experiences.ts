@@ -859,14 +859,14 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
     },
     {
       id: "8",
-      name: "Portfolio Loïc — V1",
+      name: "Portfolio Loïc Ghanem",
       description:
-        "Création et fondation du portfolio pour compositeur de musique de films, jeux vidéo et publicités",
+        "Portfolio immersif pour compositeur de musique avec 3D, cartographie, lecteur audio et back-office",
       longDescription:
-        "Portfolio immersif pour compositeur de musique avec visualisations 3D (Three.js), lecteur audio personnalisé, galerie de projets avec intégration vidéo, cartographie des collaborations mondiales, et génération de CV PDF. Multi-langues et responsive.",
+        "Portfolio immersif pour le compositeur Loïc Ghanem (musiques de films, jeux vidéo, publicités). Visualisations 3D (Three.js / React Three Fiber), lecteur audio personnalisé, cartographie interactive des collaborations mondiales (Mapbox GL), générateur de CV PDF, et back-office de gestion de contenu avec éditeur Tiptap. Multi-langues et responsive.",
       category: "Portfolio",
       experienceType: "freelance",
-      year: "2023",
+      year: "2023 - 2025",
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
@@ -876,9 +876,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         "Next.js 16",
         "React 19",
         "Three.js",
-        "TailwindCSS",
-        "Prisma",
-        "Better Auth",
+        "React Three Fiber",
+        "Mapbox GL",
+        "Tiptap",
       ],
       stack: {
         frontend: [
@@ -913,71 +913,6 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         {
           title: "Carte Interactive",
           description: "Mapbox GL pour visualiser les collaborations mondiales",
-        },
-        {
-          title: "Export CV PDF",
-          description: "Génération de CV professionnel via React PDF Renderer",
-        },
-      ],
-      links: {
-        website: "https://www.loic-ghanem.com/",
-      },
-    },
-    {
-      id: "8b",
-      name: "Portfolio Loïc — V2",
-      description:
-        "Refonte complète du portfolio compositeur avec 3D, cartographie et back-office",
-      longDescription:
-        "Seconde mission sur le portfolio du compositeur Loïc Ghanem. Ajout de visualisations 3D immersives (Three.js / React Three Fiber), cartographie interactive des collaborations mondiales (Mapbox GL), générateur de CV PDF, lecteur audio personnalisé amélioré, et back-office de gestion de contenu avec éditeur Tiptap.",
-      category: "Portfolio",
-      experienceType: "freelance",
-      year: "2025",
-      platforms: ["web"],
-      gradient: "from-violet-400 to-purple-600",
-      emoji: "🎶",
-      image: "/images/projects/portfolio-loic-landing.png",
-      stats: { teamSize: "Solo", downloads: "B2C" },
-      features: [
-        "Next.js 16",
-        "Three.js",
-        "React Three Fiber",
-        "Mapbox GL",
-        "Tiptap",
-        "Better Auth",
-      ],
-      stack: {
-        frontend: [
-          "Next.js 16",
-          "React 19",
-          "TailwindCSS",
-          "Three.js",
-          "React Three Fiber",
-          "Framer Motion",
-          "Mapbox GL",
-        ],
-        backend: [
-          "Prisma ORM",
-          "Better Auth",
-          "Tiptap Editor",
-          "React PDF Renderer",
-          "Vercel Blob",
-        ],
-        database: ["PostgreSQL", "Prisma ORM 6.19", "Upstash Redis"],
-      },
-      highlights: [
-        {
-          title: "Visualisation 3D",
-          description:
-            "Animations immersives avec Three.js et React Three Fiber",
-        },
-        {
-          title: "Carte Interactive",
-          description: "Mapbox GL pour visualiser les collaborations mondiales",
-        },
-        {
-          title: "Export CV PDF",
-          description: "Génération de CV professionnel",
         },
         {
           title: "Back-Office CMS",
@@ -2161,14 +2096,14 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
     },
     {
       id: "8",
-      name: "Portfolio Loïc — V1",
+      name: "Portfolio Loïc Ghanem",
       description:
-        "Creation and foundation of the portfolio for a film/video game/commercial music composer",
+        "Immersive portfolio for a film/video game/commercial music composer with 3D, mapping, audio player and back-office",
       longDescription:
-        "Immersive composer portfolio with 3D visualizations (Three.js), a custom audio player, a project gallery with video integration, a world map of collaborations, and PDF resume generation. Multi-language and responsive.",
+        "Immersive portfolio for composer Loïc Ghanem (film, video game, commercial music). 3D visualizations (Three.js / React Three Fiber), custom audio player, interactive world map of collaborations (Mapbox GL), PDF resume generator, and content management back-office with Tiptap editor. Multi-language and responsive.",
       category: "Portfolio",
       experienceType: "freelance",
-      year: "2025",
+      year: "2023 - 2025",
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
@@ -2178,9 +2113,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         "Next.js 16",
         "React 19",
         "Three.js",
-        "TailwindCSS",
-        "Prisma",
-        "Better Auth",
+        "React Three Fiber",
+        "Mapbox GL",
+        "Tiptap",
       ],
       stack: {
         frontend: [
@@ -2215,70 +2150,6 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         {
           title: "Interactive map",
           description: "Mapbox GL to visualize worldwide collaborations",
-        },
-        {
-          title: "PDF resume export",
-          description: "Professional resume generated via React PDF Renderer",
-        },
-      ],
-      links: {
-        website: "https://www.loic-ghanem.com/",
-      },
-    },
-    {
-      id: "8b",
-      name: "Portfolio Loïc — V2",
-      description: "Full portfolio redesign with 3D, mapping and back-office",
-      longDescription:
-        "Second mission on composer Loïc Ghanem's portfolio. Added immersive 3D visualizations (Three.js / React Three Fiber), interactive world map of collaborations (Mapbox GL), PDF resume generator, improved custom audio player, and content management back-office with Tiptap editor.",
-      category: "Portfolio",
-      experienceType: "freelance",
-      year: "2025",
-      platforms: ["web"],
-      gradient: "from-violet-400 to-purple-600",
-      emoji: "🎶",
-      image: "/images/projects/portfolio-loic-landing.png",
-      stats: { teamSize: "Solo", downloads: "B2C" },
-      features: [
-        "Next.js 16",
-        "Three.js",
-        "React Three Fiber",
-        "Mapbox GL",
-        "Tiptap",
-        "Better Auth",
-      ],
-      stack: {
-        frontend: [
-          "Next.js 16",
-          "React 19",
-          "TailwindCSS",
-          "Three.js",
-          "React Three Fiber",
-          "Framer Motion",
-          "Mapbox GL",
-        ],
-        backend: [
-          "Prisma ORM",
-          "Better Auth",
-          "Tiptap Editor",
-          "React PDF Renderer",
-          "Vercel Blob",
-        ],
-        database: ["PostgreSQL", "Prisma ORM 6.19", "Upstash Redis"],
-      },
-      highlights: [
-        {
-          title: "3D visualization",
-          description:
-            "Immersive animations with Three.js and React Three Fiber",
-        },
-        {
-          title: "Interactive map",
-          description: "Mapbox GL to visualize worldwide collaborations",
-        },
-        {
-          title: "PDF resume export",
-          description: "Professional resume generation",
         },
         {
           title: "CMS Back-office",
