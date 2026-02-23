@@ -61,6 +61,7 @@ const labels = {
       { id: "nature", title: "Nature & randonnée" },
       { id: "travel", title: "Voyage & culture" },
     ] as CvInterest[],
+    mobility: "Mobilité : Permis A · Permis B",
     document: { title: "CV Yoann Andrieux - Dev React Native" },
   },
   en: {
@@ -102,6 +103,7 @@ const labels = {
       { id: "nature", title: "Nature & hiking" },
       { id: "travel", title: "Travel & culture" },
     ] as CvInterest[],
+    mobility: "Mobility: License A (motorcycle) · License B (car)",
     document: { title: "Resume Yoann Andrieux - React Native Developer" },
   },
 };
@@ -202,11 +204,7 @@ export function renderCvHtml(locale: Locale): string {
   const ourTheory = experiences.find((e) => e.id === "10a");
   const ugcCgr = experiences.find((e) => e.id === "10c");
 
-  // Bio: first 2 sentences for the header
-  const bioSentences = profile.bio.split(". ");
-  const bioShort =
-    bioSentences.slice(0, 2).join(". ") +
-    (bioSentences.length > 2 ? "." : "");
+  // Full bio from profile (same as hero)
 
   // Availability text from profile
   const availDetail = profile.availabilityOptions.join(" / ");
@@ -407,7 +405,7 @@ export function renderCvHtml(locale: Locale): string {
         </div>
 
         <!-- Bio -->
-        <div style="font-size:7.5px;color:#CBD5E1;line-height:1.45;margin-bottom:8px;">${escapeHtml(bioShort)}</div>
+        <div style="font-size:7.5px;color:#CBD5E1;line-height:1.45;margin-bottom:8px;">${escapeHtml(profile.bio)}</div>
 
         <!-- Contact line -->
         <div style="font-size:7px;color:#94A3B8;margin-bottom:8px;">
@@ -479,7 +477,7 @@ export function renderCvHtml(locale: Locale): string {
     <div style="padding:22px 20px 10px 20px;flex:1;display:flex;flex-direction:column;">
       ${renderSectionTitle(l.sectionTitles.experiences)}
       ${detailed.map((exp) => renderDetailedExp(exp, 3)).join("")}
-      ${compactTech.map(renderCompactExp).join("")}
+      ${compactTech.map(renderSemiDetailedExp).join("")}
     </div>
   </div>
 
@@ -515,8 +513,11 @@ export function renderCvHtml(locale: Locale): string {
       <div style="font-size:7px;color:#475569;margin-bottom:3px;">
         <strong>${escapeHtml(l.sectionTitles.languages)} :</strong> ${langLine}
       </div>
-      <div style="font-size:7px;color:#475569;margin-bottom:8px;">
+      <div style="font-size:7px;color:#475569;margin-bottom:3px;">
         <strong>${escapeHtml(l.sectionTitles.interests)} :</strong> ${interestLine}
+      </div>
+      <div style="font-size:7px;color:#475569;margin-bottom:8px;">
+        ${escapeHtml(l.mobility)}
       </div>
 
       <div style="margin-top:auto;">
