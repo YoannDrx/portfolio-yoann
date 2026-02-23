@@ -213,81 +213,102 @@ const WebView = () => {
         }`}
       >
         {/* Hero Section */}
-        <section className="relative flex min-h-screen items-center justify-center px-6 py-20">
+        <section className="relative min-h-screen overflow-hidden px-6 py-20 lg:h-screen lg:py-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
           </div>
 
-          <div className="stagger-children relative z-10 mx-auto max-w-4xl text-center">
-            {/* Avatar */}
-            <div className="relative mx-auto mb-8 h-52 w-52">
-              <div className="absolute -inset-5 animate-pulse-soft rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-xl" />
-              <div className="relative h-52 w-52 overflow-hidden rounded-full border-4 border-background bg-blue-200 shadow-medium dark:bg-blue-900/60">
-                <Image
-                  src={profile.avatar}
-                  alt={`${profile.firstName} ${profile.lastName}`}
-                  fill
-                  className="object-cover object-top"
-                  priority
-                  sizes="208px"
-                />
+          <div className="stagger-children relative z-10 mx-auto flex min-h-screen max-w-5xl items-center lg:h-full lg:min-h-0">
+            <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-2">
+              {/* Left: Text content */}
+              <div className="text-center lg:text-left">
+                {/* Small avatar - visible < lg only */}
+                <div className="relative mx-auto mb-8 h-52 w-52 lg:hidden">
+                  <div className="absolute -inset-5 animate-pulse-soft rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-xl" />
+                  <div className="relative h-52 w-52 overflow-hidden rounded-full border-4 border-background bg-blue-200 shadow-medium dark:bg-blue-900/60">
+                    <Image
+                      src={profile.avatar}
+                      alt={`${profile.firstName} ${profile.lastName}`}
+                      fill
+                      className="object-cover object-top"
+                      priority
+                      sizes="208px"
+                    />
+                  </div>
+                </div>
+
+                <h1 className="mb-4 text-5xl font-bold tracking-tight text-foreground md:text-7xl">
+                  {profile.firstName} {profile.lastName}
+                  <span className="mt-2 block text-3xl text-primary md:text-4xl">
+                    {profile.title}
+                  </span>
+                </h1>
+
+                <p className="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-muted-foreground lg:mx-0">
+                  {profile.bio}
+                </p>
+
+                <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
+                  <IOSButton
+                    size="lg"
+                    onClick={() =>
+                      document
+                        .getElementById("experiences")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                  >
+                    {uiTexts.buttons.viewMyExperiences}
+                  </IOSButton>
+                  <IOSButton
+                    variant="secondary"
+                    size="lg"
+                    onClick={() =>
+                      document
+                        .getElementById("contact")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                  >
+                    {uiTexts.buttons.contactMe}
+                  </IOSButton>
+                  <PDFDownloadButton className="!h-14 !px-6 !text-base" />
+                </div>
+
+                {/* Stats */}
+                <div className="mt-16 flex justify-center gap-8 md:gap-12 lg:justify-start">
+                  {profile.stats.map((stat) => (
+                    <IOSCard
+                      key={stat.label}
+                      variant="subtle"
+                      padding="md"
+                      className="card-premium-hover min-w-[120px] text-center"
+                    >
+                      <p className="text-3xl font-bold tabular-nums tracking-tight text-foreground md:text-4xl">
+                        {stat.value}
+                      </p>
+                      <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
+                        {stat.label}
+                      </p>
+                    </IOSCard>
+                  ))}
+                </div>
               </div>
             </div>
+          </div>
 
-            <h1 className="mb-4 text-5xl font-bold tracking-tight text-foreground md:text-7xl">
-              {profile.firstName} {profile.lastName}
-              <span className="mt-2 block text-3xl text-primary md:text-4xl">
-                {profile.title}
-              </span>
-            </h1>
-
-            <p className="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {profile.bio}
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-4">
-              <IOSButton
-                size="lg"
-                onClick={() =>
-                  document
-                    .getElementById("experiences")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                {uiTexts.buttons.viewMyExperiences}
-              </IOSButton>
-              <IOSButton
-                variant="secondary"
-                size="lg"
-                onClick={() =>
-                  document
-                    .getElementById("contact")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                {uiTexts.buttons.contactMe}
-              </IOSButton>
-              <PDFDownloadButton className="!h-14 !px-6 !text-base" />
-            </div>
-
-            {/* Stats */}
-            <div className="mt-16 flex justify-center gap-8 md:gap-12">
-              {profile.stats.map((stat) => (
-                <IOSCard
-                  key={stat.label}
-                  variant="subtle"
-                  padding="md"
-                  className="card-premium-hover min-w-[120px] text-center"
-                >
-                  <p className="text-3xl font-bold tabular-nums tracking-tight text-foreground md:text-4xl">
-                    {stat.value}
-                  </p>
-                  <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
-                    {stat.label}
-                  </p>
-                </IOSCard>
-              ))}
+          {/* Right: Full silhouette anchored to bottom - visible lg+ only */}
+          <div className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-1/2 lg:block">
+            <div className="relative h-full w-full">
+              <Image
+                src={profile.avatar}
+                alt={`${profile.firstName} ${profile.lastName}`}
+                fill
+                className="object-contain object-bottom"
+                priority
+                sizes="50vw"
+                quality={100}
+                unoptimized
+              />
             </div>
           </div>
         </section>
