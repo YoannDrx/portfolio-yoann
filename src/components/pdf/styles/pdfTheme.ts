@@ -20,7 +20,7 @@ export const pdfColors = {
     independant: { bg: "#F3E8FF", text: "#9333EA" },
     cdd: { bg: "#FFF7ED", text: "#EA580C" },
     intermittent: { bg: "#FCE7F3", text: "#DB2777" },
-    ponctuel: { bg: "#FEF3C7", text: "#D97706" },
+    ponctuel: { bg: "#DBEAFE", text: "#2563EB" },
     hors_tech: { bg: "#F3E8FF", text: "#7C3AED" },
     cinema: { bg: "#FEF3C7", text: "#D97706" },
     ops: { bg: "#D1FAE5", text: "#059669" },
@@ -62,7 +62,7 @@ export const pdfColors = {
   experience: {
     cdi: "#10B981", // emerald-500
     freelance: "#3B82F6", // blue-500
-    ponctuel: "#F59E0B", // amber-500
+    ponctuel: "#3B82F6", // blue-500 (same as freelance)
     hors_tech: "#8B5CF6", // violet-500
     cinema: "#D97706", // amber-600
     ops: "#059669", // emerald-600

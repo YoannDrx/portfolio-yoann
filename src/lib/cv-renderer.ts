@@ -42,7 +42,7 @@ const labels = {
       independant: "Indep.",
       cdd: "CDD",
       intermittent: "Intermittent",
-      ponctuel: "Ponctuel",
+      ponctuel: "Freelance",
       hors_tech: "Autre",
       ops: "Ops",
       cinema: "Cinéma",
@@ -84,7 +84,7 @@ const labels = {
       independant: "Self-employed",
       cdd: "Fixed-term",
       intermittent: "Intermittent",
-      ponctuel: "Short-term",
+      ponctuel: "Freelance",
       hors_tech: "Other",
       ops: "Ops",
       cinema: "Cinema",
@@ -116,7 +116,7 @@ function getBadgeStyle(type: string): { bg: string; text: string } {
   const map: Record<string, { bg: string; text: string }> = {
     cdi: { bg: "#DCFCE7", text: "#16A34A" },
     freelance: { bg: "#DBEAFE", text: "#2563EB" },
-    ponctuel: { bg: "#FEF3C7", text: "#D97706" },
+    ponctuel: { bg: "#DBEAFE", text: "#2563EB" },
     ops: { bg: "#D1FAE5", text: "#059669" },
     cinema: { bg: "#FEF3C7", text: "#D97706" },
     hors_tech: { bg: "#F3E8FF", text: "#7C3AED" },
@@ -128,7 +128,7 @@ function getAccentColor(type: string): string {
   const map: Record<string, string> = {
     cdi: "#10B981",
     freelance: "#3B82F6",
-    ponctuel: "#F59E0B",
+    ponctuel: "#3B82F6",
     ops: "#059669",
     cinema: "#D97706",
     hors_tech: "#8B5CF6",
@@ -223,7 +223,7 @@ export function renderCvHtml(locale: Locale): string {
   const renderSubSectionTitle = (title: string) => `
     <div style="font-size:8.5px;font-weight:700;color:#475569;margin:8px 0 5px 0;text-transform:uppercase;letter-spacing:0.5px;">${escapeHtml(title)}</div>`;
 
-  // Detailed experience: 3 bullets + up to 6 skills
+  // Detailed experience: intro paragraph + bullets + up to 6 skills
   const renderDetailedExp = (exp: WorkExperience, maxBullets = 3) => {
     const badge = getBadgeStyle(exp.type);
     const accent = getAccentColor(exp.type);
@@ -233,8 +233,10 @@ export function renderCvHtml(locale: Locale): string {
         ? ` · ${l.remoteLabels[exp.remote] ?? exp.remote}`
         : "";
 
-    const descriptions = exp.description
-      .slice(0, maxBullets)
+    // First description as intro paragraph, rest as bullets
+    const introDesc = exp.description[0] ?? "";
+    const bullets = exp.description
+      .slice(1, maxBullets + 1)
       .map(
         (d) =>
           `<div style="font-size:6.5px;color:#475569;line-height:1.4;">&#8226; ${escapeHtml(d)}</div>`
@@ -262,20 +264,23 @@ export function renderCvHtml(locale: Locale): string {
         </div>
         <div style="font-size:7.5px;color:#3B82F6;font-weight:600;margin-bottom:1px;">${escapeHtml(exp.role)}</div>
         <div style="font-size:6.5px;color:#94A3B8;margin-bottom:3px;">${escapeHtml(exp.location)}${remoteLabel}</div>
-        ${descriptions}
+        <div style="font-size:6.5px;color:#334155;line-height:1.45;margin-bottom:2px;font-style:italic;">${escapeHtml(introDesc)}</div>
+        ${bullets}
         <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">${skills}</div>
       </div>
     </div>`;
   };
 
-  // Semi-detailed: role + 1-2 bullets (for page 2 cinema/management items)
+  // Semi-detailed: intro paragraph + 1-2 bullets (for page 2 and compact tech items)
   const renderSemiDetailedExp = (exp: WorkExperience) => {
     const badge = getBadgeStyle(exp.type);
     const accent = getAccentColor(exp.type);
     const typeLabel = l.employmentTypes[exp.type] ?? exp.type;
 
-    const descriptions = exp.description
-      .slice(0, 2)
+    // First description as intro paragraph, rest as bullets
+    const introDesc = exp.description[0] ?? "";
+    const bullets = exp.description
+      .slice(1, 3)
       .map(
         (d) =>
           `<div style="font-size:6.5px;color:#475569;line-height:1.35;">&#8226; ${escapeHtml(d)}</div>`
@@ -294,7 +299,8 @@ export function renderCvHtml(locale: Locale): string {
           <span style="font-size:6px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
         </div>
         <div style="font-size:7px;color:#3B82F6;font-weight:600;margin-bottom:2px;">${escapeHtml(exp.role)}</div>
-        ${descriptions}
+        <div style="font-size:6.5px;color:#334155;line-height:1.4;margin-bottom:1px;font-style:italic;">${escapeHtml(introDesc)}</div>
+        ${bullets}
       </div>
     </div>`;
   };
@@ -380,7 +386,7 @@ export function renderCvHtml(locale: Locale): string {
       .join("");
 
     return `
-    <div style="background:#0F172A;padding:16px 20px 16px 20px;flex-shrink:0;position:relative;overflow:visible;min-height:155px;">
+    <div style="background:#0F172A;padding:16px 20px 16px 20px;flex-shrink:0;position:relative;overflow:hidden;min-height:155px;">
       <!-- Silhouette: full-body, anchored bottom-left, white outline + blue glow -->
       <div style="position:absolute;left:18px;bottom:0;height:90%;z-index:10;">
         <!-- Back layer: white outline via brightness(0) invert(1) + blue glow via drop-shadow -->
