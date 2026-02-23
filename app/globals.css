@@ -385,6 +385,32 @@
     50% { opacity: 0.7; }
   }
 
+  /* Silhouette white stroke layer (behind the real image) */
+  .silhouette-stroke {
+    filter: brightness(0) invert(1)
+      drop-shadow(0 0 6px hsl(var(--primary) / 0.6))
+      drop-shadow(0 0 6px hsl(var(--primary) / 0.6))
+      drop-shadow(0 0 14px hsl(var(--primary) / 0.3));
+    transform: scale(1.012) translateY(4px);
+    transform-origin: bottom center;
+    animation: outline-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes outline-pulse {
+    0%, 100% {
+      filter: brightness(0) invert(1)
+        drop-shadow(0 0 6px hsl(var(--primary) / 0.6))
+        drop-shadow(0 0 6px hsl(var(--primary) / 0.6))
+        drop-shadow(0 0 14px hsl(var(--primary) / 0.3));
+    }
+    50% {
+      filter: brightness(0) invert(1)
+        drop-shadow(0 0 8px hsl(var(--primary) / 0.7))
+        drop-shadow(0 0 8px hsl(var(--primary) / 0.7))
+        drop-shadow(0 0 20px hsl(var(--primary) / 0.4));
+    }
+  }
+
   /* Stagger children animation */
   .stagger-children > * {
     animation: ios-spring var(--duration-slowest) var(--ease-spring) backwards;

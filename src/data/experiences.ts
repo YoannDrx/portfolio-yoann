@@ -1092,8 +1092,8 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       id: "18",
       name: "Cyclofix (Roulez Jeunesse)",
       description:
-        "Scale-up de réparation vélo à domicile : 6 ans de croissance opérationnelle",
-      category: "Opérations",
+        "Pilotage de la croissance opérationnelle d'une scale-up leader de la réparation vélo à domicile pendant 6 ans",
+      category: "Management Ops",
       experienceType: "ops",
       year: "2022",
       platforms: ["web"],
@@ -1105,14 +1105,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         "/images/projects/roulez-jeunesse-reparations.png",
       ],
       stats: { teamSize: "1000+ recrutés", downloads: "B2B/B2C" },
-      features: [
-        "Management",
-        "Recrutement",
-        "B2B",
-        "Opérations",
-        "Zapier",
-        "Airtable",
-      ],
+      features: ["Management", "Recrutement", "B2B", "Operations", "Zapier", "Airtable", "KPI Tracking"],
       highlights: [
         {
           title: "1000+ recrutements",
@@ -1120,20 +1113,20 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
             "Travailleurs indépendants recrutés et onboardés à l'échelle nationale",
         },
         {
-          title: "Partenariats B2B",
-          description: "Netflix, Amazon Prime, Canal+",
+          title: "Partenariats B2B stratégiques",
+          description: "Société Générale, Fnac, Decathlon, L'Oréal et autres grands comptes",
         },
         {
           title: "Acquisition automatisée",
-          description: "Entonnoir de recrutement optimisé (Zapier/Airtable)",
+          description: "Entonnoir de recrutement optimisé via Zapier et Airtable",
         },
         {
           title: "6 ans de croissance",
-          description: "Pilotage des opérations d'une scale-up leader",
+          description: "Management d'équipes larges et dispersées avec suivi de KPIs opérationnels",
         },
       ],
       links: {
-        website: "https://www.roulezjeunesse.com/",
+        website: "https://www.cyclofix.com/",
       },
     },
     {
@@ -2399,8 +2392,8 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
     {
       id: "18",
       name: "Cyclofix (Roulez Jeunesse)",
-      description: "Home bike repair scale-up: 6 years of operational growth",
-      category: "Operations",
+      description: "Led operational growth of a leading home bike repair scale-up for 6 years",
+      category: "Management Ops",
       experienceType: "ops",
       year: "2022",
       platforms: ["web"],
@@ -2412,34 +2405,27 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         "/images/projects/roulez-jeunesse-reparations.png",
       ],
       stats: { teamSize: "1000+ recruited", downloads: "B2B/B2C" },
-      features: [
-        "Management",
-        "Recruitment",
-        "B2B",
-        "Operations",
-        "Zapier",
-        "Airtable",
-      ],
+      features: ["Management", "Recrutement", "B2B", "Operations", "Zapier", "Airtable", "KPI Tracking"],
       highlights: [
         {
           title: "1000+ recruitments",
           description: "Independent workers recruited and onboarded nationwide",
         },
         {
-          title: "B2B partnerships",
-          description: "Netflix, Amazon Prime, Canal+",
+          title: "Strategic B2B partnerships",
+          description: "Société Générale, Fnac, Decathlon, L'Oréal and other major accounts",
         },
         {
           title: "Automated acquisition",
-          description: "Optimized recruitment funnel (Zapier/Airtable)",
+          description: "Optimized recruitment funnel via Zapier and Airtable",
         },
         {
           title: "6 years of growth",
-          description: "Operations management of a leading scale-up",
+          description: "Managing large, geographically dispersed teams with operational KPI tracking",
         },
       ],
       links: {
-        website: "https://www.roulezjeunesse.com/",
+        website: "https://www.cyclofix.com/",
       },
     },
     {

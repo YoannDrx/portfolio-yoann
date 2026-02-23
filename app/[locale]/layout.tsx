@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import type { Locale } from "@/i18n/locales";
-import { getProfile, getSiteConfig } from "@/data";
+import { getProfile, getSiteConfig, getSocialLinks } from "@/data";
 
 export const dynamicParams = false;
 
@@ -62,8 +62,30 @@ export default async function LocaleLayout({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const profile = getProfile(locale);
+  const siteConfig = getSiteConfig(locale);
+  const socialLinks = getSocialLinks(locale);
+
+  const sameAs = socialLinks
+    .map((link) => link.href)
+    .filter((href) => href.startsWith("http"));
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: `${profile.firstName} ${profile.lastName}`,
+    jobTitle: profile.title,
+    url: siteConfig.url,
+    sameAs,
+    knowsAbout: siteConfig.seo.keywords,
+  };
+
   return (
     <I18nProvider locale={locale}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {children}
     </I18nProvider>
   );

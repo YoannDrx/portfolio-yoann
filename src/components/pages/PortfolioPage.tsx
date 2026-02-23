@@ -12,7 +12,6 @@ import { ContactFormCard } from "@/components/contact/ContactFormCard";
 import {
   IOSCard,
   IOSButton,
-  IOSBadge,
   IOSChip,
   IOSAvailabilityBadge,
   IOSSidePanel,
@@ -54,7 +53,7 @@ const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
     ponctuel: { fr: "Ponctuel", en: "Short-term" },
     hors_tech: { fr: "Autre", en: "Other" },
     cinema: { fr: "Cinéma", en: "Cinema" },
-    ops: { fr: "Ops", en: "Ops" },
+    ops: { fr: "Management Ops", en: "Management Ops" },
   };
   return locale === "en" ? labels[type].en : labels[type].fr;
 };
@@ -118,7 +117,7 @@ export default function Home() {
       <TouchIndicator />
 
       {/* View Mode Toggle - Desktop Only */}
-      <div className="fixed right-6 top-6 z-50 hidden items-center gap-2 rounded-full border border-border/50 bg-card/80 p-1.5 shadow-soft backdrop-blur-xl lg:flex">
+      <nav aria-label="View mode" className="fixed right-6 top-6 z-50 hidden items-center gap-2 rounded-full border border-border/50 bg-card/80 p-1.5 shadow-soft backdrop-blur-xl lg:flex">
         <button
           onClick={() => handleViewModeChange("device")}
           className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
@@ -143,7 +142,7 @@ export default function Home() {
         </button>
         <LocaleToggle />
         <ThemeToggle />
-      </div>
+      </nav>
 
       {/* Device View */}
       {viewMode === "device" && (
@@ -213,18 +212,18 @@ const WebView = () => {
         }`}
       >
         {/* Hero Section */}
-        <section className="relative min-h-screen overflow-hidden px-6 py-20 lg:h-screen lg:py-0">
+        <section className="relative min-h-screen overflow-hidden px-6 py-20 2xl:h-screen 2xl:py-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
           </div>
 
-          <div className="stagger-children relative z-10 mx-auto flex min-h-screen max-w-5xl items-center lg:h-full lg:min-h-0">
-            <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-2">
+          <header className="stagger-children relative z-10 mx-auto flex min-h-screen max-w-5xl items-center 2xl:h-full 2xl:min-h-0">
+            <div className="grid w-full grid-cols-1 items-center gap-12 2xl:grid-cols-2">
               {/* Left: Text content */}
-              <div className="text-center lg:text-left">
+              <div className="text-center 2xl:text-left">
                 {/* Small avatar - visible < lg only */}
-                <div className="relative mx-auto mb-8 h-52 w-52 lg:hidden">
+                <div className="relative mx-auto mb-8 h-52 w-52 2xl:hidden">
                   <div className="absolute -inset-5 animate-pulse-soft rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-xl" />
                   <div className="relative h-52 w-52 overflow-hidden rounded-full border-4 border-background bg-blue-200 shadow-medium dark:bg-blue-900/60">
                     <Image
@@ -245,11 +244,11 @@ const WebView = () => {
                   </span>
                 </h1>
 
-                <p className="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-muted-foreground lg:mx-0">
+                <p className="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-muted-foreground 2xl:mx-0">
                   {profile.bio}
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
+                <div className="flex flex-wrap justify-center gap-4 2xl:justify-start">
                   <IOSButton
                     size="lg"
                     onClick={() =>
@@ -275,7 +274,7 @@ const WebView = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="mt-16 flex justify-center gap-8 md:gap-12 lg:justify-start">
+                <div className="mt-16 flex justify-center gap-8 md:gap-12 2xl:justify-start">
                   {profile.stats.map((stat) => (
                     <IOSCard
                       key={stat.label}
@@ -294,16 +293,30 @@ const WebView = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </header>
 
-          {/* Right: Full silhouette anchored to bottom - visible lg+ only */}
-          <div className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-1/2 lg:block">
+          {/* Right: Full silhouette anchored to bottom - visible 2xl+ only */}
+          <div className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-1/2 2xl:block">
             <div className="relative h-full w-full">
+              {/* White stroke + blue glow layer (behind) */}
+              <div className="silhouette-stroke absolute inset-0">
+                <Image
+                  src={profile.avatar}
+                  alt=""
+                  fill
+                  className="object-contain object-bottom"
+                  sizes="50vw"
+                  quality={100}
+                  unoptimized
+                  aria-hidden
+                />
+              </div>
+              {/* Real image (on top) */}
               <Image
                 src={profile.avatar}
                 alt={`${profile.firstName} ${profile.lastName}`}
                 fill
-                className="object-contain object-bottom"
+                className="relative object-contain object-bottom"
                 priority
                 sizes="50vw"
                 quality={100}
@@ -590,7 +603,7 @@ const WebView = () => {
                 <IOSCard
                   key={exp.id}
                   variant="subtle"
-                  padding="lg"
+                  padding="md"
                   className="card-premium-hover relative"
                 >
                   {/* Accent bar gauche par type */}
@@ -603,7 +616,7 @@ const WebView = () => {
                   />
 
                   <div className="pl-3">
-                    <div className="mb-4 flex flex-col md:flex-row md:items-start md:justify-between">
+                    <div className="mb-0 flex flex-col md:flex-row md:items-start md:justify-between">
                       <div>
                         <div className="mb-1 flex items-center gap-2">
                           <h3 className="text-xl font-semibold tracking-tight text-foreground">
@@ -640,35 +653,12 @@ const WebView = () => {
                         </p>
                       </div>
                     </div>
-                    <ul className="mb-4 space-y-2">
-                      {exp.description.slice(0, 3).map((desc, i) => (
-                        <li
-                          key={i}
-                          className="flex items-start gap-2 text-sm text-muted-foreground"
-                        >
-                          <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-foreground/20" />
-                          <span>{desc}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex flex-wrap gap-2">
-                      {exp.skills.slice(0, 6).map((skill) => (
-                        <IOSBadge
-                          key={skill}
-                          variant="default"
-                          size="sm"
-                          className="border border-border/30 !bg-muted/50 !text-muted-foreground"
-                        >
-                          {skill}
-                        </IOSBadge>
-                      ))}
-                    </div>
                     {exp.url && (
                       <a
                         href={exp.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                        className="mt-2 inline-flex items-center gap-1 text-xs text-primary hover:underline"
                       >
                         <ExternalLink className="h-3 w-3" />
                         {uiTexts.buttons.viewWebsite}

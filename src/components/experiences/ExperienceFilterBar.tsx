@@ -37,6 +37,8 @@ export function ExperienceFilterBar({
 
   return (
     <div
+      role="tablist"
+      aria-label="Filter experiences"
       className={
         compact
           ? "scrollbar-hide flex gap-2 overflow-x-auto px-5"
@@ -52,6 +54,8 @@ export function ExperienceFilterBar({
             size={compact ? "sm" : "md"}
             selected={activeFilter === filter}
             onToggle={() => onFilterChange(filter)}
+            role="tab"
+            aria-selected={activeFilter === filter}
           >
             {getLabel(filter)} ({count})
           </IOSChip>
