@@ -5,28 +5,44 @@
  * Contenu du panneau latéral pour afficher les détails d'une expérience
  */
 
-import Image from 'next/image';
-import { Users, Download, Globe, Apple, Smartphone, ExternalLink, Github } from 'lucide-react';
-import { IOSButton, IOSBadge } from '@/components/ios';
-import { ImageGallery } from './ImageGallery';
-import { getUiTexts } from '@/data';
-import { useI18n } from '@/i18n/I18nProvider';
-import type { Experience, ExperienceType } from '@/data';
+import Image from "next/image";
+import {
+  Users,
+  Download,
+  Globe,
+  Apple,
+  Smartphone,
+  ExternalLink,
+  Github,
+} from "lucide-react";
+import { IOSButton, IOSBadge } from "@/components/ios";
+import { ImageGallery } from "./ImageGallery";
+import { getUiTexts } from "@/data";
+import { useI18n } from "@/i18n/I18nProvider";
+import type { Experience, ExperienceType } from "@/data";
 
 const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
   const labels: Record<ExperienceType, { fr: string; en: string }> = {
-    freelance: { fr: 'Client Freelance', en: 'Freelance client' },
-    cdi: { fr: 'CDI', en: 'Full-time' },
-    personal: { fr: 'Perso', en: 'Personal project' },
+    freelance: { fr: "Client Freelance", en: "Freelance client" },
+    cdi: { fr: "CDI", en: "Full-time" },
+    personal: { fr: "Perso", en: "Personal project" },
+    ponctuel: { fr: "Ponctuel", en: "Short-term" },
+    hors_tech: { fr: "Autre", en: "Other" },
+    cinema: { fr: "Cinéma", en: "Cinema" },
+    ops: { fr: "Ops", en: "Ops" },
   };
-  return locale === 'en' ? labels[type].en : labels[type].fr;
+  return locale === "en" ? labels[type].en : labels[type].fr;
 };
 
 const getExperienceTypeColor = (type: ExperienceType) => {
   const colors: Record<ExperienceType, string> = {
-    freelance: 'bg-blue-500/20 text-blue-600',
-    cdi: 'bg-green-500/20 text-green-600',
-    personal: 'bg-purple-500/20 text-purple-600',
+    freelance: "bg-blue-500/20 text-blue-600",
+    cdi: "bg-green-500/20 text-green-600",
+    personal: "bg-purple-500/20 text-purple-600",
+    ponctuel: "bg-amber-500/20 text-amber-600",
+    hors_tech: "bg-violet-500/20 text-violet-600",
+    cinema: "bg-amber-500/20 text-amber-600",
+    ops: "bg-emerald-500/20 text-emerald-600",
   };
   return colors[type];
 };
@@ -35,16 +51,19 @@ interface ExperienceDetailPanelProps {
   experience: Experience;
 }
 
-export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps) => {
+export const ExperienceDetailPanel = ({
+  experience,
+}: ExperienceDetailPanelProps) => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
 
   // Use images array if available, otherwise fallback to single image
-  const galleryImages = experience.images && experience.images.length > 0
-    ? experience.images
-    : experience.image
-      ? [experience.image]
-      : [];
+  const galleryImages =
+    experience.images && experience.images.length > 0
+      ? experience.images
+      : experience.image
+        ? [experience.image]
+        : [];
 
   return (
     <div className="min-h-full bg-background">
@@ -57,55 +76,75 @@ export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps
       />
 
       {/* Content */}
-      <div className="px-6 pb-8 -mt-8 relative">
+      <div className="relative -mt-8 px-6 pb-8">
         {/* Badges */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${getExperienceTypeColor(experience.experienceType)}`}>
+        <div className="mb-3 flex items-center gap-2">
+          <span
+            className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getExperienceTypeColor(experience.experienceType)}`}
+          >
             {getExperienceTypeLabel(experience.experienceType, locale)}
           </span>
-          <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-muted text-muted-foreground">
+          <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
             {experience.year}
           </span>
         </div>
 
         {/* Title & Category */}
-        <h2 className="text-3xl font-bold text-foreground">{experience.name}</h2>
-        <p className="text-primary font-medium mt-1">{experience.category}</p>
+        <h2 className="text-3xl font-bold text-foreground">
+          {experience.name}
+        </h2>
+        <p className="mt-1 font-medium text-primary">{experience.category}</p>
 
         {/* Short Description */}
-        <p className="text-muted-foreground mt-4 leading-relaxed">
+        <p className="mt-4 leading-relaxed text-muted-foreground">
           {experience.description}
         </p>
 
         {/* Stats */}
-        <div className="flex items-center gap-6 mt-6 py-4 border-y border-border">
+        <div className="mt-6 flex items-center gap-6 border-y border-border py-4">
           <div className="text-center">
             <div className="flex items-center justify-center gap-1">
-              <Users className="w-5 h-5 text-primary" />
-              <span className="text-xl font-bold text-foreground">{experience.stats.teamSize}</span>
+              <Users className="h-5 w-5 text-primary" />
+              <span className="text-xl font-bold text-foreground">
+                {experience.stats.teamSize}
+              </span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.team}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {uiTexts.stats.team}
+            </p>
           </div>
-          <div className="w-px h-10 bg-border" />
+          <div className="h-10 w-px bg-border" />
           <div className="text-center">
-            <p className="text-xl font-bold text-foreground">{experience.stats.downloads}</p>
-            <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.downloads}</p>
+            <p className="text-xl font-bold text-foreground">
+              {experience.stats.downloads}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {uiTexts.stats.downloads}
+            </p>
           </div>
-          <div className="w-px h-10 bg-border" />
+          <div className="h-10 w-px bg-border" />
           <div className="text-center">
             <div className="flex items-center justify-center gap-1">
-              {experience.platforms.includes('web') && <Globe className="w-5 h-5" />}
-              {experience.platforms.includes('ios') && <Apple className="w-5 h-5" />}
-              {experience.platforms.includes('android') && <Smartphone className="w-5 h-5" />}
+              {experience.platforms.includes("web") && (
+                <Globe className="h-5 w-5" />
+              )}
+              {experience.platforms.includes("ios") && (
+                <Apple className="h-5 w-5" />
+              )}
+              {experience.platforms.includes("android") && (
+                <Smartphone className="h-5 w-5" />
+              )}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">{uiTexts.stats.platforms}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {uiTexts.stats.platforms}
+            </p>
           </div>
         </div>
 
         {/* Long Description */}
         {experience.longDescription && (
-          <div className="mt-6 p-4 bg-muted/50 rounded-2xl">
-            <p className="text-sm text-muted-foreground leading-relaxed">
+          <div className="mt-6 rounded-2xl bg-muted/50 p-4">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               {experience.longDescription}
             </p>
           </div>
@@ -113,7 +152,7 @@ export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps
 
         {/* Tech Stack - Simple tags */}
         <div className="mt-8">
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             {uiTexts.sections.techStack}
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -128,80 +167,116 @@ export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps
         {/* Detailed Stack by category */}
         {experience.stack && (
           <div className="mt-6 space-y-4">
-            {experience.stack.frontend && experience.stack.frontend.length > 0 && (
-              <div>
-                <h4 className="text-xs font-semibold text-blue-600 mb-2">{uiTexts.stackLabels.frontend}</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {experience.stack.frontend.map((tech) => (
-                    <span key={tech} className="text-xs px-2 py-1 rounded-full bg-blue-500/10 text-blue-600">
-                      {tech}
-                    </span>
-                  ))}
+            {experience.stack.frontend &&
+              experience.stack.frontend.length > 0 && (
+                <div>
+                  <h4 className="mb-2 text-xs font-semibold text-blue-600">
+                    {uiTexts.stackLabels.frontend}
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {experience.stack.frontend.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-blue-500/10 px-2 py-1 text-xs text-blue-600"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-            {experience.stack.backend && experience.stack.backend.length > 0 && (
-              <div>
-                <h4 className="text-xs font-semibold text-green-600 mb-2">{uiTexts.stackLabels.backend}</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {experience.stack.backend.map((tech) => (
-                    <span key={tech} className="text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-600">
-                      {tech}
-                    </span>
-                  ))}
+              )}
+            {experience.stack.backend &&
+              experience.stack.backend.length > 0 && (
+                <div>
+                  <h4 className="mb-2 text-xs font-semibold text-green-600">
+                    {uiTexts.stackLabels.backend}
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {experience.stack.backend.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-green-500/10 px-2 py-1 text-xs text-green-600"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-            {experience.stack.database && experience.stack.database.length > 0 && (
-              <div>
-                <h4 className="text-xs font-semibold text-purple-600 mb-2">{uiTexts.stackLabels.database}</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {experience.stack.database.map((tech) => (
-                    <span key={tech} className="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-600">
-                      {tech}
-                    </span>
-                  ))}
+              )}
+            {experience.stack.database &&
+              experience.stack.database.length > 0 && (
+                <div>
+                  <h4 className="mb-2 text-xs font-semibold text-purple-600">
+                    {uiTexts.stackLabels.database}
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {experience.stack.database.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-purple-500/10 px-2 py-1 text-xs text-purple-600"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             {experience.stack.devops && experience.stack.devops.length > 0 && (
               <div>
-                <h4 className="text-xs font-semibold text-orange-600 mb-2">{uiTexts.stackLabels.devops}</h4>
+                <h4 className="mb-2 text-xs font-semibold text-orange-600">
+                  {uiTexts.stackLabels.devops}
+                </h4>
                 <div className="flex flex-wrap gap-1.5">
                   {experience.stack.devops.map((tech) => (
-                    <span key={tech} className="text-xs px-2 py-1 rounded-full bg-orange-500/10 text-orange-600">
+                    <span
+                      key={tech}
+                      className="rounded-full bg-orange-500/10 px-2 py-1 text-xs text-orange-600"
+                    >
                       {tech}
                     </span>
                   ))}
                 </div>
               </div>
             )}
-            {experience.stack.testing && experience.stack.testing.length > 0 && (
-              <div>
-                <h4 className="text-xs font-semibold text-red-600 mb-2">{uiTexts.stackLabels.testing}</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {experience.stack.testing.map((tech) => (
-                    <span key={tech} className="text-xs px-2 py-1 rounded-full bg-red-500/10 text-red-600">
-                      {tech}
-                    </span>
-                  ))}
+            {experience.stack.testing &&
+              experience.stack.testing.length > 0 && (
+                <div>
+                  <h4 className="mb-2 text-xs font-semibold text-red-600">
+                    {uiTexts.stackLabels.testing}
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {experience.stack.testing.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-red-500/10 px-2 py-1 text-xs text-red-600"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         )}
 
         {/* Highlights */}
         {experience.highlights && experience.highlights.length > 0 && (
           <div className="mt-8">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               {uiTexts.sections.highlights}
             </h3>
             <div className="space-y-3">
               {experience.highlights.map((highlight) => (
-                <div key={highlight.title} className="p-3 bg-muted/30 rounded-xl">
-                  <h4 className="text-sm font-semibold text-foreground">{highlight.title}</h4>
-                  <p className="text-xs text-muted-foreground mt-1">{highlight.description}</p>
+                <div
+                  key={highlight.title}
+                  className="rounded-xl bg-muted/30 p-3"
+                >
+                  <h4 className="text-sm font-semibold text-foreground">
+                    {highlight.title}
+                  </h4>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {highlight.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -217,16 +292,19 @@ export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps
               rel="noopener noreferrer"
               className="block w-full"
             >
-              <IOSButton fullWidth leftIcon={<ExternalLink className="w-5 h-5" />}>
+              <IOSButton
+                fullWidth
+                leftIcon={<ExternalLink className="h-5 w-5" />}
+              >
                 {uiTexts.buttons.viewProject}
               </IOSButton>
             </a>
           ) : (
             <IOSButton
               fullWidth
-              leftIcon={<ExternalLink className="w-5 h-5" />}
+              leftIcon={<ExternalLink className="h-5 w-5" />}
               disabled
-              className="opacity-50 cursor-not-allowed"
+              className="cursor-not-allowed opacity-50"
             >
               {uiTexts.labels.privateExperience}
             </IOSButton>
@@ -239,7 +317,11 @@ export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps
               rel="noopener noreferrer"
               className="block w-full"
             >
-              <IOSButton variant="secondary" fullWidth leftIcon={<Github className="w-5 h-5" />}>
+              <IOSButton
+                variant="secondary"
+                fullWidth
+                leftIcon={<Github className="h-5 w-5" />}
+              >
                 {uiTexts.buttons.viewCode}
               </IOSButton>
             </a>
@@ -255,7 +337,11 @@ export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps
                   rel="noopener noreferrer"
                   className="flex-1"
                 >
-                  <IOSButton variant="secondary" fullWidth leftIcon={<Apple className="w-5 h-5" />}>
+                  <IOSButton
+                    variant="secondary"
+                    fullWidth
+                    leftIcon={<Apple className="h-5 w-5" />}
+                  >
                     App Store
                   </IOSButton>
                 </a>
@@ -267,7 +353,11 @@ export const ExperienceDetailPanel = ({ experience }: ExperienceDetailPanelProps
                   rel="noopener noreferrer"
                   className="flex-1"
                 >
-                  <IOSButton variant="secondary" fullWidth leftIcon={<Smartphone className="w-5 h-5" />}>
+                  <IOSButton
+                    variant="secondary"
+                    fullWidth
+                    leftIcon={<Smartphone className="h-5 w-5" />}
+                  >
                     Play Store
                   </IOSButton>
                 </a>

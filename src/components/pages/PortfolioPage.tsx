@@ -20,26 +20,54 @@ import {
 import { ExperienceDetailPanel } from "@/components/experiences/ExperienceDetailPanel";
 import { ExperienceFilterBar } from "@/components/experiences/ExperienceFilterBar";
 import { ExperienceSectionHeader } from "@/components/experiences/ExperienceSectionHeader";
-import { Smartphone, Monitor, ExternalLink, Linkedin, Github, Mail, Phone, Briefcase, ChevronRight } from "lucide-react";
-import { getAiContent, getEducation, getWorkExperiences, getProfile, getExperiences, getSocialLinks, getSoftSkills, getTechnicalSkills, getUiTexts } from "@/data";
+import {
+  Smartphone,
+  Monitor,
+  ExternalLink,
+  Linkedin,
+  Github,
+  Mail,
+  Phone,
+  Briefcase,
+  ChevronRight,
+} from "lucide-react";
+import {
+  getAiContent,
+  getEducation,
+  getWorkExperiences,
+  getProfile,
+  getExperiences,
+  getSocialLinks,
+  getSoftSkills,
+  getTechnicalSkills,
+  getUiTexts,
+} from "@/data";
 import { useExperienceFilter } from "@/hooks/use-experience-filter";
 import type { Experience, ExperienceType } from "@/data";
 
 // Helper functions for experience type labels and colors
 const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
   const labels: Record<ExperienceType, { fr: string; en: string }> = {
-    freelance: { fr: 'Freelance', en: 'Freelance' },
-    cdi: { fr: 'CDI', en: 'Full-time' },
-    personal: { fr: 'Perso', en: 'Personal' },
+    freelance: { fr: "Freelance", en: "Freelance" },
+    cdi: { fr: "CDI", en: "Full-time" },
+    personal: { fr: "Perso", en: "Personal" },
+    ponctuel: { fr: "Ponctuel", en: "Short-term" },
+    hors_tech: { fr: "Autre", en: "Other" },
+    cinema: { fr: "Cinéma", en: "Cinema" },
+    ops: { fr: "Ops", en: "Ops" },
   };
-  return locale === 'en' ? labels[type].en : labels[type].fr;
+  return locale === "en" ? labels[type].en : labels[type].fr;
 };
 
 const getExperienceTypeColor = (type: ExperienceType) => {
   const colors: Record<ExperienceType, string> = {
-    freelance: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
-    cdi: 'bg-green-500/20 text-green-600 dark:text-green-400',
-    personal: 'bg-purple-500/20 text-purple-600 dark:text-purple-400',
+    freelance: "bg-blue-500/20 text-blue-600 dark:text-blue-400",
+    cdi: "bg-green-500/20 text-green-600 dark:text-green-400",
+    personal: "bg-purple-500/20 text-purple-600 dark:text-purple-400",
+    ponctuel: "bg-amber-500/20 text-amber-600 dark:text-amber-400",
+    hors_tech: "bg-violet-500/20 text-violet-600 dark:text-violet-400",
+    cinema: "bg-amber-500/20 text-amber-600 dark:text-amber-400",
+    ops: "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400",
   };
   return colors[type];
 };
@@ -48,11 +76,11 @@ import { useI18n } from "@/i18n/I18nProvider";
 
 // Icon mapping for social links
 const iconMap: Record<string, React.ReactNode> = {
-  Linkedin: <Linkedin className="w-5 h-5" />,
-  Github: <Github className="w-5 h-5" />,
-  Mail: <Mail className="w-5 h-5" />,
-  Phone: <Phone className="w-5 h-5" />,
-  Briefcase: <Briefcase className="w-5 h-5" />,
+  Linkedin: <Linkedin className="h-5 w-5" />,
+  Github: <Github className="h-5 w-5" />,
+  Mail: <Mail className="h-5 w-5" />,
+  Phone: <Phone className="h-5 w-5" />,
+  Briefcase: <Briefcase className="h-5 w-5" />,
 };
 
 const VIEW_MODE_KEY = "portfolio-view-mode";
@@ -90,49 +118,52 @@ export default function Home() {
       <TouchIndicator />
 
       {/* View Mode Toggle - Desktop Only */}
-      <div className="hidden lg:flex fixed top-6 right-6 z-50 items-center gap-2 p-1.5 rounded-full bg-card/80 backdrop-blur-xl shadow-soft border border-border/50">
+      <div className="fixed right-6 top-6 z-50 hidden items-center gap-2 rounded-full border border-border/50 bg-card/80 p-1.5 shadow-soft backdrop-blur-xl lg:flex">
         <button
           onClick={() => handleViewModeChange("device")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+          className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
             viewMode === "device"
               ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Smartphone className="w-4 h-4" />
+          <Smartphone className="h-4 w-4" />
           iPhone
         </button>
         <button
           onClick={() => handleViewModeChange("web")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+          className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
             viewMode === "web"
               ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
-	        >
-	          <Monitor className="w-4 h-4" />
-	          Web
-	        </button>
-	        <LocaleToggle />
-	        <ThemeToggle />
-	      </div>
+        >
+          <Monitor className="h-4 w-4" />
+          Web
+        </button>
+        <LocaleToggle />
+        <ThemeToggle />
+      </div>
 
       {/* Device View */}
       {viewMode === "device" && (
-        <div className="flex items-center justify-center min-h-screen py-8 px-4 animate-ios-fade-in">
+        <div className="flex min-h-screen animate-ios-fade-in items-center justify-center px-4 py-8">
           <div className="relative">
             {/* Background Decorations */}
-            <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse-soft" />
-              <div className="absolute inset-20 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse-soft" style={{ animationDelay: "1s" }} />
+            <div className="absolute left-1/2 top-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute inset-0 animate-pulse-soft rounded-full bg-gradient-to-r from-primary/20 to-cyan-400/20 blur-3xl" />
+              <div
+                className="absolute inset-20 animate-pulse-soft rounded-full bg-gradient-to-r from-purple-400/10 to-pink-400/10 blur-3xl"
+                style={{ animationDelay: "1s" }}
+              />
             </div>
 
             <PortfolioApp />
 
-	            {/* Caption */}
-	            <p className="hidden lg:block text-center text-sm text-muted-foreground mt-6">
-	              {getUiTexts(locale).hero.swipeToNavigate}
-	            </p>
+            {/* Caption */}
+            <p className="mt-6 hidden text-center text-sm text-muted-foreground lg:block">
+              {getUiTexts(locale).hero.swipeToNavigate}
+            </p>
           </div>
         </div>
       )}
@@ -161,429 +192,590 @@ const WebView = () => {
   const socialLinks = getSocialLinks(locale);
 
   // State pour le panneau de détail expérience
-  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  const [selectedExperience, setSelectedExperience] =
+    useState<Experience | null>(null);
 
   // Filtres expériences
-  const { activeFilter, setActiveFilter, sections, counts, showSectionHeaders } = useExperienceFilter(experiences);
+  const {
+    activeFilter,
+    setActiveFilter,
+    sections,
+    counts,
+    showSectionHeaders,
+  } = useExperienceFilter(experiences);
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-background">
       {/* Wrapper avec transform pour l'effet push */}
-      <div className={`transition-transform duration-300 ease-out ${
-        selectedExperience ? '-translate-x-[288px]' : 'translate-x-0'
-      }`}>
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 py-20">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl" />
-        </div>
+      <div
+        className={`transition-transform duration-300 ease-out ${
+          selectedExperience ? "-translate-x-[288px]" : "translate-x-0"
+        }`}
+      >
+        {/* Hero Section */}
+        <section className="relative flex min-h-screen items-center justify-center px-6 py-20">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
+            <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
+          </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center stagger-children">
-          {/* Avatar */}
-          <div className="relative mx-auto w-40 h-40 mb-8">
-            <div className="absolute -inset-5 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-xl animate-pulse-soft" />
-            <div className="relative w-40 h-40 rounded-full overflow-hidden shadow-medium border-4 border-background">
-              <Image
-                src={profile.avatar}
-                alt={`${profile.firstName} ${profile.lastName}`}
-                fill
-                className="object-cover"
-                priority
-                sizes="160px"
-              />
+          <div className="stagger-children relative z-10 mx-auto max-w-4xl text-center">
+            {/* Avatar */}
+            <div className="relative mx-auto mb-8 h-52 w-52">
+              <div className="absolute -inset-5 animate-pulse-soft rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-xl" />
+              <div className="relative h-52 w-52 overflow-hidden rounded-full border-4 border-background bg-blue-200 shadow-medium dark:bg-blue-900/60">
+                <Image
+                  src={profile.avatar}
+                  alt={`${profile.firstName} ${profile.lastName}`}
+                  fill
+                  className="object-cover object-top"
+                  priority
+                  sizes="208px"
+                />
+              </div>
+            </div>
+
+            <h1 className="mb-4 text-5xl font-bold tracking-tight text-foreground md:text-7xl">
+              {profile.firstName} {profile.lastName}
+              <span className="mt-2 block text-3xl text-primary md:text-4xl">
+                {profile.title}
+              </span>
+            </h1>
+
+            <p className="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-muted-foreground">
+              {profile.bio}
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              <IOSButton
+                size="lg"
+                onClick={() =>
+                  document
+                    .getElementById("experiences")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                {uiTexts.buttons.viewMyExperiences}
+              </IOSButton>
+              <IOSButton
+                variant="secondary"
+                size="lg"
+                onClick={() =>
+                  document
+                    .getElementById("contact")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                {uiTexts.buttons.contactMe}
+              </IOSButton>
+              <PDFDownloadButton className="!h-14 !px-6 !text-base" />
+            </div>
+
+            {/* Stats */}
+            <div className="mt-16 flex justify-center gap-8 md:gap-12">
+              {profile.stats.map((stat) => (
+                <IOSCard
+                  key={stat.label}
+                  variant="subtle"
+                  padding="md"
+                  className="card-premium-hover min-w-[120px] text-center"
+                >
+                  <p className="text-3xl font-bold tabular-nums tracking-tight text-foreground md:text-4xl">
+                    {stat.value}
+                  </p>
+                  <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
+                    {stat.label}
+                  </p>
+                </IOSCard>
+              ))}
             </div>
           </div>
+        </section>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight">
-            {profile.firstName} {profile.lastName}
-            <span className="block text-primary text-3xl md:text-4xl mt-2">{profile.title}</span>
-          </h1>
+        {/* Experiences Section */}
+        <section
+          id="experiences"
+          className="bg-gradient-to-br from-blue-50/80 via-background to-indigo-50/50 px-6 py-20 dark:from-blue-950/30 dark:via-background dark:to-indigo-950/20"
+        >
+          <div className="mx-auto max-w-6xl">
+            <h2 className="mb-4 text-center text-4xl font-bold text-foreground">
+              {uiTexts.nav.experiences}
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl text-center text-muted-foreground">
+              {uiTexts.descriptions.experiencesSubtitle}
+            </p>
 
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-            {profile.bio}
-          </p>
+            <ExperienceFilterBar
+              activeFilter={activeFilter}
+              onFilterChange={setActiveFilter}
+              counts={counts}
+            />
 
-          <div className="flex flex-wrap justify-center gap-4">
-            <IOSButton
-              size="lg"
-              onClick={() => document.getElementById('experiences')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              {uiTexts.buttons.viewMyExperiences}
-            </IOSButton>
-            <IOSButton
-              variant="secondary"
-              size="lg"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              {uiTexts.buttons.contactMe}
-            </IOSButton>
-            <PDFDownloadButton className="!h-14 !px-6 !text-base" />
-          </div>
+            <div className="mt-10 space-y-16">
+              {sections.map((section) => (
+                <div key={section.type}>
+                  {showSectionHeaders && (
+                    <ExperienceSectionHeader
+                      type={section.type}
+                      count={section.experiences.length}
+                    />
+                  )}
+                  <div className="stagger-children grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {section.experiences.map((experience) => (
+                      <IOSCard
+                        key={experience.id}
+                        variant="subtle"
+                        padding="none"
+                        className="card-premium-hover group relative h-full cursor-pointer overflow-hidden"
+                        interactive
+                        onPress={() => setSelectedExperience(experience)}
+                      >
+                        {/* Accent gradient line top */}
+                        <div
+                          className={`absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${experience.gradient} z-10`}
+                        />
 
-          {/* Stats */}
-          <div className="flex justify-center gap-8 md:gap-12 mt-16">
-            {profile.stats.map((stat) => (
-              <IOSCard key={stat.label} variant="subtle" padding="md" className="text-center card-premium-hover min-w-[120px]">
-                <p className="text-3xl md:text-4xl font-bold text-foreground tracking-tight tabular-nums">{stat.value}</p>
-                <p className="text-[11px] text-muted-foreground/70 font-medium mt-1.5 uppercase tracking-wider">{stat.label}</p>
-              </IOSCard>
-            ))}
-          </div>
-        </div>
-      </section>
+                        <div className="flex h-full flex-col">
+                          {/* Image zone */}
+                          <div className="relative h-48 flex-shrink-0 overflow-hidden">
+                            {experience.image ? (
+                              <>
+                                <Image
+                                  src={experience.image}
+                                  alt={experience.name}
+                                  fill
+                                  className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+                              </>
+                            ) : (
+                              <div className="relative h-full overflow-hidden bg-muted/40 dark:bg-muted/20">
+                                <div
+                                  className={`absolute inset-0 bg-gradient-to-br ${experience.gradient} opacity-[0.12] dark:opacity-[0.18]`}
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                                  <span className="select-none px-4 text-center text-[4rem] font-black leading-none tracking-tighter text-foreground/[0.04] dark:text-foreground/[0.06]">
+                                    {experience.name}
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
 
-      {/* Experiences Section */}
-      <section id="experiences" className="py-20 px-6 bg-gradient-to-br from-blue-50/80 via-background to-indigo-50/50 dark:from-blue-950/30 dark:via-background dark:to-indigo-950/20">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-foreground mb-4 text-center">{uiTexts.nav.experiences}</h2>
-          <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-            {uiTexts.descriptions.experiencesSubtitle}
-          </p>
-
-          <ExperienceFilterBar
-            activeFilter={activeFilter}
-            onFilterChange={setActiveFilter}
-            counts={counts}
-          />
-
-          <div className="mt-10 space-y-16">
-            {sections.map((section) => (
-              <div key={section.type}>
-                {showSectionHeaders && (
-                  <ExperienceSectionHeader type={section.type} count={section.experiences.length} />
-                )}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-                  {section.experiences.map((experience) => (
-                    <IOSCard
-                      key={experience.id}
-                      variant="subtle"
-                      padding="none"
-                      className="card-premium-hover overflow-hidden group cursor-pointer h-full relative"
-                      interactive
-                      onPress={() => setSelectedExperience(experience)}
-                    >
-                      {/* Accent gradient line top */}
-                      <div className={`absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r ${experience.gradient} z-10`} />
-
-                      <div className="flex flex-col h-full">
-                        {/* Image zone */}
-                        <div className="relative h-48 overflow-hidden flex-shrink-0">
-                          {experience.image ? (
-                            <>
-                              <Image
-                                src={experience.image}
-                                alt={experience.name}
-                                fill
-                                className="object-cover object-top group-hover:scale-[1.07] transition-transform duration-700 ease-out"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
-                            </>
-                          ) : (
-                            <div className="h-full relative overflow-hidden bg-muted/40 dark:bg-muted/20">
-                              <div className={`absolute inset-0 bg-gradient-to-br ${experience.gradient} opacity-[0.12] dark:opacity-[0.18]`} />
-                              <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                                <span className="text-[4rem] font-black text-foreground/[0.04] dark:text-foreground/[0.06] select-none leading-none tracking-tighter text-center px-4">
-                                  {experience.name}
+                          {/* Contenu */}
+                          <div className="flex flex-1 flex-col p-5">
+                            {/* Badges type/year + tech chips */}
+                            <div className="mb-3 flex flex-wrap items-center gap-2">
+                              <span
+                                className={`border-current/20 rounded-md border px-2 py-0.5 text-[10px] font-semibold ${getExperienceTypeColor(experience.experienceType)}`}
+                              >
+                                {getExperienceTypeLabel(
+                                  experience.experienceType,
+                                  locale
+                                )}
+                              </span>
+                              <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                                {experience.year}
+                              </span>
+                              <div className="mx-0.5 h-3 w-px bg-border/60" />
+                              {experience.features.slice(0, 3).map((tech) => (
+                                <span
+                                  key={tech}
+                                  className="rounded bg-muted/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/70 dark:bg-muted/40"
+                                >
+                                  {tech}
                                 </span>
+                              ))}
+                            </div>
+
+                            <h3 className="mb-0.5 text-lg font-semibold tracking-tight text-foreground">
+                              {experience.name}
+                            </h3>
+                            <p className="mb-2 text-sm font-medium text-primary">
+                              {experience.category}
+                            </p>
+                            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground/70">
+                              {experience.description}
+                            </p>
+
+                            {/* Footer */}
+                            <div className="mt-auto flex items-center justify-between border-t border-border/30 pt-3">
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground/50">
+                                <span>{experience.platforms.join(" · ")}</span>
+                                <span>·</span>
+                                <span>{experience.stats.teamSize}</span>
+                              </div>
+                              <div className="flex items-center text-xs text-muted-foreground/50 transition-colors group-hover:text-primary/70">
+                                <span>{uiTexts.buttons.viewDetails}</span>
+                                <ChevronRight className="ml-0.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                               </div>
                             </div>
-                          )}
-                        </div>
-
-                        {/* Contenu */}
-                        <div className="p-5 flex flex-col flex-1">
-                          {/* Badges type/year + tech chips */}
-                          <div className="flex items-center gap-2 mb-3 flex-wrap">
-                            <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-md border border-current/20 ${getExperienceTypeColor(experience.experienceType)}`}>
-                              {getExperienceTypeLabel(experience.experienceType, locale)}
-                            </span>
-                            <span className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-muted text-muted-foreground">
-                              {experience.year}
-                            </span>
-                            <div className="w-px h-3 bg-border/60 mx-0.5" />
-                            {experience.features.slice(0, 3).map((tech) => (
-                              <span key={tech} className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-muted/60 text-muted-foreground/70 dark:bg-muted/40">
-                                {tech}
-                              </span>
-                            ))}
-                          </div>
-
-                          <h3 className="text-lg font-semibold text-foreground tracking-tight mb-0.5">{experience.name}</h3>
-                          <p className="text-sm text-primary font-medium mb-2">{experience.category}</p>
-                          <p className="text-sm text-muted-foreground/70 leading-relaxed line-clamp-2 mb-4">{experience.description}</p>
-
-                          {/* Footer */}
-                          <div className="mt-auto pt-3 border-t border-border/30 flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground/50">
-                              <span>{experience.platforms.join(' · ')}</span>
-                              <span>·</span>
-                              <span>{experience.stats.teamSize}</span>
-                            </div>
-                            <div className="flex items-center text-xs text-muted-foreground/50 group-hover:text-primary/70 transition-colors">
-                              <span>{uiTexts.buttons.viewDetails}</span>
-                              <ChevronRight className="w-3.5 h-3.5 ml-0.5 transition-transform group-hover:translate-x-0.5" />
-                            </div>
                           </div>
                         </div>
+                      </IOSCard>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Skills Section */}
+        <section id="skills" className="px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="mb-4 text-center text-4xl font-bold text-foreground">
+              {uiTexts.nav.skills}
+            </h2>
+            <p className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
+              {uiTexts.descriptions.myTechStack}
+            </p>
+
+            {/* Technical Skills - Narrative cards */}
+            <div className="mb-12 grid gap-6 md:grid-cols-2">
+              {technicalSkills.map((skill) => (
+                <IOSCard
+                  key={skill.id}
+                  variant="subtle"
+                  padding="lg"
+                  className="card-premium-hover relative"
+                >
+                  {/* Accent bar */}
+                  <div
+                    className={`absolute bottom-0 left-0 top-0 w-[3px] bg-gradient-to-b ${skill.gradient}`}
+                  />
+
+                  <div className="pl-3">
+                    <div className="mb-3 flex items-center justify-between">
+                      <h3 className="text-lg font-semibold tracking-tight text-foreground">
+                        {skill.title}
+                      </h3>
+                      <span className="rounded-md border border-border/50 bg-muted/30 px-2 py-0.5 text-xs font-medium text-muted-foreground/60">
+                        {skill.level}
+                      </span>
+                    </div>
+                    <p className="mb-4 text-sm leading-relaxed text-muted-foreground/80">
+                      {skill.narrative}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {skill.highlights.map((h, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-sm text-foreground/70"
+                        >
+                          <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-foreground/25" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </IOSCard>
+              ))}
+            </div>
+
+            {/* AI Section */}
+            <div className="mb-12">
+              <h3 className="mb-6 text-center text-2xl font-bold text-foreground">
+                {aiContent.title}
+              </h3>
+              <IOSCard
+                variant="subtle"
+                padding="lg"
+                className="card-premium-hover relative mx-auto max-w-3xl"
+              >
+                <div className="absolute bottom-0 left-0 top-0 w-[3px] bg-purple-500/40" />
+                <div className="mb-4 flex items-center gap-3 pl-3">
+                  <span className="rounded-lg border border-purple-500/20 bg-purple-500/[0.06] bg-clip-padding px-2.5 py-1 text-xs font-bold text-purple-600 dark:text-purple-400">
+                    AI
+                  </span>
+                  <div>
+                    <h4 className="text-lg font-semibold text-foreground">
+                      {aiContent.subtitle}
+                    </h4>
+                    <p className="text-xs text-muted-foreground/60">
+                      {uiTexts.descriptions.aiToolsIntegrated}
+                    </p>
+                  </div>
+                </div>
+                <p className="mb-6 leading-relaxed text-muted-foreground">
+                  {aiContent.narrative}
+                </p>
+                <ul className="mb-6 space-y-2">
+                  {aiContent.highlights.map((highlight, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-purple-500/40" />
+                      <span className="text-foreground/80">{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-2">
+                  {aiContent.tools.map((tool) => (
+                    <IOSChip
+                      key={tool.name}
+                      variant="default"
+                      size="md"
+                      className="!border-purple-500/15 !bg-purple-500/[0.06] !text-purple-700 dark:!text-purple-300"
+                    >
+                      {tool.name}
+                    </IOSChip>
+                  ))}
+                </div>
+              </IOSCard>
+            </div>
+
+            {/* Soft Skills */}
+            <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+              {softSkills.map((skill) => (
+                <IOSCard
+                  key={skill.id}
+                  variant="subtle"
+                  padding="md"
+                  className="card-premium-hover relative overflow-hidden"
+                >
+                  <div
+                    className={`absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r ${skill.gradient} opacity-50`}
+                  />
+                  <h3 className="mb-2 text-sm font-semibold tracking-tight text-foreground">
+                    {skill.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground/80">
+                    {skill.narrative}
+                  </p>
+                </IOSCard>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Resume Section */}
+        <section
+          id="resume"
+          className="bg-gradient-to-br from-teal-50/70 via-background to-emerald-50/50 px-6 py-20 dark:from-teal-950/30 dark:via-background dark:to-emerald-950/20"
+        >
+          <div className="mx-auto max-w-4xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-4xl font-bold text-foreground">
+                {uiTexts.sections.career}
+              </h2>
+              <PDFDownloadButton />
+            </div>
+            <p className="mb-12 max-w-2xl text-muted-foreground">
+              {uiTexts.descriptions.myProfessionalBackground}
+            </p>
+
+            <div className="space-y-6">
+              {workExperiences.map((exp) => (
+                <IOSCard
+                  key={exp.id}
+                  variant="subtle"
+                  padding="lg"
+                  className="card-premium-hover relative"
+                >
+                  {/* Accent bar gauche par type */}
+                  <div
+                    className={`absolute bottom-0 left-0 top-0 w-[2px] rounded-l-xl ${
+                      exp.type === "cdi"
+                        ? "bg-gradient-to-b from-green-400 to-green-500"
+                        : "bg-gradient-to-b from-blue-400 to-blue-500"
+                    }`}
+                  />
+
+                  <div className="pl-3">
+                    <div className="mb-4 flex flex-col md:flex-row md:items-start md:justify-between">
+                      <div>
+                        <div className="mb-1 flex items-center gap-2">
+                          <h3 className="text-xl font-semibold tracking-tight text-foreground">
+                            {exp.company}
+                          </h3>
+                          <span
+                            className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${
+                              exp.type === "cdi"
+                                ? "bg-green-500/20 text-green-600 dark:text-green-400"
+                                : "bg-blue-500/20 text-blue-600 dark:text-blue-400"
+                            }`}
+                          >
+                            {exp.type === "cdi"
+                              ? locale === "en"
+                                ? "Full-time"
+                                : "CDI"
+                              : "Freelance"}
+                          </span>
+                        </div>
+                        <p className="font-medium text-primary">{exp.role}</p>
                       </div>
-                    </IOSCard>
+                      <div className="mt-2 text-sm text-muted-foreground md:mt-0 md:text-right">
+                        <p className="font-medium">
+                          {exp.startDate} -{" "}
+                          {exp.endDate || uiTexts.labels.present}
+                        </p>
+                        <p>
+                          {exp.location}
+                          {exp.remote === "remote"
+                            ? " · Remote"
+                            : exp.remote === "hybrid"
+                              ? " · Hybride"
+                              : ""}
+                        </p>
+                      </div>
+                    </div>
+                    <ul className="mb-4 space-y-2">
+                      {exp.description.slice(0, 3).map((desc, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-sm text-muted-foreground"
+                        >
+                          <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-foreground/20" />
+                          <span>{desc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex flex-wrap gap-2">
+                      {exp.skills.slice(0, 6).map((skill) => (
+                        <IOSBadge
+                          key={skill}
+                          variant="default"
+                          size="sm"
+                          className="border border-border/30 !bg-muted/50 !text-muted-foreground"
+                        >
+                          {skill}
+                        </IOSBadge>
+                      ))}
+                    </div>
+                    {exp.url && (
+                      <a
+                        href={exp.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        {uiTexts.buttons.viewWebsite}
+                      </a>
+                    )}
+                  </div>
+                </IOSCard>
+              ))}
+            </div>
+
+            {/* Education */}
+            <h3 className="mb-6 mt-16 text-center text-2xl font-bold text-foreground">
+              {uiTexts.sections.education}
+            </h3>
+            <div className="grid gap-4 md:grid-cols-3">
+              {education.map((edu) => (
+                <IOSCard
+                  key={edu.id}
+                  variant="subtle"
+                  padding="md"
+                  className="card-premium-hover"
+                >
+                  <p className="text-base font-semibold tracking-tight text-foreground">
+                    {edu.degree}
+                  </p>
+                  <p className="mt-0.5 text-sm text-muted-foreground/70">
+                    {edu.school}
+                  </p>
+                  <p className="mt-2 text-xs font-medium text-primary/70">
+                    {edu.year}
+                  </p>
+                </IOSCard>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section
+          id="contact"
+          className="bg-gradient-to-br from-violet-50/70 via-background to-purple-50/50 px-6 py-20 dark:from-violet-950/30 dark:via-background dark:to-purple-950/20"
+        >
+          <div className="mx-auto max-w-5xl">
+            <div className="grid items-start gap-12 md:grid-cols-2">
+              {/* Gauche: Titre, sous-titre, icônes */}
+              <div className="space-y-6">
+                <div>
+                  <h2 className="mb-3 text-4xl font-bold text-foreground">
+                    {uiTexts.hero.letsWorkTogether}
+                  </h2>
+                  <p className="text-lg text-muted-foreground">
+                    {uiTexts.hero.projectQuestion}
+                    <br />
+                    {uiTexts.hero.letsDiscuss}
+                  </p>
+                </div>
+
+                {profile.isAvailable && (
+                  <IOSAvailabilityBadge
+                    text={profile.availabilityText}
+                    variant="prominent"
+                    status="available"
+                    animated
+                  />
+                )}
+
+                <div className="flex flex-wrap gap-4">
+                  {socialLinks.map((link) => {
+                    const brandColors: Record<string, string> = {
+                      linkedin: "text-[#0A66C2]",
+                      github: "text-zinc-800 dark:text-zinc-200",
+                      malt: "text-[#FC5757]",
+                      email: "text-emerald-500",
+                      phone: "text-violet-500",
+                    };
+                    const iconColor = brandColors[link.id] || "text-foreground";
+                    return (
+                      <a
+                        key={link.id}
+                        href={link.href}
+                        target={
+                          link.href.startsWith("http") ? "_blank" : undefined
+                        }
+                        rel={
+                          link.href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        className="group"
+                        title={link.name}
+                      >
+                        <div className="flex h-12 w-12 transform items-center justify-center rounded-2xl border border-border/50 bg-card/80 shadow-sm backdrop-blur-sm transition-all duration-200 ease-out group-hover:-translate-y-1 group-hover:scale-110 group-hover:border-border group-hover:shadow-lg group-active:scale-95">
+                          <span
+                            className={`${iconColor} transition-transform duration-200 group-hover:scale-110`}
+                          >
+                            {iconMap[link.icon]}
+                          </span>
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {profile.availabilityOptions?.map((option) => (
+                    <IOSChip key={option} variant="availability" size="md">
+                      {option}
+                    </IOSChip>
                   ))}
                 </div>
               </div>
-            ))}
+
+              {/* Droite: Formulaire */}
+              <ContactFormCard />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-foreground mb-4 text-center">{uiTexts.nav.skills}</h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-            {uiTexts.descriptions.myTechStack}
-          </p>
-
-          {/* Technical Skills - Narrative cards */}
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
-            {technicalSkills.map((skill) => (
-              <IOSCard key={skill.id} variant="subtle" padding="lg" className="card-premium-hover relative">
-                {/* Accent bar */}
-                <div className={`absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b ${skill.gradient}`} />
-
-                <div className="pl-3">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-foreground tracking-tight">{skill.title}</h3>
-                    <span className="text-xs font-medium text-muted-foreground/60 px-2 py-0.5 rounded-md border border-border/50 bg-muted/30">
-                      {skill.level}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground/80 leading-relaxed mb-4">{skill.narrative}</p>
-                  <ul className="space-y-1.5">
-                    {skill.highlights.map((h, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-foreground/70">
-                        <span className="mt-[7px] w-1 h-1 rounded-full bg-foreground/25 flex-shrink-0" />
-                        <span>{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </IOSCard>
-            ))}
-          </div>
-
-          {/* AI Section */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-foreground mb-6 text-center">{aiContent.title}</h3>
-            <IOSCard variant="subtle" padding="lg" className="card-premium-hover relative max-w-3xl mx-auto">
-              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-purple-500/40" />
-              <div className="flex items-center gap-3 mb-4 pl-3">
-                <span className="text-xs font-bold px-2.5 py-1 rounded-lg border border-purple-500/20 bg-purple-500/[0.06] bg-clip-padding text-purple-600 dark:text-purple-400">
-                  AI
-                </span>
-                <div>
-                  <h4 className="text-lg font-semibold text-foreground">{aiContent.subtitle}</h4>
-                  <p className="text-xs text-muted-foreground/60">{uiTexts.descriptions.aiToolsIntegrated}</p>
-                </div>
-              </div>
-              <p className="text-muted-foreground leading-relaxed mb-6">{aiContent.narrative}</p>
-              <ul className="space-y-2 mb-6">
-                {aiContent.highlights.map((highlight, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm">
-                    <span className="mt-[7px] w-1 h-1 rounded-full bg-purple-500/40 flex-shrink-0" />
-                    <span className="text-foreground/80">{highlight}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-wrap gap-2">
-                {aiContent.tools.map((tool) => (
-                  <IOSChip key={tool.name} variant="default" size="md" className="!bg-purple-500/[0.06] !border-purple-500/15 !text-purple-700 dark:!text-purple-300">
-                    {tool.name}
-                  </IOSChip>
-                ))}
-              </div>
-            </IOSCard>
-          </div>
-
-          {/* Soft Skills */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {softSkills.map((skill) => (
-              <IOSCard key={skill.id} variant="subtle" padding="md" className="card-premium-hover relative overflow-hidden">
-                <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${skill.gradient} opacity-50`} />
-                <h3 className="font-semibold text-foreground text-sm mb-2 tracking-tight">{skill.title}</h3>
-                <p className="text-sm text-muted-foreground/80 leading-relaxed">{skill.narrative}</p>
-              </IOSCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Resume Section */}
-      <section id="resume" className="py-20 px-6 bg-gradient-to-br from-teal-50/70 via-background to-emerald-50/50 dark:from-teal-950/30 dark:via-background dark:to-emerald-950/20">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-4xl font-bold text-foreground">{uiTexts.sections.career}</h2>
+        {/* Footer */}
+        <footer className="border-t border-border px-6 py-8">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
+            <p className="text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} {profile.firstName}{" "}
+              {profile.lastName}. {uiTexts.labels.allRightsReserved}
+            </p>
             <PDFDownloadButton />
           </div>
-          <p className="text-muted-foreground mb-12 max-w-2xl">
-            {uiTexts.descriptions.myProfessionalBackground}
-          </p>
-
-          <div className="space-y-6">
-            {workExperiences.map((exp) => (
-              <IOSCard key={exp.id} variant="subtle" padding="lg" className="card-premium-hover relative">
-                {/* Accent bar gauche par type */}
-                <div className={`absolute left-0 top-0 bottom-0 w-[2px] rounded-l-xl ${
-                  exp.type === 'cdi'
-                    ? 'bg-gradient-to-b from-green-400 to-green-500'
-                    : 'bg-gradient-to-b from-blue-400 to-blue-500'
-                }`} />
-
-                <div className="pl-3">
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-xl font-semibold text-foreground tracking-tight">{exp.company}</h3>
-                        <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-md ${
-                          exp.type === 'cdi'
-                            ? 'bg-green-500/20 text-green-600 dark:text-green-400'
-                            : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
-                        }`}>
-                          {exp.type === 'cdi' ? (locale === 'en' ? 'Full-time' : 'CDI') : 'Freelance'}
-                        </span>
-                      </div>
-                      <p className="text-primary font-medium">{exp.role}</p>
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-2 md:mt-0 md:text-right">
-                      <p className="font-medium">
-                        {exp.startDate} - {exp.endDate || uiTexts.labels.present}
-                      </p>
-                      <p>{exp.location}{exp.remote === 'remote' ? ' · Remote' : exp.remote === 'hybrid' ? ' · Hybride' : ''}</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-2 mb-4">
-                    {exp.description.slice(0, 3).map((desc, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <span className="mt-[7px] w-1 h-1 rounded-full bg-foreground/20 flex-shrink-0" />
-                        <span>{desc}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-wrap gap-2">
-                    {exp.skills.slice(0, 6).map((skill) => (
-                      <IOSBadge key={skill} variant="default" size="sm" className="!bg-muted/50 !text-muted-foreground border border-border/30">
-                        {skill}
-                      </IOSBadge>
-                    ))}
-                  </div>
-                  {exp.url && (
-                    <a href={exp.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-3">
-                      <ExternalLink className="w-3 h-3" />
-                      {uiTexts.buttons.viewWebsite}
-                    </a>
-                  )}
-                </div>
-              </IOSCard>
-            ))}
-          </div>
-
-          {/* Education */}
-          <h3 className="text-2xl font-bold text-foreground mt-16 mb-6 text-center">
-            {uiTexts.sections.education}
-          </h3>
-          <div className="grid md:grid-cols-3 gap-4">
-            {education.map((edu) => (
-              <IOSCard key={edu.id} variant="subtle" padding="md" className="card-premium-hover">
-                <p className="text-base font-semibold text-foreground tracking-tight">{edu.degree}</p>
-                <p className="text-sm text-muted-foreground/70 mt-0.5">{edu.school}</p>
-                <p className="text-xs text-primary/70 font-medium mt-2">{edu.year}</p>
-              </IOSCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 bg-gradient-to-br from-violet-50/70 via-background to-purple-50/50 dark:from-violet-950/30 dark:via-background dark:to-purple-950/20">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            {/* Gauche: Titre, sous-titre, icônes */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-4xl font-bold text-foreground mb-3">
-                  {uiTexts.hero.letsWorkTogether}
-                </h2>
-                <p className="text-muted-foreground text-lg">
-                  {uiTexts.hero.projectQuestion}
-                  <br />
-                  {uiTexts.hero.letsDiscuss}
-                </p>
-              </div>
-
-              {profile.isAvailable && (
-                <IOSAvailabilityBadge
-                  text={profile.availabilityText}
-                  variant="prominent"
-                  status="available"
-                  animated
-                />
-              )}
-
-              <div className="flex flex-wrap gap-4">
-                {socialLinks.map((link) => {
-                  const brandColors: Record<string, string> = {
-                    linkedin: 'text-[#0A66C2]',
-                    github: 'text-zinc-800 dark:text-zinc-200',
-                    malt: 'text-[#FC5757]',
-                    email: 'text-emerald-500',
-                    phone: 'text-violet-500',
-                  };
-                  const iconColor = brandColors[link.id] || 'text-foreground';
-                  return (
-                    <a
-                      key={link.id}
-                      href={link.href}
-                      target={link.href.startsWith('http') ? '_blank' : undefined}
-                      rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="group"
-                      title={link.name}
-                    >
-                      <div className="w-12 h-12 rounded-2xl bg-card/80 backdrop-blur-sm border border-border/50 flex items-center justify-center shadow-sm transform transition-all duration-200 ease-out group-hover:scale-110 group-hover:shadow-lg group-hover:-translate-y-1 group-hover:border-border group-active:scale-95">
-                        <span className={`${iconColor} transition-transform duration-200 group-hover:scale-110`}>
-                          {iconMap[link.icon]}
-                        </span>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {profile.availabilityOptions?.map((option) => (
-                  <IOSChip key={option} variant="availability" size="md">
-                    {option}
-                  </IOSChip>
-                ))}
-              </div>
-            </div>
-
-            {/* Droite: Formulaire */}
-            <ContactFormCard />
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-border">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-muted-foreground text-sm">
-            &copy; {new Date().getFullYear()} {profile.firstName} {profile.lastName}.{" "}
-            {uiTexts.labels.allRightsReserved}
-          </p>
-          <PDFDownloadButton />
-        </div>
-      </footer>
+        </footer>
       </div>
 
       {/* Side Panel pour détails expérience */}
@@ -592,7 +784,9 @@ const WebView = () => {
         onClose={() => setSelectedExperience(null)}
         width="xl"
       >
-        {selectedExperience && <ExperienceDetailPanel experience={selectedExperience} />}
+        {selectedExperience && (
+          <ExperienceDetailPanel experience={selectedExperience} />
+        )}
       </IOSSidePanel>
     </div>
   );

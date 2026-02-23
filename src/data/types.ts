@@ -26,8 +26,15 @@ export interface Profile {
 
 // ============ EXPERIENCES ============
 
-export type Platform = 'ios' | 'android' | 'web';
-export type ExperienceType = 'freelance' | 'cdi' | 'personal';
+export type Platform = "ios" | "android" | "web";
+export type ExperienceType =
+  | "freelance"
+  | "cdi"
+  | "personal"
+  | "ponctuel"
+  | "hors_tech"
+  | "cinema"
+  | "ops";
 
 export interface ExperienceStats {
   teamSize: string;
@@ -97,7 +104,14 @@ export interface Tool {
 
 // ============ NARRATIVE SKILLS ============
 
-export type SkillLevel = 'Expert' | 'Avancé' | 'Confirmé' | 'Intermédiaire' | 'Advanced' | 'Proficient' | 'Intermediate';
+export type SkillLevel =
+  | "Expert"
+  | "Avancé"
+  | "Confirmé"
+  | "Intermédiaire"
+  | "Advanced"
+  | "Proficient"
+  | "Intermediate";
 
 export interface NarrativeSkillCard {
   id: string;
@@ -140,7 +154,16 @@ export interface NavigationItem {
 
 // ============ RESUME (CV) ============
 
-export type EmploymentType = 'cdi' | 'freelance' | 'independant' | 'cdd' | 'intermittent';
+export type EmploymentType =
+  | "cdi"
+  | "freelance"
+  | "independant"
+  | "cdd"
+  | "intermittent"
+  | "ponctuel"
+  | "hors_tech"
+  | "cinema"
+  | "ops";
 
 export interface WorkExperience {
   id: string;
@@ -150,7 +173,7 @@ export interface WorkExperience {
   startDate: string;
   endDate?: string; // undefined = présent
   location: string;
-  remote?: 'remote' | 'hybrid' | 'onsite';
+  remote?: "remote" | "hybrid" | "onsite";
   description: string[];
   skills: string[];
   logo?: string;
