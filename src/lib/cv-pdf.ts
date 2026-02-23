@@ -3,23 +3,10 @@
  * Utilise playwright-core pour générer un PDF depuis du HTML
  */
 
+import { launchBrowser } from "./browser";
+
 export async function generateCvPdfBuffer(html: string): Promise<Uint8Array> {
-  const isVercel = !!process.env.VERCEL;
-
-  let browser;
-
-  if (isVercel) {
-    const chromium = await import("@sparticuz/chromium");
-    const { chromium: playwrightChromium } = await import("playwright-core");
-    browser = await playwrightChromium.launch({
-      args: chromium.default.args,
-      executablePath: await chromium.default.executablePath(),
-      headless: true,
-    });
-  } else {
-    const { chromium: playwrightChromium } = await import("playwright-core");
-    browser = await playwrightChromium.launch({ headless: true });
-  }
+  const browser = await launchBrowser();
 
   try {
     const page = await browser.newPage();

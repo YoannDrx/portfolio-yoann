@@ -25,7 +25,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       image: "/images/projects/klesia-landing.png",
       stats: { teamSize: "3 devs", downloads: "100K+" },
       features: [
-        "React Native 0.77",
+        "React Native 0.82",
         "TypeScript",
         "Redux Toolkit",
         "RxJS",
@@ -35,7 +35,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       ],
       stack: {
         frontend: [
-          "React Native 0.77",
+          "React Native 0.82",
           "React 18",
           "TypeScript 5.6",
           "Redux Toolkit",
@@ -449,7 +449,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       ],
       stack: {
         frontend: [
-          "React Native 0.77",
+          "React Native 0.82",
           "React 18",
           "TypeScript",
           "Redux Toolkit",
@@ -1068,9 +1068,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       id: "19",
       name: "Pub CUPRA x AVNIER",
       description:
-        "Régie plateau sur un tournage publicitaire CUPRA x AVNIER, tourné de nuit à Noisy-le-Grand",
+        "Régie générale sur un tournage publicitaire CUPRA x AVNIER, tourné de nuit à Noisy-le-Grand",
       longDescription:
-        "Coordination logistique et opérationnelle sur le tournage publicitaire de la collaboration CUPRA x AVNIER. Gestion du plateau en équipe de nuit avec suivi rigoureux des plannings et coordination des équipes techniques. Réalisation Benjamin Marchal, directrice de la photographie Lara Perrotte. Production Wilders, agence BBDO.",
+        "Régie générale et coordination logistique sur le tournage publicitaire de la collaboration CUPRA x AVNIER. Gestion du plateau en équipe de nuit avec suivi rigoureux des plannings et coordination des équipes techniques. Réalisation Benjamin Marchal, directrice de la photographie Lara Perrotte. Production Wilders, agence BBDO.",
       category: "Publicité",
       experienceType: "cinema",
       year: "2026",
@@ -1085,7 +1085,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       ],
       stats: { teamSize: "Équipe nuit", downloads: "Pub" },
       features: [
-        "Régie plateau",
+        "Régie générale",
         "Coordination logistique",
         "Tournage de nuit",
         "Production Wilders",
@@ -1103,7 +1103,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         {
           title: "Tournage de nuit",
           description:
-            "Gestion complète du plateau en équipe de nuit, suivi des plannings et coordination technique",
+            "Régie générale du plateau en équipe de nuit, suivi des plannings et coordination technique",
         },
         {
           title: "Adaptation",
@@ -1268,7 +1268,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       image: "/images/projects/klesia-landing.png",
       stats: { teamSize: "3 devs", downloads: "100K+" },
       features: [
-        "React Native 0.77",
+        "React Native 0.82",
         "TypeScript",
         "Redux Toolkit",
         "RxJS",
@@ -1278,7 +1278,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       ],
       stack: {
         frontend: [
-          "React Native 0.77",
+          "React Native 0.82",
           "React 18",
           "TypeScript 5.6",
           "Redux Toolkit",
@@ -1690,7 +1690,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       ],
       stack: {
         frontend: [
-          "React Native 0.77",
+          "React Native 0.82",
           "React 18",
           "TypeScript",
           "Redux Toolkit",
@@ -2303,9 +2303,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       id: "19",
       name: "CUPRA x AVNIER Ad",
       description:
-        "Stage management on a CUPRA x AVNIER ad shoot, filmed at night in Noisy-le-Grand",
+        "General stage management on a CUPRA x AVNIER ad shoot, filmed at night in Noisy-le-Grand",
       longDescription:
-        "Logistics coordination and stage management on the CUPRA x AVNIER advertising shoot. Night crew management with rigorous schedule tracking and technical team coordination. Directed by Benjamin Marchal, DOP Lara Perrotte. Production Wilders, BBDO agency.",
+        "General stage management and logistics coordination on the CUPRA x AVNIER advertising shoot. Night crew management with rigorous schedule tracking and technical team coordination. Directed by Benjamin Marchal, DOP Lara Perrotte. Production Wilders, BBDO agency.",
       category: "Advertising",
       experienceType: "cinema",
       year: "2026",
@@ -2320,7 +2320,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       ],
       stats: { teamSize: "Night crew", downloads: "Ad" },
       features: [
-        "Stage management",
+        "General stage management",
         "Logistics coordination",
         "Night shoot",
         "Production Wilders",
@@ -2338,7 +2338,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
         {
           title: "Night shoot",
           description:
-            "Full stage management on a night crew, schedule tracking and technical coordination",
+            "General stage management on a night crew, schedule tracking and technical coordination",
         },
         {
           title: "Adaptability",

@@ -56,3 +56,6 @@ export { siteConfig, getSiteConfig, uiTexts, getUiTexts } from './config';
 
 // AI Content
 export { aiContent, getAiContent, type AIContent, type AITool } from './ai';
+
+// Download Assets
+export { downloadAssets, getAssetsByCategory, type DownloadAsset, type AssetCategory, type AssetFormat } from './download-assets';
