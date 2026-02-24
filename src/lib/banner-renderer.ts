@@ -46,316 +46,244 @@ function hexToRgbCss(hex: string): string {
   return `${r}, ${g}, ${b}`;
 }
 
+// ─── Dark Gradient ─────────────────────────────────────────────
+
 function renderDarkGradient(): string {
   return `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<html><head><meta charset="UTF-8">
 <style>
 ${fontFace}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  width: 1584px;
-  height: 396px;
+  width: 1584px; height: 396px;
   overflow: hidden;
-  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #2d4a8e 100%);
+  background: #07070f;
   font-family: 'Inter', sans-serif;
   position: relative;
 }
 
-.grid-pattern {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+/* Gradient base layer */
+.bg-gradient {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #07070f 0%, #0e1028 45%, #161640 100%);
+}
+
+/* Subtle dot grid */
+.dot-grid {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
   pointer-events: none;
 }
 
+/* Soft orbs */
 .orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); pointer-events: none;
+}
+.orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.15) 0%, transparent 70%);
+  top: -200px; right: -80px;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(88, 86, 214, 0.1) 0%, transparent 70%);
+  bottom: -180px; left: 200px;
 }
 
-.orb1 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(0, 122, 255, 0.3) 0%, transparent 70%);
-  top: -150px;
-  right: -100px;
-}
-
-.orb2 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(88, 86, 214, 0.3) 0%, transparent 70%);
-  bottom: -100px;
-  left: 300px;
-}
-
-.orb3 {
-  width: 250px;
-  height: 250px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
-  top: 50%;
-  right: 200px;
-}
-
-.geometric-shapes {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  opacity: 0.08;
-}
-
-.shape {
-  position: absolute;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.shape1 {
-  width: 80px;
-  height: 80px;
-  top: 50px;
-  right: 150px;
-  transform: rotate(45deg);
-}
-
-.shape2 {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  bottom: 100px;
-  right: 300px;
-}
-
-.shape3 {
-  width: 60px;
-  height: 60px;
-  top: 200px;
-  right: 50px;
-  transform: rotate(20deg);
-}
-
-.code-snippet {
-  position: absolute;
-  font-family: 'Courier New', monospace;
-  color: rgba(255, 255, 255, 0.08);
-  font-size: 12px;
-  line-height: 1.4;
-  pointer-events: none;
-}
-
-.snippet1 {
-  top: 80px;
-  left: 100px;
-  width: 200px;
-}
-
-.snippet2 {
-  bottom: 80px;
-  right: 100px;
-  width: 200px;
-  text-align: right;
-}
-
+/* Content */
 .content {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 60px;
-  padding-right: 60px;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding-left: 80px;
 }
-
 .name {
-  font-size: 48px;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
+  font-size: 58px; font-weight: 800; color: #fff;
+  letter-spacing: -1.5px; line-height: 1;
 }
-
+.accent-bar {
+  width: 180px; height: 2px; margin: 20px 0;
+  background: linear-gradient(to right, #007AFF, transparent);
+  border-radius: 1px;
+}
 .title {
-  font-size: 22px;
-  color: #8899bb;
+  font-size: 22px; font-weight: 500; color: #667799;
   margin-bottom: 24px;
-  font-weight: 500;
 }
-
-.badges {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
+.skills {
+  font-size: 14px; font-weight: 500; color: #4a5568;
+  letter-spacing: 0.5px;
 }
-
-.badge {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 14px;
-  color: #aabbcc;
-  font-weight: 500;
-  white-space: nowrap;
-}
-</style>
-</head>
+</style></head>
 <body>
-<div class="grid-pattern"></div>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div class="orb orb3"></div>
-
-<div class="geometric-shapes">
-  <div class="shape shape1"></div>
-  <div class="shape shape2"></div>
-  <div class="shape shape3"></div>
-</div>
-
-<div class="code-snippet snippet1">
-const portfolio = {<br/>
-&nbsp;&nbsp;name: "Yoann",<br/>
-&nbsp;&nbsp;focus: "React Native"<br/>
-}
-</div>
-
-<div class="code-snippet snippet2">
-import React from "react";<br/>
-export const skills = [...];<br/>
-await deploy();
-</div>
-
+<div class="bg-gradient"></div>
+<div class="dot-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 <div class="content">
   <div class="name">Yoann Andrieux</div>
-  <div class="title">Dev React Native · Freelance</div>
-  <div class="badges">
-    <div class="badge">React Native</div>
-    <div class="badge">TypeScript</div>
-    <div class="badge">Next.js</div>
-    <div class="badge">Node.js</div>
-  </div>
+  <div class="accent-bar"></div>
+  <div class="title">Dev React Native &middot; Freelance</div>
+  <div class="skills">React Native &nbsp;&middot;&nbsp; TypeScript &nbsp;&middot;&nbsp; Next.js &nbsp;&middot;&nbsp; Node.js</div>
 </div>
-</body>
-</html>`;
+</body></html>`;
 }
+
+// ─── Minimal Light ─────────────────────────────────────────────
 
 function renderMinimalLight(): string {
   return `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<html><head><meta charset="UTF-8">
 <style>
 ${fontFace}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  width: 1584px;
-  height: 396px;
+  width: 1584px; height: 396px;
   overflow: hidden;
-  background: #f8f9fa;
+  background: #fafbfc;
   font-family: 'Inter', sans-serif;
   position: relative;
 }
 
-.accent-line {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 6px;
-  height: 100%;
-  background: #007AFF;
+/* Left accent gradient bar */
+.accent-bar {
+  position: absolute; left: 0; top: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(to bottom, #007AFF, #5856D6);
 }
 
-.subtle-lines {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: repeating-linear-gradient(
-    0deg,
-    rgba(0, 122, 255, 0.05) 0px,
-    rgba(0, 122, 255, 0.05) 1px,
-    transparent 1px,
-    transparent 60px
-  );
+/* Subtle background texture */
+.texture {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
   pointer-events: none;
 }
 
-.accent-dot {
+/* Soft ambient orb */
+.orb {
   position: absolute;
-  width: 12px;
-  height: 12px;
-  background: #007AFF;
-  border-radius: 50%;
-  top: 50%;
-  right: 100px;
-  transform: translateY(-50%);
+  width: 600px; height: 600px;
+  top: -200px; right: -100px;
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.04) 0%, transparent 60%);
+  filter: blur(40px);
+  pointer-events: none;
 }
 
 .content {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
   padding-left: 80px;
-  padding-right: 80px;
 }
-
 .name {
-  font-size: 52px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 16px;
-  letter-spacing: -0.8px;
+  font-size: 58px; font-weight: 800; color: #111827;
+  letter-spacing: -1.5px; line-height: 1;
 }
-
+.divider {
+  width: 48px; height: 2px; margin: 20px 0;
+  background: #007AFF;
+  border-radius: 1px;
+}
 .title {
-  font-size: 24px;
-  color: #007AFF;
-  margin-bottom: 28px;
-  font-weight: 600;
+  font-size: 24px; font-weight: 600; color: #007AFF;
+  margin-bottom: 24px;
 }
-
-.badges {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  font-size: 16px;
-  color: #666;
-  font-weight: 500;
+.skills {
+  font-size: 15px; font-weight: 500; color: #6b7280;
+  letter-spacing: 0.3px;
 }
-
-.badge {
-  display: inline;
-}
-
-.badge:not(:last-child)::after {
-  content: " · ";
-  margin-left: 16px;
-}
-</style>
-</head>
+</style></head>
 <body>
-<div class="accent-line"></div>
-<div class="subtle-lines"></div>
-<div class="accent-dot"></div>
-
+<div class="accent-bar"></div>
+<div class="texture"></div>
+<div class="orb"></div>
 <div class="content">
   <div class="name">Yoann Andrieux</div>
+  <div class="divider"></div>
   <div class="title">Dev React Native</div>
+  <div class="skills">React Native &nbsp;&middot;&nbsp; TypeScript &nbsp;&middot;&nbsp; Next.js &nbsp;&middot;&nbsp; Node.js</div>
+</div>
+</body></html>`;
+}
+
+// ─── Gradient Mesh ─────────────────────────────────────────────
+
+function renderGradientMesh(): string {
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+${fontFace}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 1584px; height: 396px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0055CC 0%, #4338CA 40%, #7C3AED 75%, #9333EA 100%);
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+/* Mesh overlays */
+.mesh {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 20%, rgba(0, 0, 0, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 60%, rgba(99, 102, 241, 0.15) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Subtle grain */
+.grain {
+  position: absolute; inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+  pointer-events: none;
+}
+
+.content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: center; text-align: center;
+}
+.name {
+  font-size: 56px; font-weight: 800; color: #fff;
+  letter-spacing: -1px; line-height: 1;
+}
+.underline {
+  width: 120px; height: 2px; margin: 18px auto;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+}
+.title {
+  font-size: 22px; font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 28px;
+}
+.badges {
+  display: flex; gap: 10px;
+}
+.badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 7px 18px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+</style></head>
+<body>
+<div class="mesh"></div>
+<div class="grain"></div>
+<div class="content">
+  <div class="name">Yoann Andrieux</div>
+  <div class="underline"></div>
+  <div class="title">Dev React Native &middot; Freelance</div>
   <div class="badges">
     <div class="badge">React Native</div>
     <div class="badge">TypeScript</div>
@@ -363,220 +291,116 @@ body {
     <div class="badge">Node.js</div>
   </div>
 </div>
-</body>
-</html>`;
+</body></html>`;
 }
 
-function renderGradientMesh(): string {
-  return `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<style>
-${fontFace}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  width: 1584px;
-  height: 396px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #007AFF 0%, #5856D6 50%, #8B5CF6 100%);
-  font-family: 'Inter', sans-serif;
-  position: relative;
-}
-
-.mesh-layer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0.6;
-  background:
-    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-}
-
-.content {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.glass-pill {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 40px 60px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-}
-
-.name {
-  font-size: 46px;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
-}
-
-.title {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 24px;
-  font-weight: 500;
-}
-
-.badges {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.badge {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 16px;
-  padding: 8px 16px;
-  font-size: 13px;
-  color: #ffffff;
-  font-weight: 500;
-  white-space: nowrap;
-}
-</style>
-</head>
-<body>
-<div class="mesh-layer"></div>
-
-<div class="content">
-  <div class="glass-pill">
-    <div class="name">Yoann Andrieux</div>
-    <div class="title">Dev React Native · Freelance</div>
-    <div class="badges">
-      <div class="badge">React Native</div>
-      <div class="badge">TypeScript</div>
-      <div class="badge">Next.js</div>
-      <div class="badge">Node.js</div>
-    </div>
-  </div>
-</div>
-</body>
-</html>`;
-}
+// ─── Code Terminal ─────────────────────────────────────────────
 
 function renderCodeTerminal(): string {
   return `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<html><head><meta charset="UTF-8">
 <style>
 ${fontFace}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  width: 1584px;
-  height: 396px;
+  width: 1584px; height: 396px;
   overflow: hidden;
-  background: #0d1117;
-  font-family: 'Courier New', monospace;
+  background: #0a0e14;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
   position: relative;
-  background-image: repeating-linear-gradient(
+}
+
+/* Subtle scanlines */
+.scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
     0deg,
-    rgba(255, 255, 255, 0.03) 0px,
-    rgba(255, 255, 255, 0.03) 1px,
+    transparent 0px,
     transparent 1px,
-    transparent 2px
+    rgba(255, 255, 255, 0.015) 1px,
+    rgba(255, 255, 255, 0.015) 2px
   );
+  pointer-events: none;
 }
 
+/* Terminal window */
 .terminal {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: #c9d1d9;
+  position: absolute;
+  top: 32px; left: 48px; right: 48px; bottom: 32px;
+  background: #0d1117;
+  border-radius: 10px;
+  border: 1px solid #1e2530;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-.terminal-header {
+.terminal-bar {
+  height: 36px;
   background: #161b22;
-  border-bottom: 1px solid #30363d;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 12px;
+  border-bottom: 1px solid #21262d;
+  display: flex; align-items: center;
+  padding: 0 14px; gap: 8px;
+  flex-shrink: 0;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: #28c840; }
+.tab {
+  margin-left: 16px;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 12px; font-weight: 500;
   color: #8b949e;
+  padding: 4px 12px;
+  border-radius: 6px 6px 0 0;
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-bottom: none;
+  position: relative; top: 1px;
 }
 
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.dot-red { background: #ff5f56; }
-.dot-yellow { background: #ffbd2e; }
-.dot-green { background: #27c93f; }
-
-.title-text {
-  margin-left: 8px;
-  color: #8b949e;
-  font-weight: 500;
-}
-
-.code-content {
-  flex: 1;
-  padding: 32px 40px;
-  font-size: 16px;
-  line-height: 1.6;
+.code {
+  flex: 1; padding: 24px 28px;
+  font-size: 15px; line-height: 1.7;
+  color: #c9d1d9;
   overflow: hidden;
 }
-
-.code-line {
-  margin-bottom: 8px;
-}
-
-.comment { color: #6a737d; }
-.keyword { color: #ff7b72; }
-.string { color: #a5d6ff; }
-.variable { color: #79c0ff; }
-.bracket { color: #8b949e; }
-</style>
-</head>
+.ln { color: #30363d; user-select: none; display: inline-block; width: 32px; text-align: right; margin-right: 20px; }
+.cm { color: #6e7681; font-style: italic; }
+.kw { color: #ff7b72; }
+.fn { color: #d2a8ff; }
+.st { color: #a5d6ff; }
+.vr { color: #79c0ff; }
+.pr { color: #ffa657; }
+.br { color: #8b949e; }
+.bl { color: #7ee787; }
+</style></head>
 <body>
+<div class="scanlines"></div>
 <div class="terminal">
-  <div class="terminal-header">
-    <span class="dot dot-red"></span>
-    <span class="dot dot-yellow"></span>
-    <span class="dot dot-green"></span>
-    <span class="title-text">portfolio.tsx</span>
+  <div class="terminal-bar">
+    <span class="dot dot-r"></span>
+    <span class="dot dot-y"></span>
+    <span class="dot dot-g"></span>
+    <span class="tab">portfolio.ts</span>
   </div>
-
-  <div class="code-content">
-    <div class="code-line"><span class="comment">// Yoann Andrieux — Dev React Native</span></div>
-    <div class="code-line"><span class="keyword">import</span> <span class="bracket">{</span> <span class="variable">skills</span> <span class="bracket">}</span> <span class="keyword">from</span> <span class="string">"./expertise"</span><span class="bracket">;</span></div>
-    <div class="code-line"></div>
-    <div class="code-line"><span class="keyword">export const</span> <span class="variable">stack</span> <span class="bracket">=</span> <span class="bracket">[</span></div>
-    <div class="code-line">&nbsp;&nbsp;<span class="string">"React Native"</span><span class="bracket">,</span> <span class="string">"TypeScript"</span><span class="bracket">,</span></div>
-    <div class="code-line">&nbsp;&nbsp;<span class="string">"Next.js"</span><span class="bracket">,</span> <span class="string">"Node.js"</span></div>
-    <div class="code-line"><span class="bracket">];</span></div>
-    <div class="code-line"></div>
-    <div class="code-line"><span class="keyword">export const</span> <span class="variable">status</span> <span class="bracket">=</span> <span class="string">"Available for new projects"</span><span class="bracket">;</span></div>
+  <div class="code">
+    <div><span class="ln">1</span><span class="cm">// Yoann Andrieux &mdash; React Native Developer</span></div>
+    <div><span class="ln">2</span></div>
+    <div><span class="ln">3</span><span class="kw">const</span> <span class="vr">developer</span> <span class="br">=</span> <span class="br">{</span></div>
+    <div><span class="ln">4</span>&nbsp;&nbsp;<span class="pr">name</span><span class="br">:</span> <span class="st">"Yoann Andrieux"</span><span class="br">,</span></div>
+    <div><span class="ln">5</span>&nbsp;&nbsp;<span class="pr">role</span><span class="br">:</span> <span class="st">"Dev React Native &middot; Freelance"</span><span class="br">,</span></div>
+    <div><span class="ln">6</span>&nbsp;&nbsp;<span class="pr">stack</span><span class="br">:</span> <span class="br">[</span><span class="st">"React Native"</span><span class="br">,</span> <span class="st">"TypeScript"</span><span class="br">,</span> <span class="st">"Next.js"</span><span class="br">,</span> <span class="st">"Node.js"</span><span class="br">],</span></div>
+    <div><span class="ln">7</span>&nbsp;&nbsp;<span class="pr">available</span><span class="br">:</span> <span class="bl">true</span><span class="br">,</span></div>
+    <div><span class="ln">8</span><span class="br">};</span></div>
   </div>
 </div>
-</body>
-</html>`;
+</body></html>`;
 }
+
+// ─── Portrait Banners ──────────────────────────────────────────
 
 function renderPortrait(haloHex: string): string {
   const profilePath = join(process.cwd(), "public/images/yoann-profile-nobg.png");
@@ -585,134 +409,103 @@ function renderPortrait(haloHex: string): string {
   const haloRgb = hexToRgbCss(haloHex);
 
   return `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<html><head><meta charset="UTF-8">
 <style>
 ${fontFace}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  width: 1584px;
-  height: 396px;
+  width: 1584px; height: 396px;
   overflow: hidden;
-  background: linear-gradient(to right, #0a0a1a 0%, #0a0a1a 62%, rgba(${haloRgb}, 0.12) 100%);
   font-family: 'Inter', sans-serif;
   position: relative;
+  background: #08081a;
 }
 
-/* Colored halo glow behind the silhouette */
-.portrait-glow {
-  position: absolute;
-  right: 40px;
-  bottom: -144px;
-  height: 446px;
-  width: auto;
-  filter: brightness(0) invert(1) blur(20px)
-    drop-shadow(0 0 12px rgba(${haloRgb}, 0.18))
-    drop-shadow(0 0 24px rgba(${haloRgb}, 0.12));
-  opacity: 0.08;
+/* Background gradient with halo tint on the right */
+.bg {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, #08081a 0%, #08081a 55%, rgba(${haloRgb}, 0.06) 100%),
+    linear-gradient(180deg, #08081a 0%, #0c0c24 100%);
+}
+
+/* Subtle dot grid */
+.dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
   pointer-events: none;
 }
 
-/* White stroke: same image slightly enlarged */
+/* Diffuse ambient halo glow behind portrait */
+.halo {
+  position: absolute;
+  right: 0; bottom: -40px;
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(${haloRgb}, 0.1) 0%, transparent 65%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+/* Stroke layer — white silhouette with colored glow, rising from bottom */
 .portrait-stroke {
   position: absolute;
-  right: 58px;
-  bottom: -96px;
-  height: 432px;
-  width: auto;
+  right: 60px; bottom: 0;
+  height: 420px; width: auto;
+  transform: scale(1.015);
+  transform-origin: bottom center;
   filter: brightness(0) invert(1)
-    drop-shadow(0 0 1px rgba(255, 255, 255, 0.95))
-    drop-shadow(0 0 2px rgba(255, 255, 255, 0.88))
-    drop-shadow(0 0 4px rgba(${haloRgb}, 0.16));
+    drop-shadow(0 0 6px rgba(${haloRgb}, 0.6))
+    drop-shadow(0 0 6px rgba(${haloRgb}, 0.6))
+    drop-shadow(0 0 14px rgba(${haloRgb}, 0.3));
   pointer-events: none;
 }
 
-/* Main portrait on top */
+/* Main portrait — anchored at bottom, body rises from the edge */
 .portrait-image {
   position: absolute;
-  right: 60px;
-  bottom: -94px;
-  height: 424px;
-  width: auto;
+  right: 60px; bottom: 0;
+  height: 420px; width: auto;
   object-fit: contain;
 }
 
-/* Diffuse ambient glow */
-.halo {
-  position: absolute;
-  right: -6px;
-  bottom: -62px;
-  width: 430px;
-  height: 430px;
-  background: radial-gradient(circle, rgba(${haloRgb}, 0.08) 0%, transparent 72%);
-  filter: blur(36px);
-  pointer-events: none;
-}
-
+/* Text content — left side */
 .content {
-  position: absolute;
-  width: 60%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 60px;
-  padding-right: 40px;
+  position: absolute; inset: 0;
+  width: 58%;
+  display: flex; flex-direction: column; justify-content: center;
+  padding-left: 80px;
 }
-
 .name {
-  font-size: 48px;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
+  font-size: 52px; font-weight: 800; color: #fff;
+  letter-spacing: -1.2px; line-height: 1;
 }
-
+.accent-bar {
+  width: 160px; height: 2px; margin: 18px 0;
+  background: linear-gradient(to right, rgba(${haloRgb}, 0.8), transparent);
+  border-radius: 1px;
+}
 .title {
-  font-size: 22px;
-  color: #8899bb;
-  margin-bottom: 24px;
-  font-weight: 500;
+  font-size: 21px; font-weight: 500; color: #667799;
+  margin-bottom: 22px;
 }
-
-.badges {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
+.skills {
+  font-size: 13px; font-weight: 500; color: #4a5568;
+  letter-spacing: 0.5px;
 }
-
-.badge {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 14px;
-  color: #aabbcc;
-  font-weight: 500;
-  white-space: nowrap;
-}
-</style>
-</head>
+</style></head>
 <body>
+<div class="bg"></div>
+<div class="dots"></div>
 <div class="halo"></div>
-<img src="${profileDataUri}" class="portrait-glow" alt="" />
 <img src="${profileDataUri}" class="portrait-stroke" alt="" />
 <img src="${profileDataUri}" class="portrait-image" alt="Yoann Andrieux" />
-
 <div class="content">
   <div class="name">Yoann Andrieux</div>
-  <div class="title">Dev React Native · Freelance</div>
-  <div class="badges">
-    <div class="badge">React Native</div>
-    <div class="badge">TypeScript</div>
-    <div class="badge">Next.js</div>
-    <div class="badge">Node.js</div>
-  </div>
+  <div class="accent-bar"></div>
+  <div class="title">Dev React Native &middot; Freelance</div>
+  <div class="skills">React Native &nbsp;&middot;&nbsp; TypeScript &nbsp;&middot;&nbsp; Next.js &nbsp;&middot;&nbsp; Node.js</div>
 </div>
-</body>
-</html>`;
+</body></html>`;
 }
