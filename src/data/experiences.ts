@@ -270,6 +270,10 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       gradient: "from-indigo-400 to-purple-600",
       emoji: "💼",
       image: "/images/projects/jobio-landing.png",
+      images: [
+        "/images/projects/jobio-landing.png",
+        "/images/projects/jobio-dashboard.png",
+      ],
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: [
         "Next.js 16",
@@ -1512,6 +1516,10 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       gradient: "from-indigo-400 to-purple-600",
       emoji: "💼",
       image: "/images/projects/jobio-landing.png",
+      images: [
+        "/images/projects/jobio-landing.png",
+        "/images/projects/jobio-dashboard.png",
+      ],
       stats: { teamSize: "Solo", downloads: "SaaS" },
       features: [
         "Next.js 16",
