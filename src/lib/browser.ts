@@ -1,8 +1,14 @@
 /**
  * Browser renderer — HTML to PNG screenshot & PDF
- * Uses puppeteer-core + @sparticuz/chromium on Vercel (serverless),
+ * Uses puppeteer-core + @sparticuz/chromium-min on Vercel (serverless),
  * and playwright-core locally (dev).
+ *
+ * On Vercel, the Chromium binary is downloaded at runtime from GitHub CDN
+ * and cached in /tmp for subsequent invocations.
  */
+
+const CHROMIUM_REMOTE_URL =
+  "https://github.com/Sparticuz/chromium/releases/download/v143.0.4/chromium-v143.0.4-pack.tar";
 
 export interface RenderOptions {
   html: string;
@@ -22,12 +28,12 @@ export async function renderHtmlToImage(options: RenderOptions): Promise<Buffer>
 }
 
 async function renderWithPuppeteer(options: RenderOptions): Promise<Buffer> {
-  const chromium = (await import("@sparticuz/chromium")).default;
+  const chromium = (await import("@sparticuz/chromium-min")).default;
   const puppeteer = (await import("puppeteer-core")).default;
 
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath(),
+    executablePath: await chromium.executablePath(CHROMIUM_REMOTE_URL),
     headless: true,
   });
 
@@ -90,12 +96,12 @@ export async function renderHtmlToPdf(options: PdfOptions): Promise<Uint8Array> 
 }
 
 async function pdfWithPuppeteer(options: PdfOptions): Promise<Uint8Array> {
-  const chromium = (await import("@sparticuz/chromium")).default;
+  const chromium = (await import("@sparticuz/chromium-min")).default;
   const puppeteer = (await import("puppeteer-core")).default;
 
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath(),
+    executablePath: await chromium.executablePath(CHROMIUM_REMOTE_URL),
     headless: true,
   });
 

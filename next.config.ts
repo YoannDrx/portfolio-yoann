@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ["playwright-core", "puppeteer-core", "@sparticuz/chromium"],
+  serverExternalPackages: ["playwright-core", "puppeteer-core", "@sparticuz/chromium-min"],
   images: {
     formats: ["image/avif", "image/webp"],
   },
