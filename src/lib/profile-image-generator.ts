@@ -8,7 +8,7 @@
 import sharp from "sharp";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { launchBrowser } from "./browser";
+import { renderHtmlToImage } from "./browser";
 
 export interface GenerateProfileImageOptions {
   shape: "portrait" | "circle" | "square" | "raw";
@@ -94,36 +94,25 @@ export async function generateProfileImage(
     outH
   );
 
-  // Render via Playwright
+  // Render via browser (Puppeteer on Vercel, Playwright locally)
   const isTransparent = options.background === "transparent";
-  let browser;
-  try {
-    browser = await launchBrowser();
-    const page = await browser.newPage();
-    await page.setViewportSize({ width: outW, height: outH });
-    await page.setContent(html, { waitUntil: "networkidle" });
 
-    const screenshot = await page.screenshot({
-      type: "png",
-      fullPage: true,
-      omitBackground: isTransparent,
-    });
+  const screenshot = await renderHtmlToImage({
+    html,
+    width: outW,
+    height: outH,
+    fullPage: true,
+    omitBackground: isTransparent,
+  });
 
-    await page.close();
-
-    // Preview resize
-    if (options.preview) {
-      const pw = 400;
-      const ph = Math.round((pw * outH) / outW);
-      return sharp(screenshot).resize(pw, ph).png().toBuffer();
-    }
-
-    return Buffer.from(screenshot);
-  } finally {
-    if (browser) {
-      await browser.close().catch(() => {});
-    }
+  // Preview resize
+  if (options.preview) {
+    const pw = 400;
+    const ph = Math.round((pw * outH) / outW);
+    return sharp(screenshot).resize(pw, ph).png().toBuffer();
   }
+
+  return Buffer.from(screenshot);
 }
 
 // ─── HTML Template Dispatch ────────────────────────────────────
