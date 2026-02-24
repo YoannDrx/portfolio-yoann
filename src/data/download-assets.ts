@@ -16,7 +16,7 @@ export interface DownloadAsset {
 }
 
 export const downloadAssets: DownloadAsset[] = [
-  // ─── Banners (5) ───────────────────────────────────────────
+  // ─── Banners (8) ───────────────────────────────────────────
   {
     id: "banner-dark-gradient",
     category: "banner",
@@ -64,13 +64,46 @@ export const downloadAssets: DownloadAsset[] = [
   {
     id: "banner-portrait",
     category: "banner",
-    title: { fr: "Bannière Portrait", en: "Portrait Banner" },
+    title: { fr: "Bannière Portrait Halo Bleu", en: "Blue Halo Portrait Banner" },
     description: { fr: "Silhouette détourée style héros avec halo bleu", en: "Hero-style silhouette with blue halo" },
     dimensions: { width: 1584, height: 396 },
     format: "PNG",
     apiUrl: "/api/download/banner?design=portrait",
     previewUrl: "/api/download/banner?design=portrait&preview=true",
     filename: { fr: "Yoann_Andrieux_Banner_Portrait_1584x396.png", en: "Yoann_Andrieux_Banner_Portrait_1584x396.png" },
+  },
+  {
+    id: "banner-portrait-indigo",
+    category: "banner",
+    title: { fr: "Bannière Portrait Halo Indigo", en: "Indigo Halo Portrait Banner" },
+    description: { fr: "Silhouette détourée style héros avec halo indigo", en: "Hero-style silhouette with indigo halo" },
+    dimensions: { width: 1584, height: 396 },
+    format: "PNG",
+    apiUrl: "/api/download/banner?design=portrait-indigo",
+    previewUrl: "/api/download/banner?design=portrait-indigo&preview=true",
+    filename: { fr: "Yoann_Andrieux_Banner_Portrait-Indigo_1584x396.png", en: "Yoann_Andrieux_Banner_Portrait-Indigo_1584x396.png" },
+  },
+  {
+    id: "banner-portrait-teal",
+    category: "banner",
+    title: { fr: "Bannière Portrait Halo Cyan", en: "Teal Halo Portrait Banner" },
+    description: { fr: "Silhouette détourée style héros avec halo cyan", en: "Hero-style silhouette with teal halo" },
+    dimensions: { width: 1584, height: 396 },
+    format: "PNG",
+    apiUrl: "/api/download/banner?design=portrait-teal",
+    previewUrl: "/api/download/banner?design=portrait-teal&preview=true",
+    filename: { fr: "Yoann_Andrieux_Banner_Portrait-Cyan_1584x396.png", en: "Yoann_Andrieux_Banner_Portrait-Cyan_1584x396.png" },
+  },
+  {
+    id: "banner-portrait-pink",
+    category: "banner",
+    title: { fr: "Bannière Portrait Halo Rose", en: "Pink Halo Portrait Banner" },
+    description: { fr: "Silhouette détourée style héros avec halo rose", en: "Hero-style silhouette with pink halo" },
+    dimensions: { width: 1584, height: 396 },
+    format: "PNG",
+    apiUrl: "/api/download/banner?design=portrait-pink",
+    previewUrl: "/api/download/banner?design=portrait-pink&preview=true",
+    filename: { fr: "Yoann_Andrieux_Banner_Portrait-Rose_1584x396.png", en: "Yoann_Andrieux_Banner_Portrait-Rose_1584x396.png" },
   },
 
   // ─── Portrait Brut (1) ─────────────────────────────────────
@@ -86,7 +119,7 @@ export const downloadAssets: DownloadAsset[] = [
     filename: { fr: "Yoann_Andrieux_Portrait_Brut_1024x1536.png", en: "Yoann_Andrieux_Portrait_Brut_1024x1536.png" },
   },
 
-  // ─── Portrait with Halo (5) — 1400x2100 ───────────────────
+  // ─── Portrait with Halo (7) — 1400x2100 ───────────────────
   {
     id: "portrait-halo-blue",
     category: "portrait",
@@ -142,6 +175,28 @@ export const downloadAssets: DownloadAsset[] = [
     previewUrl: "/api/download/profile?shape=portrait&bg=transparent&halo=pink&preview=true",
     filename: { fr: "Yoann_Andrieux_Portrait_Halo-Rose_1400x2100.png", en: "Yoann_Andrieux_Portrait_Halo-Rose_1400x2100.png" },
   },
+  {
+    id: "portrait-halo-orange",
+    category: "portrait",
+    title: { fr: "Portrait Halo Orange", en: "Orange Halo Portrait" },
+    description: { fr: "Silhouette détourée avec liseré blanc et halo orange", en: "Silhouette with white stroke and orange halo" },
+    dimensions: { width: 1400, height: 2100 },
+    format: "PNG",
+    apiUrl: "/api/download/profile?shape=portrait&bg=transparent&halo=orange",
+    previewUrl: "/api/download/profile?shape=portrait&bg=transparent&halo=orange&preview=true",
+    filename: { fr: "Yoann_Andrieux_Portrait_Halo-Orange_1400x2100.png", en: "Yoann_Andrieux_Portrait_Halo-Orange_1400x2100.png" },
+  },
+  {
+    id: "portrait-halo-violet",
+    category: "portrait",
+    title: { fr: "Portrait Halo Violet", en: "Violet Halo Portrait" },
+    description: { fr: "Silhouette détourée avec liseré blanc et halo violet", en: "Silhouette with white stroke and violet halo" },
+    dimensions: { width: 1400, height: 2100 },
+    format: "PNG",
+    apiUrl: "/api/download/profile?shape=portrait&bg=transparent&halo=violet",
+    previewUrl: "/api/download/profile?shape=portrait&bg=transparent&halo=violet&preview=true",
+    filename: { fr: "Yoann_Andrieux_Portrait_Halo-Violet_1400x2100.png", en: "Yoann_Andrieux_Portrait_Halo-Violet_1400x2100.png" },
+  },
 
   // ─── Portrait Solid Background (3) — 1400x2100 ────────────
   {
@@ -178,7 +233,7 @@ export const downloadAssets: DownloadAsset[] = [
     filename: { fr: "Yoann_Andrieux_Portrait_Fond-Primaire_1400x2100.jpg", en: "Yoann_Andrieux_Portrait_Fond-Primaire_1400x2100.jpg" },
   },
 
-  // ─── Circle with Halo (5) — 1024x1024 ─────────────────────
+  // ─── Circle with Halo (7) — 1024x1024 ─────────────────────
   {
     id: "circle-halo-blue",
     category: "circle",
@@ -233,6 +288,28 @@ export const downloadAssets: DownloadAsset[] = [
     apiUrl: "/api/download/profile?shape=circle&bg=transparent&halo=pink",
     previewUrl: "/api/download/profile?shape=circle&bg=transparent&halo=pink&preview=true",
     filename: { fr: "Yoann_Andrieux_Medaillon_Halo-Rose_1024x1024.png", en: "Yoann_Andrieux_Medaillon_Halo-Rose_1024x1024.png" },
+  },
+  {
+    id: "circle-halo-orange",
+    category: "circle",
+    title: { fr: "Médaillon Halo Orange", en: "Orange Halo Medallion" },
+    description: { fr: "Médaillon fond transparent avec halo orange", en: "Transparent medallion with orange halo" },
+    dimensions: { width: 1024, height: 1024 },
+    format: "PNG",
+    apiUrl: "/api/download/profile?shape=circle&bg=transparent&halo=orange",
+    previewUrl: "/api/download/profile?shape=circle&bg=transparent&halo=orange&preview=true",
+    filename: { fr: "Yoann_Andrieux_Medaillon_Halo-Orange_1024x1024.png", en: "Yoann_Andrieux_Medaillon_Halo-Orange_1024x1024.png" },
+  },
+  {
+    id: "circle-halo-violet",
+    category: "circle",
+    title: { fr: "Médaillon Halo Violet", en: "Violet Halo Medallion" },
+    description: { fr: "Médaillon fond transparent avec halo violet", en: "Transparent medallion with violet halo" },
+    dimensions: { width: 1024, height: 1024 },
+    format: "PNG",
+    apiUrl: "/api/download/profile?shape=circle&bg=transparent&halo=violet",
+    previewUrl: "/api/download/profile?shape=circle&bg=transparent&halo=violet&preview=true",
+    filename: { fr: "Yoann_Andrieux_Medaillon_Halo-Violet_1024x1024.png", en: "Yoann_Andrieux_Medaillon_Halo-Violet_1024x1024.png" },
   },
 
   // ─── Circle Solid Background (3) ──────────────────────────
@@ -300,8 +377,8 @@ export const downloadAssets: DownloadAsset[] = [
     description: { fr: "Photo de profil carrée transparente", en: "Transparent square profile photo" },
     dimensions: { width: 1024, height: 1024 },
     format: "PNG",
-    apiUrl: "/api/download/profile?shape=circle&bg=transparent&halo=blue",
-    previewUrl: "/api/download/profile?shape=circle&bg=transparent&halo=blue&preview=true",
+    apiUrl: "/api/download/profile?shape=square&bg=transparent&halo=blue",
+    previewUrl: "/api/download/profile?shape=square&bg=transparent&halo=blue&preview=true",
     filename: { fr: "Yoann_Andrieux_Profile_Carre_1024x1024.png", en: "Yoann_Andrieux_Profile_Carre_1024x1024.png" },
   },
   {
@@ -311,8 +388,8 @@ export const downloadAssets: DownloadAsset[] = [
     description: { fr: "Photo de profil carrée avec fond sombre", en: "Square profile photo with dark background" },
     dimensions: { width: 1024, height: 1024 },
     format: "PNG",
-    apiUrl: "/api/download/profile?shape=circle&bg=dark&halo=blue",
-    previewUrl: "/api/download/profile?shape=circle&bg=dark&halo=blue&preview=true",
+    apiUrl: "/api/download/profile?shape=square&bg=dark&halo=blue",
+    previewUrl: "/api/download/profile?shape=square&bg=dark&halo=blue&preview=true",
     filename: { fr: "Yoann_Andrieux_Profile_Carre_Sombre_1024x1024.png", en: "Yoann_Andrieux_Profile_Carre_Sombre_1024x1024.png" },
   },
   {

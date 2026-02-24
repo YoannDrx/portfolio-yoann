@@ -1,7 +1,15 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 
-export type BannerDesign = "dark-gradient" | "minimal-light" | "gradient-mesh" | "code-terminal" | "portrait";
+export type BannerDesign =
+  | "dark-gradient"
+  | "minimal-light"
+  | "gradient-mesh"
+  | "code-terminal"
+  | "portrait"
+  | "portrait-indigo"
+  | "portrait-teal"
+  | "portrait-pink";
 
 const fontPath = join(process.cwd(), "public/fonts/Inter-Variable.woff2");
 const fontBase64 = readFileSync(fontPath).toString("base64");
@@ -18,10 +26,24 @@ export function renderBannerHtml(design: BannerDesign): string {
     case "code-terminal":
       return renderCodeTerminal();
     case "portrait":
-      return renderPortrait();
+      return renderPortrait("#007AFF");
+    case "portrait-indigo":
+      return renderPortrait("#5856D6");
+    case "portrait-teal":
+      return renderPortrait("#5AC8FA");
+    case "portrait-pink":
+      return renderPortrait("#FF2D55");
     default:
       return renderDarkGradient();
   }
+}
+
+function hexToRgbCss(hex: string): string {
+  const n = parseInt(hex.replace("#", ""), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return `${r}, ${g}, ${b}`;
 }
 
 function renderDarkGradient(): string {
@@ -556,10 +578,11 @@ body {
 </html>`;
 }
 
-function renderPortrait(): string {
+function renderPortrait(haloHex: string): string {
   const profilePath = join(process.cwd(), "public/images/yoann-profile-nobg.png");
   const profileBase64 = readFileSync(profilePath).toString("base64");
   const profileDataUri = `data:image/png;base64,${profileBase64}`;
+  const haloRgb = hexToRgbCss(haloHex);
 
   return `<!DOCTYPE html>
 <html>
@@ -574,41 +597,34 @@ body {
   width: 1584px;
   height: 396px;
   overflow: hidden;
-  background: linear-gradient(to right, #0a0a1a 0%, #0a0a1a 60%, #1a2744 100%);
+  background: linear-gradient(to right, #0a0a1a 0%, #0a0a1a 62%, rgba(${haloRgb}, 0.12) 100%);
   font-family: 'Inter', sans-serif;
   position: relative;
-}
-
-/* Hero-style silhouette: glow → white stroke → portrait */
-.portrait-wrapper {
-  position: absolute;
-  right: 60px;
-  bottom: 0;
-  height: 460px;
-  width: auto;
-  pointer-events: none;
 }
 
 /* Colored halo glow behind the silhouette */
 .portrait-glow {
   position: absolute;
-  right: 30px;
-  bottom: -30px;
-  height: 520px;
+  right: 42px;
+  bottom: -8px;
+  height: 424px;
   width: auto;
-  filter: blur(30px) brightness(1.5);
-  opacity: 0.5;
+  filter: blur(24px) saturate(1.08);
+  opacity: 0.18;
   pointer-events: none;
 }
 
 /* White stroke: same image slightly enlarged */
 .portrait-stroke {
   position: absolute;
-  right: 57px;
-  bottom: -3px;
-  height: 466px;
+  right: 58px;
+  bottom: 0;
+  height: 394px;
   width: auto;
-  filter: brightness(0) invert(1) drop-shadow(0 0 2px white) drop-shadow(0 0 1px white);
+  filter: brightness(0) invert(1)
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.88))
+    drop-shadow(0 0 5px rgba(${haloRgb}, 0.24));
   pointer-events: none;
 }
 
@@ -617,7 +633,7 @@ body {
   position: absolute;
   right: 60px;
   bottom: 0;
-  height: 460px;
+  height: 390px;
   width: auto;
   object-fit: contain;
 }
@@ -625,12 +641,12 @@ body {
 /* Diffuse ambient glow */
 .halo {
   position: absolute;
-  right: -20px;
-  bottom: -60px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0, 122, 255, 0.25) 0%, transparent 65%);
-  filter: blur(50px);
+  right: -6px;
+  bottom: -44px;
+  width: 470px;
+  height: 470px;
+  background: radial-gradient(circle, rgba(${haloRgb}, 0.14) 0%, transparent 70%);
+  filter: blur(42px);
   pointer-events: none;
 }
 

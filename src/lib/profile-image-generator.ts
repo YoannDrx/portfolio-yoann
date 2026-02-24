@@ -7,7 +7,7 @@ import sharp from "sharp";
 import { join } from "path";
 
 export interface GenerateProfileImageOptions {
-  shape: "portrait" | "circle" | "raw";
+  shape: "portrait" | "circle" | "square" | "raw";
   background: "transparent" | "dark" | "light" | "primary";
   haloColor: string | null; // hex like "#007AFF"
   preview: boolean;
@@ -23,13 +23,18 @@ const BG_COLORS: Record<string, string> = {
 const SRC_W = 1024;
 const SRC_H = 1536;
 
-// Output sizes — bigger containers with padding for breathing room
+// Output sizes
 const PORTRAIT_OUT_W = 1400;
 const PORTRAIT_OUT_H = 2100;
 const CIRCLE_OUT = 1024;
+const SQUARE_OUT = 1024;
 
-// Circle: scale portrait down to ~88% inside the circle so bonnet isn't clipped
-const CIRCLE_FACE_SCALE = 0.88;
+// Subject scales / offsets per target format
+const PORTRAIT_SUBJECT_SCALE = 0.88;
+const CIRCLE_SUBJECT_SCALE = 0.78;
+const SQUARE_SUBJECT_SCALE = 0.86;
+const CIRCLE_VERTICAL_SHIFT = 34;
+const SQUARE_VERTICAL_SHIFT = 20;
 
 function hexToRgb(hex: string) {
   const n = parseInt(hex.replace("#", ""), 16);
@@ -51,8 +56,10 @@ export async function generateProfileImage(
   }
 
   const isCircle = options.shape === "circle";
-  const outW = isCircle ? CIRCLE_OUT : PORTRAIT_OUT_W;
-  const outH = isCircle ? CIRCLE_OUT : PORTRAIT_OUT_H;
+  const isSquare = options.shape === "square";
+  const isRoundOrSquare = isCircle || isSquare;
+  const outW = isCircle ? CIRCLE_OUT : isSquare ? SQUARE_OUT : PORTRAIT_OUT_W;
+  const outH = isCircle ? CIRCLE_OUT : isSquare ? SQUARE_OUT : PORTRAIT_OUT_H;
 
   // 1. Load source at original size (1024x1536)
   const fullSource = await sharp(imagePath).ensureAlpha().png().toBuffer();
@@ -62,29 +69,34 @@ export async function generateProfileImage(
   let subjectTop: number;
   let subjectLeft: number;
 
-  if (isCircle) {
-    // Crop top of the portrait (head area), scale down to fit inside circle
+  if (isRoundOrSquare) {
+    // Use the upper square area then scale down to keep the bonnet clear from the top edge.
     const cropH = SRC_W; // 1024x1024 square from top
     const cropped = await sharp(fullSource)
       .extract({ left: 0, top: 0, width: SRC_W, height: cropH })
       .png()
       .toBuffer();
 
-    // Scale down to ~88% of circle size
-    const innerSize = Math.round(CIRCLE_OUT * CIRCLE_FACE_SCALE);
+    const innerSize = Math.round(
+      outW * (isCircle ? CIRCLE_SUBJECT_SCALE : SQUARE_SUBJECT_SCALE)
+    );
     subject = await sharp(cropped)
       .resize(innerSize, innerSize)
       .png()
       .toBuffer();
 
-    // Center in the output
-    subjectLeft = Math.round((CIRCLE_OUT - innerSize) / 2);
-    subjectTop = Math.round((CIRCLE_OUT - innerSize) / 2);
+    subjectLeft = Math.round((outW - innerSize) / 2);
+    subjectTop = Math.round((outH - innerSize) / 2) + (isCircle ? CIRCLE_VERTICAL_SHIFT : SQUARE_VERTICAL_SHIFT);
   } else {
-    // Portrait: place the 1024x1536 source centered in the larger canvas
-    subject = fullSource;
-    subjectLeft = Math.round((PORTRAIT_OUT_W - SRC_W) / 2);
-    subjectTop = Math.round((PORTRAIT_OUT_H - SRC_H) / 2);
+    // Portrait: slightly scale down and anchor to bottom to create more breathing room around the subject.
+    const portraitW = Math.round(SRC_W * PORTRAIT_SUBJECT_SCALE);
+    const portraitH = Math.round(SRC_H * PORTRAIT_SUBJECT_SCALE);
+    subject = await sharp(fullSource)
+      .resize(portraitW, portraitH)
+      .png()
+      .toBuffer();
+    subjectLeft = Math.round((PORTRAIT_OUT_W - portraitW) / 2);
+    subjectTop = PORTRAIT_OUT_H - portraitH;
   }
 
   // 3. Build the subject on canvas (for alpha extraction)
@@ -100,10 +112,6 @@ export async function generateProfileImage(
     .extractChannel(3)
     .raw()
     .toBuffer();
-  const alphaMask = await sharp(alphaBuf, { raw: { width: outW, height: outH, channels: 1 } })
-    .toColorspace("b-w")
-    .png()
-    .toBuffer();
 
   // 5. Build compositing layers
   const layers: sharp.OverlayOptions[] = [];
@@ -117,19 +125,19 @@ export async function generateProfileImage(
 
   // Halo glow
   if (options.haloColor) {
-    const halo = await buildHalo(alphaMask, outW, outH, options.haloColor);
+    const halo = await buildHalo(alphaBuf, outW, outH, options.haloColor);
     layers.push({ input: halo, top: 0, left: 0 });
   }
 
   // White stroke (lisere)
   if (options.haloColor) {
-    const stroke = await buildStroke(alphaMask, outW, outH);
+    const stroke = await buildStroke(alphaBuf, outW, outH);
     layers.push({ input: stroke, top: 0, left: 0 });
   }
 
   // Subject on canvas (with circle mask if needed)
   if (isCircle) {
-    const masked = await applyCircleMask(subjectOnCanvas, CIRCLE_OUT);
+    const masked = await applyCircleMask(subjectOnCanvas, outW);
     layers.push({ input: masked, top: 0, left: 0 });
   } else {
     layers.push({ input: subjectOnCanvas, top: 0, left: 0 });
@@ -151,7 +159,10 @@ export async function generateProfileImage(
     output = output.resize(pw, ph);
   }
 
-  if (options.background === "transparent") {
+  const useJpeg =
+    options.shape === "portrait" && options.background !== "transparent";
+
+  if (!useJpeg) {
     return output.png().toBuffer();
   }
   return output.jpeg({ quality: 95 }).toBuffer();
@@ -161,52 +172,77 @@ export async function generateProfileImage(
  * Create a blurred halo glow from the alpha silhouette.
  */
 async function buildHalo(
-  alphaMask: Buffer,
+  alphaRaw: Buffer,
   width: number,
   height: number,
   color: string
 ): Promise<Buffer> {
   const { r, g, b } = hexToRgb(color);
+  const raw = { raw: { width, height, channels: 1 as const } };
 
-  const colorLayer = await sharp({
-    create: { width, height, channels: 4, background: { r, g, b, alpha: 255 } },
-  })
-    .png()
+  const inner = await sharp(alphaRaw, raw)
+    .blur(18)
+    .extractChannel(0)
+    .raw()
+    .toBuffer();
+  const outer = await sharp(alphaRaw, raw)
+    .blur(46)
+    .extractChannel(0)
+    .raw()
     .toBuffer();
 
-  const tinted = await sharp(colorLayer)
-    .composite([{ input: alphaMask, blend: "dest-in" }])
-    .png()
-    .toBuffer();
+  const haloAlpha = Buffer.alloc(width * height);
+  for (let i = 0; i < haloAlpha.length; i += 1) {
+    haloAlpha[i] = Math.min(
+      255,
+      Math.round(inner[i] * 0.58 + outer[i] * 0.34)
+    );
+  }
 
-  return sharp(tinted).blur(35).png().toBuffer();
+  return solidWithAlpha(width, height, { r, g, b }, haloAlpha);
 }
 
 /**
  * Create a white outline by dilating the alpha then subtracting the original.
  */
 async function buildStroke(
-  alphaMask: Buffer,
+  alphaRaw: Buffer,
   width: number,
   height: number
 ): Promise<Buffer> {
-  const dilated = await sharp(alphaMask)
-    .blur(5)
-    .threshold(15)
-    .png()
+  const raw = { raw: { width, height, channels: 1 as const } };
+
+  const base = await sharp(alphaRaw, raw)
+    .threshold(1)
+    .extractChannel(0)
+    .raw()
+    .toBuffer();
+  const dilatedInner = await sharp(alphaRaw, raw)
+    .blur(4)
+    .threshold(8)
+    .extractChannel(0)
+    .raw()
+    .toBuffer();
+  const dilatedOuter = await sharp(alphaRaw, raw)
+    .blur(8)
+    .threshold(6)
+    .extractChannel(0)
+    .raw()
     .toBuffer();
 
-  const whiteFill = await sharp({
-    create: { width, height, channels: 4, background: { r: 255, g: 255, b: 255, alpha: 255 } },
-  })
-    .composite([{ input: dilated, blend: "dest-in" }])
-    .png()
-    .toBuffer();
+  const strokeAlpha = Buffer.alloc(width * height);
+  for (let i = 0; i < strokeAlpha.length; i += 1) {
+    const innerRing = Math.max(0, dilatedInner[i] - base[i]);
+    const outerRing = Math.max(0, dilatedOuter[i] - dilatedInner[i]);
+    strokeAlpha[i] = Math.min(255, innerRing + Math.round(outerRing * 0.52));
+  }
 
-  return sharp(whiteFill)
-    .composite([{ input: alphaMask, blend: "dest-out" }])
-    .png()
-    .toBuffer();
+  return solidWithAlpha(
+    width,
+    height,
+    { r: 255, g: 255, b: 255 },
+    strokeAlpha
+  );
 }
 
 /**
@@ -217,6 +253,20 @@ async function applyCircleMask(source: Buffer, size: number): Promise<Buffer> {
   const svg = `<svg width="${size}" height="${size}"><circle cx="${r}" cy="${r}" r="${r}" fill="white"/></svg>`;
   return sharp(source)
     .composite([{ input: Buffer.from(svg), blend: "dest-in" }])
+    .png()
+    .toBuffer();
+}
+
+async function solidWithAlpha(
+  width: number,
+  height: number,
+  color: { r: number; g: number; b: number },
+  alphaRaw: Buffer
+): Promise<Buffer> {
+  return sharp({
+    create: { width, height, channels: 3, background: color },
+  })
+    .joinChannel(alphaRaw, { raw: { width, height, channels: 1 } })
     .png()
     .toBuffer();
 }

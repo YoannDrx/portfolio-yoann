@@ -7,6 +7,8 @@ const HALO_COLOR_MAP: Record<string, string | null> = {
   teal: "#5AC8FA",
   green: "#34C759",
   pink: "#FF2D55",
+  orange: "#FF9500",
+  violet: "#AF52DE",
   none: null,
 };
 
@@ -16,6 +18,8 @@ const HALO_LABEL_FR: Record<string, string> = {
   teal: "Cyan",
   green: "Vert",
   pink: "Rose",
+  orange: "Orange",
+  violet: "Violet",
 };
 
 const BG_LABEL_FR: Record<string, string> = {
@@ -29,10 +33,11 @@ const DIMS: Record<string, { w: number; h: number }> = {
   raw: { w: 1024, h: 1536 },
   portrait: { w: 1400, h: 2100 },
   circle: { w: 1024, h: 1024 },
+  square: { w: 1024, h: 1024 },
 };
 
 function generateFilename(
-  shape: "portrait" | "circle" | "raw",
+  shape: "portrait" | "circle" | "square" | "raw",
   background: string,
   halo: string | null,
   width: number,
@@ -42,7 +47,8 @@ function generateFilename(
     return `Yoann_Andrieux_Portrait_Brut_${width}x${height}.png`;
   }
 
-  const baseShape = shape === "portrait" ? "Portrait" : "Medaillon";
+  const baseShape =
+    shape === "portrait" ? "Portrait" : shape === "square" ? "Carre" : "Medaillon";
   let suffix = "";
 
   if (halo && halo !== "none") {
@@ -51,7 +57,8 @@ function generateFilename(
     suffix = `_${BG_LABEL_FR[background] || background}`;
   }
 
-  const ext = background === "transparent" ? "png" : "jpg";
+  const ext =
+    shape === "portrait" && background !== "transparent" ? "jpg" : "png";
   return `Yoann_Andrieux_${baseShape}${suffix}_${width}x${height}.${ext}`;
 }
 
@@ -59,12 +66,14 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const shape = (searchParams.get("shape") as "portrait" | "circle" | "raw") || "portrait";
+    const shape =
+      (searchParams.get("shape") as "portrait" | "circle" | "square" | "raw") ||
+      "portrait";
     const background = (searchParams.get("bg") as "transparent" | "dark" | "light" | "primary") || "transparent";
     const haloParam = searchParams.get("halo") || "none";
     const preview = searchParams.get("preview") === "true";
 
-    if (!["portrait", "circle", "raw"].includes(shape)) {
+    if (!["portrait", "circle", "square", "raw"].includes(shape)) {
       return NextResponse.json({ error: "Invalid shape parameter" }, { status: 400 });
     }
     if (!["transparent", "dark", "light", "primary"].includes(background)) {
@@ -93,12 +102,14 @@ export async function GET(request: NextRequest) {
     );
 
     const contentType =
-      shape === "raw" || background === "transparent" ? "image/png" : "image/jpeg";
+      shape === "portrait" && background !== "transparent"
+        ? "image/jpeg"
+        : "image/png";
 
     const response = new NextResponse(new Uint8Array(imageBuffer), {
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=86400, immutable",
+        "Cache-Control": "no-store",
       },
     });
 

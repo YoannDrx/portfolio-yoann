@@ -27,6 +27,10 @@ export function DownloadAssetCard({
   isLoading,
   texts,
 }: DownloadAssetCardProps) {
+  const assetVersion = "20260224-portrait-fix-2";
+  const withVersion = (url: string) =>
+    `${url}${url.includes("?") ? "&" : "?"}v=${assetVersion}`;
+
   const isTransparent =
     asset.id.includes("halo") ||
     asset.id === "profile-square" ||
@@ -49,7 +53,7 @@ export function DownloadAssetCard({
           }`}
         >
           <Image
-            src={asset.previewUrl}
+            src={withVersion(asset.previewUrl)}
             alt={asset.title[locale]}
             fill
             className="object-contain"
@@ -96,7 +100,7 @@ export function DownloadAssetCard({
           leftIcon={<Download className="size-4" />}
           isLoading={isLoading}
           onClick={() =>
-            onDownload(asset.id, asset.apiUrl, asset.filename[locale])
+            onDownload(asset.id, withVersion(asset.apiUrl), asset.filename[locale])
           }
         >
           {isLoading ? texts.downloading : texts.downloadButton}

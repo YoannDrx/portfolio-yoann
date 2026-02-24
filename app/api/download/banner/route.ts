@@ -14,6 +14,9 @@ export async function GET(request: Request) {
       "gradient-mesh",
       "code-terminal",
       "portrait",
+      "portrait-indigo",
+      "portrait-teal",
+      "portrait-pink",
     ];
 
     if (!validDesigns.includes(design)) {
@@ -51,7 +54,7 @@ export async function GET(request: Request) {
 
       const headers: Record<string, string> = {
         "Content-Type": "image/png",
-        "Cache-Control": "public, max-age=3600",
+        "Cache-Control": "no-store",
       };
 
       if (!preview) {
