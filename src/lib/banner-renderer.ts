@@ -605,12 +605,14 @@ body {
 /* Colored halo glow behind the silhouette */
 .portrait-glow {
   position: absolute;
-  right: 44px;
-  bottom: -40px;
-  height: 456px;
+  right: 40px;
+  bottom: -144px;
+  height: 446px;
   width: auto;
-  filter: blur(24px) saturate(1.08);
-  opacity: 0.14;
+  filter: brightness(0) invert(1) blur(20px)
+    drop-shadow(0 0 12px rgba(${haloRgb}, 0.18))
+    drop-shadow(0 0 24px rgba(${haloRgb}, 0.12));
+  opacity: 0.08;
   pointer-events: none;
 }
 
@@ -618,13 +620,13 @@ body {
 .portrait-stroke {
   position: absolute;
   right: 58px;
-  bottom: -2px;
-  height: 434px;
+  bottom: -96px;
+  height: 432px;
   width: auto;
   filter: brightness(0) invert(1)
     drop-shadow(0 0 1px rgba(255, 255, 255, 0.95))
     drop-shadow(0 0 2px rgba(255, 255, 255, 0.88))
-    drop-shadow(0 0 5px rgba(${haloRgb}, 0.24));
+    drop-shadow(0 0 4px rgba(${haloRgb}, 0.16));
   pointer-events: none;
 }
 
@@ -632,8 +634,8 @@ body {
 .portrait-image {
   position: absolute;
   right: 60px;
-  bottom: 0;
-  height: 430px;
+  bottom: -94px;
+  height: 424px;
   width: auto;
   object-fit: contain;
 }
@@ -642,11 +644,11 @@ body {
 .halo {
   position: absolute;
   right: -6px;
-  bottom: -44px;
-  width: 470px;
-  height: 470px;
-  background: radial-gradient(circle, rgba(${haloRgb}, 0.14) 0%, transparent 70%);
-  filter: blur(42px);
+  bottom: -62px;
+  width: 430px;
+  height: 430px;
+  background: radial-gradient(circle, rgba(${haloRgb}, 0.08) 0%, transparent 72%);
+  filter: blur(36px);
   pointer-events: none;
 }
 

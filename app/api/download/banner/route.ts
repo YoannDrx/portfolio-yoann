@@ -7,6 +7,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const design = (searchParams.get("design") || "dark-gradient") as BannerDesign;
     const preview = searchParams.get("preview") === "true";
+    const inline = searchParams.get("inline") === "true";
 
     const validDesigns: BannerDesign[] = [
       "dark-gradient",
@@ -57,7 +58,7 @@ export async function GET(request: Request) {
         "Cache-Control": "no-store",
       };
 
-      if (!preview) {
+      if (!preview && !inline) {
         headers["Content-Disposition"] = `attachment; filename="${filename}"`;
       }
 

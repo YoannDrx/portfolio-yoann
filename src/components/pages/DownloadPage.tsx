@@ -24,6 +24,8 @@ function AssetGrid({
   download: (id: string, url: string, filename: string) => void;
   isLoading: (id: string) => boolean;
   texts: {
+    previewButton: string;
+    previewTitle: string;
     downloadButton: string;
     downloading: string;
     formatLabel: string;
@@ -83,6 +85,8 @@ export function DownloadPage({ locale }: DownloadPageProps) {
     sectionCircleSolid: string;
     sectionSocial: string;
     sectionDocuments: string;
+    previewButton: string;
+    previewTitle: string;
     downloadButton: string;
     downloading: string;
     formatLabel: string;
@@ -102,6 +106,8 @@ export function DownloadPage({ locale }: DownloadPageProps) {
   const circleSolid = circles.filter((a) => !a.id.includes("halo"));
 
   const downloadTexts = {
+    previewButton: texts.previewButton,
+    previewTitle: texts.previewTitle,
     downloadButton: texts.downloadButton,
     downloading: texts.downloading,
     formatLabel: texts.formatLabel,

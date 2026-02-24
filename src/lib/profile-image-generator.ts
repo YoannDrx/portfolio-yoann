@@ -47,9 +47,9 @@ const SQUARE_OUT = 1024;
 
 // Subject scales / offsets per target format
 const PORTRAIT_SUBJECT_SCALE = 0.88;
-const CIRCLE_SUBJECT_SCALE = 0.78;
+const CIRCLE_SUBJECT_HEIGHT_RATIO = 0.96;
 const SQUARE_SUBJECT_SCALE = 0.86;
-const CIRCLE_VERTICAL_SHIFT = 34;
+const CIRCLE_VERTICAL_SHIFT = 10;
 const SQUARE_VERTICAL_SHIFT = 20;
 
 function hexToRgb(hex: string) {
@@ -85,24 +85,34 @@ export async function generateProfileImage(
   let subjectTop: number;
   let subjectLeft: number;
 
-  if (isRoundOrSquare) {
-    // Use the upper square area then scale down to keep the bonnet clear from the top edge.
+  if (isCircle) {
+    // Circle avatar: keep full silhouette and anchor lower so the body reaches the bottom of the medallion.
+    const circleH = Math.round(CIRCLE_OUT * CIRCLE_SUBJECT_HEIGHT_RATIO);
+    const circleW = Math.round((SRC_W / SRC_H) * circleH);
+
+    subject = await sharp(fullSource)
+      .resize(circleW, circleH)
+      .png()
+      .toBuffer();
+
+    subjectLeft = Math.round((CIRCLE_OUT - circleW) / 2);
+    subjectTop = CIRCLE_OUT - circleH + CIRCLE_VERTICAL_SHIFT;
+  } else if (isRoundOrSquare) {
+    // Square avatar: upper body framing with extra top room for the bonnet.
     const cropH = SRC_W; // 1024x1024 square from top
     const cropped = await sharp(fullSource)
       .extract({ left: 0, top: 0, width: SRC_W, height: cropH })
       .png()
       .toBuffer();
 
-    const innerSize = Math.round(
-      outW * (isCircle ? CIRCLE_SUBJECT_SCALE : SQUARE_SUBJECT_SCALE)
-    );
+    const innerSize = Math.round(outW * SQUARE_SUBJECT_SCALE);
     subject = await sharp(cropped)
       .resize(innerSize, innerSize)
       .png()
       .toBuffer();
 
     subjectLeft = Math.round((outW - innerSize) / 2);
-    subjectTop = Math.round((outH - innerSize) / 2) + (isCircle ? CIRCLE_VERTICAL_SHIFT : SQUARE_VERTICAL_SHIFT);
+    subjectTop = Math.round((outH - innerSize) / 2) + SQUARE_VERTICAL_SHIFT;
   } else {
     // Portrait: slightly scale down and anchor to bottom to create more breathing room around the subject.
     const portraitW = Math.round(SRC_W * PORTRAIT_SUBJECT_SCALE);
@@ -123,8 +133,13 @@ export async function generateProfileImage(
     .png()
     .toBuffer();
 
+  // Circle shape should clip the subject itself (not the whole canvas background).
+  const subjectForEffects = isCircle
+    ? await applyCircleMask(subjectOnCanvas, outW)
+    : subjectOnCanvas;
+
   // 4. Extract alpha mask from the canvas-placed subject
-  const alphaBuf = await sharp(subjectOnCanvas)
+  const alphaBuf = await sharp(subjectForEffects)
     .extractChannel(3)
     .raw()
     .toBuffer();
@@ -151,13 +166,8 @@ export async function generateProfileImage(
     layers.push({ input: stroke, top: 0, left: 0 });
   }
 
-  // Subject on canvas (with circle mask if needed)
-  if (isCircle) {
-    const masked = await applyCircleMask(subjectOnCanvas, outW);
-    layers.push({ input: masked, top: 0, left: 0 });
-  } else {
-    layers.push({ input: subjectOnCanvas, top: 0, left: 0 });
-  }
+  // Subject on canvas
+  layers.push({ input: subjectForEffects, top: 0, left: 0 });
 
   // 6. Compose — materialize first (Sharp runs resize BEFORE composite)
   const composed = await sharp({
