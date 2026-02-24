@@ -26,13 +26,13 @@ export function renderBannerHtml(design: BannerDesign): string {
     case "code-terminal":
       return renderCodeTerminal();
     case "portrait":
-      return renderPortrait("#007AFF");
+      return renderPortrait("#007AFF", "Crafting Mobile Experiences", "React Native Developer · Freelance");
     case "portrait-indigo":
-      return renderPortrait("#5856D6");
+      return renderPortrait("#5856D6", "Code. Ship. Repeat.", "React Native · TypeScript · Freelance");
     case "portrait-teal":
-      return renderPortrait("#5AC8FA");
+      return renderPortrait("#5AC8FA", "Building Apps That Feel Native", "React Native Developer · Freelance");
     case "portrait-pink":
-      return renderPortrait("#FF2D55");
+      return renderPortrait("#FF2D55", "Du concept au store.", "Développeur React Native · Freelance");
     default:
       return renderDarkGradient();
   }
@@ -402,7 +402,7 @@ body {
 
 // ─── Portrait Banners ──────────────────────────────────────────
 
-function renderPortrait(haloHex: string): string {
+function renderPortrait(haloHex: string, tagline: string, subtitle: string): string {
   const profilePath = join(process.cwd(), "public/images/yoann-profile-nobg.png");
   const profileBase64 = readFileSync(profilePath).toString("base64");
   const profileDataUri = `data:image/png;base64,${profileBase64}`;
@@ -452,7 +452,7 @@ body {
 .portrait-stroke {
   position: absolute;
   right: 60px; bottom: 0;
-  height: 420px; width: auto;
+  height: 390px; width: auto;
   transform: scale(1.015);
   transform-origin: bottom center;
   filter: brightness(0) invert(1)
@@ -466,33 +466,29 @@ body {
 .portrait-image {
   position: absolute;
   right: 60px; bottom: 0;
-  height: 420px; width: auto;
+  height: 390px; width: auto;
   object-fit: contain;
 }
 
-/* Text content — left side */
+/* Text content — left side, anchored near top */
 .content {
   position: absolute; inset: 0;
   width: 58%;
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex; flex-direction: column;
   padding-left: 80px;
+  padding-top: 52px;
 }
-.name {
-  font-size: 52px; font-weight: 800; color: #fff;
-  letter-spacing: -1.2px; line-height: 1;
+.tagline {
+  font-size: 46px; font-weight: 800; color: #fff;
+  letter-spacing: -1.2px; line-height: 1.1;
 }
 .accent-bar {
-  width: 160px; height: 2px; margin: 18px 0;
+  width: 160px; height: 2px; margin: 16px 0;
   background: linear-gradient(to right, rgba(${haloRgb}, 0.8), transparent);
   border-radius: 1px;
 }
-.title {
-  font-size: 21px; font-weight: 500; color: #667799;
-  margin-bottom: 22px;
-}
-.skills {
-  font-size: 13px; font-weight: 500; color: #4a5568;
-  letter-spacing: 0.5px;
+.subtitle {
+  font-size: 18px; font-weight: 500; color: #667799;
 }
 </style></head>
 <body>
@@ -502,10 +498,9 @@ body {
 <img src="${profileDataUri}" class="portrait-stroke" alt="" />
 <img src="${profileDataUri}" class="portrait-image" alt="Yoann Andrieux" />
 <div class="content">
-  <div class="name">Yoann Andrieux</div>
+  <div class="tagline">${tagline}</div>
   <div class="accent-bar"></div>
-  <div class="title">Dev React Native &middot; Freelance</div>
-  <div class="skills">React Native &nbsp;&middot;&nbsp; TypeScript &nbsp;&middot;&nbsp; Next.js &nbsp;&middot;&nbsp; Node.js</div>
+  <div class="subtitle">${subtitle}</div>
 </div>
 </body></html>`;
 }
