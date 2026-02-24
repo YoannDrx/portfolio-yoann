@@ -15,7 +15,7 @@ const baseSiteConfig = {
     accentColor: "#5856D6", // iOS Indigo
   },
   contact: {
-    email: "hello@example.com",
+    email: "yoann.andrieux@gmail.com",
     phone: undefined,
   },
 } as const;

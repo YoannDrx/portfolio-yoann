@@ -1,5 +1,6 @@
 import { launchBrowser } from "@/lib/browser";
 import { renderBannerHtml, type BannerDesign } from "@/lib/banner-renderer";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 import sharp from "sharp";
 
 export async function GET(request: Request) {
@@ -7,6 +8,14 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const design = (searchParams.get("design") || "dark-gradient") as BannerDesign;
     const preview = searchParams.get("preview") === "true";
+
+    // Rate limit only actual downloads, not preview thumbnails
+    if (!preview) {
+      const clientIp = getClientIp(request);
+      if (isRateLimited(clientIp, { namespace: "download-banner", windowMs: 60_000, max: 5 })) {
+        return new Response("Too many requests. Please try again later.", { status: 429 });
+      }
+    }
     const inline = searchParams.get("inline") === "true";
 
     const validDesigns: BannerDesign[] = [

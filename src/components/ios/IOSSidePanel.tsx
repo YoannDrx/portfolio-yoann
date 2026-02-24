@@ -13,6 +13,7 @@ interface IOSSidePanelProps {
   onClose: () => void;
   children: React.ReactNode;
   width?: 'md' | 'lg' | 'xl' | '2xl';
+  closeLabel?: string;
 }
 
 const widthClasses = {
@@ -26,7 +27,8 @@ export const IOSSidePanel = ({
   isOpen,
   onClose,
   children,
-  width = 'xl'
+  width = 'xl',
+  closeLabel = 'Fermer'
 }: IOSSidePanelProps) => {
 
   const panelRef = useRef<HTMLDivElement>(null);
@@ -101,7 +103,7 @@ export const IOSSidePanel = ({
           className="absolute top-4 left-4 z-20 w-10 h-10 rounded-full bg-secondary/80 backdrop-blur-sm
             hover:bg-secondary flex items-center justify-center transition-all
             hover:scale-105 active:scale-95"
-          aria-label="Fermer"
+          aria-label={closeLabel}
         >
           <X className="w-5 h-5 text-foreground" />
         </button>

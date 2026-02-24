@@ -1,5 +1,6 @@
 import { generateProfileImage } from "@/lib/profile-image-generator";
 import { NextRequest, NextResponse } from "next/server";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 
 const HALO_COLOR_MAP: Record<string, string | null> = {
   blue: "#007AFF",
@@ -70,6 +71,15 @@ function generateFilename(
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    const preview = searchParams.get("preview") === "true";
+
+    // Rate limit only actual downloads, not preview thumbnails
+    if (!preview) {
+      const clientIp = getClientIp(request);
+      if (isRateLimited(clientIp, { namespace: "download-profile", windowMs: 60_000, max: 5 })) {
+        return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+      }
+    }
 
     const shape =
       (searchParams.get("shape") as "portrait" | "circle" | "square" | "raw") ||
@@ -87,7 +97,6 @@ export async function GET(request: NextRequest) {
         | "sunset"
         | "royal") || "transparent";
     const haloParam = searchParams.get("halo") || "none";
-    const preview = searchParams.get("preview") === "true";
 
     if (!["portrait", "circle", "square", "raw"].includes(shape)) {
       return NextResponse.json({ error: "Invalid shape parameter" }, { status: 400 });

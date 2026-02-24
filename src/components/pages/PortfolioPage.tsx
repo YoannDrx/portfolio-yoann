@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import PortfolioApp from "@/components/PortfolioApp";
+import dynamic from "next/dynamic";
+
+const PortfolioApp = dynamic(() => import("@/components/PortfolioApp"), {
+  ssr: false,
+});
 import TouchIndicator from "@/components/TouchIndicator";
 import PDFDownloadButton from "@/components/pdf/PDFDownloadButton";
 import { useIsRealMobile } from "@/hooks/use-mobile";
@@ -329,10 +333,11 @@ const WebView = () => {
         {/* Experiences Section */}
         <section
           id="experiences"
+          aria-labelledby="experiences-title"
           className="bg-gradient-to-br from-blue-50/80 via-background to-indigo-50/50 px-6 py-20 dark:from-blue-950/30 dark:via-background dark:to-indigo-950/20"
         >
           <div className="mx-auto max-w-6xl">
-            <h2 className="mb-4 text-center text-4xl font-bold text-foreground">
+            <h2 id="experiences-title" className="mb-4 text-center text-4xl font-bold text-foreground">
               {uiTexts.nav.experiences}
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-center text-muted-foreground">
@@ -457,9 +462,9 @@ const WebView = () => {
         </section>
 
         {/* Skills Section */}
-        <section id="skills" className="px-6 py-20">
+        <section id="skills" aria-labelledby="skills-title" className="px-6 py-20">
           <div className="mx-auto max-w-6xl">
-            <h2 className="mb-4 text-center text-4xl font-bold text-foreground">
+            <h2 id="skills-title" className="mb-4 text-center text-4xl font-bold text-foreground">
               {uiTexts.nav.skills}
             </h2>
             <p className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
@@ -585,11 +590,12 @@ const WebView = () => {
         {/* Resume Section */}
         <section
           id="resume"
+          aria-labelledby="resume-title"
           className="bg-gradient-to-br from-teal-50/70 via-background to-emerald-50/50 px-6 py-20 dark:from-teal-950/30 dark:via-background dark:to-emerald-950/20"
         >
           <div className="mx-auto max-w-4xl">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-4xl font-bold text-foreground">
+              <h2 id="resume-title" className="text-4xl font-bold text-foreground">
                 {uiTexts.sections.career}
               </h2>
               <PDFDownloadButton />
@@ -699,6 +705,7 @@ const WebView = () => {
         {/* Contact Section */}
         <section
           id="contact"
+          aria-labelledby="contact-title"
           className="bg-gradient-to-br from-violet-50/70 via-background to-purple-50/50 px-6 py-20 dark:from-violet-950/30 dark:via-background dark:to-purple-950/20"
         >
           <div className="mx-auto max-w-5xl">
@@ -706,7 +713,7 @@ const WebView = () => {
               {/* Gauche: Titre, sous-titre, icônes */}
               <div className="space-y-6">
                 <div>
-                  <h2 className="mb-3 text-4xl font-bold text-foreground">
+                  <h2 id="contact-title" className="mb-3 text-4xl font-bold text-foreground">
                     {uiTexts.hero.letsWorkTogether}
                   </h2>
                   <p className="text-lg text-muted-foreground">

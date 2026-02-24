@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/components";
 import ContactFormEmail from "@/emails/contact-form.email";
 import { z } from "zod";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 
 const ContactPayloadSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -11,10 +12,6 @@ const ContactPayloadSchema = z.object({
   // Honeypot field (must stay empty)
   company: z.string().optional(),
 });
-
-const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
-const RATE_LIMIT_MAX = 5;
-const rateLimitStore = new Map<string, { count: number; windowStart: number }>();
 
 function getLocale(request: NextRequest) {
   return request.headers.get("x-locale") === "en" ? "en" : "fr";
@@ -42,26 +39,6 @@ function getApiMessages(locale: "fr" | "en") {
   } as const;
 }
 
-function getClientIp(request: NextRequest): string {
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  if (forwardedFor) return forwardedFor.split(",")[0]?.trim() ?? "unknown";
-  return request.headers.get("x-real-ip") ?? "unknown";
-}
-
-function isRateLimited(clientId: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitStore.get(clientId);
-
-  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
-    rateLimitStore.set(clientId, { count: 1, windowStart: now });
-    return false;
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) return true;
-
-  rateLimitStore.set(clientId, { ...entry, count: entry.count + 1 });
-  return false;
-}
 
 export async function POST(request: NextRequest) {
   const locale = getLocale(request);
@@ -69,7 +46,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const clientIp = getClientIp(request);
-    if (isRateLimited(clientIp)) {
+    if (isRateLimited(clientIp, { namespace: "send-email", windowMs: 15 * 60 * 1000, max: 5 })) {
       return NextResponse.json(
         { error: messages.tooManyRequests },
         { status: 429 }

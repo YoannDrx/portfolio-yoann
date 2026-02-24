@@ -20,7 +20,7 @@ const profiles: Record<Locale, Profile> = {
     availabilityOptions: ["CDI", "Freelance", "Mission longue"],
     stats: [
       { label: "Années XP", value: "4+" },
-      { label: "Expériences", value: "15+" },
+      { label: "Expériences", value: "20+" },
       { label: "Clients", value: "10+" },
     ],
   },
@@ -37,7 +37,7 @@ const profiles: Record<Locale, Profile> = {
     availabilityOptions: ["Full-time", "Freelance", "Long-term"],
     stats: [
       { label: "Years XP", value: "4+" },
-      { label: "Experiences", value: "15+" },
+      { label: "Experiences", value: "20+" },
       { label: "Clients", value: "10+" },
     ],
   },

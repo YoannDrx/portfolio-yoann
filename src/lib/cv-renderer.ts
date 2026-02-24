@@ -34,7 +34,8 @@ const labels = {
       interests: "Centres d'intérêt",
       softSkills: "Soft Skills",
       managementAndOthers: "Management & Autres expériences",
-      cinemaEvents: "Cinéma & Événementiel",
+      cinemaEvents: "Cinéma",
+      intermittent: "Intermittent du spectacle",
     },
     employmentTypes: {
       cdi: "CDI",
@@ -43,7 +44,7 @@ const labels = {
       cdd: "CDD",
       intermittent: "Intermittent",
       ponctuel: "Freelance",
-      hors_tech: "Spectacle vivant",
+      hors_tech: "Intermittent",
       ops: "Ops",
       cinema: "Cinéma",
     } as Record<string, string>,
@@ -76,7 +77,8 @@ const labels = {
       interests: "Interests",
       softSkills: "Soft Skills",
       managementAndOthers: "Management & Other Experience",
-      cinemaEvents: "Cinema & Events",
+      cinemaEvents: "Cinema",
+      intermittent: "Performing Arts",
     },
     employmentTypes: {
       cdi: "Full-time",
@@ -85,7 +87,7 @@ const labels = {
       cdd: "Fixed-term",
       intermittent: "Intermittent",
       ponctuel: "Freelance",
-      hors_tech: "Live Performance",
+      hors_tech: "Intermittent",
       ops: "Ops",
       cinema: "Cinema",
     } as Record<string, string>,
@@ -192,7 +194,7 @@ export function renderCvHtml(locale: Locale): string {
 
   // ── Split experiences into groups ──
   const detailedIds = new Set(["1", "1b", "2", "3", "4", "6"]);
-  const semiDetailedTechIds = new Set(["1c", "1d", "4b"]);
+  const semiDetailedTechIds = new Set(["1c", "1d", "4b", "5", "7"]);
   const allPage1Ids = [...detailedIds, ...semiDetailedTechIds];
   const allPage1Exps = sortByDateDesc(
     allPage1Ids
@@ -200,14 +202,23 @@ export function renderCvHtml(locale: Locale): string {
       .filter(Boolean) as WorkExperience[]
   );
 
-  const cyclofix = experiences.find((e) => e.id === "8");
-  const courrier = experiences.find((e) => e.id === "9");
-  const cinemaIds = ["0a", "0d", "0c", "0b", "10b"];
+  // Management & Ops — sorted by date desc
+  const managementIds = ["8", "9"];
+  const managementExps = sortByDateDesc(managementIds
+    .map((id) => experiences.find((e) => e.id === id))
+    .filter(Boolean) as WorkExperience[]);
+
+  // Cinéma (projection) — sorted by date desc
+  const cinemaIds = ["0d", "0c", "10c"];
   const cinemaExps = sortByDateDesc(cinemaIds
     .map((id) => experiences.find((e) => e.id === id))
     .filter(Boolean) as WorkExperience[]);
-  const ourTheory = experiences.find((e) => e.id === "10a");
-  const ugcCgr = experiences.find((e) => e.id === "10c");
+
+  // Intermittent du spectacle (pub, régie, musique) — sorted by date desc
+  const intermittentIds = ["0a", "0b", "10a", "10b"];
+  const intermittentExps = sortByDateDesc(intermittentIds
+    .map((id) => experiences.find((e) => e.id === id))
+    .filter(Boolean) as WorkExperience[]);
 
   // Full bio from profile (same as hero)
 
@@ -500,14 +511,13 @@ export function renderCvHtml(locale: Locale): string {
     ${renderAccentLine()}
     <div style="padding:12px 20px;flex:1;display:flex;flex-direction:column;">
       ${renderSectionTitle(l.sectionTitles.managementAndOthers)}
-      ${cyclofix ? renderDetailedExp(cyclofix, 3) : ""}
-      ${courrier ? renderSemiDetailedExp(courrier) : ""}
+      ${managementExps.map((exp, i) => i === 0 ? renderDetailedExp(exp, 3) : renderSemiDetailedExp(exp)).join("")}
 
       ${renderSubSectionTitle(l.sectionTitles.cinemaEvents)}
       ${cinemaExps.map(renderSemiDetailedExp).join("")}
 
-      ${ourTheory ? renderSemiDetailedExp(ourTheory) : ""}
-      ${ugcCgr ? renderSemiDetailedExp(ugcCgr) : ""}
+      ${renderSubSectionTitle(l.sectionTitles.intermittent)}
+      ${intermittentExps.map(renderSemiDetailedExp).join("")}
 
       ${renderSectionTitle(l.sectionTitles.skills)}
       <div style="display:flex;gap:6px;margin-bottom:4px;">

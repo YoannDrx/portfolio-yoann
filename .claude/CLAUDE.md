@@ -34,13 +34,13 @@ pnpm lint         # ESLint
 
 ### Stack technique
 
-- **Framework** : Next.js avec App Router
+- **Framework** : Next.js 16 avec App Router
 - **Langage** : TypeScript
 - **Styling** : TailwindCSS + Radix UI
-- **Animations** : Framer Motion
-- **i18n** : next-intl
+- **Animations** : CSS pur (animations iOS spring, stagger)
+- **i18n** : Implémentation custom (I18nProvider)
 - **Thème** : next-themes (dark/light)
-- **PDF** : @react-pdf/renderer
+- **PDF** : Rendu HTML → Playwright (screenshot/PDF)
 - **Package Manager** : pnpm
 
 ### Composants UI
