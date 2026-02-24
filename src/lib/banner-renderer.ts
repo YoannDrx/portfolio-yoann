@@ -605,12 +605,12 @@ body {
 /* Colored halo glow behind the silhouette */
 .portrait-glow {
   position: absolute;
-  right: 42px;
-  bottom: -8px;
-  height: 424px;
+  right: 44px;
+  bottom: -40px;
+  height: 456px;
   width: auto;
   filter: blur(24px) saturate(1.08);
-  opacity: 0.18;
+  opacity: 0.14;
   pointer-events: none;
 }
 
@@ -618,8 +618,8 @@ body {
 .portrait-stroke {
   position: absolute;
   right: 58px;
-  bottom: 0;
-  height: 394px;
+  bottom: -2px;
+  height: 434px;
   width: auto;
   filter: brightness(0) invert(1)
     drop-shadow(0 0 1px rgba(255, 255, 255, 0.95))
@@ -633,7 +633,7 @@ body {
   position: absolute;
   right: 60px;
   bottom: 0;
-  height: 390px;
+  height: 430px;
   width: auto;
   object-fit: contain;
 }

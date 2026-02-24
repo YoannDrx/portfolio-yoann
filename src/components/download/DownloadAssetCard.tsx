@@ -27,14 +27,11 @@ export function DownloadAssetCard({
   isLoading,
   texts,
 }: DownloadAssetCardProps) {
-  const assetVersion = "20260224-portrait-fix-2";
+  const assetVersion = "20260224-portrait-fix-3";
   const withVersion = (url: string) =>
     `${url}${url.includes("?") ? "&" : "?"}v=${assetVersion}`;
 
-  const isTransparent =
-    asset.id.includes("halo") ||
-    asset.id === "profile-square" ||
-    asset.format === "PNG";
+  const isTransparent = /[?&]bg=transparent(?:&|$)/.test(asset.previewUrl);
 
   const isBanner = asset.category === "banner";
   const isDocument = asset.category === "document";

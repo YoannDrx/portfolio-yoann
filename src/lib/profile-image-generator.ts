@@ -8,7 +8,17 @@ import { join } from "path";
 
 export interface GenerateProfileImageOptions {
   shape: "portrait" | "circle" | "square" | "raw";
-  background: "transparent" | "dark" | "light" | "primary";
+  background:
+    | "transparent"
+    | "dark"
+    | "light"
+    | "primary"
+    | "midnight"
+    | "ocean"
+    | "forest"
+    | "plum"
+    | "sunset"
+    | "royal";
   haloColor: string | null; // hex like "#007AFF"
   preview: boolean;
 }
@@ -17,6 +27,12 @@ const BG_COLORS: Record<string, string> = {
   dark: "#0a0a1a",
   light: "#f5f5f7",
   primary: "#007AFF",
+  midnight: "#14182b",
+  ocean: "#12253a",
+  forest: "#14281d",
+  plum: "#2a1730",
+  sunset: "#3a2413",
+  royal: "#1f2458",
 };
 
 // Source image is 1024x1536
@@ -159,13 +175,7 @@ export async function generateProfileImage(
     output = output.resize(pw, ph);
   }
 
-  const useJpeg =
-    options.shape === "portrait" && options.background !== "transparent";
-
-  if (!useJpeg) {
-    return output.png().toBuffer();
-  }
-  return output.jpeg({ quality: 95 }).toBuffer();
+  return output.png().toBuffer();
 }
 
 /**

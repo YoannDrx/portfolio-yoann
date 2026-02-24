@@ -26,6 +26,12 @@ const BG_LABEL_FR: Record<string, string> = {
   dark: "Fond-Sombre",
   light: "Fond-Clair",
   primary: "Fond-Primaire",
+  midnight: "Fond-Midnight",
+  ocean: "Fond-Ocean",
+  forest: "Fond-Forest",
+  plum: "Fond-Plum",
+  sunset: "Fond-Sunset",
+  royal: "Fond-Royal",
 };
 
 // Output dimensions (must match profile-image-generator.ts constants)
@@ -57,8 +63,7 @@ function generateFilename(
     suffix = `_${BG_LABEL_FR[background] || background}`;
   }
 
-  const ext =
-    shape === "portrait" && background !== "transparent" ? "jpg" : "png";
+  const ext = "png";
   return `Yoann_Andrieux_${baseShape}${suffix}_${width}x${height}.${ext}`;
 }
 
@@ -69,14 +74,38 @@ export async function GET(request: NextRequest) {
     const shape =
       (searchParams.get("shape") as "portrait" | "circle" | "square" | "raw") ||
       "portrait";
-    const background = (searchParams.get("bg") as "transparent" | "dark" | "light" | "primary") || "transparent";
+    const background =
+      (searchParams.get("bg") as
+        | "transparent"
+        | "dark"
+        | "light"
+        | "primary"
+        | "midnight"
+        | "ocean"
+        | "forest"
+        | "plum"
+        | "sunset"
+        | "royal") || "transparent";
     const haloParam = searchParams.get("halo") || "none";
     const preview = searchParams.get("preview") === "true";
 
     if (!["portrait", "circle", "square", "raw"].includes(shape)) {
       return NextResponse.json({ error: "Invalid shape parameter" }, { status: 400 });
     }
-    if (!["transparent", "dark", "light", "primary"].includes(background)) {
+    if (
+      ![
+        "transparent",
+        "dark",
+        "light",
+        "primary",
+        "midnight",
+        "ocean",
+        "forest",
+        "plum",
+        "sunset",
+        "royal",
+      ].includes(background)
+    ) {
       return NextResponse.json({ error: "Invalid background parameter" }, { status: 400 });
     }
     if (!Object.keys(HALO_COLOR_MAP).includes(haloParam)) {
@@ -101,10 +130,7 @@ export async function GET(request: NextRequest) {
       dims.h
     );
 
-    const contentType =
-      shape === "portrait" && background !== "transparent"
-        ? "image/jpeg"
-        : "image/png";
+    const contentType = "image/png";
 
     const response = new NextResponse(new Uint8Array(imageBuffer), {
       headers: {
