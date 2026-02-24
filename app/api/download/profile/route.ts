@@ -144,7 +144,9 @@ export async function GET(request: NextRequest) {
     const response = new NextResponse(new Uint8Array(imageBuffer), {
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "no-store",
+        "Cache-Control": preview
+          ? "public, s-maxage=86400, stale-while-revalidate=604800"
+          : "no-store",
       },
     });
 

@@ -2,15 +2,15 @@
   "functions": {
     "app/api/download/banner/route.ts": {
       "memory": 1024,
-      "maxDuration": 30
+      "maxDuration": 60
     },
     "app/api/download/profile/route.ts": {
       "memory": 1024,
-      "maxDuration": 30
+      "maxDuration": 60
     },
     "app/api/cv/route.ts": {
       "memory": 1024,
-      "maxDuration": 30
+      "maxDuration": 60
     }
   }
 }

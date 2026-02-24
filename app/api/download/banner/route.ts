@@ -58,7 +58,9 @@ export async function GET(request: Request) {
 
     const headers: Record<string, string> = {
       "Content-Type": "image/png",
-      "Cache-Control": "no-store",
+      "Cache-Control": preview
+        ? "public, s-maxage=86400, stale-while-revalidate=604800"
+        : "no-store",
     };
 
     if (!preview && !inline) {
