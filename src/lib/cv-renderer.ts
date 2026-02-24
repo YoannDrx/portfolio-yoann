@@ -278,7 +278,7 @@ export function renderCvHtml(locale: Locale): string {
       <div style="flex:1;">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div>
-            <span style="font-size:10px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>${linkIcon}
+            <span style="font-size:9.5px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>${linkIcon}
             <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:6.5px;font-weight:700;margin-left:5px;">${escapeHtml(typeLabel)}</span>
           </div>
           <span style="font-size:7.5px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
@@ -319,12 +319,12 @@ export function renderCvHtml(locale: Locale): string {
       <div style="flex:1;">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div>
-            <span style="font-size:9px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>${linkIcon}
-            <span style="background:${badge.bg};color:${badge.text};padding:1px 4px;border-radius:3px;font-size:6px;font-weight:700;margin-left:4px;">${escapeHtml(typeLabel)}</span>
+            <span style="font-size:9.5px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>${linkIcon}
+            <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:6.5px;font-weight:700;margin-left:5px;">${escapeHtml(typeLabel)}</span>
           </div>
-          <span style="font-size:7px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
+          <span style="font-size:7.5px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
         </div>
-        <div style="font-size:8px;color:#3B82F6;font-weight:600;margin-bottom:2px;">${escapeHtml(exp.role)}</div>
+        <div style="font-size:8.5px;color:#3B82F6;font-weight:600;margin-bottom:2px;">${escapeHtml(exp.role)}</div>
         <div style="font-size:7.5px;color:#334155;line-height:1.4;margin-bottom:1px;font-style:italic;">${escapeHtml(introDesc)}</div>
         ${bullets}
       </div>
@@ -344,12 +344,12 @@ export function renderCvHtml(locale: Locale): string {
       <div style="flex:1;">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div>
-            <span style="font-size:9px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>
-            <span style="background:${badge.bg};color:${badge.text};padding:1px 4px;border-radius:3px;font-size:6px;font-weight:700;margin-left:4px;">${escapeHtml(typeLabel)}</span>
+            <span style="font-size:9.5px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>
+            <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:6.5px;font-weight:700;margin-left:5px;">${escapeHtml(typeLabel)}</span>
           </div>
-          <span style="font-size:7px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
+          <span style="font-size:7.5px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
         </div>
-        <div style="font-size:7.5px;color:#3B82F6;font-weight:600;">${escapeHtml(exp.role)} <span style="color:#475569;font-weight:400;">&#8226; ${escapeHtml(shortDesc)}</span></div>
+        <div style="font-size:8.5px;color:#3B82F6;font-weight:600;">${escapeHtml(exp.role)} <span style="color:#475569;font-weight:400;">&#8226; ${escapeHtml(shortDesc)}</span></div>
       </div>
     </div>`;
   };
