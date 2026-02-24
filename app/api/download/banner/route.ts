@@ -68,6 +68,11 @@ export async function GET(request: Request) {
     return new Response(new Uint8Array(screenshot), { headers });
   } catch (error) {
     console.error("Banner screenshot error:", error);
+    const debug = new URL(request.url).searchParams.get("debug") === "true";
+    if (debug) {
+      const msg = error instanceof Error ? `${error.name}: ${error.message}\n${error.stack}` : String(error);
+      return new Response(msg, { status: 500, headers: { "Content-Type": "text/plain" } });
+    }
     return new Response("Failed to generate banner", { status: 500 });
   }
 }
