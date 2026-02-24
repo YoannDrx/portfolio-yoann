@@ -41,10 +41,11 @@ const DIMS: Record<string, { w: number; h: number }> = {
   portrait: { w: 1400, h: 2100 },
   circle: { w: 1024, h: 1024 },
   square: { w: 1024, h: 1024 },
+  bust: { w: 1024, h: 1024 },
 };
 
 function generateFilename(
-  shape: "portrait" | "circle" | "square" | "raw",
+  shape: "portrait" | "circle" | "square" | "bust" | "raw",
   background: string,
   halo: string | null,
   width: number,
@@ -55,7 +56,7 @@ function generateFilename(
   }
 
   const baseShape =
-    shape === "portrait" ? "Portrait" : shape === "square" ? "Carre" : "Medaillon";
+    shape === "portrait" ? "Portrait" : shape === "square" ? "Carre" : shape === "bust" ? "Medaillon_Buste" : "Medaillon";
   let suffix = "";
 
   if (halo && halo !== "none") {
@@ -82,7 +83,7 @@ export async function GET(request: NextRequest) {
     }
 
     const shape =
-      (searchParams.get("shape") as "portrait" | "circle" | "square" | "raw") ||
+      (searchParams.get("shape") as "portrait" | "circle" | "square" | "bust" | "raw") ||
       "portrait";
     const background =
       (searchParams.get("bg") as
@@ -98,7 +99,7 @@ export async function GET(request: NextRequest) {
         | "royal") || "transparent";
     const haloParam = searchParams.get("halo") || "none";
 
-    if (!["portrait", "circle", "square", "raw"].includes(shape)) {
+    if (!["portrait", "circle", "square", "bust", "raw"].includes(shape)) {
       return NextResponse.json({ error: "Invalid shape parameter" }, { status: 400 });
     }
     if (

@@ -84,6 +84,7 @@ export function DownloadPage({ locale }: DownloadPageProps) {
     sectionCircleHalo: string;
     sectionCircleSolid: string;
     sectionCirclePlain: string;
+    sectionCircleBust: string;
     sectionSocial: string;
     sectionDocuments: string;
     previewButton: string;
@@ -104,7 +105,8 @@ export function DownloadPage({ locale }: DownloadPageProps) {
   const portraitHalo = portraits.filter((a) => a.id.includes("halo"));
   const portraitSolid = portraits.filter((a) => !a.id.includes("halo") && a.id !== "portrait-raw");
   const circleHalo = circles.filter((a) => a.id.includes("halo"));
-  const circleSolid = circles.filter((a) => !a.id.includes("halo") && !a.id.includes("plain"));
+  const circleSolid = circles.filter((a) => !a.id.includes("halo") && !a.id.includes("plain") && !a.id.startsWith("bust-"));
+  const circleBust = circles.filter((a) => a.id.startsWith("bust-"));
   const circlePlain = circles.filter((a) => a.id.includes("plain"));
 
   const downloadTexts = {
@@ -234,6 +236,18 @@ export function DownloadPage({ locale }: DownloadPageProps) {
                 <SubSectionTitle>{texts.sectionCircleSolid}</SubSectionTitle>
                 <AssetGrid
                   assets={circleSolid}
+                  locale={locale}
+                  columns="circle"
+                  download={download}
+                  isLoading={isLoading}
+                  texts={downloadTexts}
+                />
+              </div>
+
+              <div>
+                <SubSectionTitle>{texts.sectionCircleBust}</SubSectionTitle>
+                <AssetGrid
+                  assets={circleBust}
                   locale={locale}
                   columns="circle"
                   download={download}

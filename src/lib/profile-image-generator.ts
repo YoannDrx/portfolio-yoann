@@ -11,7 +11,7 @@ import { join } from "path";
 import { renderHtmlToImage } from "./browser";
 
 export interface GenerateProfileImageOptions {
-  shape: "portrait" | "circle" | "square" | "raw";
+  shape: "portrait" | "circle" | "square" | "bust" | "raw";
   background:
     | "transparent"
     | "dark"
@@ -56,6 +56,11 @@ const CIRCLE_VERTICAL_SHIFT = 10;
 const SQUARE_SUBJECT_SCALE = 0.86;
 const SQUARE_VERTICAL_SHIFT = 20;
 
+// Bust (chest-up crop in circle)
+const BUST_OUT = 1024;
+const BUST_SUBJECT_SCALE = 1.3;
+const BUST_TOP_OFFSET = 25;
+
 function hexToRgbCss(hex: string): string {
   const n = parseInt(hex.replace("#", ""), 16);
   return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
@@ -77,8 +82,9 @@ export async function generateProfileImage(
 
   const isCircle = options.shape === "circle";
   const isSquare = options.shape === "square";
-  const outW = isCircle ? CIRCLE_OUT : isSquare ? SQUARE_OUT : PORTRAIT_OUT_W;
-  const outH = isCircle ? CIRCLE_OUT : isSquare ? SQUARE_OUT : PORTRAIT_OUT_H;
+  const isBust = options.shape === "bust";
+  const outW = isBust ? BUST_OUT : isCircle ? CIRCLE_OUT : isSquare ? SQUARE_OUT : PORTRAIT_OUT_W;
+  const outH = isBust ? BUST_OUT : isCircle ? CIRCLE_OUT : isSquare ? SQUARE_OUT : PORTRAIT_OUT_H;
 
   // Encode source as base64 data URI
   const imageBase64 = readFileSync(imagePath).toString("base64");
@@ -118,7 +124,7 @@ export async function generateProfileImage(
 // ─── HTML Template Dispatch ────────────────────────────────────
 
 function renderProfileHtml(
-  shape: "portrait" | "circle" | "square",
+  shape: "portrait" | "circle" | "square" | "bust",
   background: string,
   haloColor: string | null,
   dataUri: string,
@@ -132,6 +138,8 @@ function renderProfileHtml(
       return renderCircleHtml(background, haloColor, dataUri, outW, outH);
     case "square":
       return renderSquareHtml(background, haloColor, dataUri, outW, outH);
+    case "bust":
+      return renderBustHtml(background, haloColor, dataUri, outW, outH);
   }
 }
 
@@ -325,5 +333,73 @@ body {
 ${haloColor ? `<div class="halo"></div>` : ""}
 ${haloColor ? `<div class="stroke-wrapper"><img src="${dataUri}" class="square-img" /></div>` : ""}
 <div class="subject-wrapper"><img src="${dataUri}" class="square-img" /></div>
+</body></html>`;
+}
+
+// ─── Bust Template (1024x1024 — chest-up crop in circle) ─────────
+
+function renderBustHtml(
+  background: string,
+  haloColor: string | null,
+  dataUri: string,
+  outW: number,
+  outH: number
+): string {
+  const bgCss =
+    background === "transparent"
+      ? "transparent"
+      : BG_COLORS[background] || "transparent";
+  const subjectH = Math.round(BUST_OUT * BUST_SUBJECT_SCALE);
+  const haloRgb = haloColor ? hexToRgbCss(haloColor) : "";
+
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: ${outW}px; height: ${outH}px;
+  position: relative; overflow: hidden;
+  background: ${bgCss};
+}
+.halo {
+  position: absolute;
+  top: 40%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: ${Math.round(outW * 0.85)}px;
+  height: ${Math.round(outH * 0.85)}px;
+  background: radial-gradient(circle, rgba(${haloRgb}, 0.15) 0%, transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+.stroke-wrapper {
+  position: absolute; inset: 0;
+  transform: scale(1.012);
+  transform-origin: center center;
+  filter: brightness(0) invert(1)
+    drop-shadow(0 0 6px rgba(${haloRgb}, 0.6))
+    drop-shadow(0 0 6px rgba(${haloRgb}, 0.6))
+    drop-shadow(0 0 14px rgba(${haloRgb}, 0.3));
+  pointer-events: none;
+}
+.bust-clip {
+  width: ${outW}px; height: ${outH}px;
+  border-radius: 50%; overflow: hidden;
+  position: relative;
+}
+.bust-img {
+  position: absolute;
+  top: ${BUST_TOP_OFFSET}px;
+  left: 50%; transform: translateX(-50%);
+  height: ${subjectH}px; width: auto;
+}
+.subject-clip {
+  position: absolute; inset: 0;
+  border-radius: 50%; overflow: hidden;
+}
+</style></head>
+<body>
+${haloColor ? `<div class="halo"></div>` : ""}
+${haloColor ? `<div class="stroke-wrapper"><div class="bust-clip"><img src="${dataUri}" class="bust-img" /></div></div>` : ""}
+<div class="subject-clip"><img src="${dataUri}" class="bust-img" /></div>
 </body></html>`;
 }
