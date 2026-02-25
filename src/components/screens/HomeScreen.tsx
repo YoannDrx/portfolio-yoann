@@ -7,13 +7,20 @@
  */
 
 import Image from "next/image";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ChevronRight, Layers, Zap, FileText, Send, type LucideIcon } from "lucide-react";
 import StatusBar from "../device/StatusBar";
-import { IOSCard, IOSListItem, IOSAvailabilityBadge, IOSChip } from "../ios";
+import { IOSCard, IOSAvailabilityBadge, IOSChip } from "../ios";
 import { getNavigationItems, getProfile, getUiTexts } from "@/data";
 import { LocaleToggle } from "@/components/LocaleToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useI18n } from "@/i18n/I18nProvider";
+
+const navIcons: Record<string, LucideIcon> = {
+  experiences: Layers,
+  skills: Zap,
+  resume: FileText,
+  contact: Send,
+};
 
 interface HomeScreenProps {
   onNavigate: (tab: string) => void;
@@ -104,28 +111,41 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
             {uiTexts.sections.explorer}
           </h3>
 
-          {navigationItems.map((item) => (
-            <IOSCard
-              key={item.id}
-              variant="subtle"
-              padding="md"
-              interactive
-              onPress={() => onNavigate(item.id)}
-              className="card-premium-hover"
-            >
-              <IOSListItem
-                title={item.label}
-                subtitle={item.subtitle}
-                leftIcon={
-                  <div
-                    className={`h-10 w-[3px] rounded-full bg-gradient-to-b ${item.gradient} self-center`}
-                  />
-                }
-                showChevron
-                className="bg-transparent p-0"
-              />
-            </IOSCard>
-          ))}
+          {navigationItems.map((item) => {
+            const Icon = navIcons[item.id] ?? Layers;
+            return (
+              <IOSCard
+                key={item.id}
+                variant="subtle"
+                padding="md"
+                interactive
+                onPress={() => onNavigate(item.id)}
+                className="card-premium-hover"
+              >
+                <div className="flex items-center gap-3.5">
+                  {/* Icône Apple Settings style */}
+                  <div className="relative flex-shrink-0">
+                    <div
+                      className={`flex h-11 w-11 items-center justify-center rounded-[13px] bg-gradient-to-br ${item.gradient} shadow-sm`}
+                    >
+                      <Icon className="h-[22px] w-[22px] text-white" strokeWidth={1.8} />
+                    </div>
+                  </div>
+                  {/* Contenu */}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[15px] font-semibold text-foreground">
+                      {item.label}
+                    </p>
+                    <p className="mt-0.5 truncate text-[13px] text-muted-foreground">
+                      {item.subtitle}
+                    </p>
+                  </div>
+                  {/* Chevron */}
+                  <ChevronRight className="h-4.5 w-4.5 flex-shrink-0 text-muted-foreground/40" />
+                </div>
+              </IOSCard>
+            );
+          })}
         </div>
 
         {/* Availability Section - Redesigned */}
