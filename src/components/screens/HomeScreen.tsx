@@ -64,7 +64,7 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
                 </div>
                 {/* Badge disponible */}
                 {profile.isAvailable && (
-                  <div className="absolute -bottom-1 -right-1 rounded-full border-2 border-white bg-success p-1.5 shadow-md">
+                  <div className="absolute bottom-3 right-3 rounded-full border-2 border-white bg-success p-1.5 shadow-md">
                     <Sparkles className="h-3.5 w-3.5 text-white" />
                   </div>
                 )}
