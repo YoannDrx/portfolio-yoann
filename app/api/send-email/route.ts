@@ -7,7 +7,7 @@ import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 const ContactPayloadSchema = z.object({
   name: z.string().trim().min(1).max(100),
   email: z.string().trim().email().max(254),
-  message: z.string().trim().min(1).max(4000),
+  message: z.string().trim().min(20).max(4000),
   subject: z.string().trim().max(150).optional(),
   // Honeypot field (must stay empty)
   company: z.string().optional(),
@@ -79,19 +79,14 @@ export async function POST(request: NextRequest) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
+    const toEmail = process.env.CONTACT_EMAIL;
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    if (!apiKey || !toEmail || !fromEmail) {
       return NextResponse.json(
         { error: messages.emailNotConfigured },
         { status: 503 }
       );
     }
-
-    // Email de destination (ton email)
-    const toEmail = process.env.CONTACT_EMAIL || "yoann.andrieux@gmail.com";
-
-    // Domaine d'envoi
-    const fromEmail =
-      process.env.RESEND_FROM_EMAIL || "Portfolio <onboarding@resend.dev>";
 
     // Render React template to HTML
     const emailHtml = await render(
@@ -107,17 +102,28 @@ export async function POST(request: NextRequest) {
     const { Resend } = await import("resend");
     const resend = new Resend(apiKey);
 
-    const { data, error } = await resend.emails.send({
-      from: fromEmail,
-      to: [toEmail],
-      subject: subject?.trim() || messages.newMessageSubject(name),
-      replyTo: email,
-      html: emailHtml,
-    });
+    const requestId = request.headers.get("x-contact-request-id");
+    const idempotencyKey =
+      requestId && /^[a-f0-9-]{36}$/i.test(requestId)
+        ? `portfolio-contact-${requestId}`
+        : undefined;
+    const { data, error } = await resend.emails.send(
+      {
+        from: fromEmail,
+        to: [toEmail],
+        subject: subject?.trim() || messages.newMessageSubject(name),
+        replyTo: email,
+        html: emailHtml,
+      },
+      idempotencyKey ? { idempotencyKey } : undefined
+    );
 
     if (error) {
-      console.error("Erreur Resend:", error);
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      console.error("Resend delivery failed");
+      return NextResponse.json(
+        { error: messages.internalError },
+        { status: 502 }
+      );
     }
 
     return NextResponse.json({ success: true, data });

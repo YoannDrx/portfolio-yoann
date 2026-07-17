@@ -2494,10 +2494,290 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
   ],
 };
 
-export const experiences: Experience[] = experiencesByLocale.fr;
+const hiddenPortfolioProjects = new Set(["Impulsion"]);
+const primaryCaseStudies = ["MoodDay", "Jobio", "MyCryptoPilot"];
+
+const portfolioOverrides: Record<
+  Locale,
+  Record<string, Partial<Experience>>
+> = {
+  fr: {
+    MoodDay: {
+      description:
+        "Compagnon personnel non clinique pour suivre humeur, énergie et traitements prescrits",
+      longDescription:
+        "MoodDay est un produit sensible conçu autour de la confidentialité et d'un check-in quotidien rapide. Le parcours fonctionne hors ligne avec une file IndexedDB idempotente, gère plusieurs horaires de traitement, les exports personnels et un cercle aidant aux permissions explicites. L'application ne pose aucun diagnostic et ne formule aucune recommandation clinique.",
+      stats: { teamSize: "Solo", downloads: "122 tests" },
+      features: [
+        "Next.js 16",
+        "React 19",
+        "TypeScript",
+        "PostgreSQL",
+        "Prisma",
+        "IndexedDB",
+        "Web Push",
+        "Playwright",
+      ],
+      highlights: [
+        {
+          title: "Offline fiable",
+          description:
+            "Sept jours de check-ins se synchronisent sans perte ni doublon après fermeture de page.",
+        },
+        {
+          title: "Permissions aidant",
+          description:
+            "Invitation, refus, révocation et expiration sont contrôlés côté serveur et testés à deux sessions.",
+        },
+        {
+          title: "Données personnelles",
+          description:
+            "Exports JSON, CSV et PDF, puis suppression de compte vérifiée sans donnée résiduelle.",
+        },
+        {
+          title: "Positionnement non clinique",
+          description:
+            "Les tendances décrivent des faits sans diagnostic, causalité ni recommandation médicale.",
+        },
+      ],
+    },
+    Jobio: {
+      description:
+        "Workflow commercial ciblé pour savoir quoi faire aujourd'hui afin de signer une mission",
+      longDescription:
+        "Jobio recentre la prospection freelance sur cinq parcours : Aujourd'hui, Pipeline, Relances, CV et Contacts. Le travail de produit a consisté à réduire le périmètre, bloquer les modules hors V1 par manifeste serveur et fiabiliser l'onboarding, les transitions Kanban, les stop conditions de relance, la fusion de contacts et l'export ATS.",
+      stats: { teamSize: "Solo", downloads: "399 tests" },
+      features: [
+        "Next.js 16",
+        "React 19",
+        "TypeScript",
+        "PostgreSQL",
+        "Prisma",
+        "Better Auth",
+        "Vitest",
+        "Playwright",
+      ],
+      highlights: [
+        {
+          title: "Réduction de périmètre",
+          description:
+            "Navigation, pricing et contrôles serveur partagent le même manifeste de fonctionnalités.",
+        },
+        {
+          title: "Pipeline robuste",
+          description:
+            "Déplacements optimistes rejouables, verrou anti-double action, annulation et retry.",
+        },
+        {
+          title: "Relances responsables",
+          description:
+            "Arrêt sur réponse, mission terminale, désinscription, doublon et sur-sollicitation.",
+        },
+        {
+          title: "CV Lab",
+          description:
+            "Variantes nommées, aperçu A4, PDF visuel et export ATS linéaire sans contenu inventé.",
+        },
+      ],
+    },
+    MyCryptoPilot: {
+      description:
+        "Démonstrateur crypto risk-first en démo/testnet avec connexions exchange read-only",
+      longDescription:
+        "MyCryptoPilot est présenté comme une étude de cas architecture et sécurité. Le produit public reste en démo/testnet : il permet d'examiner des signaux, un portefeuille en lecture seule et de simuler le risque. Il n'exécute aucun copy trading réel, ne garde aucun fonds et ne promet aucun rendement.",
+      stats: { teamSize: "Solo", downloads: "482 tests" },
+      features: [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "PostgreSQL",
+        "Prisma",
+        "Workers",
+        "Testnet",
+        "Vitest",
+      ],
+      highlights: [
+        {
+          title: "Démo / Testnet",
+          description:
+            "Le contexte de simulation reste visible et aucune action publique n'exécute un ordre réel.",
+        },
+        {
+          title: "Accès read-only",
+          description:
+            "Les permissions exchange sont validées et les secrets ne sont ni affichés ni journalisés en clair.",
+        },
+        {
+          title: "Risk Console",
+          description:
+            "Les signaux sont analysés par exposition, perte potentielle et limites avant toute simulation.",
+        },
+        {
+          title: "Architecture testée",
+          description:
+            "Workers, circuit breakers et dataset déterministe sont couverts par une suite automatisée.",
+        },
+      ],
+    },
+    Hyrun: {
+      description:
+        "Prototype d'entraînement hybride pour coureurs, adapté au matériel réellement disponible",
+      longDescription:
+        "Hyrun explore des plans hybrides déterministes, des substitutions d'exercices et un session player utilisable pendant l'effort. Nutrition, social et coach IA généraliste sont hors du périmètre validé. Une bêta fermée de deux semaines sert de gate avant toute extension.",
+      stats: { teamSize: "Solo", downloads: "Bêta" },
+    },
+  },
+  en: {
+    MoodDay: {
+      description:
+        "Non-clinical personal companion for tracking mood, energy and prescribed treatments",
+      longDescription:
+        "MoodDay is a sensitive product designed around privacy and a fast daily check-in. It works offline through an idempotent IndexedDB queue, supports multiple treatment schedules, personal exports and a caregiver circle with explicit permissions. It does not diagnose or provide clinical recommendations.",
+      stats: { teamSize: "Solo", downloads: "122 tests" },
+      features: [
+        "Next.js 16",
+        "React 19",
+        "TypeScript",
+        "PostgreSQL",
+        "Prisma",
+        "IndexedDB",
+        "Web Push",
+        "Playwright",
+      ],
+      highlights: [
+        {
+          title: "Reliable offline flow",
+          description:
+            "Seven days of check-ins synchronize without loss or duplicates after the page is closed.",
+        },
+        {
+          title: "Caregiver permissions",
+          description:
+            "Invitation, decline, revocation and expiration are server-controlled and tested across two sessions.",
+        },
+        {
+          title: "Personal data controls",
+          description:
+            "JSON, CSV and PDF exports plus account deletion are verified without residual data.",
+        },
+        {
+          title: "Non-clinical positioning",
+          description:
+            "Trends describe facts without diagnosis, causality or medical recommendations.",
+        },
+      ],
+    },
+    Jobio: {
+      description:
+        "Focused sales workflow that tells freelancers what to do today to win their next engagement",
+      longDescription:
+        "Jobio focuses freelance prospecting on five journeys: Today, Pipeline, Follow-ups, CV and Contacts. The product work involved reducing scope, blocking non-V1 modules through a server manifest and hardening onboarding, Kanban transitions, follow-up stop conditions, contact merging and ATS export.",
+      stats: { teamSize: "Solo", downloads: "399 tests" },
+      features: [
+        "Next.js 16",
+        "React 19",
+        "TypeScript",
+        "PostgreSQL",
+        "Prisma",
+        "Better Auth",
+        "Vitest",
+        "Playwright",
+      ],
+      highlights: [
+        {
+          title: "Scope reduction",
+          description:
+            "Navigation, pricing and server checks share the same feature manifest.",
+        },
+        {
+          title: "Reliable pipeline",
+          description:
+            "Replay-safe optimistic moves, double-action lock, undo and retry.",
+        },
+        {
+          title: "Responsible follow-ups",
+          description:
+            "Stops on replies, terminal opportunities, opt-out, duplicates and over-contacting.",
+        },
+        {
+          title: "CV Lab",
+          description:
+            "Named variants, A4 preview, visual PDF and linear ATS export without invented content.",
+        },
+      ],
+    },
+    MyCryptoPilot: {
+      description:
+        "Risk-first crypto demonstrator using demo/testnet data and read-only exchange connections",
+      longDescription:
+        "MyCryptoPilot is presented as an architecture and security case study. The public product remains demo/testnet only: it reviews signals, a read-only portfolio and simulated risk. It does not execute real copy trading, hold funds or promise returns.",
+      stats: { teamSize: "Solo", downloads: "482 tests" },
+      features: [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "PostgreSQL",
+        "Prisma",
+        "Workers",
+        "Testnet",
+        "Vitest",
+      ],
+      highlights: [
+        {
+          title: "Demo / Testnet",
+          description:
+            "Simulation context stays visible and no public action executes a real order.",
+        },
+        {
+          title: "Read-only access",
+          description:
+            "Exchange permissions are validated and secrets are neither displayed nor logged in plain text.",
+        },
+        {
+          title: "Risk Console",
+          description:
+            "Signals are reviewed through exposure, potential loss and limits before simulation.",
+        },
+        {
+          title: "Tested architecture",
+          description:
+            "Workers, circuit breakers and a deterministic dataset are covered by automated tests.",
+        },
+      ],
+    },
+    Hyrun: {
+      description:
+        "Hybrid training prototype for runners, adapted to the equipment they actually have",
+      longDescription:
+        "Hyrun explores deterministic hybrid plans, exercise substitutions and a workout session player. Nutrition, social features and a general AI coach are outside the validated scope. A closed two-week beta is the gate before any extension.",
+      stats: { teamSize: "Solo", downloads: "Beta" },
+    },
+  },
+};
+
+function getPortfolioExperiences(locale: Locale): Experience[] {
+  const localized = experiencesByLocale[locale] ?? experiencesByLocale.fr;
+  const visible = localized
+    .filter((experience) => !hiddenPortfolioProjects.has(experience.name))
+    .map((experience) => ({
+      ...experience,
+      ...portfolioOverrides[locale][experience.name],
+    }));
+
+  return [...visible].sort((left, right) => {
+    const leftPriority = primaryCaseStudies.indexOf(left.name);
+    const rightPriority = primaryCaseStudies.indexOf(right.name);
+    const leftRank = leftPriority === -1 ? Number.MAX_SAFE_INTEGER : leftPriority;
+    const rightRank =
+      rightPriority === -1 ? Number.MAX_SAFE_INTEGER : rightPriority;
+    return leftRank - rightRank;
+  });
+}
+
+export const experiences: Experience[] = getPortfolioExperiences("fr");
 
 export function getExperiences(locale: Locale): Experience[] {
-  return experiencesByLocale[locale] ?? experiencesByLocale.fr;
+  return getPortfolioExperiences(locale);
 }
 
 /**

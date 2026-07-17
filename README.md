@@ -1,10 +1,10 @@
 # Portfolio Yoann
 
-Portfolio personnel de développeur React Native / Mobile.
+Portfolio recruteur de développeur produit React / Next.js : architecture, UX, qualité et livraison du prototype à la production. Le simulateur iPhone reste une vue interactive optionnelle ; la lecture éditoriale web est l'entrée par défaut.
 
 ## Stack technique
 
-- **Framework** : Next.js 15 (App Router)
+- **Framework** : Next.js 16 (App Router)
 - **Styling** : Tailwind CSS + shadcn/ui
 - **Animations** : Framer Motion
 - **PWA** : Service Worker + manifest

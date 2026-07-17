@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 
 const PortfolioApp = dynamic(() => import("@/components/PortfolioApp"), {
@@ -9,7 +10,6 @@ const PortfolioApp = dynamic(() => import("@/components/PortfolioApp"), {
 });
 import TouchIndicator from "@/components/TouchIndicator";
 import PDFDownloadButton from "@/components/pdf/PDFDownloadButton";
-import { useIsRealMobile } from "@/hooks/use-mobile";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocaleToggle } from "@/components/LocaleToggle";
 import { ContactFormCard } from "@/components/contact/ContactFormCard";
@@ -39,6 +39,7 @@ import {
   getEducation,
   getWorkExperiences,
   getProfile,
+  getCaseStudySummaries,
   getExperiences,
   getSocialLinks,
   getSoftSkills,
@@ -88,65 +89,59 @@ const iconMap: Record<string, React.ReactNode> = {
 
 const VIEW_MODE_KEY = "portfolio-view-mode";
 
+const caseSectionCopy = {
+  fr: {
+    eyebrow: "Études de cas principales",
+    title: "Trois produits, trois problèmes de fond",
+    subtitle:
+      "Le code compte, mais les contraintes, les options rejetées et les preuves de fonctionnement racontent davantage la qualité du travail.",
+    cta: "Lire l’étude de cas",
+    primaryCta: "Voir les études de cas",
+  },
+  en: {
+    eyebrow: "Featured case studies",
+    title: "Three products, three fundamental problems",
+    subtitle:
+      "Code matters, but constraints, rejected options and evidence of operation say more about the quality of the work.",
+    cta: "Read the case study",
+    primaryCta: "View case studies",
+  },
+} as const;
+
 export default function Home() {
   const { locale } = useI18n();
-  const isRealMobile = useIsRealMobile();
-  const [viewMode, setViewMode] = useState<"device" | "web">("device");
+  const [viewMode, setViewMode] = useState<"device" | "web">("web");
 
-  // Restore viewMode from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem(VIEW_MODE_KEY);
-    if (saved === "web" || saved === "device") {
-      setViewMode(saved);
-    }
-  }, []);
-
-  // Persist viewMode to localStorage
+  // The editorial web view is intentionally the entry point. The device
+  // simulator remains available as an optional interaction.
   const handleViewModeChange = (mode: "device" | "web") => {
     setViewMode(mode);
     localStorage.setItem(VIEW_MODE_KEY, mode);
   };
-
-  // Mobile réel → fullscreen automatique (pas de cadre iPhone)
-  if (isRealMobile) {
-    return (
-      <main className="min-h-screen bg-background">
-        <PortfolioApp showFrame={false} />
-      </main>
-    );
-  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950">
       <TouchIndicator />
 
       {/* View Mode Toggle - Desktop Only */}
-      <nav aria-label="View mode" className="fixed right-6 top-6 z-50 hidden items-center gap-2 rounded-full border border-border/50 bg-card/80 p-1.5 shadow-soft backdrop-blur-xl lg:flex">
+      {viewMode === "device" && <nav aria-label="View mode" className="fixed right-6 top-6 z-50 hidden items-center gap-2 rounded-full border border-border/50 bg-card/80 p-1.5 shadow-soft backdrop-blur-xl lg:flex">
         <button
           onClick={() => handleViewModeChange("device")}
-          className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
-            viewMode === "device"
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
+          className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all"
         >
           <Smartphone className="h-4 w-4" />
           iPhone
         </button>
         <button
           onClick={() => handleViewModeChange("web")}
-          className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
-            viewMode === "web"
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
+          className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-all hover:text-foreground"
         >
           <Monitor className="h-4 w-4" />
           Web
         </button>
         <LocaleToggle />
         <ThemeToggle />
-      </nav>
+      </nav>}
 
       {/* Device View */}
       {viewMode === "device" && (
@@ -174,7 +169,7 @@ export default function Home() {
       {/* Web View - Full Width */}
       {viewMode === "web" && (
         <div className="min-h-screen animate-ios-fade-in">
-          <WebView />
+          <WebView onDeviceView={() => handleViewModeChange("device")} />
         </div>
       )}
     </main>
@@ -182,7 +177,7 @@ export default function Home() {
 }
 
 // Full Web View Component
-const WebView = () => {
+const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
   const profile = getProfile(locale);
@@ -193,6 +188,8 @@ const WebView = () => {
   const workExperiences = getWorkExperiences(locale);
   const education = getEducation(locale);
   const socialLinks = getSocialLinks(locale);
+  const caseStudies = getCaseStudySummaries(locale);
+  const caseCopy = caseSectionCopy[locale];
 
   // State pour le panneau de détail expérience
   const [selectedExperience, setSelectedExperience] =
@@ -209,6 +206,32 @@ const WebView = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur-xl">
+        <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-4 px-5">
+          <a href="#top" className="font-mono text-sm font-bold tracking-tight text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            YA<span className="text-primary">.</span>
+          </a>
+          <nav aria-label={locale === "en" ? "Portfolio" : "Portfolio"} className="hidden items-center gap-5 md:flex">
+            <a href="#projects" className="text-sm font-medium text-muted-foreground hover:text-foreground">{locale === "en" ? "Projects" : "Projets"}</a>
+            <a href="#experiences" className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.experiences}</a>
+            <a href="#skills" className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.skills}</a>
+            <Link href={`/${locale}/cv`} className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.resume}</Link>
+            <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.contact}</a>
+          </nav>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={onDeviceView}
+              className="hidden min-h-10 items-center gap-2 rounded-full px-3 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground lg:flex"
+            >
+              <Smartphone className="size-4" aria-hidden="true" />
+              iPhone
+            </button>
+            <LocaleToggle />
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
       {/* Wrapper avec transform pour l'effet push */}
       <div
         className={`transition-transform duration-300 ease-out ${
@@ -216,7 +239,7 @@ const WebView = () => {
         }`}
       >
         {/* Hero Section */}
-        <section className="relative min-h-screen overflow-hidden px-6 py-20 2xl:h-screen 2xl:py-0">
+        <section id="top" className="relative min-h-screen overflow-hidden px-6 pb-20 pt-28 2xl:h-screen 2xl:py-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
@@ -227,28 +250,28 @@ const WebView = () => {
               {/* Left: Text content */}
               <div className="text-center 2xl:text-left">
                 {/* Small avatar - visible < lg only */}
-                <div className="relative mx-auto mb-8 h-52 w-52 2xl:hidden">
+                <div className="relative mx-auto mb-5 h-36 w-36 md:mb-8 md:h-52 md:w-52 2xl:hidden">
                   <div className="absolute -inset-5 animate-pulse-soft rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-xl" />
-                  <div className="relative h-52 w-52 overflow-hidden rounded-full border-4 border-background bg-blue-200 shadow-medium dark:bg-blue-900/60">
+                  <div className="relative h-36 w-36 overflow-hidden rounded-full border-4 border-background bg-blue-200 shadow-medium md:h-52 md:w-52 dark:bg-blue-900/60">
                     <Image
                       src={profile.avatar}
                       alt={`${profile.firstName} ${profile.lastName}`}
                       fill
                       className="object-cover object-top"
                       priority
-                      sizes="208px"
+                      sizes="(max-width: 767px) 144px, 208px"
                     />
                   </div>
                 </div>
 
-                <h1 className="mb-4 text-5xl font-bold tracking-tight text-foreground md:text-7xl">
+                <h1 className="mb-3 text-4xl font-bold tracking-tight text-foreground md:mb-4 md:text-7xl">
                   {profile.firstName} {profile.lastName}
-                  <span className="mt-2 block text-3xl text-primary md:text-4xl">
+                  <span className="mt-1 block text-xl leading-tight text-primary md:mt-2 md:text-4xl">
                     {profile.title}
                   </span>
                 </h1>
 
-                <p className="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-muted-foreground 2xl:mx-0">
+                <p className="mx-auto mb-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:mb-8 md:text-xl 2xl:mx-0">
                   {profile.bio}
                 </p>
 
@@ -257,11 +280,11 @@ const WebView = () => {
                     size="lg"
                     onClick={() =>
                       document
-                        .getElementById("experiences")
+                        .getElementById("projects")
                         ?.scrollIntoView({ behavior: "smooth" })
                     }
                   >
-                    {uiTexts.buttons.viewMyExperiences}
+                    {caseCopy.primaryCta}
                   </IOSButton>
                   <IOSButton
                     variant="secondary"
@@ -326,6 +349,70 @@ const WebView = () => {
                 quality={100}
                 unoptimized
               />
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="projects"
+          aria-labelledby="case-studies-title"
+          className="border-y border-border/70 bg-[#FAF9F6] px-6 py-20 text-slate-950 dark:bg-slate-950 dark:text-slate-50"
+        >
+          <div className="mx-auto max-w-6xl">
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">
+              {caseCopy.eyebrow}
+            </p>
+            <div className="mt-4 grid gap-5 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
+              <h2 id="case-studies-title" className="text-4xl font-bold tracking-tight sm:text-5xl">
+                {caseCopy.title}
+              </h2>
+              <p className="max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300 lg:justify-self-end">
+                {caseCopy.subtitle}
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+              {caseStudies.map((study, index) => (
+                <Link
+                  key={study.slug}
+                  href={`/${locale}/projects/${study.slug}`}
+                  className="group flex min-h-[460px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:border-slate-800 dark:bg-slate-900"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                    <Image
+                      src={study.image}
+                      alt=""
+                      fill
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                    />
+                    <span className="absolute left-4 top-4 rounded-full bg-slate-950/85 px-3 py-1 font-mono text-xs font-bold text-white backdrop-blur">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="font-mono text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                      {study.eyebrow}
+                    </p>
+                    <h3 className="mt-3 text-2xl font-bold">{study.name}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                      {study.tagline}
+                    </p>
+                    <div className="mt-5 flex items-end justify-between gap-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+                      <div>
+                        <p className="font-mono text-lg font-bold" style={{ color: study.accent }}>
+                          {study.evidence.value}
+                        </p>
+                        <p className="text-xs text-slate-500">{study.evidence.label}</p>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-sm font-semibold">
+                        {caseCopy.cta}
+                        <ChevronRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

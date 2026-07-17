@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CheckCircle, Send } from "lucide-react";
 import { IOSButton, IOSCard, IOSInput, IOSTextarea } from "@/components/ios";
 import { toast } from "@/hooks/use-toast";
@@ -35,6 +35,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [lastSubmittedAt, setLastSubmittedAt] = useState<number | null>(null);
+  const requestIdRef = useRef<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,16 +52,22 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
 
     setIsSubmitting(true);
     setLastSubmittedAt(now);
+    requestIdRef.current ??= crypto.randomUUID();
 
     try {
       const response = await fetch("/api/send-email", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-locale": locale },
+        headers: {
+          "Content-Type": "application/json",
+          "x-locale": locale,
+          "x-contact-request-id": requestIdRef.current,
+        },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         setIsSubmitted(true);
+        requestIdRef.current = null;
         toast({
           title: uiTexts.messages.messageSent,
           description: uiTexts.messages.messageSentDescription,
@@ -164,6 +171,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             rows={4}
+            minLength={20}
             maxLength={4000}
             required
           />

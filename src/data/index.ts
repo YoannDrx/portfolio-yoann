@@ -57,5 +57,15 @@ export { siteConfig, getSiteConfig, uiTexts, getUiTexts } from './config';
 // AI Content
 export { aiContent, getAiContent, type AIContent, type AITool } from './ai';
 
+// Recruiter-facing case studies
+export {
+  caseStudySlugs,
+  getCaseStudy,
+  getCaseStudySummaries,
+  type CaseStudy,
+  type CaseStudyDecision,
+  type CaseStudySlug,
+} from "./case-studies";
+
 // Download Assets
 export { downloadAssets, getAssetsByCategory, type DownloadAsset, type AssetCategory, type AssetFormat } from './download-assets';
