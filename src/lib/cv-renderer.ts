@@ -63,7 +63,7 @@ const labels = {
       { id: "travel", title: "Voyage & culture" },
     ] as CvInterest[],
     mobility: "Mobilité : Permis A · Permis B",
-    document: { title: "CV Yoann Andrieux - Développeur produit React / Next.js" },
+    document: { title: "CV Yoann Andrieux - Développeur React Native, React & Next.js" },
   },
   en: {
     present: "Present",
@@ -106,7 +106,7 @@ const labels = {
       { id: "travel", title: "Travel & culture" },
     ] as CvInterest[],
     mobility: "Mobility: License A (motorcycle) · License B (car)",
-    document: { title: "Resume Yoann Andrieux - React / Next.js Product Developer" },
+    document: { title: "Resume Yoann Andrieux - React Native, React & Next.js Developer" },
   },
 };
 

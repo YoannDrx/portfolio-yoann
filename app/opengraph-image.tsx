@@ -60,7 +60,7 @@ export default function OpenGraphImage() {
           </div>
 
           <div style={{ fontSize: 34, color: "rgba(230,238,248,0.9)" }}>
-            Développeur produit React / Next.js
+            Développeur React Native, React & Next.js
           </div>
 
           <div
@@ -71,7 +71,7 @@ export default function OpenGraphImage() {
               flexWrap: "wrap",
             }}
           >
-            {["React", "Next.js", "TypeScript", "UX", "Qualité"].map((tag) => (
+            {["React Native", "Next.js", "TypeScript", "UX", "Qualité"].map((tag) => (
               <div
                 key={tag}
                 style={{

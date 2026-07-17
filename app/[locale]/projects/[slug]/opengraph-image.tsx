@@ -41,7 +41,7 @@ export default async function OpenGraphImage({
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 24 }}>
           <span style={{ width: 180, height: 10, borderRadius: 999, background: study?.accent ?? "#2457E6" }} />
-          <span>React / Next.js · Product · Quality</span>
+          <span>React Native · React / Next.js · Product · Quality</span>
         </div>
       </div>
     ),

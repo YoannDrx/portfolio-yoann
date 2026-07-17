@@ -320,7 +320,7 @@ export default async function ProjectCaseStudyPage({
         </section>
 
         <aside className="mt-24 rounded-[2rem] bg-[#111827] p-8 text-white sm:p-12">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-slate-400">React / Next.js · Product · UX · Quality</p>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-slate-400">React Native · React / Next.js · Product · UX · Quality</p>
           <h2 className="mt-5 max-w-3xl text-3xl font-bold sm:text-5xl">{copy.contactTitle}</h2>
           <p className="mt-5 max-w-2xl leading-relaxed text-slate-300">{copy.contactBody}</p>
           <Link href={`/${locale}#contact`} className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 font-semibold text-slate-950 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">

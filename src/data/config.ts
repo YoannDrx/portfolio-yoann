@@ -24,12 +24,12 @@ const siteConfigs: Record<Locale, SiteConfig> = {
   fr: {
     ...baseSiteConfig,
     description:
-      "Portfolio de développeur produit React / Next.js — du prototype au produit fiable",
+      "Portfolio de développeur React Native, React et Next.js — du mobile au produit web fiable",
     locale: "fr-FR",
     seo: {
-      title: "Développeur produit React / Next.js | Portfolio",
+      title: "Développeur React Native, React & Next.js | Portfolio",
       description:
-        "Architecture, UX, qualité et livraison de produits React et Next.js fiables, du prototype à la production.",
+        "Applications mobiles React Native et produits web React / Next.js : architecture, UX, qualité et livraison de bout en bout.",
       keywords: [
         "React Native",
         "iOS",
@@ -50,12 +50,12 @@ const siteConfigs: Record<Locale, SiteConfig> = {
   en: {
     ...baseSiteConfig,
     description:
-      "React / Next.js product developer portfolio — from prototype to reliable product",
+      "React Native, React and Next.js developer portfolio — reliable mobile and web products",
     locale: "en-US",
     seo: {
-      title: "React / Next.js Product Developer | Portfolio",
+      title: "React Native, React & Next.js Developer | Portfolio",
       description:
-        "Architecture, UX, quality and delivery of reliable React and Next.js products from prototype to production.",
+        "React Native mobile apps and React / Next.js web products, with end-to-end architecture, UX, quality and delivery.",
       keywords: [
         "React Native",
         "iOS",
