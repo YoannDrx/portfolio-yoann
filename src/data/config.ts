@@ -11,8 +11,8 @@ const baseSiteConfig = {
   url: "https://yoann-andrieux.fr",
   ogImage: "/og-image.png",
   theme: {
-    primaryColor: "#007AFF", // iOS Blue
-    accentColor: "#5856D6", // iOS Indigo
+    primaryColor: "#2457E6",
+    accentColor: "#22A06B",
   },
   contact: {
     email: "yoann.andrieux@gmail.com",
@@ -24,12 +24,12 @@ const siteConfigs: Record<Locale, SiteConfig> = {
   fr: {
     ...baseSiteConfig,
     description:
-      "Portfolio de développeur React Native - Applications mobiles iOS & Android",
+      "Portfolio de développeur React Native, React et Next.js — du mobile au produit web fiable",
     locale: "fr-FR",
     seo: {
-      title: "Développeur React Native | Portfolio",
+      title: "Développeur React Native, React & Next.js | Portfolio",
       description:
-        "Développeur React Native spécialisé dans la création d'applications mobiles iOS et Android performantes avec des animations fluides.",
+        "Applications mobiles React Native et produits web React / Next.js : architecture, UX, qualité et livraison de bout en bout.",
       keywords: [
         "React Native",
         "iOS",
@@ -49,12 +49,13 @@ const siteConfigs: Record<Locale, SiteConfig> = {
   },
   en: {
     ...baseSiteConfig,
-    description: "React Native developer portfolio — iOS & Android mobile apps",
+    description:
+      "React Native, React and Next.js developer portfolio — reliable mobile and web products",
     locale: "en-US",
     seo: {
-      title: "React Native Developer | Portfolio",
+      title: "React Native, React & Next.js Developer | Portfolio",
       description:
-        "React Native developer focused on building fast, polished iOS and Android apps with smooth animations and great UX.",
+        "React Native mobile apps and React / Next.js web products, with end-to-end architecture, UX, quality and delivery.",
       keywords: [
         "React Native",
         "iOS",
@@ -122,20 +123,20 @@ const uiTextsByLocale = {
       send: "Envoyer",
       back: "Retour",
       retry: "Réessayer",
-      viewMyExperiences: "Voir mes expériences",
+      viewMyExperiences: "Voir les études de cas",
       contactMe: "Me contacter",
     },
     labels: {
       present: "Présent",
       privateExperience: "Confidentiel",
       allRightsReserved: "Tous droits réservés.",
-      availableForProjects: "Disponible pour de nouveaux projets",
+      availableForProjects: "Ouvert aux échanges",
     },
     hero: {
       swipeToNavigate: "Faites glisser pour naviguer • Cliquez sur les onglets",
       letsWorkTogether: "Travaillons ensemble",
-      projectQuestion: "Vous avez un projet de Saas, mobile ou web en tête ?",
-      letsDiscuss: "Discutons-en !",
+      projectQuestion: "Un poste, une mission ou un produit à me présenter ?",
+      letsDiscuss: "Échangeons sur le contexte et les enjeux.",
     },
     descriptions: {
       experiencesSubtitle: "Une sélection de mes expériences web et mobile",
@@ -149,7 +150,7 @@ const uiTextsByLocale = {
       email: "Email",
       emailPlaceholder: "votre@email.com",
       message: "Message",
-      messagePlaceholder: "Décrivez votre projet...",
+      messagePlaceholder: "Présentez le poste, la mission ou le problème produit…",
     },
     messages: {
       messageSent: "Message envoyé !",
@@ -164,7 +165,7 @@ const uiTextsByLocale = {
     },
     stats: {
       team: "Équipe",
-      downloads: "Téléchargements",
+      downloads: "Repère",
       platforms: "Plateformes",
       publishedApps: "applications publiées",
       stackExpertise: "Stack technique & expertise",
@@ -243,20 +244,20 @@ const uiTextsByLocale = {
       send: "Send",
       back: "Back",
       retry: "Try again",
-      viewMyExperiences: "View my experiences",
+      viewMyExperiences: "View case studies",
       contactMe: "Contact me",
     },
     labels: {
       present: "Present",
       privateExperience: "Confidential",
       allRightsReserved: "All rights reserved.",
-      availableForProjects: "Available for new projects",
+      availableForProjects: "Open to conversations",
     },
     hero: {
       swipeToNavigate: "Swipe to navigate • Tap the tabs",
       letsWorkTogether: "Let's work together",
-      projectQuestion: "Have a SaaS, mobile or web project in mind?",
-      letsDiscuss: "Let's discuss!",
+      projectQuestion: "A role, engagement or product you would like to discuss?",
+      letsDiscuss: "Let’s discuss the context and constraints.",
     },
     descriptions: {
       experiencesSubtitle: "A selection of my web and mobile experiences",
@@ -270,7 +271,7 @@ const uiTextsByLocale = {
       email: "Email",
       emailPlaceholder: "you@email.com",
       message: "Message",
-      messagePlaceholder: "Tell me about your project…",
+      messagePlaceholder: "Describe the role, engagement or product problem…",
     },
     messages: {
       messageSent: "Message sent!",
@@ -285,7 +286,7 @@ const uiTextsByLocale = {
     },
     stats: {
       team: "Team",
-      downloads: "Downloads",
+      downloads: "Evidence",
       platforms: "Platforms",
       publishedApps: "apps shipped",
       stackExpertise: "Tech stack & expertise",

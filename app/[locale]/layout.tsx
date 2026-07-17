@@ -26,8 +26,7 @@ export async function generateMetadata({
 
   return {
     title: {
-      default: title,
-      template: `%s — ${profile.firstName} ${profile.lastName}`,
+      absolute: title,
     },
     description,
     keywords: siteConfig.seo.keywords,

@@ -18,10 +18,10 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: 80,
-          backgroundColor: "#0B1220",
+          backgroundColor: "#FAF9F6",
           backgroundImage:
-            "radial-gradient(circle at 20% 20%, rgba(0,112,243,0.35) 0%, rgba(0,112,243,0) 55%), radial-gradient(circle at 85% 30%, rgba(0,196,204,0.25) 0%, rgba(0,196,204,0) 50%), radial-gradient(circle at 70% 85%, rgba(88,86,214,0.25) 0%, rgba(88,86,214,0) 55%)",
-          color: "#E6EEF8",
+            "radial-gradient(circle at 20% 20%, rgba(36,87,230,0.18) 0%, rgba(36,87,230,0) 55%), radial-gradient(circle at 85% 30%, rgba(34,160,107,0.16) 0%, rgba(34,160,107,0) 50%)",
+          color: "#111827",
           fontFamily:
             "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial",
         }}
@@ -40,7 +40,7 @@ export default function OpenGraphImage() {
               alignItems: "center",
               gap: 10,
               fontSize: 22,
-              color: "rgba(230,238,248,0.85)",
+              color: "#64748B",
             }}
           >
             <div
@@ -60,7 +60,7 @@ export default function OpenGraphImage() {
           </div>
 
           <div style={{ fontSize: 34, color: "rgba(230,238,248,0.9)" }}>
-            Développeur React Native
+            Développeur React Native, React & Next.js
           </div>
 
           <div
@@ -71,16 +71,16 @@ export default function OpenGraphImage() {
               flexWrap: "wrap",
             }}
           >
-            {["React Native", "Next.js", "TypeScript", "iOS", "Android"].map((tag) => (
+            {["React Native", "Next.js", "TypeScript", "UX", "Qualité"].map((tag) => (
               <div
                 key={tag}
                 style={{
                   padding: "10px 14px",
                   borderRadius: 999,
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.12)",
+                  background: "rgba(36,87,230,0.08)",
+                  border: "1px solid rgba(36,87,230,0.18)",
                   fontSize: 20,
-                  color: "rgba(230,238,248,0.9)",
+                  color: "#2457E6",
                 }}
               >
                 {tag}
@@ -93,4 +93,3 @@ export default function OpenGraphImage() {
     size
   );
 }
-

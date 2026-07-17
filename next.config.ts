@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["playwright-core", "puppeteer-core", "@sparticuz/chromium-min"],
   images: {
     formats: ["image/avif", "image/webp"],
+    qualities: [75, 100],
   },
   async headers() {
     return [

@@ -4,11 +4,22 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { siteConfig } from "@/data";
+import { Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+});
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Yoann Andrieux — Développeur React Native",
+    default: "Yoann Andrieux — Développeur React Native, React & Next.js",
     template: "%s — Yoann Andrieux",
   },
   description: siteConfig.seo.description,
@@ -27,7 +38,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Yoann Andrieux — Développeur React Native",
+    title: "Yoann Andrieux — Développeur React Native, React & Next.js",
     description: siteConfig.seo.description,
     url: siteConfig.url,
     siteName: "Yoann Andrieux",
@@ -36,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yoann Andrieux — Développeur React Native",
+    title: "Yoann Andrieux — Développeur React Native, React & Next.js",
     description: siteConfig.seo.description,
   },
 };
@@ -51,7 +62,10 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} suppressHydrationWarning>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} ${geistMono.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
         <ServiceWorkerRegister />
         <Providers>{children}</Providers>
       </body>

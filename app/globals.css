@@ -15,8 +15,8 @@
 @layer base {
   :root {
     /* ============ SYSTEM COLORS ============ */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 11%;
+    --background: 45 29% 97%;
+    --foreground: 221 39% 11%;
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 11%;
@@ -25,7 +25,7 @@
     --popover-foreground: 0 0% 11%;
 
     /* Primary - iOS Blue */
-    --primary: 211 100% 50%;
+    --primary: 224 79% 52%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary - iOS Gray */
@@ -43,12 +43,12 @@
 
     --border: 240 6% 90%;
     --input: 240 6% 90%;
-    --ring: 211 100% 50%;
+    --ring: 224 79% 52%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
     /* ============ SEMANTIC COLORS ============ */
-    --success: 142 71% 45%;
+    --success: 156 65% 38%;
     --success-foreground: 0 0% 100%;
     --warning: 32 100% 50%;
     --warning-foreground: 0 0% 0%;
@@ -175,9 +175,32 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-inter), Inter, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  }
+
+  code,
+  pre,
+  .font-mono {
+    font-family: var(--font-geist-mono), monospace;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
