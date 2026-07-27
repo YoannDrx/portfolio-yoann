@@ -17,9 +17,8 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/download/pressay/appcast.xml",
-        destination:
-          "https://github.com/YoannDrx/pressay/releases/latest/download/appcast.xml",
-        permanent: false,
+        destination: "https://yoanndrx.github.io/pressay/appcast.xml",
+        permanent: true,
       },
       {
         source: "/download/whisper",
@@ -28,8 +27,8 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/download/whisper/appcast.xml",
-        destination: "/download/pressay/appcast.xml",
-        permanent: false,
+        destination: "https://yoanndrx.github.io/pressay/appcast.xml",
+        permanent: true,
       },
       {
         source: "/fr/projects/whisper",
