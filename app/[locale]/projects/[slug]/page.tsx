@@ -7,7 +7,10 @@ import {
   ArrowRight,
   CheckCircle2,
   CircleAlert,
+  Download,
+  ExternalLink,
   GitBranch,
+  Github,
   ShieldCheck,
   TestTube2,
   XCircle,
@@ -32,6 +35,10 @@ const labels = {
     next: "Prochaine étape",
     stack: "Socle technique",
     note: "Lecture des chiffres",
+    version: "Version publique",
+    source: "Code source",
+    releases: "Versions",
+    privacy: "Confidentialité",
     contactTitle: "Vous cherchez ce niveau de raisonnement produit ?",
     contactBody:
       "Je peux intervenir du cadrage à la livraison, en rendant visibles les risques, les choix et les preuves de fonctionnement.",
@@ -53,6 +60,10 @@ const labels = {
     next: "Next step",
     stack: "Technical foundation",
     note: "How to read the numbers",
+    version: "Public version",
+    source: "Source code",
+    releases: "Releases",
+    privacy: "Privacy",
     contactTitle: "Looking for this level of product reasoning?",
     contactBody:
       "I can contribute from framing to delivery while making risks, decisions and evidence visible.",
@@ -127,15 +138,35 @@ export default async function ProjectCaseStudyPage({
   }
 
   const copy = labels[locale];
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "TechArticle",
-    headline: `${study.name} — ${study.tagline}`,
-    description: study.summary,
-    author: { "@type": "Person", name: "Yoann Andrieux" },
-    dateModified: "2026-07-17",
-    inLanguage: locale,
-  };
+  const jsonLd = study.release
+    ? {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: study.name,
+        alternateName: `${study.name} par Yodev`,
+        applicationCategory: "ProductivityApplication",
+        operatingSystem: "macOS 14 or later",
+        softwareVersion: study.release.version,
+        description: study.summary,
+        author: { "@type": "Person", name: "Yoann Andrieux" },
+        downloadUrl: `https://www.yoann-andrieux.fr${study.release.downloadUrl}`,
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "EUR",
+          description: study.release.apiNotice,
+        },
+        inLanguage: locale,
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        headline: `${study.name} — ${study.tagline}`,
+        description: study.summary,
+        author: { "@type": "Person", name: "Yoann Andrieux" },
+        dateModified: "2026-07-27",
+        inLanguage: locale,
+      };
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-slate-950 dark:bg-slate-950 dark:text-slate-50">
@@ -172,6 +203,36 @@ export default async function ProjectCaseStudyPage({
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg">
               {study.summary}
             </p>
+            {study.release && (
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                {study.release.available ? (
+                  <a
+                    href={study.release.downloadUrl}
+                    className="inline-flex min-h-12 items-center gap-2 rounded-full bg-blue-600 px-6 font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  >
+                    <Download className="size-4" aria-hidden="true" />
+                    {study.release.downloadLabel}
+                  </a>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className="inline-flex min-h-12 cursor-not-allowed items-center gap-2 rounded-full bg-slate-200 px-6 font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                  >
+                    <Download className="size-4" aria-hidden="true" />
+                    {study.release.unavailableLabel}
+                  </span>
+                )}
+                <a
+                  href={study.release.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-full border border-slate-300 bg-white px-5 font-semibold text-slate-700 transition-colors hover:border-slate-500 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                >
+                  <Github className="size-4" aria-hidden="true" />
+                  {copy.source}
+                </a>
+              </div>
+            )}
             <dl className="mt-8 grid gap-4 border-t border-slate-200 pt-6 text-sm dark:border-slate-800 sm:grid-cols-3">
               <div>
                 <dt className="font-mono text-xs uppercase text-slate-500">Role</dt>
@@ -195,7 +256,7 @@ export default async function ProjectCaseStudyPage({
                 alt={`${study.name} — interface principale`}
                 fill
                 priority
-                className="object-cover object-top"
+                className={study.release ? "object-contain p-10 sm:p-14" : "object-cover object-top"}
                 sizes="(max-width: 1024px) 100vw, 45vw"
               />
             </div>
@@ -205,6 +266,51 @@ export default async function ProjectCaseStudyPage({
             />
           </div>
         </header>
+
+        {study.release && (
+          <section
+            className="mt-16 grid gap-6 rounded-[2rem] border border-blue-200 bg-blue-50 p-6 dark:border-blue-950 dark:bg-blue-950/30 sm:p-8 lg:grid-cols-[0.8fr_1.2fr]"
+            aria-labelledby="install-title"
+          >
+            <div>
+              <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-blue-700 dark:text-blue-300">
+                {copy.version} {study.release.version}
+              </p>
+              <h2 id="install-title" className="mt-3 text-3xl font-bold">
+                {study.release.installTitle}
+              </h2>
+              <p className="mt-3 font-semibold text-slate-700 dark:text-slate-200">
+                {study.release.requirements}
+              </p>
+              <p className="mt-5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {study.release.privacySummary}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {study.release.apiNotice}
+              </p>
+              <div className="mt-6 flex flex-wrap gap-4 text-sm font-semibold">
+                <a href={study.release.releasesUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-blue-700 hover:underline dark:text-blue-300">
+                  {copy.releases}
+                  <ExternalLink className="size-3.5" aria-hidden="true" />
+                </a>
+                <a href={study.release.privacyUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-blue-700 hover:underline dark:text-blue-300">
+                  {copy.privacy}
+                  <ExternalLink className="size-3.5" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+            <ol className="grid gap-3 sm:grid-cols-2">
+              {study.release.installSteps.map((step, index) => (
+                <li key={step} className="flex gap-3 rounded-2xl border border-blue-100 bg-white p-4 text-sm leading-relaxed dark:border-blue-900 dark:bg-slate-900">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-blue-600 font-mono text-xs font-bold text-white">
+                    {index + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
 
         <section className="mt-20" aria-labelledby="evidence-title">
           <SectionTitle id="evidence-title" icon={<TestTube2 />} title={copy.evidence} />
@@ -295,7 +401,7 @@ export default async function ProjectCaseStudyPage({
                 src={study.secondaryImage}
                 alt={`${study.name} — vue produit`}
                 fill
-                className="object-cover object-top opacity-90"
+                className={study.release ? "object-cover object-center opacity-95" : "object-cover object-top opacity-90"}
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>

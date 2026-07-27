@@ -7,6 +7,42 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     qualities: [75, 100],
   },
+  async redirects() {
+    return [
+      {
+        source: "/download/pressay",
+        destination:
+          "https://github.com/YoannDrx/pressay/releases/latest/download/Pressay.dmg",
+        permanent: false,
+      },
+      {
+        source: "/download/pressay/appcast.xml",
+        destination:
+          "https://github.com/YoannDrx/pressay/releases/latest/download/appcast.xml",
+        permanent: false,
+      },
+      {
+        source: "/download/whisper",
+        destination: "/download/pressay",
+        permanent: false,
+      },
+      {
+        source: "/download/whisper/appcast.xml",
+        destination: "/download/pressay/appcast.xml",
+        permanent: false,
+      },
+      {
+        source: "/fr/projects/whisper",
+        destination: "/fr/projects/pressay",
+        permanent: false,
+      },
+      {
+        source: "/en/projects/whisper",
+        destination: "/en/projects/pressay",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {

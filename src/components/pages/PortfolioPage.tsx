@@ -92,7 +92,7 @@ const VIEW_MODE_KEY = "portfolio-view-mode";
 const caseSectionCopy = {
   fr: {
     eyebrow: "Études de cas principales",
-    title: "Trois produits, trois problèmes de fond",
+    title: "Des produits, des problèmes de fond",
     subtitle:
       "Le code compte, mais les contraintes, les options rejetées et les preuves de fonctionnement racontent davantage la qualité du travail.",
     cta: "Lire l’étude de cas",
@@ -100,7 +100,7 @@ const caseSectionCopy = {
   },
   en: {
     eyebrow: "Featured case studies",
-    title: "Three products, three fundamental problems",
+    title: "Products built around fundamental problems",
     subtitle:
       "Code matters, but constraints, rejected options and evidence of operation say more about the quality of the work.",
     cta: "Read the case study",
@@ -371,7 +371,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            <div className="mt-12 grid gap-6 md:grid-cols-2">
               {caseStudies.map((study, index) => (
                 <Link
                   key={study.slug}
@@ -384,7 +384,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                       alt=""
                       fill
                       className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                     <span className="absolute left-4 top-4 rounded-full bg-slate-950/85 px-3 py-1 font-mono text-xs font-bold text-white backdrop-blur">
                       0{index + 1}

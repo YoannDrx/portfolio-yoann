@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/locales";
 
-export type CaseStudySlug = "moodday" | "jobio" | "mycryptopilot";
+export type CaseStudySlug = "moodday" | "jobio" | "mycryptopilot" | "pressay";
 
 export type CaseStudyDecision = {
   title: string;
@@ -34,6 +34,21 @@ export type CaseStudy = {
   nextSteps: string[];
   stack: readonly string[];
   sourceNote: string;
+  release?: {
+    available: boolean;
+    downloadUrl: string;
+    version: string;
+    requirements: string;
+    sourceUrl: string;
+    releasesUrl: string;
+    privacyUrl: string;
+    downloadLabel: string;
+    unavailableLabel: string;
+    installTitle: string;
+    installSteps: string[];
+    privacySummary: string;
+    apiNotice: string;
+  };
 };
 
 const shared = {
@@ -89,6 +104,24 @@ const shared = {
       "Exchange APIs",
       "Workers",
       "Vitest",
+    ],
+  },
+  pressay: {
+    slug: "pressay",
+    name: "Pressay",
+    image: "/images/projects/pressay-icon.png",
+    secondaryImage: "/images/projects/pressay-icon-concept.png",
+    accent: "#5668FF",
+    softAccent: "#E5E8FF",
+    stack: [
+      "Swift 6",
+      "SwiftUI",
+      "AppKit",
+      "AVFoundation",
+      "CryptoKit",
+      "Sparkle 2.9.2",
+      "OpenAI API",
+      "GitHub Actions",
     ],
   },
 } as const;
@@ -387,6 +420,114 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       sourceNote:
         "Les nombres sont des preuves de build et de tests, pas des performances financières. Les données d’exemple sont explicitement étiquetées.",
     },
+    pressay: {
+      ...shared.pressay,
+      eyebrow: "macOS natif · Voix universelle · Local-first",
+      tagline: "Maintenir, parler, relâcher — pour écrire depuis n’importe quelle application.",
+      summary:
+        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. Sa première version se concentre sur une dictée fiable avec détection locale du silence, historique chiffré et clé OpenAI personnelle ; les modes de transformation et les commandes contrôlées seront ajoutés progressivement.",
+      role: "Conception produit, UX macOS, architecture et développement Swift en solo",
+      period: "Release publique 2026",
+      status: "Release candidate 1.0.0 · téléchargement bientôt disponible",
+      evidence: [
+        { value: "arm64 + x86_64", label: "binaire universel", detail: "Apple Silicon et Mac Intel" },
+        { value: "macOS 14+", label: "compatibilité", detail: "Sonoma ou version ultérieure" },
+        { value: "AES-256-GCM", label: "historique local", detail: "Optionnel et à rétention configurable" },
+        { value: "0", label: "télémétrie Yodev", detail: "Aucun profil système envoyé avec les mises à jour" },
+      ],
+      context: [
+        "Le geste de base est volontairement immédiat : maintenir Fn/Globe, parler puis relâcher pour écrire là où se trouve le curseur.",
+        "L’interaction doit rester invisible jusqu’au moment utile : l’app vit dans la barre de menu, démarre sur Fn/Globe et restitue le presse-papiers après l’insertion.",
+        "La vision va au-delà de la dictée — transformer une sélection et préparer des actions — mais chaque capacité ne sera exposée qu’une fois son parcours complet réellement fonctionnel.",
+      ],
+      constraints: [
+        "Fonctionner sur les Mac Intel et Apple Silicon capables d’exécuter macOS 14+.",
+        "Ne jamais envoyer d’audio lorsqu’aucune voix n’est détectée localement.",
+        "Stocker la clé API dans le Trousseau et l’historique optionnel dans un fichier local chiffré.",
+        "Conserver la cible d’insertion même si l’utilisateur démarre une nouvelle dictée.",
+        "Distribuer des mises à jour complètes signées sans télémétrie ni profil système.",
+      ],
+      decisions: [
+        {
+          title: "Un raccourci modificateur natif",
+          context: "La dictée doit démarrer sans voler le focus ni imposer une fenêtre flottante permanente.",
+          choice: "Fn/Globe, Option droite ou Commande droite déclenchent un mode maintenir ou bascule depuis la barre de menu.",
+          rejected: "Une combinaison globale complexe ou un champ de saisie propre à l’application.",
+          tradeoff: "Les permissions Microphone et Accessibilité doivent être expliquées clairement au premier lancement.",
+        },
+        {
+          title: "Une clé OpenAI appartenant à l’utilisateur",
+          context: "Un backend Yodev ajouterait comptes, facturation, rétention et responsabilités opérationnelles.",
+          choice: "La clé personnelle reste dans le Trousseau macOS et authentifie directement la transcription OpenAI.",
+          rejected: "Un proxy mutualisé avec abonnement Yodev.",
+          tradeoff: "L’utilisateur gère sa facturation OpenAI, mais Yodev ne reçoit ni audio ni texte.",
+        },
+        {
+          title: "DMG Developer ID et Sparkle",
+          context: "Un ZIP non notarialisé déclenche des avertissements et ne fournit aucun chemin de mise à jour fiable.",
+          choice: "Un DMG universel notarialisé, signé Developer ID et référencé par un appcast Sparkle Ed25519.",
+          rejected: "Un binaire ad hoc à ouvrir par contournement Gatekeeper.",
+          tradeoff: "La publication exige un compte Apple Developer et une chaîne de secrets CI protégée.",
+        },
+      ],
+      architecture: [
+        { title: "Raccourci global", description: "Écoute de Fn/Globe ou du modificateur droit sans prendre le focus." },
+        { title: "Capture locale", description: "Audio temporaire et détection de voix avant tout appel réseau." },
+        { title: "Transcription", description: "Envoi direct à OpenAI avec langue, modèle et vocabulaire actifs." },
+        { title: "Insertion sûre", description: "Retour à l’application cible, collage et restauration conditionnelle du presse-papiers." },
+        { title: "Mise à jour", description: "DMG complet validé par Sparkle, Ed25519, Developer ID et Gatekeeper." },
+      ],
+      quality: [
+        "Tests de migration des préférences, de la clé API et de la clé d’historique depuis l’ancienne identité.",
+        "Migration idempotente : les valeurs actuelles ne sont jamais écrasées et une erreur Keychain peut être rejouée.",
+        "Suite Xcode, analyse statique et archive Release universelle intégrées au pipeline.",
+        "Signature profonde de l’app et de Sparkle, notarisation, agrafage et évaluation Gatekeeper avant publication.",
+        "DMG monté automatiquement pour vérifier l’app, le lien Applications et la somme SHA-256.",
+      ],
+      delivered: [
+        "Une dictée Fn/Globe disponible depuis toute application macOS.",
+        "Deux modèles de transcription, langue et profils de vocabulaire configurables.",
+        "Un historique local optionnel chiffré avec rétention de 24 heures, 7 jours ou 30 jours.",
+        "Une file de transcriptions annulable qui conserve chaque application cible.",
+        "Une chaîne de release reproductible produisant DMG, checksum et appcast.",
+      ],
+      limits: [
+        "Une clé API OpenAI personnelle est requise et son utilisation peut être facturée par OpenAI.",
+        "Microphone et Accessibilité doivent être accordés dans les Réglages Système.",
+        "La release publique 1.0.0 reste inactive tant que la signature, la notarisation Apple et le test Sparkle ne sont pas terminés.",
+        "Les transformations, commandes vocales, moteurs locaux, intégrations et réunions appartiennent à la roadmap et ne sont pas présentés comme déjà livrés.",
+        "L’application est indépendante et n’est ni éditée ni approuvée par OpenAI.",
+      ],
+      nextSteps: [
+        "Signer et notariser 1.0.0 avec le certificat Developer ID du compte Apple.",
+        "Valider installation, dictée et persistance sur une session macOS propre.",
+        "Tester une mise à jour Sparkle entre deux builds signés avant d’activer le téléchargement.",
+      ],
+      sourceNote:
+        "La compatibilité et les garanties décrivent la configuration Release auditée. Le CTA restera inactif jusqu’à la première GitHub Release notarialisée.",
+      release: {
+        available: false,
+        downloadUrl: "/download/pressay",
+        version: "1.0.0",
+        requirements: "macOS 14+ · Intel et Apple Silicon",
+        sourceUrl: "https://github.com/YoannDrx/pressay",
+        releasesUrl: "https://github.com/YoannDrx/pressay/releases",
+        privacyUrl: "https://github.com/YoannDrx/pressay/blob/main/PRIVACY.md",
+        downloadLabel: "Télécharger pour macOS",
+        unavailableLabel: "Téléchargement bientôt disponible",
+        installTitle: "Installer Pressay",
+        installSteps: [
+          "Télécharger Pressay.dmg depuis cette page.",
+          "Ouvrir le DMG et glisser Pressay dans Applications.",
+          "Lancer Pressay puis accorder Microphone et Accessibilité.",
+          "Ajouter sa clé API OpenAI personnelle dans les réglages.",
+        ],
+        privacySummary:
+          "Historique optionnel chiffré sur le Mac, clé API dans le Trousseau et aucune télémétrie envoyée à Yodev.",
+        apiNotice:
+          "Le téléchargement est gratuit. Les appels à l’API peuvent être facturés directement par OpenAI.",
+      },
+    },
   },
   en: {} as Record<CaseStudySlug, CaseStudy>,
 };
@@ -610,6 +751,114 @@ studiesByLocale.en = {
       "Document the threat model and price sources in the interface.",
     ],
     sourceNote: "Numbers are build and test evidence, not financial performance. Example data is explicitly labeled.",
+  },
+  pressay: {
+    ...studiesByLocale.fr.pressay,
+    eyebrow: "Native macOS · Universal voice · Local-first",
+    tagline: "Hold, speak, release — to write from any application.",
+    summary:
+      "Pressay turns speech into text from any macOS application. Its first release focuses on reliable dictation with local silence detection, encrypted history and a personal OpenAI key; transformation modes and controlled commands will follow incrementally.",
+    role: "Solo product design, macOS UX, architecture and Swift development",
+    period: "2026 public release",
+    status: "1.0.0 release candidate · download coming soon",
+    evidence: [
+      { value: "arm64 + x86_64", label: "universal binary", detail: "Apple Silicon and Intel Macs" },
+      { value: "macOS 14+", label: "compatibility", detail: "Sonoma or later" },
+      { value: "AES-256-GCM", label: "local history", detail: "Optional with configurable retention" },
+      { value: "0", label: "Yodev telemetry", detail: "No system profile sent with update checks" },
+    ],
+    context: [
+      "The core gesture is deliberately immediate: hold Fn/Globe, speak, then release to write at the current cursor.",
+      "The interaction stays out of the way until needed: the app lives in the menu bar, starts on Fn/Globe and restores the clipboard after insertion.",
+      "The vision extends beyond dictation to selection transformations and controlled actions, but each capability will only be exposed once its complete journey is genuinely functional.",
+    ],
+    constraints: [
+      "Run on Intel and Apple Silicon Macs capable of macOS 14 or later.",
+      "Never upload audio when no speech is detected locally.",
+      "Store the API key in Keychain and optional history in an encrypted local file.",
+      "Preserve the insertion target when a user starts another dictation.",
+      "Ship complete signed updates without telemetry or system profiling.",
+    ],
+    decisions: [
+      {
+        title: "A native modifier shortcut",
+        context: "Dictation must start without stealing focus or keeping a permanent floating window.",
+        choice: "Fn/Globe, Right Option or Right Command trigger hold or toggle mode from the menu bar.",
+        rejected: "A complex global shortcut or an app-specific text field.",
+        tradeoff: "Microphone and Accessibility permissions need a clear first-run explanation.",
+      },
+      {
+        title: "An OpenAI key owned by the user",
+        context: "A Yodev backend would add accounts, billing, retention and operational responsibility.",
+        choice: "The personal key stays in macOS Keychain and authenticates transcription directly with OpenAI.",
+        rejected: "A shared proxy bundled with a Yodev subscription.",
+        tradeoff: "The user manages OpenAI billing, while Yodev receives neither audio nor text.",
+      },
+      {
+        title: "Developer ID DMG and Sparkle",
+        context: "An unnotarized ZIP raises warnings and provides no trustworthy update path.",
+        choice: "A notarized universal DMG, signed with Developer ID and referenced by an Ed25519 Sparkle appcast.",
+        rejected: "An ad hoc binary that requires bypassing Gatekeeper.",
+        tradeoff: "Publishing requires an Apple Developer account and a protected CI secret chain.",
+      },
+    ],
+    architecture: [
+      { title: "Global shortcut", description: "Observes Fn/Globe or a right modifier without taking focus." },
+      { title: "Local capture", description: "Temporary audio and speech detection before any network call." },
+      { title: "Transcription", description: "Direct OpenAI request with the active language, model and vocabulary." },
+      { title: "Safe insertion", description: "Returns to the target app, pastes and conditionally restores the clipboard." },
+      { title: "Update", description: "Complete DMG validated by Sparkle, Ed25519, Developer ID and Gatekeeper." },
+    ],
+    quality: [
+      "Migration tests for preferences, API key and history key from the previous app identity.",
+      "Idempotent migration: current values are never overwritten and Keychain failures can be retried.",
+      "Xcode tests, static analysis and a universal Release archive included in the pipeline.",
+      "Deep app and Sparkle signing, notarization, stapling and Gatekeeper assessment before publication.",
+      "Automated DMG mount checking the app, Applications link and SHA-256 checksum.",
+    ],
+    delivered: [
+      "Fn/Globe dictation available from any macOS application.",
+      "Two transcription models, language and vocabulary profiles.",
+      "Optional encrypted local history retained for 24 hours, 7 days or 30 days.",
+      "A cancellable transcription queue preserving each target application.",
+      "A reproducible release chain producing a DMG, checksum and appcast.",
+    ],
+    limits: [
+      "A personal OpenAI API key is required and API usage may be billed by OpenAI.",
+      "Microphone and Accessibility must be granted in System Settings.",
+      "The public 1.0.0 release stays inactive until Apple signing, notarization and the Sparkle update test are complete.",
+      "Transformations, voice commands, local engines, integrations and meetings are roadmap items and are not presented as already shipped.",
+      "The app is independent and is neither published nor endorsed by OpenAI.",
+    ],
+    nextSteps: [
+      "Sign and notarize 1.0.0 with the Apple account’s Developer ID certificate.",
+      "Validate installation, dictation and persistence in a clean macOS session.",
+      "Test a Sparkle update between two signed builds before enabling the download.",
+    ],
+    sourceNote:
+      "Compatibility and guarantees describe the audited Release configuration. The CTA remains inactive until the first notarized GitHub Release.",
+    release: {
+      available: false,
+      downloadUrl: "/download/pressay",
+      version: "1.0.0",
+      requirements: "macOS 14+ · Intel and Apple Silicon",
+      sourceUrl: "https://github.com/YoannDrx/pressay",
+      releasesUrl: "https://github.com/YoannDrx/pressay/releases",
+      privacyUrl: "https://github.com/YoannDrx/pressay/blob/main/PRIVACY.md",
+      downloadLabel: "Download for macOS",
+      unavailableLabel: "Download coming soon",
+      installTitle: "Install Pressay",
+      installSteps: [
+        "Download Pressay.dmg from this page.",
+        "Open the DMG and drag Pressay into Applications.",
+        "Launch Pressay, then grant Microphone and Accessibility.",
+        "Add your personal OpenAI API key in settings.",
+      ],
+      privacySummary:
+        "Optional history is encrypted on the Mac, the API key stays in Keychain and no telemetry is sent to Yodev.",
+      apiNotice:
+        "The download is free. API calls may be billed directly by OpenAI.",
+    },
   },
 };
 
