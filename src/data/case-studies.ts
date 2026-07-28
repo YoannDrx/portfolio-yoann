@@ -425,10 +425,10 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       eyebrow: "macOS natif · Voix universelle · Local-first",
       tagline: "Maintenir, parler, relâcher — pour écrire depuis n’importe quelle application.",
       summary:
-        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2 ajoute douze modes natifs, des modes personnalisés, des profils par application et la transformation réversible d’une sélection, avec consentement explicite avant l’envoi cloud.",
+        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.1 ajoute douze modes natifs, des modes personnalisés, des profils par application et la transformation réversible d’une sélection, avec une politique cloud configurable par mode.",
       role: "Conception produit, UX macOS, architecture et développement Swift en solo",
       period: "Release publique 2026",
-      status: "Version stable 1.2.0 · téléchargement disponible",
+      status: "Version stable 1.2.1 · téléchargement disponible",
       evidence: [
         { value: "arm64 + x86_64", label: "binaire universel", detail: "Apple Silicon et Mac Intel" },
         { value: "macOS 14+", label: "compatibilité", detail: "Sonoma ou version ultérieure" },
@@ -488,7 +488,7 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
         "Une dictée Fn/Globe disponible depuis toute application macOS.",
         "Douze modes natifs, des modes personnalisés et des profils activables par application.",
         "Une transformation de sélection avec aperçu éditable, revalidation de la cible et récupération par copie.",
-        "Un consentement cloud affichant fournisseur, modèle et contenu exact avant envoi.",
+        "Une politique cloud par mode : traitement direct lorsqu’il est autorisé, ou aperçu exact et confirmation à la demande.",
         "Un historique local optionnel chiffré avec rétention de 24 heures, 7 jours ou 30 jours.",
         "Une file de transcriptions annulable qui conserve chaque application cible.",
         "Une chaîne de release reproductible produisant DMG, checksum et appcast.",
@@ -502,14 +502,14 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       nextSteps: [
         "Intégrer les moteurs locaux et le routage hybride prévus pour 1.3.",
         "Mesurer qualité, latence et consommation sur le corpus français, anglais et technique.",
-        "Préparer une variante Mac App Store sandboxée sans réduire la sécurité du produit direct.",
+        "Étudier une version App Store complémentaire compatible avec les limites du sandbox, sans dégrader le produit direct.",
       ],
       sourceNote:
-        "Le CTA pointe vers le DMG universel 1.2.0 signé Developer ID, notarisé par Apple et publié avec son checksum.",
+        "Le CTA pointe vers le DMG universel 1.2.1 signé Developer ID, notarisé par Apple et publié avec son checksum.",
       release: {
         available: true,
         downloadUrl: "/download/pressay",
-        version: "1.2.0",
+        version: "1.2.1",
         requirements: "macOS 14+ · Intel et Apple Silicon",
         sourceUrl: "https://github.com/YoannDrx/pressay",
         releasesUrl: "https://github.com/YoannDrx/pressay/releases",
@@ -758,10 +758,10 @@ studiesByLocale.en = {
     eyebrow: "Native macOS · Universal voice · Local-first",
     tagline: "Hold, speak, release — to write from any application.",
     summary:
-      "Pressay turns speech into text from any macOS application. Version 1.2 adds twelve built-in modes, custom modes, per-app profiles and reversible selection transformations, with explicit consent before cloud processing.",
+      "Pressay turns speech into text from any macOS application. Version 1.2.1 adds twelve built-in modes, custom modes, per-app profiles and reversible selection transformations, with a configurable cloud policy for each mode.",
     role: "Solo product design, macOS UX, architecture and Swift development",
     period: "2026 public release",
-    status: "Stable 1.2.0 · download available",
+    status: "Stable 1.2.1 · download available",
     evidence: [
       { value: "arm64 + x86_64", label: "universal binary", detail: "Apple Silicon and Intel Macs" },
       { value: "macOS 14+", label: "compatibility", detail: "Sonoma or later" },
@@ -821,7 +821,7 @@ studiesByLocale.en = {
       "Fn/Globe dictation available from any macOS application.",
       "Twelve built-in modes, custom modes and opt-in per-app profiles.",
       "Selection transformation with an editable preview, target revalidation and copy fallback.",
-      "Cloud consent showing the provider, model and exact content before sending.",
+      "A per-mode cloud policy: direct processing when allowed, or an exact payload preview and confirmation on request.",
       "Optional encrypted local history retained for 24 hours, 7 days or 30 days.",
       "A cancellable transcription queue preserving each target application.",
       "A reproducible release chain producing a DMG, checksum and appcast.",
@@ -835,14 +835,14 @@ studiesByLocale.en = {
     nextSteps: [
       "Integrate the local engines and hybrid routing planned for 1.3.",
       "Benchmark quality, latency and resource usage on the French, English and technical corpus.",
-      "Prepare a sandboxed Mac App Store variant without weakening the direct product’s security.",
+      "Evaluate a complementary App Store edition within sandbox limits without weakening the direct product.",
     ],
     sourceNote:
-      "The CTA points to the universal 1.2.0 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
+      "The CTA points to the universal 1.2.1 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
     release: {
       available: true,
       downloadUrl: "/download/pressay",
-      version: "1.2.0",
+      version: "1.2.1",
       requirements: "macOS 14+ · Intel and Apple Silicon",
       sourceUrl: "https://github.com/YoannDrx/pressay",
       releasesUrl: "https://github.com/YoannDrx/pressay/releases",
