@@ -426,15 +426,15 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       eyebrow: "macOS natif · Voix universelle · Local-first",
       tagline: "Maintenir, parler, relâcher — pour écrire depuis n’importe quelle application.",
       summary:
-        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.2 ajoute un HUD configurable, la correction vocale, une Voice Inbox chiffrée et des politiques de livraison par application, en complément des douze modes et des transformations réversibles.",
+        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.3 préserve le presse-papiers après l’insertion et renforce la dictée instantanée, le collage Electron et la stabilité de la cible.",
       role: "Conception produit, UX macOS, architecture et développement Swift en solo",
       period: "Release publique 2026",
-      status: "Version stable 1.2.2 · téléchargement disponible",
+      status: "Version stable 1.2.3 · téléchargement disponible",
       evidence: [
         { value: "arm64 + x86_64", label: "binaire universel", detail: "Apple Silicon et Mac Intel" },
         { value: "macOS 14+", label: "compatibilité", detail: "Sonoma ou version ultérieure" },
         { value: "AES-256-GCM", label: "historique local", detail: "Optionnel et à rétention configurable" },
-        { value: "74/74", label: "tests Swift", detail: "CI de la release publique validée" },
+        { value: "114/114", label: "tests Swift", detail: "CI de la release publique validée" },
       ],
       context: [
         "Le geste de base est volontairement immédiat : maintenir Fn/Globe, parler puis relâcher pour écrire là où se trouve le curseur.",
@@ -487,6 +487,7 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       ],
       delivered: [
         "Une dictée Fn/Globe disponible depuis toute application macOS.",
+        "Pressay restitue votre presse-papiers après une insertion réussie, sans écraser une nouvelle copie effectuée entre-temps.",
         "Douze modes natifs, des modes personnalisés et des profils activables par application.",
         "Une transformation de sélection avec aperçu éditable, revalidation de la cible et récupération par copie.",
         "Une politique cloud par mode : traitement direct lorsqu’il est autorisé, ou aperçu exact et confirmation à la demande.",
@@ -498,7 +499,7 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
         "Une chaîne de release reproductible produisant DMG, checksum et appcast.",
       ],
       limits: [
-        "Une clé API OpenAI personnelle est requise et son utilisation peut être facturée par OpenAI.",
+        "WhisperKit permet la transcription locale ; une clé OpenAI personnelle reste nécessaire pour les traitements cloud et peut être facturée par OpenAI.",
         "Microphone et Accessibilité doivent être accordés dans les Réglages Système.",
         "Les moteurs locaux, commandes vocales exécutables, intégrations et réunions appartiennent aux versions suivantes.",
         "L’application est indépendante et n’est ni éditée ni approuvée par OpenAI.",
@@ -509,11 +510,11 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
         "Étudier une version App Store complémentaire compatible avec les limites du sandbox, sans dégrader le produit direct.",
       ],
       sourceNote:
-        "Le CTA pointe vers le DMG universel 1.2.2 signé Developer ID, notarisé par Apple et publié avec son checksum.",
+        "Le CTA pointe vers le DMG universel 1.2.3 signé Developer ID, notarisé par Apple et publié avec son checksum.",
       release: {
         available: true,
         downloadUrl: "/download/pressay",
-        version: "1.2.2",
+        version: "1.2.3",
         requirements: "macOS 14+ · Intel et Apple Silicon",
         sourceUrl: "https://github.com/YoannDrx/pressay",
         productUrl: "https://press-say.app/fr",
@@ -763,15 +764,15 @@ studiesByLocale.en = {
     eyebrow: "Native macOS · Universal voice · Local-first",
     tagline: "Hold, speak, release — to write from any application.",
     summary:
-      "Pressay turns speech into text from any macOS application. Version 1.2.2 adds a configurable HUD, voice correction, an encrypted Voice Inbox and per-app delivery policies alongside twelve modes and reversible transformations.",
+      "Pressay turns speech into text from any macOS application. Version 1.2.3 preserves the clipboard after insertion and strengthens instant dictation, Electron pasting and target stability.",
     role: "Solo product design, macOS UX, architecture and Swift development",
     period: "2026 public release",
-    status: "Stable 1.2.2 · download available",
+    status: "Stable 1.2.3 · download available",
     evidence: [
       { value: "arm64 + x86_64", label: "universal binary", detail: "Apple Silicon and Intel Macs" },
       { value: "macOS 14+", label: "compatibility", detail: "Sonoma or later" },
       { value: "AES-256-GCM", label: "local history", detail: "Optional with configurable retention" },
-      { value: "74/74", label: "Swift tests", detail: "Public release CI validated" },
+      { value: "114/114", label: "Swift tests", detail: "Public release CI validated" },
     ],
     context: [
       "The core gesture is deliberately immediate: hold Fn/Globe, speak, then release to write at the current cursor.",
@@ -824,6 +825,7 @@ studiesByLocale.en = {
     ],
     delivered: [
       "Fn/Globe dictation available from any macOS application.",
+      "Pressay restores the clipboard after a successful insertion without overwriting anything copied in the meantime.",
       "Twelve built-in modes, custom modes and opt-in per-app profiles.",
       "Selection transformation with an editable preview, target revalidation and copy fallback.",
       "A per-mode cloud policy: direct processing when allowed, or an exact payload preview and confirmation on request.",
@@ -835,7 +837,7 @@ studiesByLocale.en = {
       "A reproducible release chain producing a DMG, checksum and appcast.",
     ],
     limits: [
-      "A personal OpenAI API key is required and API usage may be billed by OpenAI.",
+      "WhisperKit provides local transcription; a personal OpenAI key is still required for cloud processing and may be billed by OpenAI.",
       "Microphone and Accessibility must be granted in System Settings.",
       "Local engines, executable voice commands, integrations and meetings are planned for later releases.",
       "The app is independent and is neither published nor endorsed by OpenAI.",
@@ -846,11 +848,11 @@ studiesByLocale.en = {
       "Evaluate a complementary App Store edition within sandbox limits without weakening the direct product.",
     ],
     sourceNote:
-      "The CTA points to the universal 1.2.2 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
+      "The CTA points to the universal 1.2.3 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
     release: {
       available: true,
       downloadUrl: "/download/pressay",
-      version: "1.2.2",
+      version: "1.2.3",
       requirements: "macOS 14+ · Intel and Apple Silicon",
       sourceUrl: "https://github.com/YoannDrx/pressay",
       productUrl: "https://press-say.app/en",
