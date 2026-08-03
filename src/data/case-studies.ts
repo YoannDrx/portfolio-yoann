@@ -40,6 +40,7 @@ export type CaseStudy = {
     version: string;
     requirements: string;
     sourceUrl: string;
+    productUrl?: string;
     releasesUrl: string;
     privacyUrl: string;
     downloadLabel: string;
@@ -515,6 +516,7 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
         version: "1.2.2",
         requirements: "macOS 14+ · Intel et Apple Silicon",
         sourceUrl: "https://github.com/YoannDrx/pressay",
+        productUrl: "https://press-say.app/fr",
         releasesUrl: "https://github.com/YoannDrx/pressay/releases",
         privacyUrl: "https://github.com/YoannDrx/pressay/blob/main/PRIVACY.md",
         downloadLabel: "Télécharger pour macOS",
@@ -851,6 +853,7 @@ studiesByLocale.en = {
       version: "1.2.2",
       requirements: "macOS 14+ · Intel and Apple Silicon",
       sourceUrl: "https://github.com/YoannDrx/pressay",
+      productUrl: "https://press-say.app/en",
       releasesUrl: "https://github.com/YoannDrx/pressay/releases",
       privacyUrl: "https://github.com/YoannDrx/pressay/blob/main/PRIVACY.md",
       downloadLabel: "Download for macOS",

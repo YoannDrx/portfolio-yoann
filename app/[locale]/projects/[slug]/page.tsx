@@ -36,6 +36,7 @@ const labels = {
     stack: "Socle technique",
     note: "Lecture des chiffres",
     version: "Version publique",
+    product: "Site officiel",
     source: "Code source",
     releases: "Versions",
     privacy: "Confidentialité",
@@ -61,6 +62,7 @@ const labels = {
     stack: "Technical foundation",
     note: "How to read the numbers",
     version: "Public version",
+    product: "Official site",
     source: "Source code",
     releases: "Releases",
     privacy: "Privacy",
@@ -221,6 +223,17 @@ export default async function ProjectCaseStudyPage({
                     <Download className="size-4" aria-hidden="true" />
                     {study.release.unavailableLabel}
                   </span>
+                )}
+                {study.release.productUrl && (
+                  <a
+                    href={study.release.productUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-12 items-center gap-2 rounded-full border border-slate-300 bg-white px-5 font-semibold text-slate-700 transition-colors hover:border-slate-500 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                  >
+                    <ExternalLink className="size-4" aria-hidden="true" />
+                    {copy.product}
+                  </a>
                 )}
                 <a
                   href={study.release.sourceUrl}
