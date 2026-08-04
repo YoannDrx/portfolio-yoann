@@ -426,15 +426,15 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       eyebrow: "macOS natif · Voix universelle · Local-first",
       tagline: "Maintenir, parler, relâcher — pour écrire depuis n’importe quelle application.",
       summary:
-        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.3 préserve le presse-papiers après l’insertion et renforce la dictée instantanée, le collage Electron et la stabilité de la cible.",
+        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.4 préserve le presse-papiers après l’insertion et ajoute un chemin de dictée dédié au compositeur Codex.",
       role: "Conception produit, UX macOS, architecture et développement Swift en solo",
       period: "Release publique 2026",
-      status: "Version stable 1.2.3 · téléchargement disponible",
+      status: "Version stable 1.2.4 · téléchargement disponible",
       evidence: [
         { value: "arm64 + x86_64", label: "binaire universel", detail: "Apple Silicon et Mac Intel" },
         { value: "macOS 14+", label: "compatibilité", detail: "Sonoma ou version ultérieure" },
         { value: "AES-256-GCM", label: "historique local", detail: "Optionnel et à rétention configurable" },
-        { value: "114/114", label: "tests Swift", detail: "CI de la release publique validée" },
+        { value: "120/120", label: "tests Swift", detail: "CI de la release publique validée" },
       ],
       context: [
         "Le geste de base est volontairement immédiat : maintenir Fn/Globe, parler puis relâcher pour écrire là où se trouve le curseur.",
@@ -487,6 +487,7 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       ],
       delivered: [
         "Une dictée Fn/Globe disponible depuis toute application macOS.",
+        "Une compatibilité Codex dédiée lorsque son compositeur personnalisé n’est pas exposé à l’accessibilité.",
         "Pressay restitue votre presse-papiers après une insertion réussie, sans écraser une nouvelle copie effectuée entre-temps.",
         "Douze modes natifs, des modes personnalisés et des profils activables par application.",
         "Une transformation de sélection avec aperçu éditable, revalidation de la cible et récupération par copie.",
@@ -510,11 +511,11 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
         "Étudier une version App Store complémentaire compatible avec les limites du sandbox, sans dégrader le produit direct.",
       ],
       sourceNote:
-        "Le CTA pointe vers le DMG universel 1.2.3 signé Developer ID, notarisé par Apple et publié avec son checksum.",
+        "Le CTA pointe vers le DMG universel 1.2.4 signé Developer ID, notarisé par Apple et publié avec son checksum.",
       release: {
         available: true,
         downloadUrl: "/download/pressay",
-        version: "1.2.3",
+        version: "1.2.4",
         requirements: "macOS 14+ · Intel et Apple Silicon",
         sourceUrl: "https://github.com/YoannDrx/pressay",
         productUrl: "https://press-say.app/fr",
@@ -764,15 +765,15 @@ studiesByLocale.en = {
     eyebrow: "Native macOS · Universal voice · Local-first",
     tagline: "Hold, speak, release — to write from any application.",
     summary:
-      "Pressay turns speech into text from any macOS application. Version 1.2.3 preserves the clipboard after insertion and strengthens instant dictation, Electron pasting and target stability.",
+      "Pressay turns speech into text from any macOS application. Version 1.2.4 preserves the clipboard after insertion and adds a dedicated dictation path for the Codex composer.",
     role: "Solo product design, macOS UX, architecture and Swift development",
     period: "2026 public release",
-    status: "Stable 1.2.3 · download available",
+    status: "Stable 1.2.4 · download available",
     evidence: [
       { value: "arm64 + x86_64", label: "universal binary", detail: "Apple Silicon and Intel Macs" },
       { value: "macOS 14+", label: "compatibility", detail: "Sonoma or later" },
       { value: "AES-256-GCM", label: "local history", detail: "Optional with configurable retention" },
-      { value: "114/114", label: "Swift tests", detail: "Public release CI validated" },
+      { value: "120/120", label: "Swift tests", detail: "Public release CI validated" },
     ],
     context: [
       "The core gesture is deliberately immediate: hold Fn/Globe, speak, then release to write at the current cursor.",
@@ -825,6 +826,7 @@ studiesByLocale.en = {
     ],
     delivered: [
       "Fn/Globe dictation available from any macOS application.",
+      "Dedicated Codex compatibility when its custom composer is not exposed through Accessibility.",
       "Pressay restores the clipboard after a successful insertion without overwriting anything copied in the meantime.",
       "Twelve built-in modes, custom modes and opt-in per-app profiles.",
       "Selection transformation with an editable preview, target revalidation and copy fallback.",
@@ -848,11 +850,11 @@ studiesByLocale.en = {
       "Evaluate a complementary App Store edition within sandbox limits without weakening the direct product.",
     ],
     sourceNote:
-      "The CTA points to the universal 1.2.3 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
+      "The CTA points to the universal 1.2.4 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
     release: {
       available: true,
       downloadUrl: "/download/pressay",
-      version: "1.2.3",
+      version: "1.2.4",
       requirements: "macOS 14+ · Intel and Apple Silicon",
       sourceUrl: "https://github.com/YoannDrx/pressay",
       productUrl: "https://press-say.app/en",
