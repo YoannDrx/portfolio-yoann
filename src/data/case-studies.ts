@@ -426,15 +426,15 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
       eyebrow: "macOS natif · Voix universelle · Local-first",
       tagline: "Maintenir, parler, relâcher — pour écrire depuis n’importe quelle application.",
       summary:
-        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.5 rétablit la dictée instantanée dans ChatGPT Web, préserve le presse-papiers et réduit la latence perçue.",
+        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.6 accélère la transcription OpenAI, rend les erreurs réseau récupérables et préchauffe le moteur local.",
       role: "Conception produit, UX macOS, architecture et développement Swift en solo",
       period: "Release publique 2026",
-      status: "Version stable 1.2.5 · téléchargement disponible",
+      status: "Version stable 1.2.6 · téléchargement disponible",
       evidence: [
         { value: "arm64 + x86_64", label: "binaire universel", detail: "Apple Silicon et Mac Intel" },
         { value: "macOS 14+", label: "compatibilité", detail: "Sonoma ou version ultérieure" },
         { value: "AES-256-GCM", label: "historique local", detail: "Optionnel et à rétention configurable" },
-        { value: "132/132", label: "tests Swift", detail: "Suite de release validée" },
+        { value: "139/139", label: "tests Swift", detail: "Suite de release validée" },
       ],
       context: [
         "Le geste de base est volontairement immédiat : maintenir Fn/Globe, parler puis relâcher pour écrire là où se trouve le curseur.",
@@ -511,11 +511,11 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
         "Étudier une version App Store complémentaire compatible avec les limites du sandbox, sans dégrader le produit direct.",
       ],
       sourceNote:
-        "Le CTA pointe vers le DMG universel 1.2.5 signé Developer ID, notarisé par Apple et publié avec son checksum.",
+        "Le CTA pointe vers le DMG universel 1.2.6 signé Developer ID, notarisé par Apple et publié avec son checksum.",
       release: {
         available: true,
         downloadUrl: "/download/pressay",
-        version: "1.2.5",
+        version: "1.2.6",
         requirements: "macOS 14+ · Intel et Apple Silicon",
         sourceUrl: "https://github.com/YoannDrx/pressay",
         productUrl: "https://press-say.app/fr",
@@ -765,15 +765,15 @@ studiesByLocale.en = {
     eyebrow: "Native macOS · Universal voice · Local-first",
     tagline: "Hold, speak, release — to write from any application.",
     summary:
-      "Pressay turns speech into text from any macOS application. Version 1.2.5 restores instant dictation in ChatGPT Web, preserves the clipboard and reduces perceived latency.",
+      "Pressay turns speech into text from any macOS application. Version 1.2.6 speeds up OpenAI transcription, makes network failures recoverable and prewarms the local engine.",
     role: "Solo product design, macOS UX, architecture and Swift development",
     period: "2026 public release",
-    status: "Stable 1.2.5 · download available",
+    status: "Stable 1.2.6 · download available",
     evidence: [
       { value: "arm64 + x86_64", label: "universal binary", detail: "Apple Silicon and Intel Macs" },
       { value: "macOS 14+", label: "compatibility", detail: "Sonoma or later" },
       { value: "AES-256-GCM", label: "local history", detail: "Optional with configurable retention" },
-      { value: "132/132", label: "Swift tests", detail: "Release suite validated" },
+      { value: "139/139", label: "Swift tests", detail: "Release suite validated" },
     ],
     context: [
       "The core gesture is deliberately immediate: hold Fn/Globe, speak, then release to write at the current cursor.",
@@ -850,11 +850,11 @@ studiesByLocale.en = {
       "Evaluate a complementary App Store edition within sandbox limits without weakening the direct product.",
     ],
     sourceNote:
-      "The CTA points to the universal 1.2.5 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
+      "The CTA points to the universal 1.2.6 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
     release: {
       available: true,
       downloadUrl: "/download/pressay",
-      version: "1.2.5",
+      version: "1.2.6",
       requirements: "macOS 14+ · Intel and Apple Silicon",
       sourceUrl: "https://github.com/YoannDrx/pressay",
       productUrl: "https://press-say.app/en",
