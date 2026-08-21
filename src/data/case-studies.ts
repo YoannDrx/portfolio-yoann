@@ -511,12 +511,12 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
         "Étudier une version App Store complémentaire compatible avec les limites du sandbox, sans dégrader le produit direct.",
       ],
       sourceNote:
-        "Le CTA pointe vers le DMG universel 1.2.7 signé Developer ID, notarisé par Apple et publié avec son checksum.",
+        "Le CTA pointe vers le DMG Apple Silicon 2.0.0-beta.2 signé Developer ID, notarisé par Apple et publié avec son checksum.",
       release: {
         available: true,
         downloadUrl: "/download/pressay",
-        version: "1.2.7",
-        requirements: "macOS 14+ · Intel et Apple Silicon",
+        version: "2.0.0-beta.2",
+        requirements: "macOS 14+ · Apple Silicon",
         sourceUrl: "https://github.com/YoannDrx/pressay",
         productUrl: "https://press-say.app/fr",
         releasesUrl: "https://github.com/YoannDrx/pressay/releases",
@@ -850,12 +850,12 @@ studiesByLocale.en = {
       "Evaluate a complementary App Store edition within sandbox limits without weakening the direct product.",
     ],
     sourceNote:
-      "The CTA points to the universal 1.2.7 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
+      "The CTA points to the Apple Silicon 2.0.0-beta.2 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
     release: {
       available: true,
       downloadUrl: "/download/pressay",
-      version: "1.2.7",
-      requirements: "macOS 14+ · Intel and Apple Silicon",
+      version: "2.0.0-beta.2",
+      requirements: "macOS 14+ · Apple Silicon",
       sourceUrl: "https://github.com/YoannDrx/pressay",
       productUrl: "https://press-say.app/en",
       releasesUrl: "https://github.com/YoannDrx/pressay/releases",

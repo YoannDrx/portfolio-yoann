@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       {
         source: "/download/pressay",
         destination:
-          "https://github.com/YoannDrx/pressay/releases/download/v2.0.0-beta.1/Pressay.dmg",
+          "https://github.com/YoannDrx/pressay/releases/latest/download/Pressay.dmg",
         permanent: false,
       },
       {
