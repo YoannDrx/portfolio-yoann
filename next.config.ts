@@ -12,8 +12,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/download/pressay",
-        destination:
-          "https://github.com/YoannDrx/pressay/releases/download/v2.0.0-beta.2/Pressay.dmg",
+        destination: "https://press-say.app/download/pressay",
         permanent: false,
       },
       {
