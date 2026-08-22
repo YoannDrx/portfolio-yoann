@@ -13,9 +13,10 @@ import { toast } from "@/hooks/use-toast";
 
 interface PDFDownloadButtonProps {
   className?: string;
+  fullLabel?: boolean;
 }
 
-const PDFDownloadButton = ({ className }: PDFDownloadButtonProps) => {
+const PDFDownloadButton = ({ className, fullLabel = false }: PDFDownloadButtonProps) => {
   const { locale } = useI18n();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,7 +72,7 @@ const PDFDownloadButton = ({ className }: PDFDownloadButtonProps) => {
       className={className}
     >
       <Download className="h-4 w-4" />
-      PDF
+      {fullLabel ? (locale === "en" ? "Download my resume" : "Télécharger mon CV") : "PDF"}
     </IOSButton>
   );
 };

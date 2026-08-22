@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import { useI18n } from "@/i18n/I18nProvider";
 
 type LocaleToggleProps = {
@@ -36,10 +37,14 @@ export function LocaleToggle({ className }: LocaleToggleProps) {
       aria-label={label}
       title={label}
     >
-      <span className="text-xs font-semibold tracking-wide">
+      <motion.span
+        key={nextLocale}
+        initial={{ y: 7, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="text-xs font-semibold tracking-wide"
+      >
         {nextLocale === "fr" ? messages.language.frShort : messages.language.enShort}
-      </span>
+      </motion.span>
     </button>
   );
 }
-
