@@ -10,9 +10,11 @@ const FILTER_OPTIONS: ExperienceFilter[] = [
   "dev",
   "cdi",
   "freelance",
+  "ponctuel",
   "personal",
   "cinema",
   "ops",
+  "hors_tech",
 ];
 
 interface ExperienceFilterBarProps {

@@ -1085,7 +1085,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/cupra-formentor.jpg",
         "/images/projects/cupra-tournage-nuit.webp",
-        "/images/projects/avnier-landing.png",
+        "/images/projects/avnier-landing.webp",
       ],
       stats: { teamSize: "Équipe nuit", downloads: "Pub" },
       features: [
@@ -2324,7 +2324,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/cupra-formentor.jpg",
         "/images/projects/cupra-tournage-nuit.webp",
-        "/images/projects/avnier-landing.png",
+        "/images/projects/avnier-landing.webp",
       ],
       stats: { teamSize: "Night crew", downloads: "Ad" },
       features: [

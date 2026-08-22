@@ -15,6 +15,8 @@ import {
 import { getProfile, getSocialLinks, getUiTexts } from '@/data';
 import { ContactFormCard } from '@/components/contact/ContactFormCard';
 import { useI18n } from '@/i18n/I18nProvider';
+import { getPortfolioContent, type ContactIntent } from '@/data/portfolio-content';
+import { useState } from 'react';
 
 // Map icon names to components
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
@@ -45,6 +47,9 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
   const uiTexts = getUiTexts(locale);
   const profile = getProfile(locale);
   const socialLinks = getSocialLinks(locale);
+  const content = getPortfolioContent(locale);
+  const [intentId, setIntentId] = useState<ContactIntent["id"]>("full-time");
+  const intent = content.contactIntents.find((item) => item.id === intentId) ?? content.contactIntents[0];
 
   return (
     <div className="h-full bg-background flex flex-col">
@@ -54,7 +59,7 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
         {/* Header */}
         <IOSNavigationBar
           title={uiTexts.nav.contact}
-          subtitle={uiTexts.stats.discussProject}
+          subtitle={intent.heading}
         />
 
         {/* Social Links - Icônes colorées sur fond glass */}
@@ -96,7 +101,12 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
 
         {/* Contact Form */}
         <div className="px-5 mt-4">
-          <ContactFormCard titleClassName="font-semibold text-foreground mb-4" />
+          <ContactFormCard
+            titleClassName="font-semibold text-foreground mb-4"
+            intents={content.contactIntents}
+            activeIntentId={intentId}
+            onIntentChange={setIntentId}
+          />
         </div>
 
         {/* Availability */}
