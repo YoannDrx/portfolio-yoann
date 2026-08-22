@@ -424,98 +424,135 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
     pressay: {
       ...shared.pressay,
       eyebrow: "macOS natif · Voix universelle · Local-first",
-      tagline: "Maintenir, parler, relâcher — pour écrire depuis n’importe quelle application.",
+      tagline:
+        "Maintenir, parler, relâcher — pour écrire depuis n’importe quelle application.",
       summary:
-        "Pressay transforme la voix en texte depuis n’importe quelle application macOS. La version 1.2.7 rend le compte autonome avec Better Auth et sécurise la connexion macOS par OAuth 2.1 avec PKCE.",
-      role: "Conception produit, UX macOS, architecture et développement Swift en solo",
-      period: "Release publique 2026",
-      status: "Version stable 1.2.7 · téléchargement disponible",
+        "Pressay 2 transforme localement la voix en texte depuis les applications macOS, sans compte ni connexion Internet. La bêta publique inaugure Signal OS, trois modèles locaux signés et des routes distantes toujours explicites.",
+      role: "Conception produit, direction artistique, UX macOS et développement Tauri/Rust/React en solo",
+      period: "Bêta publique 2026",
+      status: "Bêta publique 2.0.0-beta.3 · téléchargement disponible",
       evidence: [
-        { value: "arm64 + x86_64", label: "binaire universel", detail: "Apple Silicon et Mac Intel" },
-        { value: "macOS 14+", label: "compatibilité", detail: "Sonoma ou version ultérieure" },
-        { value: "AES-256-GCM", label: "historique local", detail: "Optionnel et à rétention configurable" },
-        { value: "140/140", label: "tests Swift", detail: "Suite de release validée" },
+        { value: "arm64", label: "binaire natif", detail: "Mac Apple Silicon" },
+        {
+          value: "macOS 14+",
+          label: "compatibilité",
+          detail: "Sonoma ou version ultérieure",
+        },
+        {
+          value: "3",
+          label: "presets locaux",
+          detail: "Fast, Polyglot et Precise",
+        },
+        { value: "316", label: "tests Rust", detail: "Suite backend validée" },
       ],
       context: [
-        "Le geste de base est volontairement immédiat : maintenir Fn/Globe, parler puis relâcher pour écrire là où se trouve le curseur.",
-        "L’interaction doit rester invisible jusqu’au moment utile : l’app vit dans la barre de menu, démarre sur Fn/Globe et restitue le presse-papiers après l’insertion.",
-        "La vision va au-delà de la dictée — transformer une sélection et préparer des actions — mais chaque capacité ne sera exposée qu’une fois son parcours complet réellement fonctionnel.",
+        "Le geste de base reste immédiat : maintenir son raccourci configurable, parler puis relâcher pour écrire là où se trouve le curseur.",
+        "L’interaction vit dans la barre de menu et une Voice Bar discrète ; la fenêtre principale sert à choisir le modèle, les modes et les règles de confidentialité.",
+        "La vision va au-delà de la dictée — transformer une sélection puis déclencher des actions contrôlées — sans sacrifier le fonctionnement local par défaut.",
       ],
       constraints: [
-        "Fonctionner sur les Mac Intel et Apple Silicon capables d’exécuter macOS 14+.",
-        "Ne jamais envoyer d’audio lorsqu’aucune voix n’est détectée localement.",
-        "Stocker la clé API dans le Trousseau et l’historique optionnel dans un fichier local chiffré.",
-        "Conserver la cible d’insertion même si l’utilisateur démarre une nouvelle dictée.",
-        "Distribuer des mises à jour complètes signées sans télémétrie ni profil système.",
+        "Fonctionner hors ligne sur les Mac Apple Silicon sous macOS 14 ou ultérieur.",
+        "Ne jamais exiger de compte, de paiement ou de fournisseur distant pour la dictée locale.",
+        "Stocker les clés BYOK dans le Trousseau et conserver l’historique local désactivé par défaut.",
+        "Rendre la route de traitement visible et interdire tout fallback Cloud silencieux.",
+        "Distribuer un DMG signé, notarisé, staplé et vérifiable par checksum.",
       ],
       decisions: [
         {
-          title: "Un raccourci modificateur natif",
-          context: "La dictée doit démarrer sans voler le focus ni imposer une fenêtre flottante permanente.",
-          choice: "Fn/Globe, Option droite ou Commande droite déclenchent un mode maintenir ou bascule depuis la barre de menu.",
-          rejected: "Une combinaison globale complexe ou un champ de saisie propre à l’application.",
-          tradeoff: "Les permissions Microphone et Accessibilité doivent être expliquées clairement au premier lancement.",
+          title: "Un cœur local gratuit",
+          context:
+            "La dictée doit rester disponible pendant une panne réseau, de compte ou de paiement.",
+          choice:
+            "Les modèles Fast, Polyglot et Precise transcrivent sur le Mac, sans compte et sans quota.",
+          rejected:
+            "Un pipeline Cloud obligatoire ou un paywall avant la première dictée.",
+          tradeoff:
+            "Le premier lancement télécharge un modèle et doit expliquer clairement espace disque, vitesse et précision.",
         },
         {
-          title: "Une clé OpenAI appartenant à l’utilisateur",
-          context: "Un backend Yodev ajouterait comptes, facturation, rétention et responsabilités opérationnelles.",
-          choice: "La clé personnelle reste dans le Trousseau macOS et authentifie directement la transcription OpenAI.",
-          rejected: "Un proxy mutualisé avec abonnement Yodev.",
-          tradeoff: "L’utilisateur gère sa facturation OpenAI, mais Yodev ne reçoit ni audio ni texte.",
+          title: "Des transformations explicitement routées",
+          context:
+            "Réécrire ou traduire demande davantage que le modèle de transcription local.",
+          choice:
+            "Chaque mode nomme sa route : règles locales, Apple Intelligence, BYOK ou Pressay Cloud.",
+          rejected:
+            "Basculer silencieusement vers un fournisseur distant lorsque la route locale est indisponible.",
+          tradeoff:
+            "Les fonctions avancées restent indisponibles tant qu’une route compatible n’est pas configurée.",
         },
         {
-          title: "DMG Developer ID et Sparkle",
-          context: "Un ZIP non notarialisé déclenche des avertissements et ne fournit aucun chemin de mise à jour fiable.",
-          choice: "Un DMG universel notarialisé, signé Developer ID et référencé par un appcast Sparkle Ed25519.",
+          title: "Deux canaux de distribution séparés",
+          context:
+            "La version directe et le Mac App Store n’autorisent pas les mêmes mécanismes de paiement et d’insertion.",
+          choice:
+            "Le DMG direct utilise Developer ID ; une variante sandboxée distincte est préparée pour StoreKit.",
           rejected: "Un binaire ad hoc à ouvrir par contournement Gatekeeper.",
-          tradeoff: "La publication exige un compte Apple Developer et une chaîne de secrets CI protégée.",
+          tradeoff:
+            "Chaque canal possède sa propre matrice de tests et la version Store reste indisponible avant TestFlight.",
         },
       ],
       architecture: [
-        { title: "Raccourci global", description: "Écoute de Fn/Globe ou du modificateur droit sans prendre le focus." },
-        { title: "Capture locale", description: "Audio temporaire et détection de voix avant tout appel réseau." },
-        { title: "Transcription", description: "Envoi direct à OpenAI avec langue, modèle et vocabulaire actifs." },
-        { title: "Insertion sûre", description: "Retour à l’application cible, collage et restauration conditionnelle du presse-papiers." },
-        { title: "Mise à jour", description: "DMG complet validé par Sparkle, Ed25519, Developer ID et Gatekeeper." },
+        {
+          title: "Capture locale",
+          description:
+            "Raccourci global, micro, resampling et détection de voix sans upload.",
+        },
+        {
+          title: "Catalogue signé",
+          description:
+            "Presets versionnés, SHA-256 vérifié, reprise et fallback de téléchargement.",
+        },
+        {
+          title: "Transcription locale",
+          description:
+            "Parakeet et Whisper exécutés sur Apple Silicon avec accélération Metal.",
+        },
+        {
+          title: "Transformation explicite",
+          description:
+            "Mode et route visibles avant toute requête Apple Intelligence, BYOK ou Cloud.",
+        },
+        {
+          title: "Insertion sûre",
+          description:
+            "Collage dans l’application cible, restauration du presse-papiers et récupération par copie.",
+        },
       ],
       quality: [
-        "Tests de migration des préférences, de la clé API et de la clé d’historique depuis l’ancienne identité.",
-        "Migration idempotente : les valeurs actuelles ne sont jamais écrasées et une erreur Keychain peut être rejouée.",
-        "Suite Xcode, analyse statique et archive Release universelle intégrées au pipeline.",
-        "Signature profonde de l’app et de Sparkle, notarisation, agrafage et évaluation Gatekeeper avant publication.",
-        "DMG monté automatiquement pour vérifier l’app, le lien Applications et la somme SHA-256.",
+        "Catalogue de modèles signé et artefacts verrouillés par révision, taille et SHA-256.",
+        "Tests Rust, TypeScript et Playwright exécutés dans la CI avant publication.",
+        "DMG final notarisé puis staplé, et non seulement l’application qu’il contient.",
+        "Asset GitHub retéléchargé puis revalidé avec codesign, stapler, Gatekeeper et checksum.",
+        "Logs de release expurgés : aucune dictée, clé, réponse, presse-papiers ou audio.",
       ],
       delivered: [
-        "Une dictée Fn/Globe disponible depuis toute application macOS.",
-        "Une compatibilité dédiée à ChatGPT Web et Codex lorsque leur compositeur personnalisé n’est plus exposé à l’accessibilité.",
-        "Pressay restitue votre presse-papiers après une insertion réussie, sans écraser une nouvelle copie effectuée entre-temps.",
-        "Douze modes natifs, des modes personnalisés et des profils activables par application.",
-        "Une transformation de sélection avec aperçu éditable, revalidation de la cible et récupération par copie.",
-        "Une politique cloud par mode : traitement direct lorsqu’il est autorisé, ou aperçu exact et confirmation à la demande.",
-        "Un HUD configurable et refermable, avec choix du mode pendant l’écoute et actions post-insertion.",
-        "Une correction vocale de la dernière insertion et des politiques injection, aperçu, copie ou exclusion par application.",
-        "Une Voice Inbox optionnelle, chiffrée séparément et soumise à sa propre rétention.",
-        "Un historique local optionnel chiffré avec rétention de 24 heures, 7 jours ou 30 jours.",
-        "Une file de transcriptions annulable qui conserve chaque application cible.",
-        "Une chaîne de release reproductible produisant DMG, checksum et appcast.",
+        "Une dictée locale gratuite déclenchée par maintien/relâchement ou bascule.",
+        "Trois presets locaux : Fast, Polyglot et Precise, avec téléchargement vérifié.",
+        "Une Voice Bar Minimal ou Live et un panneau menu bar synchronisés avec le pipeline.",
+        "Des modes intégrés, des modes personnalisés, un dictionnaire et des profils par application.",
+        "Un historique local optionnel, chiffré et soumis à une rétention configurable.",
+        "Des clés BYOK conservées dans le Trousseau avec validation explicite du fournisseur.",
+        "Une insertion inter-apps qui restaure le presse-papiers et propose Copier en récupération.",
+        "Une chaîne de release reproductible produisant un DMG et son checksum vérifiables.",
       ],
       limits: [
-        "WhisperKit permet la transcription locale ; une clé OpenAI personnelle reste nécessaire pour les traitements cloud et peut être facturée par OpenAI.",
+        "Cette bêta gratuite ne commercialise pas encore Pressay Pro : compte, Cloud, synchronisation et paiement restent fermés.",
         "Microphone et Accessibilité doivent être accordés dans les Réglages Système.",
-        "Les moteurs locaux, commandes vocales exécutables, intégrations et réunions appartiennent aux versions suivantes.",
+        "La matrice native complète sur plusieurs Mac et toutes les applications cibles est encore en cours.",
+        "La version Mac App Store attend StoreKit, TestFlight et la conformité chiffrement.",
         "L’application est indépendante et n’est ni éditée ni approuvée par OpenAI.",
       ],
       nextSteps: [
-        "Intégrer les moteurs locaux et le routage hybride prévus pour 1.3.",
-        "Mesurer qualité, latence et consommation sur le corpus français, anglais et technique.",
-        "Étudier une version App Store complémentaire compatible avec les limites du sandbox, sans dégrader le produit direct.",
+        "Terminer la matrice native de dictée, insertion, sons et HUD sur les machines de référence.",
+        "Isoler et valider le Cloud de production, Google, Apple et la synchronisation E2EE.",
+        "Ouvrir Stripe puis StoreKit uniquement après validation des entitlements et des parcours de remboursement.",
       ],
       sourceNote:
-        "Le CTA pointe vers le DMG Apple Silicon 2.0.0-beta.2 signé Developer ID, notarisé par Apple et publié avec son checksum.",
+        "Le CTA pointe vers le DMG Apple Silicon 2.0.0-beta.3 signé Developer ID, notarisé, staplé par Apple et publié avec son checksum.",
       release: {
         available: true,
         downloadUrl: "/download/pressay",
-        version: "2.0.0-beta.2",
+        version: "2.0.0-beta.3",
         requirements: "macOS 14+ · Apple Silicon",
         sourceUrl: "https://github.com/YoannDrx/pressay",
         productUrl: "https://press-say.app/fr",
@@ -528,12 +565,12 @@ const studiesByLocale: Record<Locale, Record<CaseStudySlug, CaseStudy>> = {
           "Télécharger Pressay.dmg depuis cette page.",
           "Ouvrir le DMG et glisser Pressay dans Applications.",
           "Lancer Pressay puis accorder Microphone et Accessibilité.",
-          "Ajouter sa clé API OpenAI personnelle dans les réglages.",
+          "Choisir un modèle local puis maintenir le raccourci, parler et relâcher.",
         ],
         privacySummary:
-          "Historique optionnel chiffré sur le Mac, clé API dans le Trousseau et aucune télémétrie envoyée à Yodev.",
+          "Dictée locale sans compte, historique désactivé par défaut et clés BYOK facultatives conservées dans le Trousseau.",
         apiNotice:
-          "Le téléchargement est gratuit. Les appels à l’API peuvent être facturés directement par OpenAI.",
+          "Le téléchargement et la dictée locale sont gratuits. Les routes BYOK facultatives peuvent être facturées par le fournisseur choisi.",
       },
     },
   },
@@ -765,96 +802,128 @@ studiesByLocale.en = {
     eyebrow: "Native macOS · Universal voice · Local-first",
     tagline: "Hold, speak, release — to write from any application.",
     summary:
-      "Pressay turns speech into text from any macOS application. Version 1.2.7 makes accounts self-hosted with Better Auth and secures the macOS sign-in flow with OAuth 2.1 and PKCE.",
-    role: "Solo product design, macOS UX, architecture and Swift development",
-    period: "2026 public release",
-    status: "Stable 1.2.7 · download available",
+      "Pressay 2 turns speech into text locally across macOS applications, without an account or Internet connection. The public beta introduces Signal OS, three signed local models and remote routes that always remain explicit.",
+    role: "Solo product design, art direction, macOS UX and Tauri/Rust/React development",
+    period: "2026 public beta",
+    status: "Public beta 2.0.0-beta.3 · download available",
     evidence: [
-      { value: "arm64 + x86_64", label: "universal binary", detail: "Apple Silicon and Intel Macs" },
+      { value: "arm64", label: "native binary", detail: "Apple Silicon Macs" },
       { value: "macOS 14+", label: "compatibility", detail: "Sonoma or later" },
-      { value: "AES-256-GCM", label: "local history", detail: "Optional with configurable retention" },
-      { value: "140/140", label: "Swift tests", detail: "Release suite validated" },
+      {
+        value: "3",
+        label: "local presets",
+        detail: "Fast, Polyglot and Precise",
+      },
+      { value: "316", label: "Rust tests", detail: "Backend suite validated" },
     ],
     context: [
-      "The core gesture is deliberately immediate: hold Fn/Globe, speak, then release to write at the current cursor.",
-      "The interaction stays out of the way until needed: the app lives in the menu bar, starts on Fn/Globe and restores the clipboard after insertion.",
-      "The vision extends beyond dictation to selection transformations and controlled actions, but each capability will only be exposed once its complete journey is genuinely functional.",
+      "The core gesture stays immediate: hold your configurable shortcut, speak, then release to write at the current cursor.",
+      "The interaction lives in the menu bar and a discreet Voice Bar; the main window configures models, modes and privacy rules.",
+      "The vision extends beyond dictation to selection transformations and controlled actions without sacrificing local-first operation.",
     ],
     constraints: [
-      "Run on Intel and Apple Silicon Macs capable of macOS 14 or later.",
-      "Never upload audio when no speech is detected locally.",
-      "Store the API key in Keychain and optional history in an encrypted local file.",
-      "Preserve the insertion target when a user starts another dictation.",
-      "Ship complete signed updates without telemetry or system profiling.",
+      "Run offline on Apple Silicon Macs using macOS 14 or later.",
+      "Never require an account, payment or remote provider for local dictation.",
+      "Store BYOK credentials in Keychain and keep local history off by default.",
+      "Show the processing route and prohibit silent Cloud fallback.",
+      "Ship a signed, notarized, stapled DMG with a verifiable checksum.",
     ],
     decisions: [
       {
-        title: "A native modifier shortcut",
-        context: "Dictation must start without stealing focus or keeping a permanent floating window.",
-        choice: "Fn/Globe, Right Option or Right Command trigger hold or toggle mode from the menu bar.",
-        rejected: "A complex global shortcut or an app-specific text field.",
-        tradeoff: "Microphone and Accessibility permissions need a clear first-run explanation.",
+        title: "A free local core",
+        context:
+          "Dictation must remain available during any network, account or billing outage.",
+        choice:
+          "Fast, Polyglot and Precise transcribe on the Mac without an account or quota.",
+        rejected:
+          "A mandatory Cloud pipeline or a paywall before the first successful dictation.",
+        tradeoff:
+          "First launch downloads a model and must explain disk space, speed and accuracy clearly.",
       },
       {
-        title: "An OpenAI key owned by the user",
-        context: "A Yodev backend would add accounts, billing, retention and operational responsibility.",
-        choice: "The personal key stays in macOS Keychain and authenticates transcription directly with OpenAI.",
-        rejected: "A shared proxy bundled with a Yodev subscription.",
-        tradeoff: "The user manages OpenAI billing, while Yodev receives neither audio nor text.",
+        title: "Explicitly routed transformations",
+        context:
+          "Rewriting or translating requires more than the local speech-to-text model.",
+        choice:
+          "Every mode names its route: local rules, Apple Intelligence, BYOK or Pressay Cloud.",
+        rejected:
+          "Silently switching to a remote provider when the local route is unavailable.",
+        tradeoff:
+          "Advanced features stay unavailable until a compatible route is configured.",
       },
       {
-        title: "Developer ID DMG and Sparkle",
-        context: "An unnotarized ZIP raises warnings and provides no trustworthy update path.",
-        choice: "A notarized universal DMG, signed with Developer ID and referenced by an Ed25519 Sparkle appcast.",
+        title: "Separate distribution channels",
+        context:
+          "Direct distribution and the Mac App Store do not allow the same payment and insertion mechanisms.",
+        choice:
+          "The direct DMG uses Developer ID; a separate sandboxed build is prepared for StoreKit.",
         rejected: "An ad hoc binary that requires bypassing Gatekeeper.",
-        tradeoff: "Publishing requires an Apple Developer account and a protected CI secret chain.",
+        tradeoff:
+          "Each channel has its own test matrix and the Store build stays unavailable until TestFlight.",
       },
     ],
     architecture: [
-      { title: "Global shortcut", description: "Observes Fn/Globe or a right modifier without taking focus." },
-      { title: "Local capture", description: "Temporary audio and speech detection before any network call." },
-      { title: "Transcription", description: "Direct OpenAI request with the active language, model and vocabulary." },
-      { title: "Safe insertion", description: "Returns to the target app, pastes and conditionally restores the clipboard." },
-      { title: "Update", description: "Complete DMG validated by Sparkle, Ed25519, Developer ID and Gatekeeper." },
+      {
+        title: "Local capture",
+        description:
+          "Global shortcut, microphone, resampling and voice activity detection without upload.",
+      },
+      {
+        title: "Signed catalogue",
+        description:
+          "Versioned presets with SHA-256 verification, resume and download fallback.",
+      },
+      {
+        title: "Local transcription",
+        description:
+          "Parakeet and Whisper run on Apple Silicon with Metal acceleration.",
+      },
+      {
+        title: "Explicit transformation",
+        description:
+          "The selected mode and route are visible before Apple Intelligence, BYOK or Cloud runs.",
+      },
+      {
+        title: "Safe insertion",
+        description:
+          "Pastes into the target app, restores the clipboard and offers Copy as recovery.",
+      },
     ],
     quality: [
-      "Migration tests for preferences, API key and history key from the previous app identity.",
-      "Idempotent migration: current values are never overwritten and Keychain failures can be retried.",
-      "Xcode tests, static analysis and a universal Release archive included in the pipeline.",
-      "Deep app and Sparkle signing, notarization, stapling and Gatekeeper assessment before publication.",
-      "Automated DMG mount checking the app, Applications link and SHA-256 checksum.",
+      "Signed model catalogue with artifacts pinned by revision, size and SHA-256.",
+      "Rust, TypeScript and Playwright tests run in CI before publication.",
+      "The final DMG is notarized and stapled, not only the application inside it.",
+      "The GitHub asset is downloaded again and revalidated with codesign, stapler, Gatekeeper and its checksum.",
+      "Redacted release logs contain no dictation, API key, response, clipboard value or audio.",
     ],
     delivered: [
-      "Fn/Globe dictation available from any macOS application.",
-      "Dedicated ChatGPT Web and Codex compatibility when their custom composer is no longer exposed through Accessibility.",
-      "Pressay restores the clipboard after a successful insertion without overwriting anything copied in the meantime.",
-      "Twelve built-in modes, custom modes and opt-in per-app profiles.",
-      "Selection transformation with an editable preview, target revalidation and copy fallback.",
-      "A per-mode cloud policy: direct processing when allowed, or an exact payload preview and confirmation on request.",
-      "A configurable, dismissible HUD with in-capture mode selection and post-insertion actions.",
-      "Voice correction for the latest insertion and per-app inject, preview, copy or exclude policies.",
-      "An optional Voice Inbox with separate encryption and retention.",
-      "Optional encrypted local history retained for 24 hours, 7 days or 30 days.",
-      "A cancellable transcription queue preserving each target application.",
-      "A reproducible release chain producing a DMG, checksum and appcast.",
+      "Free local dictation triggered by hold/release or toggle.",
+      "Three local presets—Fast, Polyglot and Precise—with verified downloads.",
+      "Minimal and Live Voice Bars plus a menu panel synchronized with the pipeline.",
+      "Built-in and custom modes, a dictionary and per-application profiles.",
+      "Optional encrypted local history with configurable retention.",
+      "BYOK credentials held in Keychain with explicit provider validation.",
+      "Cross-app insertion that restores the clipboard and offers Copy as recovery.",
+      "A reproducible release chain producing a verifiable DMG and checksum.",
     ],
     limits: [
-      "WhisperKit provides local transcription; a personal OpenAI key is still required for cloud processing and may be billed by OpenAI.",
+      "This free beta does not sell Pressay Pro yet: accounts, Cloud, sync and payments remain closed.",
       "Microphone and Accessibility must be granted in System Settings.",
-      "Local engines, executable voice commands, integrations and meetings are planned for later releases.",
+      "The full native matrix across multiple Macs and all target applications is still in progress.",
+      "The Mac App Store edition still requires StoreKit, TestFlight and encryption compliance.",
       "The app is independent and is neither published nor endorsed by OpenAI.",
     ],
     nextSteps: [
-      "Integrate the local engines and hybrid routing planned for 1.3.",
-      "Benchmark quality, latency and resource usage on the French, English and technical corpus.",
-      "Evaluate a complementary App Store edition within sandbox limits without weakening the direct product.",
+      "Complete the native dictation, insertion, sound and Voice Bar matrix on reference Macs.",
+      "Isolate and validate production Cloud, Google, Apple and E2EE sync.",
+      "Open Stripe and then StoreKit only after entitlements and refund journeys pass.",
     ],
     sourceNote:
-      "The CTA points to the Apple Silicon 2.0.0-beta.2 DMG signed with Developer ID, notarized by Apple and published with its checksum.",
+      "The CTA points to the Apple Silicon 2.0.0-beta.3 DMG signed with Developer ID, notarized and stapled by Apple, and published with its checksum.",
     release: {
       available: true,
       downloadUrl: "/download/pressay",
-      version: "2.0.0-beta.2",
+      version: "2.0.0-beta.3",
       requirements: "macOS 14+ · Apple Silicon",
       sourceUrl: "https://github.com/YoannDrx/pressay",
       productUrl: "https://press-say.app/en",
@@ -867,12 +936,12 @@ studiesByLocale.en = {
         "Download Pressay.dmg from this page.",
         "Open the DMG and drag Pressay into Applications.",
         "Launch Pressay, then grant Microphone and Accessibility.",
-        "Add your personal OpenAI API key in settings.",
+        "Choose a local model, then hold your shortcut, speak and release.",
       ],
       privacySummary:
-        "Optional history is encrypted on the Mac, the API key stays in Keychain and no telemetry is sent to Yodev.",
+        "Local dictation needs no account, history is off by default and optional BYOK credentials stay in Keychain.",
       apiNotice:
-        "The download is free. API calls may be billed directly by OpenAI.",
+        "The download and local dictation are free. Optional BYOK routes may be billed by the selected provider.",
     },
   },
 };
