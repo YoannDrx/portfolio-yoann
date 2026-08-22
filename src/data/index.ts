@@ -69,3 +69,16 @@ export {
 
 // Download Assets
 export { downloadAssets, getAssetsByCategory, type DownloadAsset, type AssetCategory, type AssetFormat } from './download-assets';
+
+// Shared recruiter portfolio content
+export {
+  DEV_EXPERIENCE_TYPES,
+  EXPERIENCE_TYPE_ORDER,
+  getExperienceTypeClasses,
+  getExperienceTypeLabel,
+  getPortfolioContent,
+  type PortfolioContent,
+  type PortfolioNavItem,
+  type PortfolioSectionId,
+  type ViewMode,
+} from "./portfolio-content";

@@ -1,560 +1,301 @@
-/**
- * CV Renderer
- * Generates a standalone HTML with inline CSS for the CV — Premium 2-page A4 Layout
- */
-
 import { readFileSync } from "fs";
 import { join } from "path";
 import type { Locale } from "@/i18n/locales";
 import {
   getEducation,
-  getWorkExperiences,
   getProfile,
   getSoftSkills,
   getTechnicalSkills,
-  type Education,
+  getWorkExperiences,
   type WorkExperience,
-  type NarrativeSkillCard,
-  type SoftSkillCard,
 } from "@/data";
 
-type CvLanguage = { id: string; name: string; level: string };
-type CvInterest = { id: string; title: string; detail?: string };
-
-const labels = {
+const copy = {
   fr: {
+    title: "CV Yoann Andrieux - Dev React Native",
     present: "Présent",
-    contact: "Contact",
-    availability: "Disponible",
-    sectionTitles: {
-      experiences: "Expériences",
-      skills: "Compétences",
-      education: "Formation",
-      languages: "Langues",
-      interests: "Centres d'intérêt",
-      softSkills: "Soft Skills",
-      managementAndOthers: "Management & Autres expériences",
-      cinemaEvents: "Cinéma",
-      intermittent: "Intermittent du spectacle",
-    },
-    employmentTypes: {
-      cdi: "CDI",
-      freelance: "Freelance",
-      independant: "Indep.",
-      cdd: "CDD",
-      intermittent: "Intermittent",
-      ponctuel: "Freelance",
-      hors_tech: "Intermittent",
-      ops: "Ops",
-      cinema: "Cinéma",
-    } as Record<string, string>,
-    remoteLabels: {
-      remote: "Remote",
-      hybrid: "Hybride",
-    } as Record<string, string>,
-    languages: [
-      { id: "fr", name: "Français", level: "Natif" },
-      { id: "en", name: "Anglais", level: "Professionnel" },
-    ] as CvLanguage[],
-    interests: [
-      { id: "music", title: "Musique", detail: "Bassiste pro" },
-      { id: "running", title: "Running" },
-      { id: "nature", title: "Nature & randonnée" },
-      { id: "travel", title: "Voyage & culture" },
-    ] as CvInterest[],
+    available: "Ouvert aux échanges - CDI / Freelance / Mission longue",
+    experience: "Expériences sélectionnées",
+    previous: "Projets React antérieurs",
+    management: "Management & opérations",
+    creative: "Cinéma & production",
+    skills: "Compétences principales",
+    human: "Compétences humaines",
+    education: "Formation",
+    languages: "Langues : Français natif · Anglais professionnel",
+    interests: "Musique (bassiste professionnel) · Running · Nature & randonnée · Voyage",
     mobility: "Mobilité : Permis A · Permis B",
-    document: { title: "CV Yoann Andrieux - Développeur React Native, React & Next.js" },
   },
   en: {
+    title: "Resume Yoann Andrieux - React Native Dev",
     present: "Present",
-    contact: "Contact",
-    availability: "Available",
-    sectionTitles: {
-      experiences: "Experience",
-      skills: "Skills",
-      education: "Education",
-      languages: "Languages",
-      interests: "Interests",
-      softSkills: "Soft Skills",
-      managementAndOthers: "Management & Other Experience",
-      cinemaEvents: "Cinema",
-      intermittent: "Performing Arts",
-    },
-    employmentTypes: {
-      cdi: "Full-time",
-      freelance: "Freelance",
-      independant: "Self-employed",
-      cdd: "Fixed-term",
-      intermittent: "Intermittent",
-      ponctuel: "Freelance",
-      hors_tech: "Intermittent",
-      ops: "Ops",
-      cinema: "Cinema",
-    } as Record<string, string>,
-    remoteLabels: {
-      remote: "Remote",
-      hybrid: "Hybrid",
-    } as Record<string, string>,
-    languages: [
-      { id: "fr", name: "French", level: "Native" },
-      { id: "en", name: "English", level: "Professional" },
-    ] as CvLanguage[],
-    interests: [
-      { id: "music", title: "Music", detail: "Professional bassist" },
-      { id: "running", title: "Running" },
-      { id: "nature", title: "Nature & hiking" },
-      { id: "travel", title: "Travel & culture" },
-    ] as CvInterest[],
-    mobility: "Mobility: License A (motorcycle) · License B (car)",
-    document: { title: "Resume Yoann Andrieux - React Native, React & Next.js Developer" },
+    available: "Open to conversations - Full-time / Freelance / Long-term",
+    experience: "Selected experience",
+    previous: "Previous React projects",
+    management: "Management & operations",
+    creative: "Cinema & production",
+    skills: "Core skills",
+    human: "Human skills",
+    education: "Education",
+    languages: "Languages: Native French · Professional English",
+    interests: "Music (professional bassist) · Running · Nature & hiking · Travel",
+    mobility: "Mobility: motorcycle and car driving licences",
   },
-};
+} as const;
 
-function getLabels(locale: Locale) {
-  return labels[locale] ?? labels.fr;
-}
-
-function getBadgeStyle(type: string): { bg: string; text: string } {
-  const map: Record<string, { bg: string; text: string }> = {
-    cdi: { bg: "#DCFCE7", text: "#16A34A" },
-    freelance: { bg: "#DBEAFE", text: "#2563EB" },
-    ponctuel: { bg: "#DBEAFE", text: "#2563EB" },
-    ops: { bg: "#D1FAE5", text: "#059669" },
-    cinema: { bg: "#FEF3C7", text: "#D97706" },
-    hors_tech: { bg: "#F3E8FF", text: "#7C3AED" },
-  };
-  return map[type] ?? { bg: "#E5E5EA", text: "#8E8E93" };
-}
-
-function getAccentColor(type: string): string {
-  const map: Record<string, string> = {
-    cdi: "#10B981",
-    freelance: "#3B82F6",
-    ponctuel: "#3B82F6",
-    ops: "#059669",
-    cinema: "#D97706",
-    hors_tech: "#8B5CF6",
-  };
-  return map[type] ?? "#3B82F6";
-}
-
-
-function escapeHtml(str: string): string {
-  return str
+function escapeHtml(value: string) {
+  return value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
 
-function sortByDateDesc(exps: WorkExperience[]): WorkExperience[] {
-  const parseDate = (d: string | undefined): number => {
-    if (!d) return Date.now();
-    const monthMap: Record<string, number> = {
-      "Janv.": 0, "Févr.": 1, "Mars": 2, "Avr.": 3, "Mai": 4, "Juin": 5,
-      "Juil.": 6, "Août": 7, "Sept.": 8, "Oct.": 9, "Nov.": 10, "Déc.": 11,
-      "Jan.": 0, "Feb.": 1, "Mar.": 2, "Apr.": 3, "May": 4, "Jun.": 5,
-      "Jul.": 6, "Aug.": 7, "Sep.": 8, "Dec.": 11,
-    };
-    const parts = d.split(" ");
-    if (parts.length === 2) {
-      const month = monthMap[parts[0]] ?? 0;
-      return new Date(parseInt(parts[1]), month).getTime();
-    }
-    return new Date(parseInt(d)).getTime();
-  };
-  return [...exps].sort((a, b) => parseDate(b.endDate) - parseDate(a.endDate));
-}
-
-function loadProfileImageBase64(): string {
+function profileImage() {
   try {
-    const imagePath = join(
-      process.cwd(),
-      "public",
-      "images",
-      "yoann-profile-nobg.png"
-    );
-    const imageBuffer = readFileSync(imagePath);
-    return `data:image/png;base64,${imageBuffer.toString("base64")}`;
+    const buffer = readFileSync(join(process.cwd(), "public/images/yoann-profile-nobg.png"));
+    return `data:image/png;base64,${buffer.toString("base64")}`;
   } catch {
     return "https://yoann-andrieux.fr/images/yoann-profile-nobg.png";
   }
 }
 
-export function renderCvHtml(locale: Locale): string {
-  const l = getLabels(locale);
+function findCompany(experiences: WorkExperience[], company: string) {
+  return experiences.find((item) => item.company === company);
+}
+
+function renderMonogram(color = "#F5F2EA") {
+  return `<svg viewBox="0 0 48 40" width="45" height="38" fill="none" aria-label="Yoann Andrieux">
+    <path d="M4 4 24 22 44 4M24 22v15" stroke="${color}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="42" cy="35" r="3" fill="#7DA3FF"/>
+  </svg>`;
+}
+
+function renderSectionTitle(title: string) {
+  return `<div class="section-title"><span>${escapeHtml(title)}</span><i></i></div>`;
+}
+
+function renderExperience(
+  experience: WorkExperience,
+  locale: Locale,
+  options: { compact?: boolean; bullets?: number } = {}
+) {
+  const bullets = options.bullets ?? 2;
+  const intro = experience.description.slice(0, options.compact ? 1 : 2).join(". ");
+  const detailStart = options.compact ? 1 : 2;
+  const detail = experience.description
+    .slice(detailStart, detailStart + bullets)
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+  const skills = experience.skills
+    .slice(0, options.compact ? 4 : 6)
+    .map((skill) => `<span>${escapeHtml(skill)}</span>`)
+    .join("");
+  const href = experience.url
+    ? `<a href="${experience.url}" aria-label="${escapeHtml(experience.company)}">↗</a>`
+    : "";
+
+  return `<article class="experience ${options.compact ? "compact" : ""}">
+    <div class="experience-heading">
+      <div>
+        <h3>${escapeHtml(experience.company)} ${href}</h3>
+        <p class="role">${escapeHtml(experience.role)}</p>
+      </div>
+      <p class="dates">${escapeHtml(experience.startDate)} - ${escapeHtml(experience.endDate ?? copy[locale].present)}</p>
+    </div>
+    <p class="summary">${escapeHtml(intro)}${intro.endsWith(".") ? "" : "."}</p>
+    ${detail ? `<ul>${detail}</ul>` : ""}
+    ${skills ? `<div class="skills">${skills}</div>` : ""}
+  </article>`;
+}
+
+function renderCompactGroup(experiences: WorkExperience[], locale: Locale) {
+  return experiences.map((item) => renderExperience(item, locale, { compact: true, bullets: 0 })).join("");
+}
+
+export function renderCvHtml(locale: Locale) {
+  const t = copy[locale];
   const profile = getProfile(locale);
   const experiences = getWorkExperiences(locale);
-  const edu = getEducation(locale);
-  const techSkills = getTechnicalSkills(locale);
-  const softSkills = getSoftSkills(locale);
+  const technicalSkills = getTechnicalSkills(locale).slice(0, 4);
+  const softSkills = getSoftSkills(locale).slice(0, 4);
+  const education = getEducation(locale);
 
-  // Embed profile image as base64 data URL
-  const profileImageSrc = loadProfileImageBase64();
+  const selectedCompanies = ["KLESIA", "Jaji", "Jobio", "MoodDay", "Loïc Ghanem"];
+  const selected = selectedCompanies
+    .map((name) => findCompany(experiences, name))
+    .filter((item): item is WorkExperience => Boolean(item));
 
-  // ── Split experiences into groups ──
-  const detailedIds = new Set(["1", "1b", "2", "3", "4", "6"]);
-  const semiDetailedTechIds = new Set(["1c", "1d", "4b", "5", "7"]);
-  const allPage1Ids = [...detailedIds, ...semiDetailedTechIds];
-  const allPage1Exps = sortByDateDesc(
-    allPage1Ids
-      .map((id) => experiences.find((e) => e.id === id))
-      .filter(Boolean) as WorkExperience[]
+  const previousCompanies = [
+    "Weil & Associés",
+    "Agence Néon",
+    "Caroline Senyk",
+    "Nos Instants Précieux",
+    "Mail Certificate",
+    "Test&Ride",
+    "Crazee Burger",
+  ];
+  const previous = previousCompanies
+    .map((name) => findCompany(experiences, name))
+    .filter((item): item is WorkExperience => Boolean(item));
+
+  const cyclofix = findCompany(experiences, "Cyclofix (Roulez Jeunesse)");
+  const courier = findCompany(experiences, "Couriier - Coursier.fr");
+  const creative = experiences.filter((item) =>
+    ["cinema", "hors_tech", "intermittent"].includes(item.type)
   );
 
-  // Management & Ops — sorted by date desc
-  const managementIds = ["8", "9"];
-  const managementExps = sortByDateDesc(managementIds
-    .map((id) => experiences.find((e) => e.id === id))
-    .filter(Boolean) as WorkExperience[]);
-
-  // Cinéma (projection) — sorted by date desc
-  const cinemaIds = ["0d", "0c", "10c"];
-  const cinemaExps = sortByDateDesc(cinemaIds
-    .map((id) => experiences.find((e) => e.id === id))
-    .filter(Boolean) as WorkExperience[]);
-
-  // Intermittent du spectacle (pub, régie, musique) — sorted by date desc
-  const intermittentIds = ["0a", "0b", "10a", "10b"];
-  const intermittentExps = sortByDateDesc(intermittentIds
-    .map((id) => experiences.find((e) => e.id === id))
-    .filter(Boolean) as WorkExperience[]);
-
-  // Full bio from profile (same as hero)
-
-  // Availability text from profile
-  const availDetail = profile.availabilityOptions.join(" / ");
-
-  // ── Render helpers ──
-
-  const renderAccentLine = () =>
-    `<div style="height:3px;background:#3B82F6;width:100%;flex-shrink:0;"></div>`;
-
-  const renderSectionTitle = (title: string) => `
-    <div style="margin-bottom:8px;">
-      <div style="font-size:12px;font-weight:700;color:#0F172A;margin-bottom:3px;">${escapeHtml(title)}</div>
-      <div style="width:30px;height:2px;background:#3B82F6;border-radius:1px;"></div>
-    </div>`;
-
-  const renderSubSectionTitle = (title: string) => `
-    <div style="font-size:9.5px;font-weight:700;color:#475569;margin:8px 0 5px 0;text-transform:uppercase;letter-spacing:0.5px;">${escapeHtml(title)}</div>`;
-
-  // Detailed experience: 2-line intro paragraph + 3 bullets + skills + optional link
-  const renderDetailedExp = (exp: WorkExperience, maxBullets = 3) => {
-    const badge = getBadgeStyle(exp.type);
-    const accent = getAccentColor(exp.type);
-    const typeLabel = l.employmentTypes[exp.type] ?? exp.type;
-    const remoteLabel =
-      exp.remote && exp.remote !== "onsite"
-        ? ` · ${l.remoteLabels[exp.remote] ?? exp.remote}`
-        : "";
-
-    // Combine first 2 descriptions into a longer intro paragraph (~2 lines)
-    const introparts = exp.description.slice(0, 2).filter(Boolean);
-    const introDesc = introparts.join(". ") + (introparts.length > 1 ? "." : "");
-    const bullets = exp.description
-      .slice(2, 2 + maxBullets)
-      .map(
-        (d) =>
-          `<div style="font-size:7.5px;color:#475569;line-height:1.4;">&#8226; ${escapeHtml(d)}</div>`
-      )
-      .join("");
-
-    const skills = exp.skills
-      .slice(0, 6)
-      .map(
-        (s) =>
-          `<span style="background:#F1F5F9;padding:1.5px 5px;border-radius:3px;font-size:6.5px;color:#475569;white-space:nowrap;">${escapeHtml(s)}</span>`
-      )
-      .join(" ");
-
-    const linkIcon = exp.url
-      ? ` <a href="${exp.url}" style="color:#3B82F6;text-decoration:none;" title="${exp.url}"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-left:2px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
-      : "";
-
-    return `
-    <div style="display:flex;margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid #E2E8F0;">
-      <div style="width:2px;border-radius:1px;background:${accent};margin-right:8px;flex-shrink:0;"></div>
-      <div style="flex:1;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <span style="font-size:9.5px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>${linkIcon}
-            <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:6.5px;font-weight:700;margin-left:5px;">${escapeHtml(typeLabel)}</span>
-          </div>
-          <span style="font-size:7.5px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
-        </div>
-        <div style="font-size:8.5px;color:#3B82F6;font-weight:600;margin-bottom:1px;">${escapeHtml(exp.role)}</div>
-        <div style="font-size:7.5px;color:#94A3B8;margin-bottom:3px;">${escapeHtml(exp.location)}${remoteLabel}</div>
-        <div style="font-size:7.5px;color:#334155;line-height:1.45;margin-bottom:2px;font-style:italic;">${escapeHtml(introDesc)}</div>
-        ${bullets}
-        <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">${skills}</div>
-      </div>
-    </div>`;
-  };
-
-  // Semi-detailed: 2-line intro paragraph + 2 bullets + optional link
-  const renderSemiDetailedExp = (exp: WorkExperience) => {
-    const badge = getBadgeStyle(exp.type);
-    const accent = getAccentColor(exp.type);
-    const typeLabel = l.employmentTypes[exp.type] ?? exp.type;
-
-    // Combine first 2 descriptions into longer intro
-    const introparts = exp.description.slice(0, 2).filter(Boolean);
-    const introDesc = introparts.join(". ") + (introparts.length > 1 ? "." : "");
-    const bullets = exp.description
-      .slice(2, 4)
-      .map(
-        (d) =>
-          `<div style="font-size:7.5px;color:#475569;line-height:1.35;">&#8226; ${escapeHtml(d)}</div>`
-      )
-      .join("");
-
-    const linkIcon = exp.url
-      ? ` <a href="${exp.url}" style="color:#3B82F6;text-decoration:none;" title="${exp.url}"><svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-left:2px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
-      : "";
-
-    return `
-    <div style="display:flex;margin-bottom:6px;padding-bottom:6px;border-bottom:0.5px solid #E2E8F0;">
-      <div style="width:2px;border-radius:1px;background:${accent};margin-right:8px;flex-shrink:0;"></div>
-      <div style="flex:1;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <span style="font-size:9.5px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>${linkIcon}
-            <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:6.5px;font-weight:700;margin-left:5px;">${escapeHtml(typeLabel)}</span>
-          </div>
-          <span style="font-size:7.5px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
-        </div>
-        <div style="font-size:8.5px;color:#3B82F6;font-weight:600;margin-bottom:2px;">${escapeHtml(exp.role)}</div>
-        <div style="font-size:7.5px;color:#334155;line-height:1.4;margin-bottom:1px;font-style:italic;">${escapeHtml(introDesc)}</div>
-        ${bullets}
-      </div>
-    </div>`;
-  };
-
-  // Compact: role + 1 line description
-  const renderCompactExp = (exp: WorkExperience) => {
-    const badge = getBadgeStyle(exp.type);
-    const accent = getAccentColor(exp.type);
-    const typeLabel = l.employmentTypes[exp.type] ?? exp.type;
-    const shortDesc = exp.description[0] ?? "";
-
-    return `
-    <div style="display:flex;margin-bottom:5px;padding-bottom:5px;border-bottom:0.5px solid #F1F5F9;">
-      <div style="width:2px;border-radius:1px;background:${accent};margin-right:8px;flex-shrink:0;"></div>
-      <div style="flex:1;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <span style="font-size:9.5px;font-weight:700;color:#0F172A;">${escapeHtml(exp.company)}</span>
-            <span style="background:${badge.bg};color:${badge.text};padding:1.5px 5px;border-radius:3px;font-size:6.5px;font-weight:700;margin-left:5px;">${escapeHtml(typeLabel)}</span>
-          </div>
-          <span style="font-size:7.5px;color:#64748B;">${escapeHtml(exp.startDate)} - ${escapeHtml(exp.endDate ?? l.present)}</span>
-        </div>
-        <div style="font-size:8.5px;color:#3B82F6;font-weight:600;">${escapeHtml(exp.role)} <span style="color:#475569;font-weight:400;">&#8226; ${escapeHtml(shortDesc)}</span></div>
-      </div>
-    </div>`;
-  };
-
-  // Skill card: compact card with background, badge, and bullet highlights
-  const renderSkillCard = (skill: NarrativeSkillCard) => {
-    const highlights = skill.highlights
-      .slice(0, 3)
-      .map((h) => `<div style="font-size:7px;color:#475569;line-height:1.3;">&#8226; ${escapeHtml(h)}</div>`)
-      .join("");
-
-    return `
-    <div style="flex:1;min-width:30%;background:#F8FAFC;border:0.5px solid #E2E8F0;border-radius:6px;padding:6px 8px;">
-      <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
-        <span style="font-size:8.5px;font-weight:700;color:#0F172A;">${escapeHtml(skill.title)}</span>
-        <span style="background:#DBEAFE;color:#2563EB;padding:1px 5px;border-radius:3px;font-size:6px;font-weight:600;">${escapeHtml(skill.level)}</span>
-      </div>
-      ${highlights}
-    </div>`;
-  };
-
-  // Soft skill card: compact card with enriched narrative (2 sentences)
-  const renderSoftSkillCard = (skill: SoftSkillCard) => {
-    const sentences = skill.narrative.split(". ");
-    const shortNarrative = sentences.slice(0, 2).join(". ") + (sentences.length > 2 ? "." : "");
-    return `
-    <div style="flex:1;min-width:45%;background:#F8FAFC;border:0.5px solid #E2E8F0;border-radius:6px;padding:6px 8px;">
-      <div style="font-size:8px;font-weight:700;color:#0F172A;margin-bottom:2px;">${escapeHtml(skill.title)}</div>
-      <div style="font-size:7px;color:#64748B;line-height:1.35;">${escapeHtml(shortNarrative)}</div>
-    </div>`;
-  };
-
-  // Education card
-  const renderEducationCard = (e: Education) => `
-    <div style="flex:1;background:#F8FAFC;border:0.5px solid #E2E8F0;border-radius:6px;padding:8px 10px;text-align:center;">
-      <div style="font-size:8.5px;font-weight:700;color:#0F172A;margin-bottom:2px;">${escapeHtml(e.degree)}</div>
-      <div style="font-size:7.5px;color:#64748B;">${escapeHtml(e.school)}</div>
-      <div style="font-size:7.5px;color:#3B82F6;font-weight:600;">${escapeHtml(e.year)}</div>
-    </div>`;
-
-  // ── Header — Full silhouette on left with white outline + blue glow ──
-
-  const renderHeader = () => {
-    const statsHtml = profile.stats
-      .map(
-        (s) => `
-      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:5px 12px;text-align:center;">
-        <div style="font-size:13px;font-weight:800;color:#F8FAFC;">${escapeHtml(s.value)}</div>
-        <div style="font-size:6.5px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.5px;">${escapeHtml(s.label)}</div>
-      </div>`
-      )
-      .join("");
-
-    return `
-    <div style="background:#0F172A;padding:16px 20px 16px 20px;flex-shrink:0;position:relative;overflow:hidden;min-height:155px;">
-      <!-- Silhouette: full-body, anchored bottom-left, white outline + blue glow -->
-      <div style="position:absolute;left:18px;bottom:0;height:90%;z-index:10;">
-        <!-- Back layer: white outline via brightness(0) invert(1) + blue glow via drop-shadow -->
-        <img src="${profileImageSrc}"
-             style="position:absolute;bottom:-2px;left:-2px;height:calc(100% + 4px);width:auto;filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(59,130,246,0.7)) drop-shadow(0 0 14px rgba(59,130,246,0.3));pointer-events:none;" />
-        <!-- Front layer: actual image -->
-        <img src="${profileImageSrc}"
-             style="position:relative;height:100%;width:auto;display:block;" />
-      </div>
-
-      <!-- Right content (offset to clear the silhouette) -->
-      <div style="margin-left:125px;">
-        <!-- Name -->
-        <div style="font-size:22px;font-weight:800;color:#F8FAFC;line-height:1.1;">${escapeHtml(profile.firstName)} ${escapeHtml(profile.lastName)}</div>
-        <div style="font-size:12px;font-weight:600;color:#60A5FA;margin-bottom:2px;">${escapeHtml(profile.title)}</div>
-        <div style="font-size:9px;color:#94A3B8;margin-bottom:4px;">${escapeHtml(profile.subtitle)}</div>
-
-        <!-- Availability -->
-        <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;">
-          <div style="width:7px;height:7px;border-radius:50%;background:#10B981;flex-shrink:0;"></div>
-          <span style="font-size:8px;color:#10B981;font-weight:600;">${escapeHtml(l.availability)} &mdash; ${escapeHtml(availDetail)}</span>
-        </div>
-
-        <!-- Bio -->
-        <div style="font-size:8.5px;color:#CBD5E1;line-height:1.45;margin-bottom:8px;">${escapeHtml(profile.bio)}</div>
-
-        <!-- Contact line -->
-        <div style="font-size:8px;color:#94A3B8;margin-bottom:8px;">
-          &#9993; yoann.andrieux@gmail.com
-          <span style="margin:0 4px;">&#183;</span>
-          &#9742; +33 6 63 43 46 65
-          <span style="margin:0 4px;">&#183;</span>
-          <a href="https://www.linkedin.com/in/yoann-andrieux/" style="color:#60A5FA;text-decoration:none;">LinkedIn</a>
-          <span style="margin:0 4px;">&#183;</span>
-          <a href="https://github.com/YoannDrx" style="color:#60A5FA;text-decoration:none;">GitHub</a>
-          <span style="margin:0 4px;">&#183;</span>
-          <a href="https://www.malt.fr/profile/yoannandrieux" style="color:#60A5FA;text-decoration:none;">Malt</a>
-        </div>
-
-        <!-- Stats badges -->
-        <div style="display:flex;gap:10px;">${statsHtml}</div>
-      </div>
-    </div>`;
-  };
-
-  // ── Languages & Interests ──
-
-  const langLine = l.languages
+  const skillCards = technicalSkills
     .map(
-      (lang) => `${escapeHtml(lang.name)} (${escapeHtml(lang.level)})`
+      (skill) => `<article class="skill-card">
+        <h3>${escapeHtml(skill.title)}</h3>
+        <p>${escapeHtml(skill.highlights.slice(0, 3).join(" · "))}</p>
+      </article>`
     )
-    .join(" &middot; ");
-  const interestLine = l.interests
-    .map((i) =>
-      i.detail
-        ? `${escapeHtml(i.title)} (${escapeHtml(i.detail)})`
-        : escapeHtml(i.title)
+    .join("");
+
+  const humanCards = softSkills
+    .map(
+      (skill) => `<article class="human-card">
+        <h3>${escapeHtml(skill.title)}</h3>
+        <p>${escapeHtml(skill.narrative.split(". ").slice(0, 2).join(". "))}.</p>
+      </article>`
     )
-    .join(" &middot; ");
+    .join("");
 
-  // ── Footer ──
+  const educationCards = education
+    .map(
+      (item) => `<article class="education-card">
+        <strong>${escapeHtml(item.degree)}</strong>
+        <span>${escapeHtml(item.school)} · ${escapeHtml(item.year)}</span>
+      </article>`
+    )
+    .join("");
 
-  const renderFooter = () => `
-    <div style="text-align:center;padding-top:8px;border-top:0.5px solid #E2E8F0;font-size:7.5px;">
-      <span>LinkedIn : </span><a href="https://www.linkedin.com/in/yoann-andrieux/" style="color:#3B82F6;text-decoration:none;">linkedin.com/in/yoann-andrieux</a>
-      <span style="color:#94A3B8;"> | </span>
-      <span>GitHub : </span><a href="https://github.com/YoannDrx" style="color:#3B82F6;text-decoration:none;">github.com/YoannDrx</a>
-      <span style="color:#94A3B8;"> | </span>
-      <span>Malt : </span><a href="https://www.malt.fr/profile/yoannandrieux" style="color:#3B82F6;text-decoration:none;">malt.fr/profile/yoannandrieux</a>
-      <span style="color:#94A3B8;"> | </span>
-      <span>Portfolio : </span><a href="https://yoann-andrieux.fr" style="color:#3B82F6;text-decoration:none;">yoann-andrieux.fr</a>
-    </div>`;
+  const creativeCards = creative
+    .slice(0, 6)
+    .map(
+      (item) => `<article class="creative-card">
+        <strong>${escapeHtml(item.company)}</strong>
+        <span>${escapeHtml(item.role)}</span>
+      </article>`
+    )
+    .join("");
 
-  // ── Assemble HTML ──
+  const previousCards = previous
+    .map(
+      (item) => `<article class="previous-card">
+        <strong>${escapeHtml(item.company)}</strong>
+        <span>${escapeHtml(item.role)}</span>
+        <p>${escapeHtml(item.description[0] ?? "")}</p>
+      </article>`
+    )
+    .join("");
 
-  return `<!DOCTYPE html>
-<html>
+  return `<!doctype html>
+<html lang="${locale}">
 <head>
   <meta charset="utf-8" />
-  <title>${escapeHtml(l.document.title)}</title>
+  <title>${escapeHtml(t.title)}</title>
   <style>
     @page { size: A4; margin: 0; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Helvetica, Arial, sans-serif; font-size: 9px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .page { width: 210mm; height: 297mm; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+    * { box-sizing: border-box; }
+    p, li { orphans: 3; widows: 3; }
+    html, body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; color: #0D1728; background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; height: 297mm; overflow: hidden; position: relative; padding: 12mm 12mm 10mm; }
     .page + .page { page-break-before: always; }
+    .page::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 2.4mm; background: #2457E6; }
+    .header { height: 53mm; margin: -12mm -12mm 7mm; padding: 10mm 12mm 8mm 16mm; background: #0D1728; color: #F5F2EA; display: grid; grid-template-columns: 26mm 1fr; gap: 7mm; position: relative; overflow: hidden; }
+    .portrait { position: absolute; left: 9mm; bottom: 0; width: 34mm; height: 47mm; object-fit: contain; object-position: bottom; filter: grayscale(1); }
+    .brand { position: relative; z-index: 2; }
+    .intro { grid-column: 2; position: relative; z-index: 2; }
+    .intro h1 { margin: 0; font-size: 25pt; line-height: .95; letter-spacing: -.6pt; text-transform: uppercase; }
+    .intro .title { margin: 1.5mm 0 0; color: #7DA3FF; font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: .4pt; }
+    .availability { margin: 2mm 0 0; color: #4ADE80; font-size: 7pt; font-weight: 700; }
+    .bio { margin: 2.4mm 0 0; max-width: 145mm; color: #CBD5E1; font-size: 7.7pt; line-height: 1.4; }
+    .contact { margin: 2.2mm 0 0; color: #94A3B8; font-size: 7pt; }
+    .contact a { color: #7DA3FF; text-decoration: none; }
+    .section-title { margin: 0 0 3mm; display: flex; align-items: center; gap: 3mm; break-after: avoid; }
+    .section-title span { font-size: 12pt; font-weight: 800; text-transform: uppercase; letter-spacing: -.1pt; }
+    .section-title i { display: block; height: 1px; flex: 1; background: #CBD5E1; }
+    .experience { break-inside: avoid; page-break-inside: avoid; border-left: 1.2mm solid #2457E6; padding: 0 0 2.8mm 3mm; margin-bottom: 2.8mm; }
+    .experience-heading { display: flex; align-items: start; justify-content: space-between; gap: 6mm; }
+    .experience h3 { margin: 0; font-size: 9.8pt; line-height: 1.05; }
+    .experience h3 a { color: #2457E6; text-decoration: none; }
+    .role { margin: .6mm 0 0; color: #2457E6; font-size: 7.7pt; font-weight: 700; }
+    .dates { margin: 0; color: #64748B; font-size: 6.7pt; white-space: nowrap; }
+    .summary { margin: 1.2mm 0 0; color: #334155; font-size: 7.2pt; line-height: 1.35; font-style: italic; }
+    .experience ul { margin: 1mm 0 0; padding: 0 0 0 3.5mm; color: #475569; font-size: 6.9pt; line-height: 1.35; }
+    .skills { margin-top: 1.2mm; display: flex; flex-wrap: wrap; gap: 1mm; }
+    .skills span { padding: .65mm 1.6mm; border: .25mm solid #D7DFEA; border-radius: .8mm; color: #475569; font-size: 6.2pt; }
+    .compact { border-left-width: .7mm; padding-bottom: 1.8mm; margin-bottom: 1.8mm; }
+    .compact .summary { font-size: 6.8pt; }
+    .compact .skills { display: none; }
+    .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 2.2mm; }
+    .skill-card, .human-card, .education-card { break-inside: avoid; border: .25mm solid #D7DFEA; padding: 1.8mm 2mm; background: #F8FAFC; }
+    .skill-card h3, .human-card h3 { margin: 0; font-size: 8pt; }
+    .skill-card p, .human-card p { margin: .7mm 0 0; color: #64748B; font-size: 6.2pt; line-height: 1.28; }
+    .creative-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm 4mm; margin-bottom: 3mm; break-inside: avoid; }
+    .creative-card { padding-left: 2mm; border-left: .7mm solid #2457E6; }
+    .creative-card strong { display: block; font-size: 7.2pt; line-height: 1.15; }
+    .creative-card span { display: block; margin-top: .5mm; color: #64748B; font-size: 6.2pt; line-height: 1.2; }
+    .previous-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6mm 3mm; margin-bottom: 3mm; break-inside: avoid; }
+    .previous-card { min-height: 14mm; padding: 1.6mm 2mm; border-left: .7mm solid #2457E6; background: #F8FAFC; break-inside: avoid; }
+    .previous-card strong { display: block; font-size: 7.5pt; line-height: 1.1; }
+    .previous-card span { display: block; margin-top: .5mm; color: #2457E6; font-size: 6.3pt; font-weight: 700; }
+    .previous-card p { margin: .8mm 0 0; color: #475569; font-size: 6pt; line-height: 1.25; font-style: italic; }
+    .education { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2mm; }
+    .education-card { text-align: center; }
+    .education-card strong { display: block; font-size: 7pt; }
+    .education-card span { display: block; margin-top: .8mm; color: #64748B; font-size: 6.3pt; }
+    .meta { margin-top: 3mm; padding-top: 2.5mm; border-top: .25mm solid #CBD5E1; color: #475569; font-size: 6.8pt; line-height: 1.6; }
+    .footer { position: absolute; left: 12mm; right: 12mm; bottom: 5mm; display: flex; justify-content: space-between; color: #64748B; font-size: 6.2pt; }
+    .footer a { color: #2457E6; text-decoration: none; }
   </style>
 </head>
 <body>
-  <!-- ═══════════ PAGE 1 ═══════════ -->
-  <div class="page">
-    ${renderAccentLine()}
-    ${renderHeader()}
-    <div style="padding:16px 20px 10px 20px;flex:1;display:flex;flex-direction:column;">
-      ${renderSectionTitle(l.sectionTitles.experiences)}
-      ${allPage1Exps.map((exp) =>
-        detailedIds.has(exp.id) ? renderDetailedExp(exp, 3) : renderSemiDetailedExp(exp)
-      ).join("")}
-    </div>
-  </div>
+  <section class="page">
+    <header class="header">
+      <div class="brand">${renderMonogram()}</div>
+      <img class="portrait" src="${profileImage()}" alt="" />
+      <div class="intro">
+        <h1>${escapeHtml(profile.firstName)} ${escapeHtml(profile.lastName)}</h1>
+        <p class="title">${escapeHtml(profile.title)}</p>
+        <p class="availability">● ${escapeHtml(t.available)}</p>
+        <p class="bio">${escapeHtml(profile.bio)}</p>
+        <p class="contact">yoann.andrieux@gmail.com · +33 6 63 43 46 65 · <a href="https://yoann-andrieux.fr">yoann-andrieux.fr</a> · <a href="https://www.linkedin.com/in/yoann-andrieux/">LinkedIn</a> · <a href="https://github.com/YoannDrx">GitHub</a></p>
+      </div>
+    </header>
+    ${renderSectionTitle(t.experience)}
+    ${selected.map((item, index) => renderExperience(item, locale, { bullets: index < 2 ? 3 : 2 })).join("")}
+    <footer class="footer"><span>YOANN ANDRIEUX / PORTFOLIO</span><span>01 / 02</span></footer>
+  </section>
 
-  <!-- ═══════════ PAGE 2 ═══════════ -->
-  <div class="page">
-    ${renderAccentLine()}
-    <div style="padding:12px 20px;flex:1;display:flex;flex-direction:column;">
-      ${renderSectionTitle(l.sectionTitles.managementAndOthers)}
-      ${managementExps.map((exp, i) => i === 0 ? renderDetailedExp(exp, 3) : renderSemiDetailedExp(exp)).join("")}
+  <section class="page">
+    ${renderSectionTitle(t.previous)}
+    <div class="previous-grid">${previousCards}</div>
 
-      ${renderSubSectionTitle(l.sectionTitles.cinemaEvents)}
-      ${cinemaExps.map(renderSemiDetailedExp).join("")}
+    ${renderSectionTitle(t.management)}
+    ${cyclofix ? renderExperience(cyclofix, locale, { bullets: 3 }) : ""}
+    ${courier ? renderExperience(courier, locale, { compact: true, bullets: 1 }) : ""}
 
-      ${renderSubSectionTitle(l.sectionTitles.intermittent)}
-      ${intermittentExps.map(renderSemiDetailedExp).join("")}
+    ${renderSectionTitle(t.creative)}
+    <div class="creative-grid">${creativeCards}</div>
 
-      ${renderSectionTitle(l.sectionTitles.skills)}
-      <div style="display:flex;gap:6px;margin-bottom:4px;">
-        ${techSkills.slice(0, 3).map(renderSkillCard).join("")}
-      </div>
-      <div style="display:flex;gap:6px;margin-bottom:8px;">
-        ${techSkills.slice(3).map(renderSkillCard).join("")}
-      </div>
+    ${renderSectionTitle(t.skills)}
+    <div class="grid-two">${skillCards}</div>
 
-      ${renderSectionTitle(l.sectionTitles.softSkills)}
-      <div style="display:flex;gap:6px;margin-bottom:4px;">
-        ${softSkills.slice(0, 2).map(renderSoftSkillCard).join("")}
-      </div>
-      <div style="display:flex;gap:6px;margin-bottom:8px;">
-        ${softSkills.slice(2, 4).map(renderSoftSkillCard).join("")}
-      </div>
+    <div style="height:3mm"></div>
+    ${renderSectionTitle(t.human)}
+    <div class="grid-two">${humanCards}</div>
 
-      ${renderSectionTitle(l.sectionTitles.education)}
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        ${edu.map(renderEducationCard).join("")}
-      </div>
+    <div style="height:3mm"></div>
+    ${renderSectionTitle(t.education)}
+    <div class="education">${educationCards}</div>
 
-      <div style="font-size:8px;color:#475569;margin-bottom:3px;">
-        <strong>${escapeHtml(l.sectionTitles.languages)} :</strong> ${langLine}
-      </div>
-      <div style="font-size:8px;color:#475569;margin-bottom:3px;">
-        <strong>${escapeHtml(l.sectionTitles.interests)} :</strong> ${interestLine}
-      </div>
-      <div style="font-size:8px;color:#475569;margin-bottom:8px;">
-        ${escapeHtml(l.mobility)}
-      </div>
-
-      <div style="margin-top:auto;">
-        ${renderFooter()}
-      </div>
-    </div>
-  </div>
+    <div class="meta">${escapeHtml(t.languages)}<br />${escapeHtml(t.interests)}<br />${escapeHtml(t.mobility)}</div>
+    <footer class="footer"><span><a href="https://yoann-andrieux.fr">yoann-andrieux.fr</a> · <a href="https://www.linkedin.com/in/yoann-andrieux/">LinkedIn</a> · <a href="https://github.com/YoannDrx">GitHub</a></span><span>02 / 02</span></footer>
+  </section>
 </body>
 </html>`;
 }

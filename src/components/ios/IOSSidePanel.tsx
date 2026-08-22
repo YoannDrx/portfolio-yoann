@@ -91,11 +91,13 @@ export const IOSSidePanel = ({
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="side-panel-title"
+        aria-label="Détails de l’expérience"
+        aria-hidden={!isOpen}
+        inert={!isOpen}
         onKeyDown={handleFocusTrap}
         className={`fixed top-0 right-0 h-full w-full ${widthClasses[width]} bg-background shadow-2xl z-50
           transform transition-transform duration-300 ease-out
-          ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          ${isOpen ? 'translate-x-0' : 'pointer-events-none translate-x-full'}`}
       >
         {/* Close button */}
         <button

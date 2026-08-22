@@ -10,6 +10,8 @@
 
 # next.js
 /.next/
+/.next-playwright/
+/.next-dev-final/
 /out/
 
 # production
@@ -42,6 +44,7 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /playwright/.cache/
+/tmp/
 .playwright-mcp
 
 # Editor directories and files

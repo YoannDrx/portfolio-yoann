@@ -40,7 +40,7 @@ export interface IOSCardProps extends HTMLAttributes<HTMLDivElement> {
   /** Padding interne */
   padding?: Size | 'none';
   /** Rayon des bordures */
-  rounded?: Size | 'full';
+  rounded?: Size | 'none' | 'full';
   /** Active les interactions hover/press */
   interactive?: boolean;
   /** Contenu du header */

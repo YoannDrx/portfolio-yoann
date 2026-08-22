@@ -57,7 +57,7 @@ async function renderWithPuppeteer(options: RenderOptions): Promise<Buffer> {
 
 async function renderWithPlaywright(options: RenderOptions): Promise<Buffer> {
   const { chromium } = await import("playwright-core");
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, channel: "chrome" });
 
   try {
     const page = await browser.newPage();
@@ -124,7 +124,7 @@ async function pdfWithPuppeteer(options: PdfOptions): Promise<Uint8Array> {
 
 async function pdfWithPlaywright(options: PdfOptions): Promise<Uint8Array> {
   const { chromium } = await import("playwright-core");
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, channel: "chrome" });
 
   try {
     const page = await browser.newPage();

@@ -6,14 +6,14 @@
 // ============ BREAKPOINTS (Mobile-First) ============
 
 export const breakpoints = {
-  xs: '320px',     // iPhone SE (1st gen)
-  sm: '375px',     // iPhone SE, iPhone 8, iPhone X/11/12 mini
-  md: '390px',     // iPhone 12/13/14
-  lg: '430px',     // iPhone 14 Pro Max, iPhone 15 Plus
-  xl: '744px',     // iPad mini portrait
-  '2xl': '1024px', // iPad landscape, small laptops
-  '3xl': '1280px', // Desktop
-  '4xl': '1536px', // Large desktop
+  xs: '320px',
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+  '2xl': '1536px',
+  '3xl': '1920px',
+  '4xl': '2560px',
 } as const;
 
 export type Breakpoint = keyof typeof breakpoints;

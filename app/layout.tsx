@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Yoann Andrieux — Développeur React Native, React & Next.js",
+    default: "Yoann Andrieux — Dev React Native",
     template: "%s — Yoann Andrieux",
   },
   description: siteConfig.seo.description,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Yoann Andrieux — Développeur React Native, React & Next.js",
+    title: "Yoann Andrieux — Dev React Native",
     description: siteConfig.seo.description,
     url: siteConfig.url,
     siteName: "Yoann Andrieux",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yoann Andrieux — Développeur React Native, React & Next.js",
+    title: "Yoann Andrieux — Dev React Native",
     description: siteConfig.seo.description,
   },
 };

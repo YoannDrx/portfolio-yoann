@@ -19,13 +19,13 @@ export async function generateMetadata({
 
   const title =
     locale === "en"
-      ? `Resume — ${profile.firstName} ${profile.lastName} — React Native, React & Next.js Developer`
-      : `CV — ${profile.firstName} ${profile.lastName} — Développeur React Native, React & Next.js`;
+      ? `Resume — ${profile.firstName} ${profile.lastName} — React Native Dev`
+      : `CV — ${profile.firstName} ${profile.lastName} — Dev React Native`;
 
   const description =
     locale === "en"
-      ? `View the resume of ${profile.firstName} ${profile.lastName}, React Native, React and Next.js developer`
-      : `Consultez le CV de ${profile.firstName} ${profile.lastName}, développeur React Native, React et Next.js`;
+      ? `View the resume of ${profile.firstName} ${profile.lastName}, React Native Dev with React, Next.js and product UX expertise`
+      : `Consultez le CV de ${profile.firstName} ${profile.lastName}, Dev React Native avec une expertise React, Next.js et produit UX`;
 
   return {
     title,

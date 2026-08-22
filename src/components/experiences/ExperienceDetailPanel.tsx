@@ -17,35 +17,13 @@ import {
 } from "lucide-react";
 import { IOSButton, IOSBadge } from "@/components/ios";
 import { ImageGallery } from "./ImageGallery";
-import { getUiTexts } from "@/data";
+import {
+  getExperienceTypeClasses,
+  getExperienceTypeLabel,
+  getUiTexts,
+} from "@/data";
 import { useI18n } from "@/i18n/I18nProvider";
-import type { Experience, ExperienceType } from "@/data";
-
-const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
-  const labels: Record<ExperienceType, { fr: string; en: string }> = {
-    freelance: { fr: "Client Freelance", en: "Freelance client" },
-    cdi: { fr: "CDI", en: "Full-time" },
-    personal: { fr: "Perso", en: "Personal project" },
-    ponctuel: { fr: "Freelance", en: "Freelance" },
-    hors_tech: { fr: "Autre", en: "Other" },
-    cinema: { fr: "Cinéma", en: "Cinema" },
-    ops: { fr: "Ops", en: "Ops" },
-  };
-  return locale === "en" ? labels[type].en : labels[type].fr;
-};
-
-const getExperienceTypeColor = (type: ExperienceType) => {
-  const colors: Record<ExperienceType, string> = {
-    freelance: "bg-blue-500/20 text-blue-600",
-    cdi: "bg-green-500/20 text-green-600",
-    personal: "bg-purple-500/20 text-purple-600",
-    ponctuel: "bg-blue-500/20 text-blue-600",
-    hors_tech: "bg-violet-500/20 text-violet-600",
-    cinema: "bg-amber-500/20 text-amber-600",
-    ops: "bg-emerald-500/20 text-emerald-600",
-  };
-  return colors[type];
-};
+import type { Experience } from "@/data";
 
 interface ExperienceDetailPanelProps {
   experience: Experience;
@@ -80,17 +58,17 @@ export const ExperienceDetailPanel = ({
         {/* Badges */}
         <div className="mb-3 flex items-center gap-2">
           <span
-            className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getExperienceTypeColor(experience.experienceType)}`}
+            className={`rounded-sm border px-2.5 py-1 font-mono text-[10px] font-semibold uppercase ${getExperienceTypeClasses(experience.experienceType)}`}
           >
             {getExperienceTypeLabel(experience.experienceType, locale)}
           </span>
-          <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+          <span className="rounded-sm border border-border px-2.5 py-1 font-mono text-[10px] font-semibold text-muted-foreground">
             {experience.year}
           </span>
         </div>
 
         {/* Title & Category */}
-        <h2 className="text-3xl font-bold text-foreground">
+        <h2 className="font-display text-4xl font-bold uppercase text-foreground">
           {experience.name}
         </h2>
         <p className="mt-1 font-medium text-primary">{experience.category}</p>
@@ -143,7 +121,7 @@ export const ExperienceDetailPanel = ({
 
         {/* Long Description */}
         {experience.longDescription && (
-          <div className="mt-6 rounded-2xl bg-muted/50 p-4">
+          <div className="mt-6 rounded-md border border-border bg-muted/35 p-4">
             <p className="text-sm leading-relaxed text-muted-foreground">
               {experience.longDescription}
             </p>

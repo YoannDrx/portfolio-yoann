@@ -1,6 +1,9 @@
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 
 const config = [
+  {
+    ignores: [".next-dev-final/**", ".next-playwright/**", "tmp/**", "output/**"],
+  },
   ...nextCoreWebVitals,
   {
     rules: {

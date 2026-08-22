@@ -44,6 +44,9 @@ const labels = {
     contactBody:
       "Je peux intervenir du cadrage à la livraison, en rendant visibles les risques, les choix et les preuves de fonctionnement.",
     contactCta: "Me contacter",
+    role: "Rôle",
+    period: "Période",
+    status: "Statut",
   },
   en: {
     back: "Back to portfolio",
@@ -70,6 +73,9 @@ const labels = {
     contactBody:
       "I can contribute from framing to delivery while making risks, decisions and evidence visible.",
     contactCta: "Contact me",
+    role: "Role",
+    period: "Period",
+    status: "Status",
   },
 } as const;
 
@@ -145,7 +151,7 @@ export default async function ProjectCaseStudyPage({
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         name: study.name,
-        alternateName: `${study.name} par Yodev`,
+        alternateName: study.name,
         applicationCategory: "ProductivityApplication",
         operatingSystem: "macOS 14 or later",
         softwareVersion: study.release.version,
@@ -248,15 +254,15 @@ export default async function ProjectCaseStudyPage({
             )}
             <dl className="mt-8 grid gap-4 border-t border-slate-200 pt-6 text-sm dark:border-slate-800 sm:grid-cols-3">
               <div>
-                <dt className="font-mono text-xs uppercase text-slate-500">Role</dt>
+                <dt className="font-mono text-xs uppercase text-slate-500">{copy.role}</dt>
                 <dd className="mt-2 leading-relaxed">{study.role}</dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase text-slate-500">Period</dt>
+                <dt className="font-mono text-xs uppercase text-slate-500">{copy.period}</dt>
                 <dd className="mt-2">{study.period}</dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase text-slate-500">Status</dt>
+                <dt className="font-mono text-xs uppercase text-slate-500">{copy.status}</dt>
                 <dd className="mt-2">{study.status}</dd>
               </div>
             </dl>
