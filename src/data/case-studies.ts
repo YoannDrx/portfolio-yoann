@@ -92,7 +92,7 @@ const shared = {
   mycryptopilot: {
     slug: "mycryptopilot",
     name: "MyCryptoPilot",
-    image: "/images/projects/mycryptopilot-landing.png",
+    image: "/images/projects/mycryptopilot-landing.webp",
     secondaryImage: "/images/projects/mycryptopilot-dashboard.png",
     accent: "#28E8A3",
     softAccent: "#D8FFF0",

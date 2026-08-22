@@ -11,12 +11,10 @@ import { Sparkles, ChevronRight, Layers, Zap, FileText, Send, type LucideIcon } 
 import StatusBar from "../device/StatusBar";
 import { IOSCard, IOSAvailabilityBadge, IOSChip } from "../ios";
 import { getNavigationItems, getProfile, getUiTexts } from "@/data";
-import { LocaleToggle } from "@/components/LocaleToggle";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const navIcons: Record<string, LucideIcon> = {
-  experiences: Layers,
+  work: Layers,
   skills: Zap,
   resume: FileText,
   contact: Send,
@@ -38,13 +36,8 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto px-5 pb-32">
-        <div className="flex items-center justify-end gap-1 pt-2">
-          <ThemeToggle />
-          <LocaleToggle />
-        </div>
-
         {/* Hero Section */}
-        <div className="animate-ios-spring pt-4">
+        <div className="animate-ios-spring pt-8">
           <div className="relative">
             {/* Avatar avec cercle blanc */}
             <div className="mb-6 flex justify-center">
@@ -52,7 +45,7 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
                 {/* Glow effect */}
                 <div className="absolute -inset-5 animate-pulse-soft rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-xl" />
                 {/* Avatar avec bordure blanche - Next/Image optimisé */}
-                <div className="relative h-48 w-48 overflow-hidden rounded-full border-4 border-white bg-blue-200 shadow-lg dark:bg-blue-900/60">
+                <div className="relative h-44 w-44 overflow-hidden rounded-md border border-border bg-muted">
                   <Image
                     src={profile.avatar}
                     alt={`${profile.firstName} ${profile.lastName}`}
@@ -73,13 +66,13 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
 
             {/* Name & Title */}
             <div className="space-y-2 text-center">
-              <h1 className="ios-nav-title-large">
+              <h1 className="font-display text-4xl font-bold uppercase tracking-tight">
                 {profile.firstName} {profile.lastName}
               </h1>
-              <h2 className="text-xl font-semibold text-primary">
+              <h2 className="font-display text-2xl font-semibold uppercase tracking-wide text-primary">
                 {profile.title}
               </h2>
-              <p className="mx-auto max-w-xs text-sm leading-relaxed text-muted-foreground">
+              <p className="mx-auto max-w-xs text-xs leading-5 text-muted-foreground">
                 {profile.bio}
               </p>
             </div>
@@ -87,18 +80,19 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
         </div>
 
         {/* Quick Stats */}
-        <div className="stagger-children mt-8 grid grid-cols-3 gap-3">
+        <div className="stagger-children mt-7 grid grid-cols-3 gap-px overflow-hidden rounded-md border border-border bg-border">
           {profile.stats.map((stat) => (
             <IOSCard
               key={stat.label}
-              variant="subtle"
-              padding="md"
-              className="text-center"
+              variant="flat"
+              padding="sm"
+              rounded="none"
+              className="border-0 text-center"
             >
-              <p className="text-2xl font-bold tabular-nums tracking-tight text-foreground">
+              <p className="font-display text-2xl font-bold tabular-nums tracking-tight text-foreground">
                 {stat.value}
               </p>
-              <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60">
+              <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                 {stat.label}
               </p>
             </IOSCard>
@@ -119,7 +113,7 @@ const HomeScreen = ({ onNavigate, hideStatusBar = false }: HomeScreenProps) => {
                 variant="subtle"
                 padding="md"
                 interactive
-                onPress={() => onNavigate(item.id)}
+                onPress={() => onNavigate(item.id === "experiences" ? "work" : item.id)}
                 className="card-premium-hover"
               >
                 <div className="flex items-center gap-3.5">

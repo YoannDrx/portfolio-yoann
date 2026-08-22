@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 
 const PortfolioApp = dynamic(() => import("@/components/PortfolioApp"), {
   ssr: false,
 });
 import TouchIndicator from "@/components/TouchIndicator";
 import PDFDownloadButton from "@/components/pdf/PDFDownloadButton";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { LocaleToggle } from "@/components/LocaleToggle";
+import { ViewModeControls } from "@/components/portfolio/ViewModeControls";
 import { ContactFormCard } from "@/components/contact/ContactFormCard";
 import {
   IOSCard,
@@ -24,8 +24,6 @@ import { ExperienceDetailPanel } from "@/components/experiences/ExperienceDetail
 import { ExperienceFilterBar } from "@/components/experiences/ExperienceFilterBar";
 import { ExperienceSectionHeader } from "@/components/experiences/ExperienceSectionHeader";
 import {
-  Smartphone,
-  Monitor,
   ExternalLink,
   Linkedin,
   Github,
@@ -48,6 +46,7 @@ import {
 } from "@/data";
 import { useExperienceFilter } from "@/hooks/use-experience-filter";
 import type { Experience, ExperienceType } from "@/data";
+import type { ViewMode } from "@/data/portfolio-content";
 
 // Helper functions for experience type labels and colors
 const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
@@ -65,13 +64,13 @@ const getExperienceTypeLabel = (type: ExperienceType, locale: string) => {
 
 const getExperienceTypeColor = (type: ExperienceType) => {
   const colors: Record<ExperienceType, string> = {
-    freelance: "bg-blue-500/20 text-blue-600 dark:text-blue-400",
-    cdi: "bg-green-500/20 text-green-600 dark:text-green-400",
-    personal: "bg-purple-500/20 text-purple-600 dark:text-purple-400",
-    ponctuel: "bg-blue-500/20 text-blue-600 dark:text-blue-400",
-    hors_tech: "bg-violet-500/20 text-violet-600 dark:text-violet-400",
-    cinema: "bg-amber-500/20 text-amber-600 dark:text-amber-400",
-    ops: "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400",
+    freelance: "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300",
+    cdi: "bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300",
+    personal: "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300",
+    ponctuel: "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300",
+    hors_tech: "bg-violet-100 text-violet-800 dark:bg-violet-950/60 dark:text-violet-300",
+    cinema: "bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300",
+    ops: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
   };
   return colors[type];
 };
@@ -87,7 +86,8 @@ const iconMap: Record<string, React.ReactNode> = {
   Briefcase: <Briefcase className="h-5 w-5" />,
 };
 
-const VIEW_MODE_KEY = "portfolio-view-mode";
+const VIEW_MODE_KEY = "portfolio-view-mode-v2";
+const LEGACY_VIEW_MODE_KEY = "portfolio-view-mode";
 
 const caseSectionCopy = {
   fr: {
@@ -108,44 +108,102 @@ const caseSectionCopy = {
   },
 } as const;
 
+function AnimatedFocus({
+  locale,
+  reducedMotion,
+}: {
+  locale: "fr" | "en";
+  reducedMotion: boolean;
+}) {
+  const words = locale === "en"
+    ? ["mobile products", "useful interfaces", "reliable delivery", "product craft"]
+    : ["produits mobiles", "interfaces utiles", "livraisons fiables", "culture produit"];
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    const interval = window.setInterval(() => {
+      setWordIndex((current) => (current + 1) % words.length);
+    }, 2600);
+    return () => window.clearInterval(interval);
+  }, [reducedMotion, words.length]);
+
+  return (
+    <div className="mx-auto mb-7 flex min-h-7 max-w-2xl items-center justify-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground xl:mx-0 xl:justify-start">
+      <span>{locale === "en" ? "I build" : "Je conçois"}</span>
+      <span className="relative inline-flex min-h-5 min-w-[10.5rem] overflow-hidden text-left text-primary">
+        <AnimatePresence initial={false}>
+          <motion.span
+            key={words[wordIndex]}
+            className="absolute inset-y-0 left-0 whitespace-nowrap"
+            initial={reducedMotion ? false : { y: 18, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={reducedMotion ? undefined : { y: -18, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {words[wordIndex]}
+          </motion.span>
+        </AnimatePresence>
+      </span>
+    </div>
+  );
+}
+
 export default function Home() {
   const { locale } = useI18n();
-  const [viewMode, setViewMode] = useState<"device" | "web">("web");
+  const [viewMode, setViewMode] = useState<ViewMode>("web");
+  const [isCompactDevice, setIsCompactDevice] = useState(false);
 
-  // The editorial web view is intentionally the entry point. The device
-  // simulator remains available as an optional interaction.
-  const handleViewModeChange = (mode: "device" | "web") => {
+  useEffect(() => {
+    let cancelled = false;
+    const query = window.matchMedia("(max-width: 767px)");
+    const updateCompactState = () => setIsCompactDevice(query.matches);
+    updateCompactState();
+    query.addEventListener("change", updateCompactState);
+
+    const stored = localStorage.getItem(VIEW_MODE_KEY);
+    const legacy = localStorage.getItem(LEGACY_VIEW_MODE_KEY);
+    const resolved: ViewMode | null =
+      stored === "iphone" || stored === "web"
+        ? stored
+        : legacy === "device"
+          ? "iphone"
+          : legacy === "web"
+            ? "web"
+            : null;
+
+    if (resolved) {
+      queueMicrotask(() => {
+        if (!cancelled) setViewMode(resolved);
+      });
+      localStorage.setItem(VIEW_MODE_KEY, resolved);
+      localStorage.removeItem(LEGACY_VIEW_MODE_KEY);
+    }
+
+    return () => {
+      cancelled = true;
+      query.removeEventListener("change", updateCompactState);
+    };
+  }, []);
+
+  const handleViewModeChange = useCallback((mode: ViewMode) => {
     setViewMode(mode);
     localStorage.setItem(VIEW_MODE_KEY, mode);
-  };
+  }, []);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950">
       <TouchIndicator />
-
-      {/* View Mode Toggle - Desktop Only */}
-      {viewMode === "device" && <nav aria-label="View mode" className="fixed right-6 top-6 z-50 hidden items-center gap-2 rounded-full border border-border/50 bg-card/80 p-1.5 shadow-soft backdrop-blur-xl lg:flex">
-        <button
-          onClick={() => handleViewModeChange("device")}
-          className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all"
-        >
-          <Smartphone className="h-4 w-4" />
-          iPhone
-        </button>
-        <button
-          onClick={() => handleViewModeChange("web")}
-          className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-all hover:text-foreground"
-        >
-          <Monitor className="h-4 w-4" />
-          Web
-        </button>
-        <LocaleToggle />
-        <ThemeToggle />
-      </nav>}
+      <ViewModeControls
+        mode={viewMode}
+        onChange={handleViewModeChange}
+        compact
+        className="fixed right-3 top-3 z-[70] shadow-soft sm:right-5 sm:top-5"
+      />
 
       {/* Device View */}
-      {viewMode === "device" && (
-        <div className="flex min-h-screen animate-ios-fade-in items-center justify-center px-4 py-8">
+      {viewMode === "iphone" && (
+        <div className="flex min-h-[100svh] animate-ios-fade-in items-center justify-center px-0 py-0 md:px-4 md:py-8">
           <div className="relative">
             {/* Background Decorations */}
             <div className="absolute left-1/2 top-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2">
@@ -156,7 +214,7 @@ export default function Home() {
               />
             </div>
 
-            <PortfolioApp />
+            <PortfolioApp showFrame={!isCompactDevice} />
 
             {/* Caption */}
             <p className="mt-6 hidden text-center text-sm text-muted-foreground lg:block">
@@ -169,7 +227,7 @@ export default function Home() {
       {/* Web View - Full Width */}
       {viewMode === "web" && (
         <div className="min-h-screen animate-ios-fade-in">
-          <WebView onDeviceView={() => handleViewModeChange("device")} />
+          <WebView />
         </div>
       )}
     </main>
@@ -177,7 +235,7 @@ export default function Home() {
 }
 
 // Full Web View Component
-const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
+const WebView = () => {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
   const profile = getProfile(locale);
@@ -190,6 +248,16 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
   const socialLinks = getSocialLinks(locale);
   const caseStudies = getCaseStudySummaries(locale);
   const caseCopy = caseSectionCopy[locale];
+  const heroRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const portraitY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const portraitScale = useTransform(scrollYProgress, [0, 1], [1, 1.035]);
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, -36]);
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.72], [1, 0.24]);
 
   // State pour le panneau de détail expérience
   const [selectedExperience, setSelectedExperience] =
@@ -206,32 +274,6 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur-xl">
-        <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-4 px-5">
-          <a href="#top" className="font-mono text-sm font-bold tracking-tight text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-            YA<span className="text-primary">.</span>
-          </a>
-          <nav aria-label={locale === "en" ? "Portfolio" : "Portfolio"} className="hidden items-center gap-5 md:flex">
-            <a href="#projects" className="text-sm font-medium text-muted-foreground hover:text-foreground">{locale === "en" ? "Projects" : "Projets"}</a>
-            <a href="#experiences" className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.experiences}</a>
-            <a href="#skills" className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.skills}</a>
-            <Link href={`/${locale}/cv`} className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.resume}</Link>
-            <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground">{uiTexts.nav.contact}</a>
-          </nav>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={onDeviceView}
-              className="hidden min-h-10 items-center gap-2 rounded-full px-3 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground lg:flex"
-            >
-              <Smartphone className="size-4" aria-hidden="true" />
-              iPhone
-            </button>
-            <LocaleToggle />
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
       {/* Wrapper avec transform pour l'effet push */}
       <div
         className={`transition-transform duration-300 ease-out ${
@@ -239,18 +281,24 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
         }`}
       >
         {/* Hero Section */}
-        <section id="top" className="relative min-h-screen overflow-hidden px-6 pb-20 pt-28 2xl:h-screen 2xl:py-0">
+        <section ref={heroRef} id="top" className="relative min-h-[100svh] overflow-hidden px-6 pb-20 pt-20 xl:py-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
           </div>
 
-          <header className="stagger-children relative z-10 mx-auto flex min-h-screen max-w-5xl items-center 2xl:h-full 2xl:min-h-0">
-            <div className="grid w-full grid-cols-1 items-center gap-12 2xl:grid-cols-2">
+          <header className="relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] max-w-5xl items-center xl:h-full xl:min-h-[100svh]">
+            <div className="grid w-full grid-cols-1 items-center gap-12 xl:grid-cols-2">
               {/* Left: Text content */}
-              <div className="text-center 2xl:text-left">
+              <motion.div
+                className="text-center xl:text-left"
+                style={{
+                  y: shouldReduceMotion ? 0 : copyY,
+                  opacity: shouldReduceMotion ? 1 : copyOpacity,
+                }}
+              >
                 {/* Small avatar - visible < lg only */}
-                <div className="relative mx-auto mb-5 h-36 w-36 md:mb-8 md:h-52 md:w-52 2xl:hidden">
+                <div className="relative mx-auto mb-5 h-36 w-36 md:mb-8 md:h-52 md:w-52 xl:hidden">
                   <div className="absolute -inset-5 animate-pulse-soft rounded-full bg-gradient-to-br from-primary/30 to-primary/10 blur-xl" />
                   <div className="relative h-36 w-36 overflow-hidden rounded-full border-4 border-background bg-blue-200 shadow-medium md:h-52 md:w-52 dark:bg-blue-900/60">
                     <Image
@@ -271,11 +319,13 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                   </span>
                 </h1>
 
-                <p className="mx-auto mb-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:mb-8 md:text-xl 2xl:mx-0">
+                <p className="mx-auto mb-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:mb-8 md:text-xl xl:mx-0">
                   {profile.bio}
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-4 2xl:justify-start">
+                <AnimatedFocus locale={locale} reducedMotion={Boolean(shouldReduceMotion)} />
+
+                <div className="flex flex-wrap justify-center gap-4 xl:justify-start">
                   <IOSButton
                     size="lg"
                     onClick={() =>
@@ -301,7 +351,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                 </div>
 
                 {/* Stats */}
-                <div className="mt-16 flex justify-center gap-8 md:gap-12 2xl:justify-start">
+                <div className="mt-12 flex justify-center gap-4 sm:gap-8 md:mt-16 md:gap-12 xl:justify-start">
                   {profile.stats.map((stat) => (
                     <IOSCard
                       key={stat.label}
@@ -312,18 +362,24 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                       <p className="text-3xl font-bold tabular-nums tracking-tight text-foreground md:text-4xl">
                         {stat.value}
                       </p>
-                      <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
+                      <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                         {stat.label}
                       </p>
                     </IOSCard>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             </div>
           </header>
 
           {/* Right: Full silhouette anchored to bottom - visible 2xl+ only */}
-          <div className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-1/2 2xl:block">
+          <motion.div
+            className="pointer-events-none absolute bottom-0 right-0 hidden h-[calc(100svh-6rem)] w-1/2 xl:block"
+            style={{
+              y: shouldReduceMotion ? 0 : portraitY,
+              scale: shouldReduceMotion ? 1 : portraitScale,
+            }}
+          >
             <div className="relative h-full w-full">
               {/* White stroke + blue glow layer (behind) */}
               <div className="silhouette-stroke absolute inset-0">
@@ -332,9 +388,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                   alt=""
                   fill
                   className="object-contain object-bottom"
-                  sizes="50vw"
-                  quality={100}
-                  unoptimized
+                  sizes="(max-width: 1535px) 48vw, 50vw"
                   aria-hidden
                 />
               </div>
@@ -345,12 +399,10 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                 fill
                 className="relative object-contain object-bottom"
                 priority
-                sizes="50vw"
-                quality={100}
-                unoptimized
+                sizes="(max-width: 1535px) 48vw, 50vw"
               />
             </div>
-          </div>
+          </motion.div>
         </section>
 
         <section
@@ -376,6 +428,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                 <Link
                   key={study.slug}
                   href={`/${locale}/projects/${study.slug}`}
+                  data-content-id={`featured-${study.slug}`}
                   className="group flex min-h-[460px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:border-slate-800 dark:bg-slate-900"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800">
@@ -400,7 +453,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                     </p>
                     <div className="mt-5 flex items-end justify-between gap-4 border-t border-slate-200 pt-4 dark:border-slate-800">
                       <div>
-                        <p className="font-mono text-lg font-bold" style={{ color: study.accent }}>
+                        <p className="font-mono text-lg font-bold text-primary">
                           {study.evidence.value}
                         </p>
                         <p className="text-xs text-slate-500">{study.evidence.label}</p>
@@ -450,12 +503,21 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                     {section.experiences.map((experience) => (
                       <IOSCard
                         key={experience.id}
+                        data-content-id={`journey-${experience.id}`}
                         variant="subtle"
                         padding="none"
                         className="card-premium-hover group relative h-full cursor-pointer overflow-hidden"
                         interactive
                         onPress={() => setSelectedExperience(experience)}
                       >
+                        {experience.name === "KLESIA" || experience.name === "Jaji" ? (
+                          <span
+                            data-content-id={`featured-${experience.name.toLowerCase()}`}
+                            className="sr-only"
+                          >
+                            {experience.name}
+                          </span>
+                        ) : null}
                         {/* Accent gradient line top */}
                         <div
                           className={`absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${experience.gradient} z-10`}
@@ -508,7 +570,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                               {experience.features.slice(0, 3).map((tech) => (
                                 <span
                                   key={tech}
-                                  className="rounded bg-muted/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/70 dark:bg-muted/40"
+                                  className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground dark:bg-muted/70"
                                 >
                                   {tech}
                                 </span>
@@ -521,18 +583,18 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                             <p className="mb-2 text-sm font-medium text-primary">
                               {experience.category}
                             </p>
-                            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground/70">
+                            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
                               {experience.description}
                             </p>
 
                             {/* Footer */}
                             <div className="mt-auto flex items-center justify-between border-t border-border/30 pt-3">
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground/50">
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                 <span>{experience.platforms.join(" · ")}</span>
                                 <span>·</span>
                                 <span>{experience.stats.teamSize}</span>
                               </div>
-                              <div className="flex items-center text-xs text-muted-foreground/50 transition-colors group-hover:text-primary/70">
+                              <div className="flex items-center text-xs text-muted-foreground transition-colors group-hover:text-primary">
                                 <span>{uiTexts.buttons.viewDetails}</span>
                                 <ChevronRight className="ml-0.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                               </div>
@@ -577,18 +639,18 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                       <h3 className="text-lg font-semibold tracking-tight text-foreground">
                         {skill.title}
                       </h3>
-                      <span className="rounded-md border border-border/50 bg-muted/30 px-2 py-0.5 text-xs font-medium text-muted-foreground/60">
+                      <span className="rounded-md border border-border/50 bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                         {skill.level}
                       </span>
                     </div>
-                    <p className="mb-4 text-sm leading-relaxed text-muted-foreground/80">
+                    <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
                       {skill.narrative}
                     </p>
                     <ul className="space-y-1.5">
                       {skill.highlights.map((h, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-2 text-sm text-foreground/70"
+                          className="flex items-start gap-2 text-sm text-foreground/80"
                         >
                           <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-foreground/25" />
                           <span>{h}</span>
@@ -619,7 +681,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                     <h4 className="text-lg font-semibold text-foreground">
                       {aiContent.subtitle}
                     </h4>
-                    <p className="text-xs text-muted-foreground/60">
+                    <p className="text-xs text-muted-foreground">
                       {uiTexts.descriptions.aiToolsIntegrated}
                     </p>
                   </div>
@@ -631,7 +693,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                   {aiContent.highlights.map((highlight, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
                       <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-purple-500/40" />
-                      <span className="text-foreground/80">{highlight}</span>
+                      <span className="text-foreground/90">{highlight}</span>
                     </li>
                   ))}
                 </ul>
@@ -665,7 +727,7 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                   <h3 className="mb-2 text-sm font-semibold tracking-tight text-foreground">
                     {skill.title}
                   </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground/80">
+                  <p className="text-sm leading-relaxed text-muted-foreground">
                     {skill.narrative}
                   </p>
                 </IOSCard>
@@ -718,8 +780,8 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                           <span
                             className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${
                               exp.type === "cdi"
-                                ? "bg-green-500/20 text-green-600 dark:text-green-400"
-                                : "bg-blue-500/20 text-blue-600 dark:text-blue-400"
+                                ? "bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300"
+                                : "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300"
                             }`}
                           >
                             {exp.type === "cdi"
@@ -777,10 +839,10 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                   <p className="text-base font-semibold tracking-tight text-foreground">
                     {edu.degree}
                   </p>
-                  <p className="mt-0.5 text-sm text-muted-foreground/70">
+                  <p className="mt-0.5 text-sm text-muted-foreground">
                     {edu.school}
                   </p>
-                  <p className="mt-2 text-xs font-medium text-primary/70">
+                  <p className="mt-2 text-xs font-medium text-primary">
                     {edu.year}
                   </p>
                 </IOSCard>
@@ -825,8 +887,8 @@ const WebView = ({ onDeviceView }: { onDeviceView: () => void }) => {
                       linkedin: "text-[#0A66C2]",
                       github: "text-zinc-800 dark:text-zinc-200",
                       malt: "text-[#FC5757]",
-                      email: "text-emerald-500",
-                      phone: "text-violet-500",
+                      email: "text-emerald-600 dark:text-emerald-400",
+                      phone: "text-violet-600 dark:text-violet-400",
                     };
                     const iconColor = brandColors[link.id] || "text-foreground";
                     return (

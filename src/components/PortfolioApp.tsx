@@ -5,12 +5,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import IPhoneFrame from "./device/iPhoneFrame";
 import TabBar from "./device/TabBar";
 import HomeScreen from "./screens/HomeScreen";
-import ExperiencesScreen from "./screens/ExperiencesScreen";
+import WorkScreen from "./screens/WorkScreen";
 import SkillsScreen from "./screens/SkillsScreen";
 import ResumeScreen from "./screens/ResumeScreen";
 import ContactScreen from "./screens/ContactScreen";
 
-const VALID_TABS = ["home", "experiences", "skills", "resume", "contact"] as const;
+const VALID_TABS = ["home", "work", "skills", "resume", "contact"] as const;
 type TabId = (typeof VALID_TABS)[number];
 
 function normalizeTab(tab: string | null): TabId | null {
@@ -19,7 +19,7 @@ function normalizeTab(tab: string | null): TabId | null {
 
   // Backward compat (old manifest / shared links)
   if (normalized === "cv") return "resume";
-  if (normalized === "projects") return "experiences";
+  if (normalized === "projects" || normalized === "experiences") return "work";
 
   if (VALID_TABS.includes(normalized as TabId)) {
     return normalized as TabId;
@@ -83,8 +83,8 @@ const PortfolioApp = ({ showFrame = true }: PortfolioAppProps) => {
     switch (activeTab) {
       case "home":
         return <HomeScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} />;
-      case "experiences":
-        return <ExperiencesScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} />;
+      case "work":
+        return <WorkScreen hideStatusBar={hideStatusBar} />;
       case "skills":
         return <SkillsScreen hideStatusBar={hideStatusBar} />;
       case "resume":
@@ -108,7 +108,7 @@ const PortfolioApp = ({ showFrame = true }: PortfolioAppProps) => {
   // Mode fullscreen (mobile réel) : pas de cadre
   if (!showFrame) {
     return (
-      <div className="fixed inset-0 bg-background overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden bg-background pt-16">
         {content}
       </div>
     );

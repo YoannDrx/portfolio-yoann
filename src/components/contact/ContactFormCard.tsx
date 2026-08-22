@@ -17,6 +17,8 @@ type ContactFormData = {
   company: string;
 };
 
+type ContactField = "name" | "email" | "message";
+
 export type ContactFormCardProps = {
   className?: string;
   titleClassName?: string;
@@ -35,10 +37,36 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [lastSubmittedAt, setLastSubmittedAt] = useState<number | null>(null);
+  const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({});
   const requestIdRef = useRef<string | null>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+
+  const validate = () => {
+    const nextErrors: Partial<Record<ContactField, string>> = {};
+    if (!formData.name.trim()) {
+      nextErrors.name = locale === "en" ? "Enter your name." : "Indiquez votre nom.";
+    }
+    if (!/^\S+@\S+\.\S+$/.test(formData.email.trim())) {
+      nextErrors.email = locale === "en" ? "Enter a valid email." : "Indiquez un email valide.";
+    }
+    if (formData.message.trim().length < 20) {
+      nextErrors.message = locale === "en" ? "Write at least 20 characters." : "Écrivez au moins 20 caractères.";
+    }
+    setErrors(nextErrors);
+
+    const firstError = (Object.keys(nextErrors) as ContactField[])[0];
+    if (firstError === "name") nameRef.current?.focus();
+    if (firstError === "email") emailRef.current?.focus();
+    if (firstError === "message") messageRef.current?.focus();
+    return Object.keys(nextErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validate()) return;
 
     const now = Date.now();
     if (lastSubmittedAt && now - lastSubmittedAt < MIN_SUBMISSION_INTERVAL_MS) {
@@ -67,6 +95,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
 
       if (response.ok) {
         setIsSubmitted(true);
+        setErrors({});
         requestIdRef.current = null;
         toast({
           title: uiTexts.messages.messageSent,
@@ -103,7 +132,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
       </h3>
 
       {isSubmitted ? (
-        <div className="py-8 text-center animate-ios-spring">
+        <div className="py-8 text-center animate-ios-spring" role="status" aria-live="polite">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-success/10 flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-success" />
           </div>
@@ -115,7 +144,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
           </p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {/* Honeypot field (anti-spam) */}
           <div
             style={{
@@ -144,32 +173,53 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
           </div>
 
           <IOSInput
+            ref={nameRef}
+            id="contact-name"
             type="text"
             label={uiTexts.form.name}
             placeholder={uiTexts.form.namePlaceholder}
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, name: e.target.value });
+              if (errors.name) setErrors((current) => ({ ...current, name: undefined }));
+            }}
+            state={errors.name ? "error" : "default"}
+            errorText={errors.name}
             autoComplete="name"
             maxLength={100}
             required
           />
 
           <IOSInput
+            ref={emailRef}
+            id="contact-email"
             type="email"
             label={uiTexts.form.email}
             placeholder={uiTexts.form.emailPlaceholder}
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, email: e.target.value });
+              if (errors.email) setErrors((current) => ({ ...current, email: undefined }));
+            }}
+            state={errors.email ? "error" : "default"}
+            errorText={errors.email}
             autoComplete="email"
             maxLength={254}
             required
           />
 
           <IOSTextarea
+            ref={messageRef}
+            id="contact-message"
             label={uiTexts.form.message}
             placeholder={uiTexts.form.messagePlaceholder}
             value={formData.message}
-            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, message: e.target.value });
+              if (errors.message) setErrors((current) => ({ ...current, message: undefined }));
+            }}
+            state={errors.message ? "error" : "default"}
+            errorText={errors.message}
             rows={4}
             minLength={20}
             maxLength={4000}

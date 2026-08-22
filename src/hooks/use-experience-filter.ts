@@ -1,34 +1,25 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { Experience, ExperienceType } from "@/data";
+import {
+  DEV_EXPERIENCE_TYPES,
+  EXPERIENCE_TYPE_ORDER,
+  type Experience,
+  type ExperienceType,
+} from "@/data";
 
 export type ExperienceFilter = "all" | "dev" | ExperienceType;
-
-const DEV_TYPES: ExperienceType[] = [
-  "cdi",
-  "freelance",
-  "personal",
-  "ponctuel",
-];
-
-const SECTION_ORDER: ExperienceType[] = [
-  "cdi",
-  "freelance",
-  "personal",
-  "ponctuel",
-  "hors_tech",
-  "cinema",
-  "ops",
-];
 
 export interface ExperienceSection {
   type: ExperienceType;
   experiences: Experience[];
 }
 
-export function useExperienceFilter(experiences: Experience[]) {
-  const [activeFilter, setActiveFilter] = useState<ExperienceFilter>("all");
+export function useExperienceFilter(
+  experiences: Experience[],
+  initialFilter: ExperienceFilter = "dev"
+) {
+  const [activeFilter, setActiveFilter] = useState<ExperienceFilter>(initialFilter);
 
   const counts = useMemo(() => {
     const result: Record<ExperienceFilter, number> = {
@@ -44,7 +35,7 @@ export function useExperienceFilter(experiences: Experience[]) {
     };
     for (const p of experiences) {
       result[p.experienceType]++;
-      if (DEV_TYPES.includes(p.experienceType)) {
+      if (DEV_EXPERIENCE_TYPES.includes(p.experienceType)) {
         result.dev++;
       }
     }
@@ -53,7 +44,7 @@ export function useExperienceFilter(experiences: Experience[]) {
 
   const sections = useMemo<ExperienceSection[]>(() => {
     if (activeFilter === "all") {
-      return SECTION_ORDER.map((type) => ({
+      return EXPERIENCE_TYPE_ORDER.map((type) => ({
         type,
         experiences: experiences
           .filter((p) => p.experienceType === type)
@@ -61,7 +52,7 @@ export function useExperienceFilter(experiences: Experience[]) {
       })).filter((s) => s.experiences.length > 0);
     }
     if (activeFilter === "dev") {
-      return SECTION_ORDER.filter((t) => DEV_TYPES.includes(t))
+      return EXPERIENCE_TYPE_ORDER.filter((t) => DEV_EXPERIENCE_TYPES.includes(t))
         .map((type) => ({
           type,
           experiences: experiences

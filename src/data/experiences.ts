@@ -520,9 +520,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
-      image: "/images/projects/mycryptopilot-landing.png",
+      image: "/images/projects/mycryptopilot-landing.webp",
       images: [
-        "/images/projects/mycryptopilot-landing.png",
+        "/images/projects/mycryptopilot-landing.webp",
         "/images/projects/mycryptopilot-dashboard.png",
       ],
       stats: { teamSize: "Solo", downloads: "SaaS" },
@@ -681,9 +681,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
       emoji: "🏠",
-      image: "/images/projects/homego-landing.png",
+      image: "/images/projects/homego-landing.webp",
       images: [
-        "/images/projects/homego-landing.png",
+        "/images/projects/homego-landing.webp",
         "/images/projects/homego-dashboard.png",
       ],
       stats: { teamSize: "Solo", downloads: "SaaS" },
@@ -1084,7 +1084,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       image: "/images/projects/cupra-formentor.jpg",
       images: [
         "/images/projects/cupra-formentor.jpg",
-        "/images/projects/cupra-tournage-nuit.jpg",
+        "/images/projects/cupra-tournage-nuit.webp",
         "/images/projects/avnier-landing.png",
       ],
       stats: { teamSize: "Équipe nuit", downloads: "Pub" },
@@ -1167,11 +1167,11 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-orange-400 to-red-500",
       emoji: "🎞️",
-      image: "/images/projects/oppenheimer-projecteur-70mm.png",
+      image: "/images/projects/oppenheimer-projecteur-70mm.webp",
       images: [
-        "/images/projects/oppenheimer-projecteur-70mm.png",
-        "/images/projects/oppenheimer-pellicule-70mm.png",
-        "/images/projects/oppenheimer-cabine-rex.jpg",
+        "/images/projects/oppenheimer-projecteur-70mm.webp",
+        "/images/projects/oppenheimer-pellicule-70mm.webp",
+        "/images/projects/oppenheimer-cabine-rex.webp",
       ],
       stats: { teamSize: "Équipe projection", downloads: "70mm" },
       features: [
@@ -1223,7 +1223,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/avatar-affiche.jpg",
         "/images/projects/avatar-seine-musicale.jpg",
-        "/images/projects/avatar-cabine-projection.jpg",
+        "/images/projects/avatar-cabine-projection.webp",
       ],
       stats: { teamSize: "Équipe technique", downloads: "IMAX" },
       features: [
@@ -1765,9 +1765,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-amber-400 to-orange-500",
       emoji: "🚀",
-      image: "/images/projects/mycryptopilot-landing.png",
+      image: "/images/projects/mycryptopilot-landing.webp",
       images: [
-        "/images/projects/mycryptopilot-landing.png",
+        "/images/projects/mycryptopilot-landing.webp",
         "/images/projects/mycryptopilot-dashboard.png",
       ],
       stats: { teamSize: "Solo", downloads: "SaaS" },
@@ -1925,9 +1925,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-cyan-400 to-blue-500",
       emoji: "🏠",
-      image: "/images/projects/homego-landing.png",
+      image: "/images/projects/homego-landing.webp",
       images: [
-        "/images/projects/homego-landing.png",
+        "/images/projects/homego-landing.webp",
         "/images/projects/homego-dashboard.png",
       ],
       stats: { teamSize: "Solo", downloads: "SaaS" },
@@ -2323,7 +2323,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       image: "/images/projects/cupra-formentor.jpg",
       images: [
         "/images/projects/cupra-formentor.jpg",
-        "/images/projects/cupra-tournage-nuit.jpg",
+        "/images/projects/cupra-tournage-nuit.webp",
         "/images/projects/avnier-landing.png",
       ],
       stats: { teamSize: "Night crew", downloads: "Ad" },
@@ -2406,11 +2406,11 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-orange-400 to-red-500",
       emoji: "🎞️",
-      image: "/images/projects/oppenheimer-projecteur-70mm.png",
+      image: "/images/projects/oppenheimer-projecteur-70mm.webp",
       images: [
-        "/images/projects/oppenheimer-projecteur-70mm.png",
-        "/images/projects/oppenheimer-pellicule-70mm.png",
-        "/images/projects/oppenheimer-cabine-rex.jpg",
+        "/images/projects/oppenheimer-projecteur-70mm.webp",
+        "/images/projects/oppenheimer-pellicule-70mm.webp",
+        "/images/projects/oppenheimer-cabine-rex.webp",
       ],
       stats: { teamSize: "Projection crew", downloads: "70mm" },
       features: [
@@ -2461,7 +2461,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/avatar-affiche.jpg",
         "/images/projects/avatar-seine-musicale.jpg",
-        "/images/projects/avatar-cabine-projection.jpg",
+        "/images/projects/avatar-cabine-projection.webp",
       ],
       stats: { teamSize: "Technical crew", downloads: "IMAX" },
       features: [

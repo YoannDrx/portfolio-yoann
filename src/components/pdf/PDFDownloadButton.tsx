@@ -9,6 +9,7 @@ import { useState, useCallback } from "react";
 import { Download } from "lucide-react";
 import { IOSButton } from "../ios";
 import { useI18n } from "@/i18n/I18nProvider";
+import { toast } from "@/hooks/use-toast";
 
 interface PDFDownloadButtonProps {
   className?: string;
@@ -43,6 +44,14 @@ const PDFDownloadButton = ({ className }: PDFDownloadButtonProps) => {
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Erreur lors de la génération du PDF:", error);
+      toast({
+        title: locale === "en" ? "Download failed" : "Téléchargement impossible",
+        description:
+          locale === "en"
+            ? "The resume could not be generated. Please try again."
+            : "Le CV n’a pas pu être généré. Réessayez dans un instant.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }

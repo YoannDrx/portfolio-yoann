@@ -12,7 +12,7 @@ const baseSiteConfig = {
   ogImage: "/og-image.png",
   theme: {
     primaryColor: "#2457E6",
-    accentColor: "#22A06B",
+    accentColor: "#B85C3A",
   },
   contact: {
     email: "yoann.andrieux@gmail.com",
@@ -24,12 +24,12 @@ const siteConfigs: Record<Locale, SiteConfig> = {
   fr: {
     ...baseSiteConfig,
     description:
-      "Portfolio de développeur React Native, React et Next.js — du mobile au produit web fiable",
+      "Portfolio de Yoann Andrieux, Dev React Native — applications mobiles, produits React/Next.js et culture UX",
     locale: "fr-FR",
     seo: {
-      title: "Développeur React Native, React & Next.js | Portfolio",
+      title: "Dev React Native | Portfolio Yoann Andrieux",
       description:
-        "Applications mobiles React Native et produits web React / Next.js : architecture, UX, qualité et livraison de bout en bout.",
+        "React Native en production, produits React/Next.js, architecture, UX et livraison : découvrez le parcours et les études de cas de Yoann Andrieux.",
       keywords: [
         "React Native",
         "iOS",
@@ -50,12 +50,12 @@ const siteConfigs: Record<Locale, SiteConfig> = {
   en: {
     ...baseSiteConfig,
     description:
-      "React Native, React and Next.js developer portfolio — reliable mobile and web products",
+      "Yoann Andrieux’s React Native Dev portfolio — mobile applications, React/Next.js products and UX craft",
     locale: "en-US",
     seo: {
-      title: "React Native, React & Next.js Developer | Portfolio",
+      title: "React Native Dev | Yoann Andrieux Portfolio",
       description:
-        "React Native mobile apps and React / Next.js web products, with end-to-end architecture, UX, quality and delivery.",
+        "Production React Native, React/Next.js products, architecture, UX and delivery through Yoann Andrieux’s work and case studies.",
       keywords: [
         "React Native",
         "iOS",
@@ -88,7 +88,7 @@ const uiTextsByLocale = {
   fr: {
     nav: {
       home: "Accueil",
-      experiences: "Expériences",
+      experiences: "Projets",
       skills: "Compétences",
       resume: "CV",
       contact: "Contact",
@@ -209,7 +209,7 @@ const uiTextsByLocale = {
   en: {
     nav: {
       home: "Home",
-      experiences: "Experiences",
+      experiences: "Work",
       skills: "Skills",
       resume: "Resume",
       contact: "Contact",

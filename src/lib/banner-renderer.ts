@@ -26,13 +26,13 @@ export function renderBannerHtml(design: BannerDesign): string {
     case "code-terminal":
       return renderCodeTerminal();
     case "portrait":
-      return renderPortrait("#007AFF", "Crafting Mobile Experiences", "React Native Developer · Freelance");
+      return renderPortrait("#2457E6", "Crafting Mobile Experiences", "React Native Dev · Product & UX");
     case "portrait-indigo":
-      return renderPortrait("#5856D6", "Code. Ship. Repeat.", "React Native · TypeScript · Freelance");
+      return renderPortrait("#0D1728", "Code. Ship. Refine.", "React Native · TypeScript · Product");
     case "portrait-teal":
-      return renderPortrait("#5AC8FA", "Building Apps That Feel Native", "React Native Developer · Freelance");
+      return renderPortrait("#B85C3A", "Building Apps That Feel Native", "React Native Dev · Product & UX");
     case "portrait-pink":
-      return renderPortrait("#FF2D55", "Du concept au store.", "Développeur React Native · Freelance");
+      return renderPortrait("#2457E6", "Du concept au store.", "Dev React Native · Produit & UX");
     default:
       return renderDarkGradient();
   }
@@ -387,7 +387,7 @@ body {
     <span class="tab">portfolio.ts</span>
   </div>
   <div class="code">
-    <div><span class="ln">1</span><span class="cm">// Yoann Andrieux &mdash; React Native Developer</span></div>
+    <div><span class="ln">1</span><span class="cm">// Yoann Andrieux &mdash; React Native Dev</span></div>
     <div><span class="ln">2</span></div>
     <div><span class="ln">3</span><span class="kw">const</span> <span class="vr">developer</span> <span class="br">=</span> <span class="br">{</span></div>
     <div><span class="ln">4</span>&nbsp;&nbsp;<span class="pr">name</span><span class="br">:</span> <span class="st">"Yoann Andrieux"</span><span class="br">,</span></div>

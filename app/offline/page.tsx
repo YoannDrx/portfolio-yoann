@@ -6,12 +6,10 @@ export default function OfflinePage() {
   return (
     <div className="min-h-screen bg-[#F5F5F7] flex items-center justify-center p-6">
       <div className="text-center max-w-md">
-        {/* Icône WiFi barré avec gradient */}
+        {/* Icône de connexion */}
         <div className="relative mx-auto mb-8">
           {/* Glow effect */}
           <div className="absolute inset-0 w-28 h-28 mx-auto bg-gradient-to-br from-[#0070F3]/30 to-[#00C4CC]/20 rounded-full blur-xl" />
-
-          {/* Icon container */}
           <div className="relative w-28 h-28 mx-auto rounded-full bg-gradient-to-br from-[#0070F3] to-[#00C4CC] flex items-center justify-center shadow-lg">
             <WifiOff className="w-14 h-14 text-white" strokeWidth={1.5} />
           </div>
