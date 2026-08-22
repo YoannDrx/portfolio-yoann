@@ -88,7 +88,7 @@ const StatusBar: React.FC<IOSStatusBarProps> = ({
     <div className="relative h-12 flex items-start pt-3">
       {/* Time - à gauche du Dynamic Island */}
       <div className="absolute left-6 top-3">
-        <span className={cn('text-sm font-semibold', textColor)}>{displayTime}</span>
+        <span className={cn('status-bar-time text-sm font-semibold', textColor)}>{displayTime}</span>
       </div>
 
       {/* Right Icons - à droite du Dynamic Island */}

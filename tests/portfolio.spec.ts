@@ -31,6 +31,7 @@ test("le parcours complet conserve exactement les mêmes identifiants dans les d
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/fr#work");
   await page.getByRole("tab", { name: /^Tous/ }).click();
+  await expect(page.locator('[data-content-id^="journey-"]')).toHaveCount(21);
   const webIds = await page.locator('[data-content-id^="journey-"]').evaluateAll((elements) =>
     elements.map((element) => element.getAttribute("data-content-id")).filter(Boolean).sort()
   );
@@ -40,6 +41,7 @@ test("le parcours complet conserve exactement les mêmes identifiants dans les d
   await page.getByRole("button", { name: "Projets", exact: true }).last().click();
   await page.getByRole("tab", { name: "Parcours complet" }).click();
   await page.getByRole("tab", { name: /^Tous/ }).click();
+  await expect(page.locator('[data-content-id^="journey-"]')).toHaveCount(21);
   const iphoneIds = await page.locator('[data-content-id^="journey-"]').evaluateAll((elements) =>
     elements.map((element) => element.getAttribute("data-content-id")).filter(Boolean).sort()
   );
@@ -49,6 +51,7 @@ test("le parcours complet conserve exactement les mêmes identifiants dans les d
 test("le mode, la langue et le thème restent cohérents", async ({ page }) => {
   await page.goto("/fr?tab=work#work");
   await page.getByRole("button", { name: /iPhone/i }).first().click();
+  await expect(page.getByRole("button", { name: /iPhone/i }).first()).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(".ios-tab-item").filter({ hasText: "Projets" })).toHaveAttribute("aria-current", "page");
 
   await page.getByRole("button", { name: "Switch to English" }).first().click();
@@ -101,7 +104,8 @@ test("le hero et les contrôles restent dans le viewport", async ({ page }) => {
   expect(runtimeErrors).toEqual([]);
 });
 
-test("les validations du contact et le honeypot fonctionnent sans envoi", async ({ page }) => {
+test("les validations du contact et le honeypot fonctionnent sans envoi", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Le contrat API est couvert une seule fois dans Chromium.");
   await page.setExtraHTTPHeaders({ "x-forwarded-for": "198.51.100.77" });
   await page.goto("/fr#contact");
   await page.locator("#contact").scrollIntoViewIfNeeded();
@@ -119,9 +123,34 @@ test("les validations du contact et le honeypot fonctionnent sans envoi", async 
   await expect(page.locator("#contact").getByRole("status")).toContainText("Message envoyé");
 });
 
-test("l’API contact refuse les payloads invalides et limite le débit sans envoyer d’email", async ({ request }) => {
+test("l’intention de contact enrichit le payload sans modifier le texte saisi", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Le payload est couvert une seule fois dans Chromium.");
+  await page.goto("/fr#contact");
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+  await page.getByRole("button", { name: "Freelance", exact: true }).click();
+  await page.locator("#contact-name").fill("Audit intention");
+  await page.locator("#contact-email").fill("audit@example.com");
+  const visibleMessage = "Une mission React Native avec un calendrier et un périmètre bien définis.";
+  await page.locator("#contact-message").fill(visibleMessage);
+
+  let payload: Record<string, string> | undefined;
+  await page.route("**/api/send-email", async (route) => {
+    payload = route.request().postDataJSON() as Record<string, string>;
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ success: true }) });
+  });
+  await page.getByRole("button", { name: "Envoyer" }).click();
+
+  expect(payload?.message).toBe(`Mission freelance\n\n${visibleMessage}`);
+  expect(payload?.subject).toBe("Freelance — Audit intention");
+  await expect(page.locator("#contact-message")).toHaveCount(0);
+});
+
+test("l’API contact refuse les payloads invalides et limite le débit sans envoyer d’email", async ({ request, browserName }, testInfo) => {
+  test.skip(browserName !== "chromium", "Le contrat API est couvert une seule fois dans Chromium.");
+  const runKey = `${testInfo.testId}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const testIp = (offset: number) => `e2e-${runKey}-${offset}`;
   const invalid = await request.post("/api/send-email", {
-    headers: { "x-forwarded-for": "198.51.100.80" },
+    headers: { "x-forwarded-for": testIp(0) },
     data: { name: "", email: "incorrect", message: "court" },
   });
   expect(invalid.status()).toBe(400);
@@ -133,7 +162,7 @@ test("l’API contact refuse les payloads invalides et limite le débit sans env
     company: "bot-field",
   };
   const idempotencyHeaders = {
-    "x-forwarded-for": "198.51.100.81",
+    "x-forwarded-for": testIp(1),
     "x-contact-request-id": "123e4567-e89b-12d3-a456-426614174000",
   };
   for (let index = 0; index < 2; index += 1) {
@@ -144,13 +173,13 @@ test("l’API contact refuse les payloads invalides et limite le débit sans env
 
   for (let index = 0; index < 5; index += 1) {
     const response = await request.post("/api/send-email", {
-      headers: { "x-forwarded-for": "198.51.100.82" },
+      headers: { "x-forwarded-for": testIp(2) },
       data: { name: "", email: "incorrect", message: "court" },
     });
     expect(response.status()).toBe(400);
   }
   const limited = await request.post("/api/send-email", {
-    headers: { "x-forwarded-for": "198.51.100.82" },
+    headers: { "x-forwarded-for": testIp(2) },
     data: { name: "", email: "incorrect", message: "court" },
   });
   expect(limited.status()).toBe(429);
@@ -168,7 +197,8 @@ test("les routes recruteur essentielles répondent", async ({ page }) => {
   expect(notFound?.status()).toBe(404);
 });
 
-test("le CV et les métadonnées publiques sont servis avec les bons contrats", async ({ request }) => {
+test("le CV et les métadonnées publiques sont servis avec les bons contrats", async ({ request, browserName }) => {
+  test.skip(browserName !== "chromium", "Les artefacts binaires sont couverts une seule fois dans Chromium.");
   const manifest = await request.get("/manifest.json");
   expect(manifest.status()).toBe(200);
   expect((await manifest.json()).name).toContain("Dev React Native");
@@ -180,16 +210,35 @@ test("le CV et les métadonnées publiques sont servis avec les bons contrats", 
   expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
 });
 
-test("snapshots de la DA production", async ({ page }) => {
+test("snapshots de la DA production", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Les références visuelles sont volontairement limitées à Chromium.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1440, height: 900 });
   for (const locale of ["fr", "en"] as const) {
     await page.goto(`/${locale}`);
-    await page.evaluate(() => localStorage.setItem("theme", "light"));
+    await page.evaluate(() => {
+      localStorage.setItem("theme", "light");
+      localStorage.setItem("portfolio-view-mode-v2", "web");
+    });
     await page.reload();
     await expect(page.locator("html")).not.toHaveClass(/dark/);
     await expect(page).toHaveScreenshot(`web-${locale}-light.png`, { fullPage: false });
     await page.getByRole("button", { name: locale === "fr" ? "Changer de thème" : "Toggle theme" }).first().click();
     await expect(page.locator("html")).toHaveClass(/dark/);
     await expect(page).toHaveScreenshot(`web-${locale}-dark.png`, { fullPage: false });
+
+    await page.getByRole("button", { name: locale === "fr" ? "Changer de thème" : "Toggle theme" }).first().click();
+    await page.getByRole("button", { name: /iPhone/i }).first().click();
+    await expect(page.getByRole("button", { name: /iPhone/i }).first()).toHaveAttribute("aria-pressed", "true");
+    await expect(page).toHaveScreenshot(`iphone-${locale}-light.png`, {
+      fullPage: false,
+      mask: [page.locator(".status-bar-time")],
+    });
+    await page.getByRole("button", { name: locale === "fr" ? "Changer de thème" : "Toggle theme" }).first().click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await expect(page).toHaveScreenshot(`iphone-${locale}-dark.png`, {
+      fullPage: false,
+      mask: [page.locator(".status-bar-time")],
+    });
   }
 });

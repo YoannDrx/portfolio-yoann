@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { caseStudySlugs, getCaseStudy, getSiteConfig } from "@/data";
 import { isLocale, type Locale } from "@/i18n/locales";
+import { CaseStudyExperienceClient } from "@/components/portfolio/CaseStudyExperienceClient";
 
 const labels = {
   fr: {
@@ -33,6 +34,7 @@ const labels = {
     delivered: "Ce qui est réellement livré",
     limits: "Limites assumées",
     next: "Prochaine étape",
+    retrospective: "Ce que je referais différemment",
     stack: "Socle technique",
     note: "Lecture des chiffres",
     version: "Version publique",
@@ -62,6 +64,7 @@ const labels = {
     delivered: "What is actually delivered",
     limits: "Known limits",
     next: "Next step",
+    retrospective: "What I would do differently",
     stack: "Technical foundation",
     note: "How to read the numbers",
     version: "Public version",
@@ -178,6 +181,7 @@ export default async function ProjectCaseStudyPage({
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-slate-950 dark:bg-slate-950 dark:text-slate-50">
+      <CaseStudyExperienceClient />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -186,7 +190,7 @@ export default async function ProjectCaseStudyPage({
       <div className="mx-auto max-w-6xl px-5 pb-24 pt-8 sm:px-8 lg:px-12">
         <nav className="mb-12 flex items-center justify-between gap-4" aria-label={copy.back}>
           <Link
-            href={`/${locale}`}
+            href={`/${locale}?tab=work#work`}
             className="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-500 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
@@ -412,7 +416,7 @@ export default async function ProjectCaseStudyPage({
           </ol>
         </section>
 
-        <section className="mt-24 grid gap-8 lg:grid-cols-2" aria-label={copy.quality}>
+        <section id="quality" className="mt-24 grid gap-8 lg:grid-cols-2" aria-label={copy.quality}>
           <ListPanel title={copy.quality} icon={<TestTube2 />} items={study.quality} />
           <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-950 dark:border-slate-800">
             <div className="relative aspect-[16/9]">
@@ -427,10 +431,13 @@ export default async function ProjectCaseStudyPage({
           </div>
         </section>
 
-        <section className="mt-24 grid gap-6 lg:grid-cols-3">
-          <ListPanel title={copy.delivered} items={study.delivered} tone="success" />
-          <ListPanel title={copy.limits} items={study.limits} tone="warning" />
-          <ListPanel title={copy.next} items={study.nextSteps} tone="info" />
+        <section id="retrospective" className="mt-24" aria-labelledby="retrospective-title">
+          <SectionTitle id="retrospective-title" title={copy.retrospective} icon={<CircleAlert />} />
+          <div className="mt-8 grid gap-6 lg:grid-cols-3">
+            <ListPanel title={copy.delivered} items={study.delivered} tone="success" />
+            <ListPanel title={copy.limits} items={study.limits} tone="warning" />
+            <ListPanel title={copy.next} items={study.nextSteps} tone="info" />
+          </div>
         </section>
 
         <section className="mt-20 border-t border-slate-200 pt-10 dark:border-slate-800" aria-labelledby="stack-title">
@@ -448,7 +455,7 @@ export default async function ProjectCaseStudyPage({
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-slate-400">React Native · React / Next.js · Product · UX · Quality</p>
           <h2 className="mt-5 max-w-3xl text-3xl font-bold sm:text-5xl">{copy.contactTitle}</h2>
           <p className="mt-5 max-w-2xl leading-relaxed text-slate-300">{copy.contactBody}</p>
-          <Link href={`/${locale}#contact`} className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 font-semibold text-slate-950 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+          <Link href={`/${locale}?tab=contact#contact`} className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 font-semibold text-slate-950 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
             {copy.contactCta}
             <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
