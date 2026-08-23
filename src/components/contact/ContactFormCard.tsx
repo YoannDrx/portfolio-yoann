@@ -4,8 +4,9 @@ import { useRef, useState } from "react";
 import { CheckCircle, Send } from "lucide-react";
 import { IOSButton, IOSCard, IOSInput, IOSTextarea } from "@/components/ios";
 import { toast } from "@/hooks/use-toast";
-import { getUiTexts } from "@/data";
+import { getUiTexts, type ContactIntent } from "@/data";
 import { useI18n } from "@/i18n/I18nProvider";
+import { trackPortfolioEvent } from "@/lib/analytics";
 
 const MIN_SUBMISSION_INTERVAL_MS = 5000;
 
@@ -22,9 +23,12 @@ type ContactField = "name" | "email" | "message";
 export type ContactFormCardProps = {
   className?: string;
   titleClassName?: string;
+  intent?: ContactIntent;
+  contrast?: boolean;
+  idPrefix?: string;
 };
 
-export function ContactFormCard({ className, titleClassName }: ContactFormCardProps) {
+export function ContactFormCard({ className, titleClassName, intent, contrast = false, idPrefix = "contact" }: ContactFormCardProps) {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
 
@@ -90,10 +94,19 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
           "x-locale": locale,
           "x-contact-request-id": requestIdRef.current,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          message: intent
+            ? `${intent.payloadPrefix}\n\n${formData.message}`
+            : formData.message,
+        }),
       });
 
       if (response.ok) {
+        trackPortfolioEvent("contact_submit_result", {
+          result: "success",
+          intent: intent?.id ?? "general",
+        });
         setIsSubmitted(true);
         setErrors({});
         requestIdRef.current = null;
@@ -107,6 +120,10 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
           setFormData({ name: "", email: "", message: "", company: "" });
         }, 3000);
       } else {
+        trackPortfolioEvent("contact_submit_result", {
+          result: "error",
+          intent: intent?.id ?? "general",
+        });
         const data = await response.json();
         toast({
           title: uiTexts.messages.errorTitle,
@@ -115,6 +132,10 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
         });
       }
     } catch {
+      trackPortfolioEvent("contact_submit_result", {
+        result: "error",
+        intent: intent?.id ?? "general",
+      });
       toast({
         title: uiTexts.messages.errorTitle,
         description: uiTexts.messages.cannotSend,
@@ -126,7 +147,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
   };
 
   return (
-    <IOSCard variant="glass" padding="lg" className={className}>
+    <IOSCard variant="glass" padding="lg" className={`${contrast ? "[&_label]:!text-white [&_input]:!bg-white/10 [&_input]:!text-white [&_input::placeholder]:!text-white/38 [&_textarea]:!bg-white/10 [&_textarea]:!text-white [&_textarea::placeholder]:!text-white/38" : ""} ${className ?? ""}`}>
       <h3 className={titleClassName ?? "text-lg font-semibold text-foreground mb-4"}>
         {uiTexts.sections.sendMessage}
       </h3>
@@ -174,7 +195,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
 
           <IOSInput
             ref={nameRef}
-            id="contact-name"
+            id={`${idPrefix}-name`}
             type="text"
             label={uiTexts.form.name}
             placeholder={uiTexts.form.namePlaceholder}
@@ -192,7 +213,7 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
 
           <IOSInput
             ref={emailRef}
-            id="contact-email"
+            id={`${idPrefix}-email`}
             type="email"
             label={uiTexts.form.email}
             placeholder={uiTexts.form.emailPlaceholder}
@@ -210,9 +231,9 @@ export function ContactFormCard({ className, titleClassName }: ContactFormCardPr
 
           <IOSTextarea
             ref={messageRef}
-            id="contact-message"
+            id={`${idPrefix}-message`}
             label={uiTexts.form.message}
-            placeholder={uiTexts.form.messagePlaceholder}
+            placeholder={intent?.placeholder ?? uiTexts.form.messagePlaceholder}
             value={formData.message}
             onChange={(e) => {
               setFormData({ ...formData, message: e.target.value });

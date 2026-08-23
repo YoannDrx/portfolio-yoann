@@ -8,6 +8,157 @@ import type { Locale } from "@/i18n/locales";
 
 const experiencesByLocale: Record<Locale, Experience[]> = {
   fr: [
+    // 2026
+    {
+      id: "yodev",
+      name: "Yodev — studio & produits SaaS",
+      description:
+        "Une landing commerciale et trois SaaS nés de besoins réels rencontrés dans mes propres usages et auprès de mes clients",
+      longDescription:
+        "Yodev est la marque commerciale que j’ai créée pour acquérir et accompagner des clients autour du cadrage, de l’UX et du développement de produits web fiables. En parallèle de cette vitrine, chaque friction opérationnelle que j’ai d’abord rencontrée pour mes applications ou mes clients est devenue un produit SaaS spécialisé : Mail pour l’email transactionnel, Ads pour le pilotage Google Ads et Spend pour l’attribution des coûts par projet.",
+      category: "Studio produit & SaaS",
+      experienceType: "freelance",
+      year: "2026 — en cours",
+      platforms: ["web"],
+      gradient: "from-blue-500 via-cyan-400 to-emerald-400",
+      emoji: "◆",
+      image: "/images/projects/yodev-studio.webp",
+      images: [
+        "/images/projects/yodev-studio.webp",
+        "/images/projects/yodev-mail.webp",
+        "/images/projects/yodev-ads.webp",
+        "/images/projects/yodev-spend.webp",
+      ],
+      stats: {
+        teamSize: "Solo",
+        downloads: "4 produits",
+        downloadsLabel: "Écosystème",
+      },
+      features: [
+        "Yodev.fr",
+        "Mail by Yodev",
+        "Ads by Yodev",
+        "Spend by Yodev",
+        "Product design",
+        "SaaS B2B",
+      ],
+      stack: {
+        frontend: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS"],
+        backend: ["Server Actions", "Better Auth", "Google Ads API", "Stripe"],
+        database: ["PostgreSQL", "Neon", "Drizzle ORM"],
+        devops: ["Vercel", "AWS CDK", "SQS", "Lambda"],
+        testing: ["Vitest", "Playwright", "Tests d’intégration", "CI GitHub"],
+      },
+      highlights: [
+        {
+          title: "Yodev — la landing commerciale",
+          description:
+            "Une vitrine conçue pour acquérir des clients en présentant une promesse sobre : cadrer le problème, rendre les décisions explicites et livrer un produit fiable.",
+        },
+        {
+          title: "Mail by Yodev",
+          description:
+            "Né de mon besoin d’envoyer des emails transactionnels fiables pour mes propres applications et celles de mes clients, puis décliné en SaaS géré avec API idempotente, validation des usages et accompagnement DNS.",
+        },
+        {
+          title: "Ads by Yodev",
+          description:
+            "Né du pilotage de comptes Google Ads pour mes clients, puis décliné en SaaS multi-client pour transformer les signaux en alertes expliquées, approbations et actions traçables.",
+        },
+        {
+          title: "Spend by Yodev",
+          description:
+            "Né de mon besoin de comprendre le coût réel de chaque produit, puis décliné en SaaS FinOps qui attribue les dépenses directes et répartit les abonnements mutualisés sans perdre un centime.",
+        },
+      ],
+      links: { website: "https://www.yodev.fr/fr" },
+      role: "Fondateur, product designer & développeur full-stack",
+      status: "in-progress",
+    },
+    {
+      id: "23",
+      name: "Parigo Music — refonte produit",
+      description: "Refonte intégrale du produit, de la direction artistique et du frontend de Parigo Music",
+      longDescription: "Mission freelance en cours : reprise du produit de bout en bout, nouvelle direction artistique, conception UI/UX et reconstruction du frontend depuis zéro. Le périmètre comprend également la qualité de livraison, les tests automatisés et le déploiement de la nouvelle plateforme.",
+      category: "Produit musical",
+      experienceType: "freelance",
+      year: "2026 — en cours",
+      platforms: ["web"],
+      gradient: "from-violet-500 to-blue-600",
+      emoji: "🎧",
+      image: "/images/projects/parigo-after.webp",
+      images: [
+        "/images/projects/parigo-after.webp",
+        "/images/projects/parigo-search-after.webp",
+        "/images/projects/parigo-before.webp",
+        "/images/projects/parigo-search-before.webp",
+      ],
+      stats: { teamSize: "Freelance", downloads: "En cours" },
+      features: ["Product design", "Direction artistique", "Next.js", "TypeScript", "Tests automatisés", "Déploiement"],
+      stack: {
+        frontend: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS", "Motion", "WaveSurfer"],
+        backend: ["Harvest BFF", "Session serveur chiffrée"],
+        devops: ["Vercel", "Sentry", "Web Analytics", "PWA"],
+        testing: ["Vitest", "Playwright", "Lighthouse", "CI GitHub"],
+      },
+      highlights: [
+        { title: "Refonte de bout en bout", description: "Produit, DA, UI/UX et frontend reconstruits comme un ensemble cohérent" },
+        { title: "Expérience musicale", description: "Recherche, navigation éditoriale, catalogue et écoute articulés dans une interface sombre et immersive" },
+        { title: "Qualité de livraison", description: "Tests automatisés, budgets de build, observabilité et déploiements Preview" },
+      ],
+      links: { website: "https://parigo-ten.vercel.app/" },
+      role: "Product designer & développeur frontend",
+      client: "Parigo Music",
+      status: "in-progress",
+      comparison: {
+        title: "Accueil",
+        before: "/images/projects/parigo-before.webp",
+        after: "/images/projects/parigo-after.webp",
+        beforeLabel: "Site actuellement en production",
+        afterLabel: "Nouvelle expérience en développement",
+        additional: [{
+          title: "Recherche « piano »",
+          before: "/images/projects/parigo-search-before.webp",
+          after: "/images/projects/parigo-search-after.webp",
+          beforeLabel: "Recherche « piano » — site actuel",
+          afterLabel: "Recherche « piano » — nouvelle expérience",
+        }],
+      },
+    },
+    {
+      id: "24",
+      name: "L’Odyssée — cabine 70 mm au Grand Rex",
+      description: "Montage de la cabine éphémère et du projecteur 70 mm pour L’Odyssée de Christopher Nolan",
+      longDescription: "Mission réalisée le 4 juillet 2026 pour 2AVI au Grand Rex. Préparation de l’espace de projection, montage du plancher et de l’insonorisation, installation de la cabine et du projecteur 70 mm, puis participation aux réglages techniques nécessaires à l’exploitation du film.",
+      category: "Projection cinéma",
+      experienceType: "cinema",
+      year: "4 juillet 2026",
+      platforms: ["web"],
+      gradient: "from-slate-800 to-blue-900",
+      emoji: "🎞️",
+      image: "/images/projects/odyssey-official-poster.jpg",
+      images: [
+        "/images/projects/odyssey-official-poster.jpg",
+        "/images/projects/odyssey-installation-01.webp",
+        "/images/projects/odyssey-installation-02.webp",
+        "/images/projects/odyssey-installation-03.webp",
+        "/images/projects/odyssey-cabin.webp",
+      ],
+      stats: { teamSize: "Équipe 2AVI", downloads: "70 mm" },
+      features: ["Projecteur 70 mm", "Cabine éphémère", "Plancher", "Insonorisation", "Réglages projection"],
+      highlights: [
+        { title: "Installation", description: "Montage de la cabine et du projecteur 70 mm dans la Grande Salle" },
+        { title: "Préparation du lieu", description: "Mise en place du plancher, de l’insonorisation et de l’espace technique" },
+        { title: "Mise au point", description: "Participation aux réglages du projecteur et à la préparation de l’exploitation" },
+      ],
+      links: { website: "https://www.legrandrex.com/cinema/4970" },
+      employer: "2AVI",
+      client: "Le Grand Rex",
+      venue: "Grande Salle, Paris",
+      role: "Technicien projection 70 mm",
+      status: "public",
+      mediaCredit: "Affiche © Universal Pictures · Images techniques issues des publications du Grand Rex",
+    },
     // 2025
     {
       id: "0",
@@ -874,7 +1025,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
-      image: "/images/projects/portfolio-loic-landing.png",
+      image: "/images/projects/loic-ghanem-home.webp",
       stats: { teamSize: "Solo", downloads: "B2C" },
       features: [
         "Next.js 16",
@@ -1085,7 +1236,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/cupra-formentor.jpg",
         "/images/projects/cupra-tournage-nuit.webp",
-        "/images/projects/avnier-landing.png",
+        "/images/projects/avnier-landing.webp",
       ],
       stats: { teamSize: "Équipe nuit", downloads: "Pub" },
       features: [
@@ -1167,8 +1318,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-orange-400 to-red-500",
       emoji: "🎞️",
-      image: "/images/projects/oppenheimer-projecteur-70mm.webp",
+      image: "/images/projects/oppenheimer-official-poster.jpg",
       images: [
+        "/images/projects/oppenheimer-official-poster.jpg",
         "/images/projects/oppenheimer-projecteur-70mm.webp",
         "/images/projects/oppenheimer-pellicule-70mm.webp",
         "/images/projects/oppenheimer-cabine-rex.webp",
@@ -1205,6 +1357,11 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       links: {
         website: "https://www.dailymotion.com/video/x8mvpm2",
       },
+      employer: "2AVI",
+      client: "Le Grand Rex",
+      venue: "Grande Salle, Paris",
+      role: "Assistant projectionniste 70 mm",
+      mediaCredit: "Affiche © Universal Pictures",
     },
     {
       id: "22",
@@ -1253,9 +1410,165 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
             "Coordination son et image pour projection événementielle à La Seine Musicale",
         },
       ],
+      employer: "2AVI",
+      client: "20th Century Studios",
+      venue: "La Seine Musicale",
+      role: "Assistant projectionniste et technicien",
+      mediaCredit: "Affiche © 20th Century Studios",
     },
   ],
   en: [
+    // 2026
+    {
+      id: "yodev",
+      name: "Yodev — product studio & SaaS",
+      description:
+        "A commercial landing page and three SaaS products born from real needs I encountered in my own work and with clients",
+      longDescription:
+        "Yodev is the commercial brand I created to acquire and support clients through product framing, UX and reliable web development. Alongside this storefront, each operational friction I first encountered in my own applications or client work became a focused SaaS product: Mail for transactional email, Ads for Google Ads operations and Spend for project-level cost allocation.",
+      category: "Product studio & SaaS",
+      experienceType: "freelance",
+      year: "2026 — ongoing",
+      platforms: ["web"],
+      gradient: "from-blue-500 via-cyan-400 to-emerald-400",
+      emoji: "◆",
+      image: "/images/projects/yodev-studio-en.webp",
+      images: [
+        "/images/projects/yodev-studio-en.webp",
+        "/images/projects/yodev-mail-en.webp",
+        "/images/projects/yodev-ads-en.webp",
+        "/images/projects/yodev-spend-en.webp",
+      ],
+      stats: {
+        teamSize: "Solo",
+        downloads: "4 products",
+        downloadsLabel: "Ecosystem",
+      },
+      features: [
+        "Yodev.fr",
+        "Mail by Yodev",
+        "Ads by Yodev",
+        "Spend by Yodev",
+        "Product design",
+        "B2B SaaS",
+      ],
+      stack: {
+        frontend: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS"],
+        backend: ["Server Actions", "Better Auth", "Google Ads API", "Stripe"],
+        database: ["PostgreSQL", "Neon", "Drizzle ORM"],
+        devops: ["Vercel", "AWS CDK", "SQS", "Lambda"],
+        testing: ["Vitest", "Playwright", "Integration tests", "GitHub CI"],
+      },
+      highlights: [
+        {
+          title: "Yodev — the commercial landing page",
+          description:
+            "A storefront designed to acquire clients through a deliberately straightforward promise: frame the problem, make decisions explicit and deliver a reliable product.",
+        },
+        {
+          title: "Mail by Yodev",
+          description:
+            "Born from my need to send reliable transactional email for my own applications and client products, then developed into a managed SaaS with an idempotent API, use-case approval and DNS support.",
+        },
+        {
+          title: "Ads by Yodev",
+          description:
+            "Born from operating Google Ads accounts for clients, then developed into a multi-client SaaS that turns signals into explained alerts, approvals and traceable actions.",
+        },
+        {
+          title: "Spend by Yodev",
+          description:
+            "Born from my need to understand the real cost of each product, then developed into a FinOps SaaS that assigns direct spend and allocates shared subscriptions without losing a cent.",
+        },
+      ],
+      links: { website: "https://www.yodev.fr/en" },
+      role: "Founder, product designer & full-stack developer",
+      status: "in-progress",
+    },
+    {
+      id: "23",
+      name: "Parigo Music — product redesign",
+      description: "End-to-end redesign of Parigo Music's product, art direction and frontend",
+      longDescription: "Ongoing freelance engagement covering the product rethink, a new art direction, UI/UX design and a ground-up frontend rebuild. The scope also includes delivery quality, automated testing and deployment of the new platform.",
+      category: "Music product",
+      experienceType: "freelance",
+      year: "2026 — ongoing",
+      platforms: ["web"],
+      gradient: "from-violet-500 to-blue-600",
+      emoji: "🎧",
+      image: "/images/projects/parigo-after.webp",
+      images: [
+        "/images/projects/parigo-after.webp",
+        "/images/projects/parigo-search-after.webp",
+        "/images/projects/parigo-before.webp",
+        "/images/projects/parigo-search-before.webp",
+      ],
+      stats: { teamSize: "Freelance", downloads: "Ongoing" },
+      features: ["Product design", "Art direction", "Next.js", "TypeScript", "Automated tests", "Deployment"],
+      stack: {
+        frontend: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS", "Motion", "WaveSurfer"],
+        backend: ["Harvest BFF", "Encrypted server session"],
+        devops: ["Vercel", "Sentry", "Web Analytics", "PWA"],
+        testing: ["Vitest", "Playwright", "Lighthouse", "GitHub CI"],
+      },
+      highlights: [
+        { title: "End-to-end redesign", description: "Product, art direction, UI/UX and frontend rebuilt as one coherent system" },
+        { title: "Music experience", description: "Search, editorial navigation, catalogue and listening brought together in an immersive dark interface" },
+        { title: "Delivery quality", description: "Automated tests, build budgets, observability and Preview deployments" },
+      ],
+      links: { website: "https://parigo-ten.vercel.app/" },
+      role: "Product designer & frontend developer",
+      client: "Parigo Music",
+      status: "in-progress",
+      comparison: {
+        title: "Home",
+        before: "/images/projects/parigo-before.webp",
+        after: "/images/projects/parigo-after.webp",
+        beforeLabel: "Current production website",
+        afterLabel: "New experience in development",
+        additional: [{
+          title: "“piano” search",
+          before: "/images/projects/parigo-search-before.webp",
+          after: "/images/projects/parigo-search-after.webp",
+          beforeLabel: "“piano” search — current website",
+          afterLabel: "“piano” search — new experience",
+        }],
+      },
+    },
+    {
+      id: "24",
+      name: "The Odyssey — 70mm booth at the Grand Rex",
+      description: "Installation of the temporary booth and 70mm projector for Christopher Nolan's The Odyssey",
+      longDescription: "Mission completed on July 4, 2026 for 2AVI at the Grand Rex. Preparation of the projection area, installation of the floor and soundproofing, assembly of the booth and 70mm projector, followed by participation in the technical adjustments required for exhibition.",
+      category: "Cinema projection",
+      experienceType: "cinema",
+      year: "July 4, 2026",
+      platforms: ["web"],
+      gradient: "from-slate-800 to-blue-900",
+      emoji: "🎞️",
+      image: "/images/projects/odyssey-official-poster.jpg",
+      images: [
+        "/images/projects/odyssey-official-poster.jpg",
+        "/images/projects/odyssey-installation-01.webp",
+        "/images/projects/odyssey-installation-02.webp",
+        "/images/projects/odyssey-installation-03.webp",
+        "/images/projects/odyssey-cabin.webp",
+      ],
+      stats: { teamSize: "2AVI crew", downloads: "70mm" },
+      features: ["70mm projector", "Temporary booth", "Raised floor", "Soundproofing", "Projection setup"],
+      highlights: [
+        { title: "Installation", description: "Assembly of the booth and 70mm projector inside the Grande Salle" },
+        { title: "Venue preparation", description: "Raised floor, soundproofing and technical workspace preparation" },
+        { title: "Setup", description: "Participation in projector adjustment and exhibition preparation" },
+      ],
+      links: { website: "https://www.legrandrex.com/cinema/4970" },
+      employer: "2AVI",
+      client: "Le Grand Rex",
+      venue: "Grande Salle, Paris",
+      role: "70mm projection technician",
+      status: "public",
+      mediaCredit: "Poster © Universal Pictures · Technical images from Grand Rex publications",
+    },
     // 2025
     {
       id: "0",
@@ -2115,7 +2428,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-purple-400 to-violet-500",
       emoji: "🎵",
-      image: "/images/projects/portfolio-loic-landing.png",
+      image: "/images/projects/loic-ghanem-home.webp",
       stats: { teamSize: "Solo", downloads: "B2C" },
       features: [
         "Next.js 16",
@@ -2324,7 +2637,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/cupra-formentor.jpg",
         "/images/projects/cupra-tournage-nuit.webp",
-        "/images/projects/avnier-landing.png",
+        "/images/projects/avnier-landing.webp",
       ],
       stats: { teamSize: "Night crew", downloads: "Ad" },
       features: [
@@ -2406,8 +2719,9 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-orange-400 to-red-500",
       emoji: "🎞️",
-      image: "/images/projects/oppenheimer-projecteur-70mm.webp",
+      image: "/images/projects/oppenheimer-official-poster.jpg",
       images: [
+        "/images/projects/oppenheimer-official-poster.jpg",
         "/images/projects/oppenheimer-projecteur-70mm.webp",
         "/images/projects/oppenheimer-pellicule-70mm.webp",
         "/images/projects/oppenheimer-cabine-rex.webp",
@@ -2443,6 +2757,11 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       links: {
         website: "https://www.dailymotion.com/video/x8mvpm2",
       },
+      employer: "2AVI",
+      client: "Le Grand Rex",
+      venue: "Grande Salle, Paris",
+      role: "70mm assistant projectionist",
+      mediaCredit: "Poster © Universal Pictures",
     },
     {
       id: "22",
@@ -2490,11 +2809,16 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
             "Sound and image coordination for a premiere event at La Seine Musicale",
         },
       ],
+      employer: "2AVI",
+      client: "20th Century Studios",
+      venue: "La Seine Musicale",
+      role: "Assistant projectionist and technician",
+      mediaCredit: "Poster © 20th Century Studios",
     },
   ],
 };
 
-const hiddenPortfolioProjects = new Set(["Impulsion"]);
+const hiddenPortfolioProjects = new Set<string>();
 const primaryCaseStudies = ["MoodDay", "Jobio", "MyCryptoPilot"];
 
 const portfolioOverrides: Record<

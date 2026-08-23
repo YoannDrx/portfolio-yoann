@@ -39,6 +39,7 @@ export type ExperienceType =
 export interface ExperienceStats {
   teamSize: string;
   downloads: string;
+  downloadsLabel?: string;
 }
 
 export interface ExperienceLinks {
@@ -78,6 +79,27 @@ export interface Experience {
   };
   highlights?: ExperienceHighlight[];
   links?: ExperienceLinks;
+  /** Mission context kept separate from the project title. */
+  employer?: string;
+  client?: string;
+  venue?: string;
+  role?: string;
+  status?: "production" | "public" | "in-progress" | "prototype" | "archive" | "private";
+  mediaCredit?: string;
+  comparison?: {
+    title?: string;
+    before: string;
+    after: string;
+    beforeLabel: string;
+    afterLabel: string;
+    additional?: Array<{
+      title: string;
+      before: string;
+      after: string;
+      beforeLabel: string;
+      afterLabel: string;
+    }>;
+  };
 }
 
 // ============ SKILLS ============

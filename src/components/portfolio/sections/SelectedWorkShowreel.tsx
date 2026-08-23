@@ -90,7 +90,7 @@ function WorkMedia({
                 ? `Enlarge ${item.title} preview ${index + 1}`
                 : `Agrandir l’aperçu ${index + 1} de ${item.title}`}
               className={cn(
-                "group absolute aspect-[60/41] cursor-zoom-in overflow-hidden rounded-xl bg-white text-left shadow-2xl ring-1 ring-slate-950/10 transition-transform duration-200 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:bg-slate-900 dark:ring-white/10",
+                "group absolute aspect-[16/10] cursor-zoom-in overflow-hidden rounded-xl bg-white text-left shadow-2xl ring-1 ring-slate-950/10 transition-transform duration-200 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:bg-slate-900 dark:ring-white/10",
                 index === 0
                   ? "left-0 top-0 w-[88%]"
                   : "bottom-0 right-0 z-10 w-[58%] ring-4 ring-white dark:ring-slate-900"
@@ -100,7 +100,7 @@ function WorkMedia({
                 src={src}
                 alt={`${item.media.alt} — ${index + 1}`}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes={index === 0 ? "480px" : "320px"}
               />
               <span className="absolute right-2.5 top-2.5 inline-flex size-9 items-center justify-center rounded-full bg-slate-950/72 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
@@ -108,6 +108,7 @@ function WorkMedia({
               </span>
             </button>
           ))}
+          {item.media.logo ? <span className="absolute bottom-3 left-3 z-20 grid size-12 place-items-center rounded-[15px] border border-white/70 bg-white/82 shadow-xl backdrop-blur-xl dark:border-white/15 dark:bg-slate-900/82"><Image src={item.media.logo} alt="" width={34} height={34} className="rounded-[10px]" aria-hidden="true" /></span> : null}
         </div>
       );
     }
@@ -134,7 +135,7 @@ function WorkMedia({
               : `Agrandir l’aperçu ${index + 1} de ${item.title}`}
             className={cn(
               "group relative cursor-zoom-in overflow-hidden rounded-xl bg-white text-left shadow-lg ring-1 ring-slate-950/5 transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:bg-slate-900 dark:ring-white/10",
-              isPhoneGallery ? "aspect-[6/13]" : "aspect-[60/41]",
+              isPhoneGallery ? "aspect-[6/13]" : "aspect-[16/10]",
               compact && cn(
                 "shrink-0 snap-center first:snap-start last:snap-end",
                 isPhoneGallery ? "w-[72%]" : "w-[88%]"
@@ -145,7 +146,7 @@ function WorkMedia({
               src={src}
               alt={`${item.media.alt} — ${index + 1}`}
               fill
-              className="object-cover"
+              className="object-contain"
               sizes={compact ? (isPhoneGallery ? "72vw" : "88vw") : (isPhoneGallery ? "180px" : "280px")}
             />
             <span className="absolute right-2.5 top-2.5 inline-flex size-9 items-center justify-center rounded-full bg-slate-950/72 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">

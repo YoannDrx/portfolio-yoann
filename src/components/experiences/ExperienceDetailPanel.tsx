@@ -42,6 +42,18 @@ export const ExperienceDetailPanel = ({
       : experience.image
         ? [experience.image]
         : [];
+  const comparisonSections = experience.comparison
+    ? [
+        {
+          title: experience.comparison.title ?? (locale === "en" ? "Home" : "Accueil"),
+          before: experience.comparison.before,
+          after: experience.comparison.after,
+          beforeLabel: experience.comparison.beforeLabel,
+          afterLabel: experience.comparison.afterLabel,
+        },
+        ...(experience.comparison.additional ?? []),
+      ]
+    : [];
 
   return (
     <div className="min-h-full bg-background">
@@ -51,6 +63,8 @@ export const ExperienceDetailPanel = ({
         projectName={experience.name}
         gradient={experience.gradient}
         emoji={experience.emoji}
+        firstImageContain
+        containAllImages
       />
 
       {/* Content */}
@@ -72,6 +86,15 @@ export const ExperienceDetailPanel = ({
           {experience.name}
         </h2>
         <p className="mt-1 font-medium text-primary">{experience.category}</p>
+
+        {(experience.role || experience.employer || experience.client || experience.venue) ? (
+          <dl className="mt-5 grid gap-3 rounded-[20px] border border-border bg-muted/25 p-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            {experience.role ? <div><dt className="font-mono text-[8px] uppercase tracking-[.16em] text-muted-foreground">{locale === "en" ? "Role" : "Rôle"}</dt><dd className="mt-1 font-semibold">{experience.role}</dd></div> : null}
+            {experience.employer ? <div><dt className="font-mono text-[8px] uppercase tracking-[.16em] text-muted-foreground">{locale === "en" ? "Employer" : "Employeur"}</dt><dd className="mt-1 font-semibold">{experience.employer}</dd></div> : null}
+            {experience.client ? <div><dt className="font-mono text-[8px] uppercase tracking-[.16em] text-muted-foreground">Client</dt><dd className="mt-1 font-semibold">{experience.client}</dd></div> : null}
+            {experience.venue ? <div><dt className="font-mono text-[8px] uppercase tracking-[.16em] text-muted-foreground">{locale === "en" ? "Venue" : "Lieu"}</dt><dd className="mt-1 font-semibold">{experience.venue}</dd></div> : null}
+          </dl>
+        ) : null}
 
         {/* Short Description */}
         <p className="mt-4 leading-relaxed text-muted-foreground">
@@ -97,7 +120,7 @@ export const ExperienceDetailPanel = ({
               {experience.stats.downloads}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              {uiTexts.stats.downloads}
+              {experience.stats.downloadsLabel ?? uiTexts.stats.downloads}
             </p>
           </div>
           <div className="h-10 w-px bg-border" />
@@ -127,6 +150,29 @@ export const ExperienceDetailPanel = ({
             </p>
           </div>
         )}
+
+        {comparisonSections.length > 0 ? (
+          <section className="mt-8">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">{locale === "en" ? "Before / after" : "Avant / après"}</h3>
+            <div className="space-y-7">
+              {comparisonSections.map((comparison) => (
+                <article key={comparison.title} className="rounded-[26px] border border-border bg-muted/15 p-3 sm:p-4">
+                  <p className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[.17em] text-primary">{comparison.title}</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {([[comparison.before, comparison.beforeLabel], [comparison.after, comparison.afterLabel]] as const).map(([src, label]) => (
+                      <figure key={src} className="overflow-hidden rounded-[20px] border border-border bg-slate-950">
+                        <div className="relative aspect-[16/10]"><Image src={src} alt={label} fill className="object-contain object-center" sizes="(max-width: 640px) 90vw, 520px" /></div>
+                        <figcaption className="border-t border-white/10 bg-background px-4 py-3 text-sm font-semibold text-foreground">{label}</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {experience.mediaCredit ? <p className="mt-3 text-[10px] text-muted-foreground">{experience.mediaCredit}</p> : null}
 
         {/* Tech Stack - Simple tags */}
         <div className="mt-8">

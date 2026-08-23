@@ -14,7 +14,7 @@ const copy = {
   fr: {
     title: "CV Yoann Andrieux - Dev React Native",
     present: "Présent",
-    available: "Ouvert aux échanges - CDI / Freelance / Mission longue",
+    available: "Paris · CDI / Freelance / Mission longue",
     experience: "Expériences sélectionnées",
     previous: "Projets React antérieurs",
     management: "Management & opérations",
@@ -29,7 +29,7 @@ const copy = {
   en: {
     title: "Resume Yoann Andrieux - React Native Dev",
     present: "Present",
-    available: "Open to conversations - Full-time / Freelance / Long-term",
+    available: "Paris · Full-time / Freelance / Long-term",
     experience: "Selected experience",
     previous: "Previous React projects",
     management: "Management & operations",
@@ -62,13 +62,6 @@ function profileImage() {
 
 function findCompany(experiences: WorkExperience[], company: string) {
   return experiences.find((item) => item.company === company);
-}
-
-function renderMonogram(color = "#F5F2EA") {
-  return `<svg viewBox="0 0 48 40" width="45" height="38" fill="none" aria-label="Yoann Andrieux">
-    <path d="M4 4 24 22 44 4M24 22v15" stroke="${color}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="42" cy="35" r="3" fill="#7DA3FF"/>
-  </svg>`;
 }
 
 function renderSectionTitle(title: string) {
@@ -121,18 +114,20 @@ export function renderCvHtml(locale: Locale) {
   const softSkills = getSoftSkills(locale).slice(0, 4);
   const education = getEducation(locale);
 
-  const selectedCompanies = ["KLESIA", "Jaji", "Jobio", "MoodDay", "Loïc Ghanem"];
+  const selectedCompanies = ["KLESIA", "Parigo Music", "Jaji", "Loïc Ghanem"];
   const selected = selectedCompanies
     .map((name) => findCompany(experiences, name))
     .filter((item): item is WorkExperience => Boolean(item));
 
   const previousCompanies = [
+    "Jobio",
+    "MoodDay",
     "Weil & Associés",
     "Agence Néon",
     "Caroline Senyk",
     "Nos Instants Précieux",
     "Mail Certificate",
-    "Test&Ride",
+    "Test & Ride",
     "Crazee Burger",
   ];
   const previous = previousCompanies
@@ -205,13 +200,13 @@ export function renderCvHtml(locale: Locale) {
     .page { width: 210mm; height: 297mm; overflow: hidden; position: relative; padding: 12mm 12mm 10mm; }
     .page + .page { page-break-before: always; }
     .page::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 2.4mm; background: #2457E6; }
-    .header { height: 53mm; margin: -12mm -12mm 7mm; padding: 10mm 12mm 8mm 16mm; background: #0D1728; color: #F5F2EA; display: grid; grid-template-columns: 26mm 1fr; gap: 7mm; position: relative; overflow: hidden; }
-    .portrait { position: absolute; left: 9mm; bottom: 0; width: 34mm; height: 47mm; object-fit: contain; object-position: bottom; filter: grayscale(1); }
-    .brand { position: relative; z-index: 2; }
-    .intro { grid-column: 2; position: relative; z-index: 2; }
+    .header { height: 53mm; margin: -12mm -12mm 7mm; padding: 8mm 12mm 7mm 15mm; background: #0D1728; color: #F5F2EA; display: grid; grid-template-columns: 36mm 1fr; align-items: end; gap: 8mm; position: relative; overflow: hidden; }
+    .portrait-shell { width: 36mm; height: 36mm; align-self: center; position: relative; overflow: hidden; border-radius: 50%; background: linear-gradient(145deg,#2457E6,#6DD6F2); border: .6mm solid rgba(255,255,255,.55); }
+    .portrait { position: absolute; inset: 2mm 1.5mm 0; width: 33mm; height: 36mm; object-fit: contain; object-position: center bottom; filter: grayscale(1); }
+    .intro { position: relative; z-index: 2; align-self: center; }
     .intro h1 { margin: 0; font-size: 25pt; line-height: .95; letter-spacing: -.6pt; text-transform: uppercase; }
     .intro .title { margin: 1.5mm 0 0; color: #7DA3FF; font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: .4pt; }
-    .availability { margin: 2mm 0 0; color: #4ADE80; font-size: 7pt; font-weight: 700; }
+    .availability { margin: 2mm 0 0; color: #9AB5FF; font-size: 7pt; font-weight: 700; }
     .bio { margin: 2.4mm 0 0; max-width: 145mm; color: #CBD5E1; font-size: 7.7pt; line-height: 1.4; }
     .contact { margin: 2.2mm 0 0; color: #94A3B8; font-size: 7pt; }
     .contact a { color: #7DA3FF; text-decoration: none; }
@@ -256,18 +251,19 @@ export function renderCvHtml(locale: Locale) {
 <body>
   <section class="page">
     <header class="header">
-      <div class="brand">${renderMonogram()}</div>
-      <img class="portrait" src="${profileImage()}" alt="" />
+      <div class="portrait-shell"><img class="portrait" src="${profileImage()}" alt="" /></div>
       <div class="intro">
         <h1>${escapeHtml(profile.firstName)} ${escapeHtml(profile.lastName)}</h1>
         <p class="title">${escapeHtml(profile.title)}</p>
         <p class="availability">● ${escapeHtml(t.available)}</p>
         <p class="bio">${escapeHtml(profile.bio)}</p>
-        <p class="contact">yoann.andrieux@gmail.com · +33 6 63 43 46 65 · <a href="https://yoann-andrieux.fr">yoann-andrieux.fr</a> · <a href="https://www.linkedin.com/in/yoann-andrieux/">LinkedIn</a> · <a href="https://github.com/YoannDrx">GitHub</a></p>
+        <p class="contact"><a href="mailto:yoann.andrieux@gmail.com">yoann.andrieux@gmail.com</a> · <a href="tel:+33663434665">+33 6 63 43 46 65</a> · <a href="https://yoann-andrieux.fr">yoann-andrieux.fr</a> · <a href="https://www.linkedin.com/in/yoann-andrieux/">LinkedIn</a> · <a href="https://github.com/YoannDrx">GitHub</a></p>
       </div>
     </header>
     ${renderSectionTitle(t.experience)}
     ${selected.map((item, index) => renderExperience(item, locale, { bullets: index < 2 ? 3 : 2 })).join("")}
+    ${renderSectionTitle(t.skills)}
+    <div class="grid-two">${skillCards}</div>
     <footer class="footer"><span>YOANN ANDRIEUX / PORTFOLIO</span><span>01 / 02</span></footer>
   </section>
 
@@ -282,10 +278,6 @@ export function renderCvHtml(locale: Locale) {
     ${renderSectionTitle(t.creative)}
     <div class="creative-grid">${creativeCards}</div>
 
-    ${renderSectionTitle(t.skills)}
-    <div class="grid-two">${skillCards}</div>
-
-    <div style="height:3mm"></div>
     ${renderSectionTitle(t.human)}
     <div class="grid-two">${humanCards}</div>
 

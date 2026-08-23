@@ -69,7 +69,7 @@ const TechSkillCardCompact = ({
   skill: NarrativeSkillCard;
   onPress: () => void;
 }) => (
-  <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="card-premium-hover">
+  <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="phone-surface mb-2 !rounded-[22px] !border-white/60">
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className={`w-[3px] h-8 rounded-full bg-gradient-to-b ${skill.gradient} flex-shrink-0`} />
@@ -91,7 +91,7 @@ const SoftSkillCardCompact = ({
   skill: SoftSkillCard;
   onPress: () => void;
 }) => (
-  <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="card-premium-hover">
+  <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="phone-surface mb-2 !rounded-[22px] !border-white/60">
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className={`w-[3px] h-8 rounded-full bg-gradient-to-b ${skill.gradient} flex-shrink-0`} />
@@ -108,7 +108,7 @@ const AICardCompact = ({ onPress }: { onPress: () => void }) => {
   const aiContent = getAiContent(locale);
 
   return (
-    <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="card-premium-hover">
+    <IOSCard variant="subtle" padding="md" interactive onPress={onPress} className="phone-surface !rounded-[22px] !border-white/60">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-md border border-purple-500/20 bg-purple-500/[0.06] text-purple-600 dark:text-purple-400 flex-shrink-0">
@@ -139,7 +139,7 @@ const TechSkillDetail = ({
   const uiTexts = getUiTexts(locale);
 
   return (
-    <div className="h-full bg-background flex flex-col animate-ios-push">
+    <div className="phone-canvas h-full bg-background flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
 
       {/* Back Button */}
@@ -199,7 +199,7 @@ const SoftSkillDetail = ({
   const uiTexts = getUiTexts(locale);
 
   return (
-    <div className="h-full bg-background flex flex-col animate-ios-push">
+    <div className="phone-canvas h-full bg-background flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
 
       {/* Back Button */}
@@ -235,7 +235,7 @@ const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideS
   const aiContent = getAiContent(locale);
 
   return (
-    <div className="h-full bg-background flex flex-col animate-ios-push">
+    <div className="phone-canvas h-full bg-background flex flex-col animate-ios-push">
       {!hideStatusBar && <StatusBar />}
 
       {/* Back Button */}
@@ -254,6 +254,7 @@ const AIDetail = ({ onBack, hideStatusBar = false }: { onBack: () => void; hideS
           </span>
           <h1 className="text-2xl font-bold text-foreground tracking-tight">{aiContent.subtitle}</h1>
           <div className="mt-2"><LevelBadge level={aiContent.level} size="sm" /></div>
+          <div className="mt-4 flex flex-wrap gap-1.5">{(locale === 'en' ? ['Agentic workflows', 'Agents', 'MCP', 'Context engineering'] : ['Workflows agentiques', 'Agents', 'MCP', 'Context engineering']).map((item) => <span key={item} className="rounded-full border border-primary/15 bg-primary/[.06] px-2.5 py-1 font-mono text-[8px] font-semibold text-primary">{item}</span>)}</div>
         </div>
 
         {/* Narrative */}
@@ -327,7 +328,7 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
 
   // Vue liste
   return (
-    <div className="h-full bg-background flex flex-col">
+    <div className="phone-canvas h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
 	      <div className="flex-1 overflow-y-auto pb-32">
@@ -339,11 +340,7 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
 
         {/* Intro narrative */}
         <div className="px-5 mb-6">
-          <IOSCard variant="subtle" padding="md">
-            <p className="text-sm text-muted-foreground leading-relaxed italic">
-              "{skillStoryIntro}"
-            </p>
-          </IOSCard>
+          <p className="border-y border-border py-5 text-sm leading-relaxed text-muted-foreground">{skillStoryIntro}</p>
         </div>
 
 	        {/* Technical Skills Section */}
@@ -351,7 +348,7 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
 	          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
 	            {uiTexts.sections.technicalSkills}
 	          </h3>
-          <div className="space-y-3 stagger-children">
+          <div className="stagger-children">
             {technicalSkills.map((skill) => (
               <TechSkillCardCompact
                 key={skill.id}
@@ -375,7 +372,7 @@ const SkillsScreen = ({ hideStatusBar = false }: SkillsScreenProps) => {
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
             {uiTexts.sections.softSkills}
           </h3>
-          <div className="space-y-3 stagger-children">
+          <div className="stagger-children">
             {softSkills.map((skill) => (
               <SoftSkillCardCompact
                 key={skill.id}

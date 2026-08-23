@@ -59,7 +59,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
   const devExperiences = experiences;
 
   return (
-    <div className="h-full bg-background flex flex-col">
+    <div className="phone-canvas h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
@@ -82,7 +82,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
           {/* Timeline */}
           <div className="relative stagger-children">
             {/* Timeline line */}
-            <div className="absolute left-5 top-6 bottom-6 w-0.5 bg-gradient-to-b from-blue-400 via-cyan-400 to-transparent" />
+            <div className="absolute bottom-6 left-5 top-6 w-px bg-gradient-to-b from-blue-500 via-cyan-400/60 to-transparent" />
 
             <div className="space-y-4">
               {devExperiences.map((exp, index) => (
@@ -90,7 +90,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
                   {/* Timeline dot */}
                   <div className="absolute left-3.5 top-4 w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 border-2 border-white shadow-sm" />
 
-                  <IOSCard variant="subtle" padding="sm">
+                  <IOSCard variant="subtle" padding="sm" className="phone-surface !rounded-[22px] !border-white/60">
                     <div className="space-y-2">
                       {/* Header */}
                       <div className="flex items-start justify-between gap-2">
@@ -170,7 +170,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 
           <div className="space-y-3 stagger-children">
             {education.map((edu) => (
-              <IOSCard key={edu.id} variant="subtle" padding="sm">
+              <IOSCard key={edu.id} variant="subtle" padding="sm" className="phone-surface !rounded-[22px] !border-white/60">
                 <div className="flex items-start gap-3">
                   <div className="w-[3px] h-10 rounded-full bg-gradient-to-b from-purple-400 to-violet-500 flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">

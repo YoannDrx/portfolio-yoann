@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { motion, useReducedMotion } from "motion/react";
 import IPhoneFrame from "./device/iPhoneFrame";
 import TabBar from "./device/TabBar";
 import HomeScreen from "./screens/HomeScreen";
@@ -39,6 +40,7 @@ const PortfolioApp = ({ showFrame = true }: PortfolioAppProps) => {
   const searchParamsString = searchParams.toString();
   const rawTab = searchParams.get("tab");
   const activeTab = normalizeTab(rawTab) ?? "home";
+  const reducedMotion = useReducedMotion();
 
   // En mode fullscreen, on cache la StatusBar des screens
   const hideStatusBar = !showFrame;
@@ -79,27 +81,34 @@ const PortfolioApp = ({ showFrame = true }: PortfolioAppProps) => {
     router.replace(`${pathname}${nextSearch ? `?${nextSearch}` : ""}${hash}`, { scroll: false });
   };
 
-  const renderScreen = () => {
-    switch (activeTab) {
-      case "home":
-        return <HomeScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} />;
-      case "work":
-        return <WorkScreen hideStatusBar={hideStatusBar} />;
-      case "skills":
-        return <SkillsScreen hideStatusBar={hideStatusBar} />;
-      case "resume":
-        return <ResumeScreen hideStatusBar={hideStatusBar} />;
-      case "contact":
-        return <ContactScreen hideStatusBar={hideStatusBar} />;
-      default:
-        return <HomeScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} />;
-    }
-  };
+  const screens = [
+    { id: "home", node: <HomeScreen onNavigate={handleTabChange} hideStatusBar={hideStatusBar} /> },
+    { id: "work", node: <WorkScreen hideStatusBar={hideStatusBar} /> },
+    { id: "skills", node: <SkillsScreen hideStatusBar={hideStatusBar} /> },
+    { id: "resume", node: <ResumeScreen hideStatusBar={hideStatusBar} /> },
+    { id: "contact", node: <ContactScreen hideStatusBar={hideStatusBar} /> },
+  ] as const;
+  const activeIndex = screens.findIndex((screen) => screen.id === activeTab);
 
   const content = (
-    <div className="relative h-full flex flex-col">
-      <div className="flex-1 overflow-hidden">
-        {renderScreen()}
+    <div className="phone-canvas relative flex h-full flex-col">
+      <div className="relative flex-1 overflow-hidden">
+        {screens.map((screen, index) => {
+          const active = screen.id === activeTab;
+          return (
+            <motion.div
+              key={screen.id}
+              className={`absolute inset-0 h-full ${active ? "pointer-events-auto" : "pointer-events-none"}`}
+              aria-hidden={!active}
+              inert={!active}
+              initial={false}
+              animate={active ? { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0, x: reducedMotion ? 0 : index < activeIndex ? -26 : 26, scale: reducedMotion ? 1 : .985, filter: reducedMotion ? "blur(0px)" : "blur(5px)" }}
+              transition={reducedMotion ? { duration: .16 } : { type: "spring", stiffness: 340, damping: 34, mass: .82 }}
+            >
+              {screen.node}
+            </motion.div>
+          );
+        })}
       </div>
       <TabBar activeTab={activeTab} onTabChange={handleTabChange} isFullscreen={hideStatusBar} />
     </div>
@@ -108,7 +117,7 @@ const PortfolioApp = ({ showFrame = true }: PortfolioAppProps) => {
   // Mode fullscreen (mobile réel) : pas de cadre
   if (!showFrame) {
     return (
-      <div className="fixed inset-0 overflow-hidden bg-background pt-16">
+      <div className="fixed inset-0 overflow-hidden bg-background pt-[max(4rem,env(safe-area-inset-top))]">
         {content}
       </div>
     );

@@ -12,9 +12,11 @@ import {
   IOSBadge,
   IOSNavigationBar,
 } from '../ios';
-import { getProfile, getSocialLinks, getUiTexts } from '@/data';
+import { getPortfolioContent, getProfile, getSocialLinks, getUiTexts } from '@/data';
 import { ContactFormCard } from '@/components/contact/ContactFormCard';
 import { useI18n } from '@/i18n/I18nProvider';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 // Map icon names to components
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
@@ -45,9 +47,12 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
   const uiTexts = getUiTexts(locale);
   const profile = getProfile(locale);
   const socialLinks = getSocialLinks(locale);
+  const content = getPortfolioContent(locale);
+  const [intentId, setIntentId] = useState(content.contactIntents[0].id);
+  const intent = content.contactIntents.find((item) => item.id === intentId) ?? content.contactIntents[0];
 
   return (
-    <div className="h-full bg-background flex flex-col">
+    <div className="phone-canvas h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
@@ -96,7 +101,11 @@ const ContactScreen = ({ hideStatusBar = false }: ContactScreenProps) => {
 
         {/* Contact Form */}
         <div className="px-5 mt-4">
-          <ContactFormCard titleClassName="font-semibold text-foreground mb-4" />
+          <div className="mb-4 flex gap-2 overflow-x-auto pb-1" role="group" aria-label={locale === 'en' ? 'Contact intent' : 'Type de contact'}>
+            {content.contactIntents.map((item) => <button key={item.id} type="button" aria-pressed={intentId === item.id} onClick={() => setIntentId(item.id)} className={cn('liquid-button shrink-0 !min-h-10 !px-3 !text-xs', intentId === item.id && 'liquid-button-primary')}>{item.label}</button>)}
+          </div>
+          <h2 className="mb-5 text-3xl font-bold tracking-[-0.045em]">{intent.heading}</h2>
+          <ContactFormCard idPrefix="phone-contact" titleClassName="mb-6 text-xl font-semibold text-foreground" intent={intent} className="phone-surface !rounded-[28px] !border-white/70 !bg-background/72 backdrop-blur-2xl dark:!border-white/10" />
         </div>
 
         {/* Availability */}

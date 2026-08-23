@@ -57,9 +57,9 @@ function getApiMessages(locale: "fr" | "en") {
 }
 
 function contactEmailProvider() {
-  return process.env.CONTACT_EMAIL_PROVIDER === "yodev_mail"
-    ? "yodev_mail"
-    : "resend";
+  return process.env.CONTACT_EMAIL_PROVIDER === "resend"
+    ? "resend"
+    : "yodev_mail";
 }
 
 async function sendWithResend(input: ContactEmailInput): Promise<ContactEmailResult> {

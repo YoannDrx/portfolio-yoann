@@ -103,6 +103,21 @@
     --ease-ios: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
+    /* ============ YOANN LIQUID V2 ============ */
+    --liquid-canvas: 42 38% 96%;
+    --liquid-ink: 222 46% 9%;
+    --liquid-cyan: 188 91% 52%;
+    --liquid-night: 222 68% 6%;
+    --liquid-regular: 0 0% 100% / 0.62;
+    --liquid-clear: 0 0% 100% / 0.12;
+    --liquid-specular: 0 0% 100% / 0.82;
+    --liquid-blur: 28px;
+    --liquid-shadow: 0 24px 70px -28px hsl(222 46% 9% / 0.38);
+    --duration-micro: 160ms;
+    --duration-navigation: 360ms;
+    --duration-scene: 720ms;
+    --duration-cinematic: 1100ms;
+
     /* ============ SIDEBAR (compatibility) ============ */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -165,6 +180,12 @@
     --shadow-soft: 0 8px 32px -8px hsl(0 0% 0% / 0.4);
     --shadow-medium: 0 16px 48px -12px hsl(0 0% 0% / 0.5);
     --shadow-elevated: 0 25px 50px -12px hsl(0 0% 0% / 0.6);
+    --liquid-canvas: 222 44% 6%;
+    --liquid-ink: 210 40% 98%;
+    --liquid-regular: 222 28% 13% / 0.68;
+    --liquid-clear: 0 0% 100% / 0.09;
+    --liquid-specular: 0 0% 100% / 0.22;
+    --liquid-shadow: 0 30px 80px -28px hsl(0 0% 0% / 0.85);
   }
 }
 
@@ -196,6 +217,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 24px;
+  scrollbar-gutter: stable;
 }
 
 ::selection { color: white; background: hsl(var(--primary)); }
@@ -212,6 +234,139 @@ html {
 }
 
 @layer components {
+  .liquid-canvas {
+    background-color: hsl(var(--liquid-canvas));
+    background-image:
+      radial-gradient(circle at 18% 12%, hsl(var(--primary) / 0.08), transparent 34%),
+      radial-gradient(circle at 84% 82%, hsl(var(--liquid-cyan) / 0.055), transparent 30%),
+      linear-gradient(hsl(var(--foreground) / 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--foreground) / 0.018) 1px, transparent 1px);
+    background-size: auto, auto, 36px 36px, 36px 36px;
+  }
+
+  .phone-canvas {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(circle at 84% 6%, hsl(var(--primary) / 0.17), transparent 27%),
+      radial-gradient(circle at 4% 42%, hsl(var(--liquid-cyan) / 0.09), transparent 31%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--liquid-canvas)));
+  }
+
+  .phone-surface {
+    border: 1px solid hsl(var(--liquid-specular));
+    background: linear-gradient(145deg, hsl(var(--background) / 0.82), hsl(var(--liquid-regular) / 0.58));
+    box-shadow: inset 0 1px 0 hsl(var(--liquid-specular)), 0 24px 50px -34px hsl(var(--foreground) / 0.58);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    backdrop-filter: blur(22px) saturate(145%);
+  }
+
+  .liquid-button {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold outline-none transition;
+    border-color: hsl(var(--liquid-specular));
+    background: linear-gradient(145deg, hsl(var(--liquid-regular)), hsl(var(--background) / 0.42));
+    box-shadow: inset 0 1px 0 hsl(var(--liquid-specular)), var(--liquid-shadow);
+    -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(145%);
+    backdrop-filter: blur(var(--liquid-blur)) saturate(145%);
+    transition-duration: var(--duration-micro);
+  }
+
+  .liquid-button:hover {
+    transform: translateY(-2px);
+    border-color: hsl(var(--primary) / 0.28);
+  }
+
+  .liquid-button:active {
+    transform: translateY(0) scale(0.975);
+  }
+
+  .liquid-button:focus-visible,
+  .liquid-icon-button:focus-visible,
+  .constellation-node:focus-visible {
+    outline: 3px solid hsl(var(--primary) / 0.42);
+    outline-offset: 3px;
+  }
+
+  .liquid-button-primary {
+    border-color: hsl(var(--primary) / 0.34);
+    background: linear-gradient(145deg, hsl(var(--primary)), hsl(222 87% 45%));
+    color: hsl(var(--primary-foreground));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.34), 0 18px 42px -20px hsl(var(--primary) / 0.78);
+  }
+
+  .liquid-button-clear {
+    border-color: hsl(0 0% 100% / 0.18);
+    background: linear-gradient(145deg, hsl(0 0% 100% / 0.14), hsl(0 0% 100% / 0.045));
+    color: white;
+  }
+
+  .liquid-icon-button {
+    @apply inline-flex size-12 items-center justify-center rounded-full border border-white/15 bg-white/[0.08] text-white outline-none transition;
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    backdrop-filter: blur(22px) saturate(145%);
+  }
+
+  .liquid-icon-button:hover {
+    @apply bg-white/15;
+    transform: translateY(-2px);
+  }
+
+  .liquid-silhouette {
+    opacity: 0.88;
+    mix-blend-mode: screen;
+  }
+
+  .constellation-node {
+    @apply relative min-h-44 rounded-[28px] border border-white/55 bg-background/70 p-6 outline-none transition-all duration-500 dark:border-white/10 dark:bg-white/[0.055];
+    box-shadow: 0 24px 70px -36px hsl(var(--foreground) / 0.55), inset 0 1px 0 hsl(var(--liquid-specular));
+    -webkit-backdrop-filter: blur(22px) saturate(135%);
+    backdrop-filter: blur(22px) saturate(135%);
+    content-visibility: auto;
+    contain-intrinsic-size: 176px;
+  }
+
+  .constellation-node:hover {
+    transform: translateY(-5px) rotateX(1deg);
+    border-color: hsl(var(--primary) / 0.28);
+  }
+
+  .constellation-node h3 {
+    @apply mt-3 pr-9 text-2xl font-bold tracking-[-0.035em];
+  }
+
+  .constellation-node > p:not(.constellation-year) {
+    @apply mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground;
+  }
+
+  .constellation-year {
+    @apply font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-primary;
+  }
+
+  .constellation-arrow {
+    @apply absolute right-6 top-6 size-5 text-primary transition-transform;
+  }
+
+  .constellation-node:hover .constellation-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .constellation-dot {
+    @apply absolute -left-[2.82rem] top-8 size-3 rounded-full border-2 border-background bg-primary shadow-[0_0_22px_hsl(var(--primary)/0.85)] lg:hidden;
+  }
+
+  @media (min-width: 1024px) {
+    .constellation-node:nth-child(even) .constellation-dot {
+      display: block;
+      left: -3.44rem;
+    }
+
+    .constellation-node:nth-child(odd) .constellation-dot {
+      display: block;
+      left: auto;
+      right: -3.44rem;
+    }
+  }
+
   /* ============ iOS GLASS CARD ============ */
   .glass-card {
     @apply relative overflow-hidden rounded-2xl transition-colors duration-200;

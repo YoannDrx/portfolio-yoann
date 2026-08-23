@@ -7,6 +7,7 @@
 
 import * as React from 'react';
 import { Home, FolderOpen, Layers, FileText, Mail } from 'lucide-react';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
@@ -44,13 +45,12 @@ const TabBar: React.FC<TabBarProps> = ({
   return (
     <div
       className={cn(
-        'left-0 right-0 z-40 bg-background',
-        isFullscreen ? 'fixed bottom-0' : 'absolute bottom-0'
+        'left-3 right-3 z-40',
+        isFullscreen ? 'fixed bottom-[max(.7rem,env(safe-area-inset-bottom))]' : 'absolute bottom-3'
       )}
     >
-	      {/* Border top */}
-	      <div className="border-t border-border/50">
-	        <div className="flex items-center justify-around py-2 pb-6">
+	      <div className="rounded-[27px] border border-white/70 bg-background/78 shadow-[0_18px_55px_-20px_hsl(var(--foreground)/.55)] backdrop-blur-2xl dark:border-white/10">
+	        <div className="grid min-h-[68px] grid-cols-5 items-center gap-0.5 p-1.5">
 	          {resolvedTabs.map((tab) => {
 	            const isActive = activeTab === tab.id;
 
@@ -58,24 +58,13 @@ const TabBar: React.FC<TabBarProps> = ({
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={cn(
-                  'ios-tab-item',
-                  'ios-press',
-                  isActive && 'active'
-                )}
+                className={cn('relative isolate grid h-[56px] min-w-0 grid-rows-[34px_13px] place-items-center self-center rounded-[21px] px-0.5 py-1 text-muted-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary', isActive && 'text-primary')}
                 aria-label={tab.label}
                 aria-current={isActive ? 'page' : undefined}
               >
-                <span
-                  className={cn(
-                    'transition-transform duration-200',
-                    '[&_svg]:h-6 [&_svg]:w-6',
-                    isActive && 'scale-110 [&_svg]:stroke-[2.5px]'
-                  )}
-                >
-                  {tab.icon}
-                </span>
-                <span className="text-[10px] font-medium">{tab.label}</span>
+                {isActive ? <motion.span layoutId="iphone-tab-active" className="absolute inset-0 -z-10 rounded-[21px] bg-primary/10 shadow-[inset_0_1px_0_rgba(255,255,255,.55)]" transition={{ type: 'spring', stiffness: 430, damping: 32 }} /> : null}
+                <motion.span animate={isActive ? { y: -1, scale: 1.12 } : { y: 0, scale: 1 }} transition={{ type: 'spring', stiffness: 420, damping: 28 }} className={cn('grid size-8 place-items-center [&_svg]:size-5', isActive && '[&_svg]:stroke-[2.5px]')}>{tab.icon}</motion.span>
+                <span className="block max-w-full truncate text-[8px] font-semibold leading-none">{tab.label}</span>
 
                 {/* Badge */}
                 {tab.badge !== undefined && (
