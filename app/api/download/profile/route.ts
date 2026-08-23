@@ -2,6 +2,8 @@ import { generateProfileImage } from "@/lib/profile-image-generator";
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 
+export const maxDuration = 60;
+
 const HALO_COLOR_MAP: Record<string, string | null> = {
   blue: "#007AFF",
   indigo: "#5856D6",

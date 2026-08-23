@@ -2,6 +2,8 @@ import { renderCvHtml } from "@/lib/cv-renderer";
 import { generateCvPdfBuffer } from "@/lib/cv-pdf";
 import { isLocale } from "@/i18n/locales";
 
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}));
   const locale = isLocale(body.locale) ? body.locale : "fr";
