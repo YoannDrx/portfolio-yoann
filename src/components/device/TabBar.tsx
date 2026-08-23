@@ -7,7 +7,6 @@
 
 import * as React from 'react';
 import { Home, FolderOpen, Layers, FileText, Mail } from 'lucide-react';
-import { LayoutGroup, motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
@@ -51,15 +50,13 @@ const TabBar: React.FC<TabBarProps> = ({
     >
 	      {/* Border top */}
 	      <div className="border-t border-border/50">
-	        <LayoutGroup id="iphone-tabbar">
 	        <div className="flex items-center justify-around py-2 pb-6">
 	          {resolvedTabs.map((tab) => {
 	            const isActive = activeTab === tab.id;
 
             return (
-              <motion.button
+              <button
                 key={tab.id}
-                layout
                 onClick={() => onTabChange(tab.id)}
                 className={cn(
                   'ios-tab-item',
@@ -71,19 +68,12 @@ const TabBar: React.FC<TabBarProps> = ({
               >
                 <span
                   className={cn(
-                    'relative transition-transform duration-200',
+                    'transition-transform duration-200',
                     '[&_svg]:h-6 [&_svg]:w-6',
                     isActive && 'scale-110 [&_svg]:stroke-[2.5px]'
                   )}
                 >
                   {tab.icon}
-                  {isActive ? (
-                    <motion.span
-                      layoutId="iphone-tab-indicator"
-                      className="absolute -bottom-2 left-1/2 h-1 w-5 -translate-x-1/2 rounded-full bg-primary"
-                      transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.8 }}
-                    />
-                  ) : null}
                 </span>
                 <span className="text-[10px] font-medium">{tab.label}</span>
 
@@ -103,11 +93,10 @@ const TabBar: React.FC<TabBarProps> = ({
                       : tab.badge}
                   </span>
                 )}
-              </motion.button>
+              </button>
             );
           })}
-	        </div>
-	        </LayoutGroup>
+        </div>
       </div>
     </div>
   );

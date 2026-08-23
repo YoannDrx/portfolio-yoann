@@ -56,8 +56,8 @@ const shared = {
   moodday: {
     slug: "moodday",
     name: "Moodday",
-    image: "/images/projects/moodday-landing.png",
-    secondaryImage: "/images/projects/moodday-dashboard.png",
+    image: "/images/projects/moodday-home-current.webp",
+    secondaryImage: "/images/projects/moodday-consultation-current.webp",
     accent: "#1E7775",
     softAccent: "#D8ECE8",
     stack: [
@@ -110,8 +110,8 @@ const shared = {
   pressay: {
     slug: "pressay",
     name: "Pressay",
-    image: "/images/projects/pressay-icon.png",
-    secondaryImage: "/images/projects/pressay-icon-concept.png",
+    image: "/images/projects/pressay-icon-current.webp",
+    secondaryImage: "/images/projects/pressay-home-dark.webp",
     accent: "#5668FF",
     softAccent: "#E5E8FF",
     stack: [

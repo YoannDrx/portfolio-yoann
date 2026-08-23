@@ -609,10 +609,10 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-teal-400 to-emerald-500",
       emoji: "🧠",
-      image: "/images/projects/moodday-landing.png",
+      image: "/images/projects/moodday-home-current.webp",
       images: [
-        "/images/projects/moodday-landing.png",
-        "/images/projects/moodday-dashboard.png",
+        "/images/projects/moodday-home-current.webp",
+        "/images/projects/moodday-consultation-current.webp",
       ],
       stats: { teamSize: "Solo", downloads: "App" },
       features: [
@@ -1085,7 +1085,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/cupra-formentor.jpg",
         "/images/projects/cupra-tournage-nuit.webp",
-        "/images/projects/avnier-landing.webp",
+        "/images/projects/avnier-landing.png",
       ],
       stats: { teamSize: "Équipe nuit", downloads: "Pub" },
       features: [
@@ -1854,10 +1854,10 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       platforms: ["web"],
       gradient: "from-teal-400 to-emerald-500",
       emoji: "🧠",
-      image: "/images/projects/moodday-landing.png",
+      image: "/images/projects/moodday-home-current.webp",
       images: [
-        "/images/projects/moodday-landing.png",
-        "/images/projects/moodday-dashboard.png",
+        "/images/projects/moodday-home-current.webp",
+        "/images/projects/moodday-consultation-current.webp",
       ],
       stats: { teamSize: "Solo", downloads: "App" },
       features: [
@@ -2324,7 +2324,7 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
       images: [
         "/images/projects/cupra-formentor.jpg",
         "/images/projects/cupra-tournage-nuit.webp",
-        "/images/projects/avnier-landing.webp",
+        "/images/projects/avnier-landing.png",
       ],
       stats: { teamSize: "Night crew", downloads: "Ad" },
       features: [

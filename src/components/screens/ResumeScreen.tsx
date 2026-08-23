@@ -8,7 +8,7 @@
 import dynamic from 'next/dynamic';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSBadge, IOSNavigationBar, IOSButton } from '../ios';
-import { getEducation, getPortfolioContent, getWorkExperiences, getUiTexts } from '@/data';
+import { getEducation, getWorkExperiences, getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
 import { Briefcase, GraduationCap, MapPin, ExternalLink, Download } from 'lucide-react';
 
@@ -55,7 +55,6 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
   const uiTexts = getUiTexts(locale);
   const experiences = getWorkExperiences(locale);
   const education = getEducation(locale);
-  const content = getPortfolioContent(locale);
 
   const devExperiences = experiences;
 
@@ -70,16 +69,6 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 	          subtitle={uiTexts.sections.experienceAndEducation}
 	          rightAction={<PDFDownloadButton />}
         />
-
-        <div className="scrollbar-hide mb-6 flex gap-3 overflow-x-auto px-5">
-          {content.careerChapters.map((chapter, index) => (
-            <div key={chapter.id} className="w-56 shrink-0 rounded-xl border border-border bg-card p-4">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-primary">0{index + 1} / {chapter.period}</p>
-              <h2 className="mt-3 font-display text-xl font-bold uppercase">{chapter.label}</h2>
-              <p className="mt-2 line-clamp-4 text-xs leading-5 text-muted-foreground">{chapter.transferStatement}</p>
-            </div>
-          ))}
-        </div>
 
         {/* Experience Section */}
         <div className="px-5 mb-6">

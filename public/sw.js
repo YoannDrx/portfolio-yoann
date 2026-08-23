@@ -3,7 +3,7 @@
  * Stratégies de cache intelligentes pour PWA offline
  */
 
-const CACHE_VERSION = 'v3-product-cinema';
+const CACHE_VERSION = 'v4-previous-da';
 const CACHE_NAMES = {
   core: `portfolio-yoann-core-${CACHE_VERSION}`,
   images: `portfolio-yoann-images-${CACHE_VERSION}`,

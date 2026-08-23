@@ -38,7 +38,7 @@ export type FeaturedWorkItem = {
   decision: string;
   impact: string;
   proof: { value: string; label: string; detail: string };
-  media: { primary: string; secondary?: string; alt: string };
+  media: { primary: string; secondary?: string; gallery?: string[]; logo?: string; alt: string };
   accent: string;
   destination:
     | { type: "panel"; experienceId: string }
@@ -151,7 +151,12 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
         detail: localized ? "Public mobile distribution" : "Distribution mobile publique",
       },
       media: {
-        primary: "/images/projects/klesia-texture.webp",
+        primary: "/images/projects/klesia-appstore-01.webp",
+        gallery: [
+          "/images/projects/klesia-appstore-01.webp",
+          "/images/projects/klesia-appstore-02.webp",
+          "/images/projects/klesia-appstore-03.webp",
+        ],
         alt: localized ? "KLESIA mobile application" : "Application mobile KLESIA",
       },
       accent: "#2563EB",
@@ -179,7 +184,12 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
         detail: localized ? "iOS and Android distribution" : "Distribution iOS et Android",
       },
       media: {
-        primary: "/images/projects/jaji-texture.webp",
+        primary: "/images/projects/jaji-appstore-01.webp",
+        gallery: [
+          "/images/projects/jaji-appstore-01.webp",
+          "/images/projects/jaji-appstore-02.webp",
+          "/images/projects/jaji-appstore-03.webp",
+        ],
         alt: localized ? "Jaji mobile application" : "Application mobile Jaji",
       },
       accent: "#0F9F7A",
@@ -199,8 +209,12 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
     if (!study) throw new Error(`Missing case study: ${slug}`);
     const decision = study.decisions[0];
     const textureBySlug: Partial<Record<CaseStudySlug, string>> = {
+      pressay: "/images/projects/pressay-home-dark.webp",
       jobio: "/images/projects/jobio-texture.webp",
-      moodday: "/images/projects/moodday-texture.webp",
+      moodday: "/images/projects/moodday-home-current.webp",
+    };
+    const logoBySlug: Partial<Record<CaseStudySlug, string>> = {
+      moodday: "/images/projects/moodday-icon-current.webp",
     };
     return {
       id: slug,
@@ -216,6 +230,13 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
       media: {
         primary: textureBySlug[slug] ?? study.image,
         secondary: study.secondaryImage,
+        logo: logoBySlug[slug],
+        gallery: slug === "pressay"
+          ? [
+              "/images/projects/pressay-home-dark.webp",
+              "/images/projects/pressay-modes-light.webp",
+            ]
+          : undefined,
         alt: `${study.name} — ${study.tagline}`,
       },
       accent: study.accent,
@@ -331,7 +352,7 @@ function getCareerChapters(locale: Locale): CareerChapter[] {
       transferStatement: english
         ? "Moving from interfaces to products meant learning to reduce scope, expose trade-offs and verify delivery."
         : "Passer des interfaces aux produits m’a appris à réduire le périmètre, exposer les arbitrages et vérifier la livraison.",
-      media: ["/images/projects/jobio-landing.png", "/images/projects/moodday-landing.png"],
+      media: ["/images/projects/jobio-landing.png", "/images/projects/moodday-home-current.webp"],
     },
     {
       id: "mobile",

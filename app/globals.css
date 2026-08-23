@@ -196,7 +196,6 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 24px;
-  scrollbar-gutter: stable;
 }
 
 ::selection { color: white; background: hsl(var(--primary)); }
@@ -479,76 +478,4 @@ html {
   .shadow-medium { box-shadow: var(--shadow-medium); }
   .shadow-elevated { box-shadow: var(--shadow-elevated); }
   .shadow-device { box-shadow: var(--shadow-device); }
-}
-
-/* ============ PRODUCT CINEMA ============ */
-.product-cinema-grain::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image:
-    repeating-linear-gradient(0deg, transparent 0 3px, hsl(var(--foreground) / 0.18) 3px 4px),
-    repeating-linear-gradient(90deg, transparent 0 5px, hsl(var(--foreground) / 0.12) 5px 6px);
-  background-size: 7px 7px, 11px 11px;
-  mix-blend-mode: multiply;
-}
-
-.dark .product-cinema-grain::after {
-  opacity: 0.02;
-  mix-blend-mode: screen;
-}
-
-.hero-portrait {
-  filter:
-    drop-shadow(1px 0 0 hsl(var(--background)))
-    drop-shadow(-1px 0 0 hsl(var(--background)))
-    drop-shadow(0 1px 0 hsl(var(--background)))
-    drop-shadow(0 -1px 0 hsl(var(--background)))
-    drop-shadow(18px 28px 38px hsl(var(--primary) / 0.16));
-}
-
-.iphone-studio {
-  transform-style: preserve-3d;
-}
-
-@supports (view-transition-name: root) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 450ms;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  ::view-transition-new(root) {
-    clip-path: circle(0 at var(--theme-x, 95%) var(--theme-y, 5%));
-    animation-name: theme-reveal;
-  }
-}
-
-@keyframes theme-reveal {
-  to { clip-path: circle(145% at var(--theme-x, 95%) var(--theme-y, 5%)); }
-}
-
-@media (min-width: 1024px) {
-  #experiences,
-  #skills,
-  #resume,
-  #contact {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 900px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-portrait {
-    filter: drop-shadow(0 16px 28px hsl(var(--primary) / 0.12));
-  }
-
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.01ms !important;
-  }
 }

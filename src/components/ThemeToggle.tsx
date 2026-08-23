@@ -2,7 +2,6 @@
 
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
-import { useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -13,7 +12,6 @@ type ThemeToggleProps = {
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme();
   const { locale } = useI18n();
-  const reducedMotion = useReducedMotion();
   const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
   const title = locale === "en" ? "Toggle theme" : "Changer de thème";
   const toDark = locale === "en" ? "Switch to dark mode" : "Passer en mode sombre";
@@ -22,19 +20,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   return (
     <button
       type="button"
-      onClick={(event) => {
-        const root = document.documentElement;
-        root.style.setProperty("--theme-x", `${event.clientX}px`);
-        root.style.setProperty("--theme-y", `${event.clientY}px`);
-        const viewTransitionDocument = document as Document & {
-          startViewTransition?: (update: () => void) => { finished: Promise<void> };
-        };
-        if (reducedMotion || !viewTransitionDocument.startViewTransition) {
-          setTheme(nextTheme);
-          return;
-        }
-        viewTransitionDocument.startViewTransition(() => setTheme(nextTheme));
-      }}
+      onClick={() => setTheme(nextTheme)}
       className={cn(
         "flex items-center justify-center px-3 py-2 rounded-full text-sm font-medium transition-all",
         "text-muted-foreground hover:text-foreground hover:bg-muted/40",

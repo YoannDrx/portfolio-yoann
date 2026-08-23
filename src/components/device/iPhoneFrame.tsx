@@ -16,19 +16,21 @@ interface IPhoneFrameProps {
   showFrame?: boolean;
   /** Additional className */
   className?: string;
+  /** Display scale - defaults to the portfolio simulator size */
+  scale?: number;
 }
 
 const IPhoneFrame = ({
   children,
   device = 'iPhone14Pro',
   showFrame = true,
-  className
+  className,
+  scale = 0.95,
 }: IPhoneFrameProps) => {
   // Get device config from tokens
   const deviceConfig = useMemo(() => devices[device], [device]);
 
-  // Calculate dimensions - scale down for display
-  const scale = 0.95; // Scale factor for display
+  // Calculate dimensions - scale down for the requested context
   const width = Math.round(deviceConfig.width * scale);
   const height = Math.round(deviceConfig.height * scale);
 

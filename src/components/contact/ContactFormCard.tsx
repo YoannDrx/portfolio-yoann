@@ -2,13 +2,10 @@
 
 import { useRef, useState } from "react";
 import { CheckCircle, Send } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { IOSButton, IOSCard, IOSInput, IOSTextarea } from "@/components/ios";
 import { toast } from "@/hooks/use-toast";
 import { getUiTexts } from "@/data";
 import { useI18n } from "@/i18n/I18nProvider";
-import type { ContactIntent } from "@/data/portfolio-content";
-import { cn } from "@/lib/utils";
 
 const MIN_SUBMISSION_INTERVAL_MS = 5000;
 
@@ -25,23 +22,11 @@ type ContactField = "name" | "email" | "message";
 export type ContactFormCardProps = {
   className?: string;
   titleClassName?: string;
-  intents?: ContactIntent[];
-  activeIntentId?: ContactIntent["id"];
-  onIntentChange?: (intent: ContactIntent["id"]) => void;
 };
 
-export function ContactFormCard({
-  className,
-  titleClassName,
-  intents = [],
-  activeIntentId,
-  onIntentChange,
-}: ContactFormCardProps) {
+export function ContactFormCard({ className, titleClassName }: ContactFormCardProps) {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
-  const reducedMotion = useReducedMotion();
-  const activeIntent = intents.find((intent) => intent.id === activeIntentId);
-  const messageMaxLength = 4000 - (activeIntent ? activeIntent.payloadPrefix.length + 2 : 0);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
@@ -105,13 +90,7 @@ export function ContactFormCard({
           "x-locale": locale,
           "x-contact-request-id": requestIdRef.current,
         },
-        body: JSON.stringify({
-          ...formData,
-          message: activeIntent
-            ? `${activeIntent.payloadPrefix}\n\n${formData.message}`
-            : formData.message,
-          subject: activeIntent ? `${activeIntent.label} — ${formData.name}` : undefined,
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -152,27 +131,18 @@ export function ContactFormCard({
         {uiTexts.sections.sendMessage}
       </h3>
 
-      <AnimatePresence mode="wait" initial={false}>
       {isSubmitted ? (
-        <motion.div
-          key="success"
-          initial={reducedMotion ? false : { opacity: 0, y: 18, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={reducedMotion ? undefined : { opacity: 0, y: -10 }}
-          className="py-8 text-center"
-          role="status"
-          aria-live="polite"
-        >
-          <motion.div
-            initial={reducedMotion ? false : { x: -24, rotate: -8 }}
-            animate={{ x: 0, rotate: 0 }}
-            className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-success/10"
-          >
-            <CheckCircle className="size-8 text-success" />
-          </motion.div>
-          <p className="font-semibold text-foreground">{uiTexts.messages.messageSent}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{uiTexts.messages.willReplyShort}</p>
-        </motion.div>
+        <div className="py-8 text-center animate-ios-spring" role="status" aria-live="polite">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-success/10 flex items-center justify-center">
+            <CheckCircle className="w-8 h-8 text-success" />
+          </div>
+          <p className="font-semibold text-foreground">
+            {uiTexts.messages.messageSent}
+          </p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {uiTexts.messages.willReplyShort}
+          </p>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {/* Honeypot field (anti-spam) */}
@@ -201,32 +171,6 @@ export function ContactFormCard({
               />
             </label>
           </div>
-
-          {intents.length > 0 ? (
-            <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {locale === "en" ? "Conversation" : "Type d’échange"}
-              </p>
-              <div className="flex flex-wrap gap-2" role="group" aria-label={locale === "en" ? "Conversation type" : "Type d’échange"}>
-                {intents.map((intent) => (
-                  <button
-                    key={intent.id}
-                    type="button"
-                    onClick={() => onIntentChange?.(intent.id)}
-                    aria-pressed={activeIntentId === intent.id}
-                    className={cn(
-                      "min-h-11 rounded-full border px-4 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                      activeIntentId === intent.id
-                        ? "border-primary bg-primary text-white"
-                        : "border-border bg-background text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {intent.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
 
           <IOSInput
             ref={nameRef}
@@ -268,7 +212,7 @@ export function ContactFormCard({
             ref={messageRef}
             id="contact-message"
             label={uiTexts.form.message}
-            placeholder={activeIntent?.placeholder ?? uiTexts.form.messagePlaceholder}
+            placeholder={uiTexts.form.messagePlaceholder}
             value={formData.message}
             onChange={(e) => {
               setFormData({ ...formData, message: e.target.value });
@@ -278,7 +222,7 @@ export function ContactFormCard({
             errorText={errors.message}
             rows={4}
             minLength={20}
-            maxLength={messageMaxLength}
+            maxLength={4000}
             required
           />
 
@@ -292,7 +236,6 @@ export function ContactFormCard({
           </IOSButton>
         </form>
       )}
-      </AnimatePresence>
     </IOSCard>
   );
 }
