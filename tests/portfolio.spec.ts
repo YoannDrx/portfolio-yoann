@@ -347,7 +347,7 @@ test("les validations du contact et le honeypot fonctionnent sans envoi", async 
   await page.locator("#contact-name").fill("Audit E2E");
   await page.locator("#contact-email").fill("audit@example.com");
   await page.locator("#contact-message").fill("Un message de validation assez long pour le parcours de test automatisé.");
-  await contact.locator('input[name="company"]').fill("honeypot-test");
+  await contact.locator('input[name="portfolio_verification"]').fill("honeypot-test", { force: true });
   const response = page.waitForResponse((item) => item.url().endsWith("/api/send-email"));
   await contact.getByRole("button", { name: "Envoyer" }).click();
   expect((await response).status()).toBe(200);
@@ -366,7 +366,7 @@ test("l’API contact refuse les payloads invalides et limite le débit sans env
     name: "Audit automatisé",
     email: "audit@example.com",
     message: "Ce message de test ne doit jamais être envoyé car le honeypot est rempli.",
-    company: "bot-field",
+    portfolioVerification: "bot-field",
   };
   const idempotencyHeaders = {
     "x-forwarded-for": "198.51.100.81",

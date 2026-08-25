@@ -15,7 +15,7 @@ type ContactFormData = {
   email: string;
   message: string;
   // Honeypot (doit rester vide)
-  company: string;
+  portfolioVerification: string;
 };
 
 type ContactField = "name" | "email" | "message";
@@ -36,7 +36,7 @@ export function ContactFormCard({ className, titleClassName, intent, contrast = 
     name: "",
     email: "",
     message: "",
-    company: "",
+    portfolioVerification: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -117,7 +117,7 @@ export function ContactFormCard({ className, titleClassName, intent, contrast = 
 
         setTimeout(() => {
           setIsSubmitted(false);
-          setFormData({ name: "", email: "", message: "", company: "" });
+          setFormData({ name: "", email: "", message: "", portfolioVerification: "" });
         }, 3000);
       } else {
         trackPortfolioEvent("contact_submit_result", {
@@ -168,6 +168,7 @@ export function ContactFormCard({ className, titleClassName, intent, contrast = 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {/* Honeypot field (anti-spam) */}
           <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               left: "-10000px",
@@ -176,18 +177,19 @@ export function ContactFormCard({ className, titleClassName, intent, contrast = 
               height: "1px",
               overflow: "hidden",
             }}
-            aria-hidden="true"
           >
             <label>
-              Company
+              Portfolio verification
               <input
                 type="text"
-                name="company"
+                name="portfolio_verification"
                 tabIndex={-1}
-                autoComplete="off"
-                value={formData.company}
+                autoComplete="new-password"
+                data-1p-ignore="true"
+                data-lpignore="true"
+                value={formData.portfolioVerification}
                 onChange={(e) =>
-                  setFormData({ ...formData, company: e.target.value })
+                  setFormData({ ...formData, portfolioVerification: e.target.value })
                 }
               />
             </label>

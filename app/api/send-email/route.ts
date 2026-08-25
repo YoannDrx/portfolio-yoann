@@ -27,7 +27,7 @@ const ContactPayloadSchema = z.object({
   message: z.string().trim().min(20).max(4000),
   subject: z.string().trim().max(150).optional(),
   // Honeypot field (must stay empty)
-  company: z.string().optional(),
+  portfolioVerification: z.string().optional(),
 });
 
 function getLocale(request: NextRequest) {
@@ -167,10 +167,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, message, subject, company } = payload.data;
+    const { name, email, message, subject, portfolioVerification } = payload.data;
 
     // Honeypot: if filled, pretend success but don't send anything
-    if (company && company.trim().length > 0) {
+    if (portfolioVerification && portfolioVerification.trim().length > 0) {
       return NextResponse.json({ success: true });
     }
 
