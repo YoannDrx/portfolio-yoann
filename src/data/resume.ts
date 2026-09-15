@@ -24,7 +24,7 @@ const experiencesByLocale: Record<Locale, WorkExperience[]> = {
         "Mise en place des tests automatisés, de l’observabilité et du déploiement continu",
       ],
       skills: ["Product design", "Next.js", "React", "TypeScript", "Playwright", "Vercel"],
-      url: "https://parigo-ten.vercel.app/",
+      url: "https://www.parigomusic.com/",
     },
     {
       id: "0-odyssey",
@@ -460,7 +460,7 @@ const experiencesByLocale: Record<Locale, WorkExperience[]> = {
         "Automated testing, observability and continuous deployment setup",
       ],
       skills: ["Product design", "Next.js", "React", "TypeScript", "Playwright", "Vercel"],
-      url: "https://parigo-ten.vercel.app/",
+      url: "https://www.parigomusic.com/",
     },
     {
       id: "0-odyssey",

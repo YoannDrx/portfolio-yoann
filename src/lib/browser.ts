@@ -40,7 +40,8 @@ async function renderWithPuppeteer(options: RenderOptions): Promise<Buffer> {
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: options.width, height: options.height });
-    await page.setContent(options.html, { waitUntil: "networkidle0" });
+    await page.setContent(options.html, { waitUntil: "load" });
+    await page.waitForNetworkIdle();
 
     const screenshot = await page.screenshot({
       type: "png",
@@ -109,7 +110,8 @@ async function pdfWithPuppeteer(options: PdfOptions): Promise<Uint8Array> {
 
   try {
     const page = await browser.newPage();
-    await page.setContent(options.html, { waitUntil: "networkidle0" });
+    await page.setContent(options.html, { waitUntil: "load" });
+    await page.waitForNetworkIdle();
     await page.emulateMediaType("print");
 
     const bytes = await page.pdf({
