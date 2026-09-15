@@ -87,6 +87,8 @@ test("les familles filtrent le parcours et les détails s’ouvrent dans la moda
   await expect(parigoDialog.getByRole("img", { name: "Recherche « piano » — site actuel" })).toBeVisible();
   await expect(parigoDialog.getByRole("img", { name: "Recherche « piano » — nouvelle expérience" })).toBeVisible();
   await page.keyboard.press("Escape");
+  await expect(parigoDialog).toHaveCount(0);
+  await expect(page.locator("[data-modal-viewport-layer]")).toHaveCount(0);
 
   await work.locator('[data-content-id="journey-yodev"]').click();
   const yodevDialog = page.getByRole("dialog", { name: "Yodev — studio & produits SaaS" });
