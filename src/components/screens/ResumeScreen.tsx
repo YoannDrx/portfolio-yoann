@@ -8,7 +8,7 @@
 import dynamic from 'next/dynamic';
 import StatusBar from '../device/StatusBar';
 import { IOSCard, IOSBadge, IOSNavigationBar, IOSButton } from '../ios';
-import { getEducation, getPortfolioContent, getWorkExperiences, getUiTexts } from '@/data';
+import { getEducation, getWorkExperiences, getUiTexts } from '@/data';
 import { useI18n } from '@/i18n/I18nProvider';
 import { Briefcase, GraduationCap, MapPin, ExternalLink, Download } from 'lucide-react';
 
@@ -55,12 +55,11 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
   const uiTexts = getUiTexts(locale);
   const experiences = getWorkExperiences(locale);
   const education = getEducation(locale);
-  const content = getPortfolioContent(locale);
 
   const devExperiences = experiences;
 
   return (
-    <div className="h-full bg-background flex flex-col">
+    <div className="phone-canvas h-full bg-background flex flex-col">
       {!hideStatusBar && <StatusBar />}
 
       <div className="flex-1 overflow-y-auto pb-32">
@@ -70,16 +69,6 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 	          subtitle={uiTexts.sections.experienceAndEducation}
 	          rightAction={<PDFDownloadButton />}
         />
-
-        <div className="scrollbar-hide mb-6 flex gap-3 overflow-x-auto px-5">
-          {content.careerChapters.map((chapter, index) => (
-            <div key={chapter.id} className="w-56 shrink-0 rounded-xl border border-border bg-card p-4">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-primary">0{index + 1} / {chapter.period}</p>
-              <h2 className="mt-3 font-display text-xl font-bold uppercase">{chapter.label}</h2>
-              <p className="mt-2 line-clamp-4 text-xs leading-5 text-muted-foreground">{chapter.transferStatement}</p>
-            </div>
-          ))}
-        </div>
 
         {/* Experience Section */}
         <div className="px-5 mb-6">
@@ -93,7 +82,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
           {/* Timeline */}
           <div className="relative stagger-children">
             {/* Timeline line */}
-            <div className="absolute left-5 top-6 bottom-6 w-0.5 bg-gradient-to-b from-blue-400 via-cyan-400 to-transparent" />
+            <div className="absolute bottom-6 left-5 top-6 w-px bg-gradient-to-b from-blue-500 via-cyan-400/60 to-transparent" />
 
             <div className="space-y-4">
               {devExperiences.map((exp, index) => (
@@ -101,7 +90,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
                   {/* Timeline dot */}
                   <div className="absolute left-3.5 top-4 w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 border-2 border-white shadow-sm" />
 
-                  <IOSCard variant="subtle" padding="sm">
+                  <IOSCard variant="subtle" padding="sm" className="phone-surface !rounded-[22px] !border-white/60">
                     <div className="space-y-2">
                       {/* Header */}
                       <div className="flex items-start justify-between gap-2">
@@ -181,7 +170,7 @@ const ResumeScreen = ({ hideStatusBar = false }: ResumeScreenProps) => {
 
           <div className="space-y-3 stagger-children">
             {education.map((edu) => (
-              <IOSCard key={edu.id} variant="subtle" padding="sm">
+              <IOSCard key={edu.id} variant="subtle" padding="sm" className="phone-surface !rounded-[22px] !border-white/60">
                 <div className="flex items-start gap-3">
                   <div className="w-[3px] h-10 rounded-full bg-gradient-to-b from-purple-400 to-violet-500 flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">

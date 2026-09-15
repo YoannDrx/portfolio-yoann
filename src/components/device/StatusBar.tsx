@@ -8,6 +8,14 @@ import { Wifi, Signal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { IOSStatusBarProps } from '@/design-system/types';
 
+const getCurrentTime = () => {
+  const now = new Date();
+  return `${now.getHours().toString().padStart(2, '0')}:${now
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`;
+};
+
 // Icône batterie iOS avec remplissage continu
 const BatteryIcon: React.FC<{ level: number; className?: string }> = ({ level, className }) => {
   // Largeur du remplissage (max 17px sur 21px de largeur interne)
@@ -41,26 +49,14 @@ const StatusBar: React.FC<IOSStatusBarProps> = ({
   theme = 'light',
 }) => {
   // Auto-update time if not provided
-  const [currentTime, setCurrentTime] = React.useState(() => {
-    const now = new Date();
-    return `${now.getHours().toString().padStart(2, '0')}:${now
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}`;
-  });
+  // The server and the browser must render the same first value. The live
+  // clock is applied immediately after hydration and then on minute changes.
+  const [currentTime, setCurrentTime] = React.useState('00:00');
 
   React.useEffect(() => {
     if (time) return;
 
-    const updateTime = () => {
-      const now = new Date();
-      setCurrentTime(
-        `${now.getHours().toString().padStart(2, '0')}:${now
-          .getMinutes()
-          .toString()
-          .padStart(2, '0')}`
-      );
-    };
+    const updateTime = () => setCurrentTime(getCurrentTime());
 
     updateTime();
 
@@ -88,7 +84,7 @@ const StatusBar: React.FC<IOSStatusBarProps> = ({
     <div className="relative h-12 flex items-start pt-3">
       {/* Time - à gauche du Dynamic Island */}
       <div className="absolute left-6 top-3">
-        <span className={cn('status-bar-time text-sm font-semibold', textColor)}>{displayTime}</span>
+        <span className={cn('text-sm font-semibold', textColor)}>{displayTime}</span>
       </div>
 
       {/* Right Icons - à droite du Dynamic Island */}

@@ -19,12 +19,19 @@ export type SceneQuality = "high" | "balanced" | "static";
 export type PortfolioSceneId = "hero" | "mode-transition" | "showreel" | "career";
 export type ViewTransitionState = "idle" | "preparing" | "morphing" | "settling";
 export type WorkPresentation = "phone" | "browser" | "desktop-app";
+export type ProjectTier = "featured" | "case-study" | "constellation";
+export type ProjectStatus = "production" | "public" | "beta" | "prototype" | "archive" | "private";
+export type ContentReviewState = "validated" | "to-confirm" | "missing-media" | "verify-link";
+export type MotionCapability = "full" | "balanced" | "reduced" | "static";
+export type PortfolioLocation = { mode: ViewMode; section?: PortfolioSectionId; tab?: PortfolioSectionId; projectId?: string };
 export type FeaturedWorkId =
   | "klesia"
   | "jaji"
   | "pressay"
+  | "parigo"
   | "jobio"
   | "moodday"
+  | "loic"
   | "mycryptopilot";
 
 export type FeaturedWorkItem = {
@@ -38,11 +45,31 @@ export type FeaturedWorkItem = {
   decision: string;
   impact: string;
   proof: { value: string; label: string; detail: string };
-  media: { primary: string; secondary?: string; alt: string };
+  media: { primary: string; secondary?: string; gallery?: string[]; logo?: string; alt: string };
   accent: string;
   destination:
     | { type: "panel"; experienceId: string }
     | { type: "route"; slug: CaseStudySlug };
+};
+
+export type ProjectRecord = {
+  id: string;
+  slug: string;
+  title: string;
+  period: string;
+  type: ExperienceType | "product";
+  role: string | null;
+  status: ProjectStatus;
+  tier: ProjectTier;
+  summary: string;
+  details: string | null;
+  stack: string[];
+  proofs: string[];
+  media: string[];
+  links: string[];
+  reviewState: ContentReviewState;
+  sourceExperienceId?: string;
+  caseStudySlug?: CaseStudySlug;
 };
 
 export type Capability = {
@@ -151,7 +178,12 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
         detail: localized ? "Public mobile distribution" : "Distribution mobile publique",
       },
       media: {
-        primary: "/images/projects/klesia-texture.webp",
+        primary: "/images/projects/klesia-appstore-01.webp",
+        gallery: [
+          "/images/projects/klesia-appstore-01.webp",
+          "/images/projects/klesia-appstore-02.webp",
+          "/images/projects/klesia-appstore-03.webp",
+        ],
         alt: localized ? "KLESIA mobile application" : "Application mobile KLESIA",
       },
       accent: "#2563EB",
@@ -179,7 +211,12 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
         detail: localized ? "iOS and Android distribution" : "Distribution iOS et Android",
       },
       media: {
-        primary: "/images/projects/jaji-texture.webp",
+        primary: "/images/projects/jaji-appstore-01.webp",
+        gallery: [
+          "/images/projects/jaji-appstore-01.webp",
+          "/images/projects/jaji-appstore-02.webp",
+          "/images/projects/jaji-appstore-03.webp",
+        ],
         alt: localized ? "Jaji mobile application" : "Application mobile Jaji",
       },
       accent: "#0F9F7A",
@@ -189,9 +226,7 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
 
   const caseOrder: Array<{ slug: CaseStudySlug; presentation: WorkPresentation }> = [
     { slug: "pressay", presentation: "desktop-app" },
-    { slug: "jobio", presentation: "browser" },
     { slug: "moodday", presentation: "browser" },
-    { slug: "mycryptopilot", presentation: "browser" },
   ];
 
   const cases = caseOrder.map(({ slug, presentation }): FeaturedWorkItem => {
@@ -199,8 +234,12 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
     if (!study) throw new Error(`Missing case study: ${slug}`);
     const decision = study.decisions[0];
     const textureBySlug: Partial<Record<CaseStudySlug, string>> = {
+      pressay: "/images/projects/pressay-home-dark.webp",
       jobio: "/images/projects/jobio-texture.webp",
-      moodday: "/images/projects/moodday-texture.webp",
+      moodday: "/images/projects/moodday-home-current.webp",
+    };
+    const logoBySlug: Partial<Record<CaseStudySlug, string>> = {
+      moodday: "/images/projects/moodday-icon-current.webp",
     };
     return {
       id: slug,
@@ -216,6 +255,15 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
       media: {
         primary: textureBySlug[slug] ?? study.image,
         secondary: study.secondaryImage,
+        logo: logoBySlug[slug],
+        gallery: slug === "pressay"
+          ? [
+              "/images/projects/pressay-home-dark.webp",
+              "/images/projects/pressay-modes-light.webp",
+            ]
+          : study.secondaryImage
+            ? [textureBySlug[slug] ?? study.image, study.secondaryImage]
+            : undefined,
         alt: `${study.name} — ${study.tagline}`,
       },
       accent: study.accent,
@@ -223,7 +271,85 @@ function getFeaturedWork(locale: Locale, experiences: Experience[]): FeaturedWor
     };
   });
 
-  return [...mobile, ...cases];
+  const loic = requiredExperience(experiences, "Portfolio Loïc Ghanem");
+  const parigo = requiredExperience(experiences, localized ? "Parigo Music — product redesign" : "Parigo Music — refonte produit");
+  const parigoWork: FeaturedWorkItem = {
+    id: "parigo",
+    sourceType: "experience",
+    presentation: "browser",
+    title: parigo.name,
+    category: localized ? "Freelance · Product & frontend" : "Freelance · Produit & frontend",
+    summary: parigo.description,
+    constraint: localized
+      ? "Replace a functional catalogue website with a coherent product experience without losing access to the existing music library."
+      : "Remplacer un site catalogue fonctionnel par une expérience produit cohérente sans perdre l’accès au fonds musical existant.",
+    decision: localized
+      ? "A ground-up frontend and design-system rebuild centered on search, editorial navigation and listening."
+      : "Une reconstruction du frontend et du design system centrée sur la recherche, la navigation éditoriale et l’écoute.",
+    impact: localized
+      ? "A new dark editorial experience, currently in development, supported by automated tests and Preview deployments."
+      : "Une nouvelle expérience éditoriale sombre, en cours de développement, soutenue par des tests automatisés et des déploiements Preview.",
+    proof: {
+      value: localized ? "Ongoing" : "En cours",
+      label: localized ? "complete redesign" : "refonte intégrale",
+      detail: "Product · UI/UX · Next.js · Tests · Delivery",
+    },
+    media: {
+      primary: "/images/projects/parigo-after.webp",
+      secondary: "/images/projects/parigo-before.webp",
+      gallery: [
+        "/images/projects/parigo-after.webp",
+        "/images/projects/parigo-search-after.webp",
+        "/images/projects/parigo-before.webp",
+        "/images/projects/parigo-search-before.webp",
+      ],
+      alt: localized ? "Parigo Music new product experience" : "Nouvelle expérience produit Parigo Music",
+    },
+    accent: "#6D5DFB",
+    destination: { type: "panel", experienceId: parigo.id },
+  };
+
+  const loicWork: FeaturedWorkItem = {
+    id: "loic",
+    sourceType: "experience",
+    presentation: "browser",
+    title: loic.name,
+    category: localized
+      ? "Creative web · 3D experience"
+      : "Web créatif · Expérience 3D",
+    summary: loic.description,
+    constraint: localized
+      ? "Turn a rich musical career into an experience that stays clear while combining audio, maps, editorial content and 3D."
+      : "Transformer un parcours musical riche en une expérience claire malgré l’audio, la cartographie, l’éditorial et la 3D.",
+    decision: localized
+      ? "A progressive experience built around reusable content, immersive scenes and an administration interface."
+      : "Une expérience progressive fondée sur des contenus réutilisables, des scènes immersives et une interface d’administration.",
+    impact: localized
+      ? "A distinctive portfolio that remains maintainable and gives every collaboration a place."
+      : "Un portfolio différenciant qui reste maintenable et donne une place à chaque collaboration.",
+    proof: {
+      value: "3D",
+      label: localized ? "immersive interface" : "interface immersive",
+      detail: "Three.js · React Three Fiber · Mapbox GL",
+    },
+    media: {
+      primary: "/images/projects/loic-ghanem-home.webp",
+      secondary: "/images/projects/loic-ghanem-albums.webp",
+      gallery: [
+        "/images/projects/loic-ghanem-home.webp",
+        "/images/projects/loic-ghanem-albums.webp",
+      ],
+      alt: localized
+        ? "Loïc Ghanem immersive portfolio"
+        : "Portfolio immersif de Loïc Ghanem",
+    },
+    accent: "#7C3AED",
+    destination: { type: "panel", experienceId: loic.id },
+  };
+
+  const [pressayCase, ...remainingCases] = cases;
+  if (!pressayCase) throw new Error("Missing Pressay featured case study");
+  return [...mobile, pressayCase, parigoWork, ...remainingCases, loicWork];
 }
 
 function getCapabilities(locale: Locale): Capability[] {
@@ -327,11 +453,11 @@ function getCareerChapters(locale: Locale): CareerChapter[] {
       id: "product",
       label: english ? "Web products" : "Produits web",
       period: "2022—2026",
-      experienceIds: ["1c", "1d", "3"],
+      experienceIds: ["yodev", "1c", "1d", "3"],
       transferStatement: english
         ? "Moving from interfaces to products meant learning to reduce scope, expose trade-offs and verify delivery."
         : "Passer des interfaces aux produits m’a appris à réduire le périmètre, exposer les arbitrages et vérifier la livraison.",
-      media: ["/images/projects/jobio-landing.png", "/images/projects/moodday-landing.png"],
+      media: ["/images/projects/jobio-landing.png", "/images/projects/moodday-home-current.webp"],
     },
     {
       id: "mobile",
@@ -360,10 +486,60 @@ function getContactIntents(locale: Locale): ContactIntent[] {
       ];
 }
 
+function getProjectRegistry(locale: Locale, experiences: Experience[], featuredWork: FeaturedWorkItem[]): ProjectRecord[] {
+  const featuredExperienceIds = new Set(
+    featuredWork.flatMap((work) => work.destination.type === "panel" ? [work.destination.experienceId] : [])
+  );
+  const records = experiences.map((experience): ProjectRecord => {
+    const links = Object.values(experience.links ?? {}).filter((link): link is string => Boolean(link));
+    const stack = Object.values(experience.stack ?? {}).flat();
+    return {
+      id: experience.id,
+      slug: experience.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+      title: experience.name,
+      period: experience.year,
+      type: experience.experienceType,
+      role: null,
+      status: experience.links?.appStore || experience.links?.playStore ? "production" : "public",
+      tier: featuredExperienceIds.has(experience.id) ? "featured" : "constellation",
+      summary: experience.description,
+      details: experience.longDescription ?? null,
+      stack,
+      proofs: experience.features,
+      media: [experience.image, ...(experience.images ?? [])].filter((media): media is string => Boolean(media)),
+      links,
+      reviewState: "to-confirm",
+      sourceExperienceId: experience.id,
+    };
+  });
+  const pressay = getCaseStudy(locale, "pressay");
+  if (pressay) {
+    records.unshift({
+      id: "pressay",
+      slug: "pressay",
+      title: pressay.name,
+      period: pressay.period,
+      type: "product",
+      role: pressay.role,
+      status: "public",
+      tier: "featured",
+      summary: pressay.summary,
+      details: pressay.context.join(" "),
+      stack: [...pressay.stack],
+      proofs: pressay.delivered,
+      media: [pressay.image, pressay.secondaryImage],
+      links: pressay.release?.productUrl ? [pressay.release.productUrl] : [],
+      reviewState: "to-confirm",
+      caseStudySlug: "pressay",
+    });
+  }
+  return records;
+}
+
 export function getPortfolioContent(locale: Locale) {
   const experiences = getExperiences(locale);
   const caseStudyOrder = ["pressay", "jobio", "moodday", "mycryptopilot"];
-  const caseStudies = getCaseStudySummaries(locale).toSorted(
+  const caseStudies = [...getCaseStudySummaries(locale)].sort(
     (left, right) =>
       caseStudyOrder.indexOf(left.slug) - caseStudyOrder.indexOf(right.slug)
   );
@@ -372,6 +548,7 @@ export function getPortfolioContent(locale: Locale) {
     requiredExperience(experiences, "Jaji"),
   ];
   const featuredWork = getFeaturedWork(locale, experiences);
+  const projects = getProjectRegistry(locale, experiences, featuredWork);
 
   const nav: PortfolioNavItem[] = [
     { id: "home", webAnchor: "top", label: locale === "en" ? "Home" : "Accueil" },
@@ -387,6 +564,7 @@ export function getPortfolioContent(locale: Locale) {
     nav,
     featuredMobile,
     featuredWork,
+    projects,
     caseStudies,
     experiences,
     capabilities: getCapabilities(locale),

@@ -21,6 +21,10 @@ interface ImageGalleryProps {
   forceStackLayout?: boolean;
   /** Custom height class for the container */
   heightClass?: string;
+  /** Keep a portrait cover fully visible when the first media is a film poster. */
+  firstImageContain?: boolean;
+  /** Keep every project media fully visible inside the gallery viewport. */
+  containAllImages?: boolean;
 }
 
 export const ImageGallery = ({
@@ -29,7 +33,9 @@ export const ImageGallery = ({
   gradient,
   emoji,
   forceStackLayout = false,
-  heightClass = "h-48"
+  heightClass = "h-48",
+  firstImageContain = false,
+  containAllImages = false,
 }: ImageGalleryProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -124,8 +130,8 @@ export const ImageGallery = ({
                 src={src}
                 alt={`${projectName} - Image ${index + 1}`}
                 fill
-                className="object-cover object-top"
-                sizes="100vw"
+                className={containAllImages || (index === 0 && firstImageContain) ? "object-contain object-center p-2" : "object-cover object-top"}
+                sizes="(max-width: 767px) 100vw, 390px"
                 priority={index === 0}
               />
               {/* Zoom indicator */}
@@ -154,8 +160,8 @@ export const ImageGallery = ({
                     src={src}
                     alt={`${projectName} - Image ${index + 1}`}
                     fill
-                    className="object-cover object-top"
-                    sizes="100vw"
+                    className={containAllImages || (index === 0 && firstImageContain) ? "object-contain object-center p-2" : "object-cover object-top"}
+                    sizes="(max-width: 767px) 100vw, 576px"
                     priority={index === 0}
                   />
                   {/* Zoom indicator */}
@@ -172,7 +178,7 @@ export const ImageGallery = ({
           </div>
 
           {/* Desktop: Carousel with click to open lightbox */}
-          <div className="hidden md:block h-56 relative overflow-hidden group">
+          <div className="relative hidden h-[min(34vh,340px)] overflow-hidden bg-slate-950 md:block group">
         {/* Current Image - clickable */}
         <div
           className="absolute inset-0 cursor-pointer"
@@ -182,7 +188,7 @@ export const ImageGallery = ({
             src={images[currentIndex]}
             alt={`${projectName} - Image ${currentIndex + 1}`}
             fill
-            className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+            className={containAllImages || (currentIndex === 0 && firstImageContain) ? "object-contain object-center p-3 transition-transform duration-300 group-hover:scale-[1.02]" : "object-cover object-top transition-transform duration-300 group-hover:scale-105"}
             sizes="576px"
             priority
           />

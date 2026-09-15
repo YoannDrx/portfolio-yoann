@@ -3,6 +3,8 @@ import { renderBannerHtml, type BannerDesign } from "@/lib/banner-renderer";
 import { getClientIp, isRateLimited } from "@/lib/rate-limit";
 import sharp from "sharp";
 
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

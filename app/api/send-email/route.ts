@@ -27,7 +27,7 @@ const ContactPayloadSchema = z.object({
   message: z.string().trim().min(20).max(4000),
   subject: z.string().trim().max(150).optional(),
   // Honeypot field (must stay empty)
-  company: z.string().optional(),
+  portfolioVerification: z.string().optional(),
 });
 
 function getLocale(request: NextRequest) {
@@ -57,9 +57,9 @@ function getApiMessages(locale: "fr" | "en") {
 }
 
 function contactEmailProvider() {
-  return process.env.CONTACT_EMAIL_PROVIDER === "yodev_mail"
-    ? "yodev_mail"
-    : "resend";
+  return process.env.CONTACT_EMAIL_PROVIDER === "resend"
+    ? "resend"
+    : "yodev_mail";
 }
 
 async function sendWithResend(input: ContactEmailInput): Promise<ContactEmailResult> {
@@ -167,10 +167,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, message, subject, company } = payload.data;
+    const { name, email, message, subject, portfolioVerification } = payload.data;
 
     // Honeypot: if filled, pretend success but don't send anything
-    if (company && company.trim().length > 0) {
+    if (portfolioVerification && portfolioVerification.trim().length > 0) {
       return NextResponse.json({ success: true });
     }
 

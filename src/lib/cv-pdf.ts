@@ -10,6 +10,8 @@ export async function generateCvPdfBuffer(html: string): Promise<Uint8Array> {
     html,
     format: "A4",
     printBackground: true,
+    tagged: true,
+    outline: true,
     margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
   });
 }

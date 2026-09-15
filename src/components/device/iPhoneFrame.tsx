@@ -16,19 +16,21 @@ interface IPhoneFrameProps {
   showFrame?: boolean;
   /** Additional className */
   className?: string;
+  /** Display scale - defaults to the portfolio simulator size */
+  scale?: number;
 }
 
 const IPhoneFrame = ({
   children,
   device = 'iPhone14Pro',
   showFrame = true,
-  className
+  className,
+  scale = 0.95,
 }: IPhoneFrameProps) => {
   // Get device config from tokens
   const deviceConfig = useMemo(() => devices[device], [device]);
 
-  // Calculate dimensions - scale down for display
-  const scale = 0.95; // Scale factor for display
+  // Calculate dimensions - scale down for the requested context
   const width = Math.round(deviceConfig.width * scale);
   const height = Math.round(deviceConfig.height * scale);
 
@@ -60,18 +62,18 @@ const IPhoneFrame = ({
     >
       {/* Device Shadow */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40 blur-3xl scale-95 translate-y-8"
+        className="absolute inset-0 scale-95 translate-y-8 bg-gradient-to-b from-blue-500/25 to-black/55 blur-3xl"
         style={{ borderRadius: frameRadius }}
       />
 
       {/* Device Frame */}
       <div
-        className="relative bg-device-bg p-2.5 shadow-device"
+        className="relative border border-white/20 bg-[linear-gradient(145deg,#5e626a,#17191d_28%,#050506_72%,#858991)] p-[7px] shadow-device"
         style={{ borderRadius: frameRadius }}
       >
         {/* Inner Bezel */}
         <div
-          className="relative bg-device-bezel p-[2px]"
+          className="relative bg-black p-[3px] shadow-[inset_0_0_0_1px_rgba(255,255,255,.08)]"
           style={{ borderRadius: bezelRadius }}
         >
           {/* Screen Container */}

@@ -40,7 +40,8 @@ async function renderWithPuppeteer(options: RenderOptions): Promise<Buffer> {
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: options.width, height: options.height });
-    await page.setContent(options.html, { waitUntil: "networkidle0" });
+    await page.setContent(options.html, { waitUntil: "load" });
+    await page.waitForNetworkIdle();
 
     const screenshot = await page.screenshot({
       type: "png",
@@ -84,6 +85,8 @@ export interface PdfOptions {
   format?: "A4" | "Letter";
   printBackground?: boolean;
   margin?: { top: string; right: string; bottom: string; left: string };
+  tagged?: boolean;
+  outline?: boolean;
 }
 
 export async function renderHtmlToPdf(options: PdfOptions): Promise<Uint8Array> {
@@ -107,13 +110,16 @@ async function pdfWithPuppeteer(options: PdfOptions): Promise<Uint8Array> {
 
   try {
     const page = await browser.newPage();
-    await page.setContent(options.html, { waitUntil: "networkidle0" });
+    await page.setContent(options.html, { waitUntil: "load" });
+    await page.waitForNetworkIdle();
     await page.emulateMediaType("print");
 
     const bytes = await page.pdf({
       format: options.format ?? "A4",
       printBackground: options.printBackground ?? true,
       margin: options.margin ?? { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
+      tagged: options.tagged ?? true,
+      outline: options.outline ?? true,
     });
 
     return new Uint8Array(bytes);
@@ -135,6 +141,8 @@ async function pdfWithPlaywright(options: PdfOptions): Promise<Uint8Array> {
       format: options.format ?? "A4",
       printBackground: options.printBackground ?? true,
       margin: options.margin ?? { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
+      tagged: options.tagged ?? true,
+      outline: options.outline ?? true,
     });
 
     return bytes;

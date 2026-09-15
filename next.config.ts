@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["playwright-core", "puppeteer-core", "@sparticuz/chromium-min"],
   images: {
     formats: ["image/avif", "image/webp"],
-    qualities: [75, 100],
+    qualities: [75, 92, 100],
   },
   async redirects() {
     return [
@@ -71,7 +71,7 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",

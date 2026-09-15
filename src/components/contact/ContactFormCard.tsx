@@ -2,13 +2,11 @@
 
 import { useRef, useState } from "react";
 import { CheckCircle, Send } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { IOSButton, IOSCard, IOSInput, IOSTextarea } from "@/components/ios";
 import { toast } from "@/hooks/use-toast";
-import { getUiTexts } from "@/data";
+import { getUiTexts, type ContactIntent } from "@/data";
 import { useI18n } from "@/i18n/I18nProvider";
-import type { ContactIntent } from "@/data/portfolio-content";
-import { cn } from "@/lib/utils";
+import { trackPortfolioEvent } from "@/lib/analytics";
 
 const MIN_SUBMISSION_INTERVAL_MS = 5000;
 
@@ -17,7 +15,7 @@ type ContactFormData = {
   email: string;
   message: string;
   // Honeypot (doit rester vide)
-  company: string;
+  portfolioVerification: string;
 };
 
 type ContactField = "name" | "email" | "message";
@@ -25,29 +23,20 @@ type ContactField = "name" | "email" | "message";
 export type ContactFormCardProps = {
   className?: string;
   titleClassName?: string;
-  intents?: ContactIntent[];
-  activeIntentId?: ContactIntent["id"];
-  onIntentChange?: (intent: ContactIntent["id"]) => void;
+  intent?: ContactIntent;
+  contrast?: boolean;
+  idPrefix?: string;
 };
 
-export function ContactFormCard({
-  className,
-  titleClassName,
-  intents = [],
-  activeIntentId,
-  onIntentChange,
-}: ContactFormCardProps) {
+export function ContactFormCard({ className, titleClassName, intent, contrast = false, idPrefix = "contact" }: ContactFormCardProps) {
   const { locale } = useI18n();
   const uiTexts = getUiTexts(locale);
-  const reducedMotion = useReducedMotion();
-  const activeIntent = intents.find((intent) => intent.id === activeIntentId);
-  const messageMaxLength = 4000 - (activeIntent ? activeIntent.payloadPrefix.length + 2 : 0);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     message: "",
-    company: "",
+    portfolioVerification: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -107,14 +96,17 @@ export function ContactFormCard({
         },
         body: JSON.stringify({
           ...formData,
-          message: activeIntent
-            ? `${activeIntent.payloadPrefix}\n\n${formData.message}`
+          message: intent
+            ? `${intent.payloadPrefix}\n\n${formData.message}`
             : formData.message,
-          subject: activeIntent ? `${activeIntent.label} — ${formData.name}` : undefined,
         }),
       });
 
       if (response.ok) {
+        trackPortfolioEvent("contact_submit_result", {
+          result: "success",
+          intent: intent?.id ?? "general",
+        });
         setIsSubmitted(true);
         setErrors({});
         requestIdRef.current = null;
@@ -125,9 +117,13 @@ export function ContactFormCard({
 
         setTimeout(() => {
           setIsSubmitted(false);
-          setFormData({ name: "", email: "", message: "", company: "" });
+          setFormData({ name: "", email: "", message: "", portfolioVerification: "" });
         }, 3000);
       } else {
+        trackPortfolioEvent("contact_submit_result", {
+          result: "error",
+          intent: intent?.id ?? "general",
+        });
         const data = await response.json();
         toast({
           title: uiTexts.messages.errorTitle,
@@ -136,6 +132,10 @@ export function ContactFormCard({
         });
       }
     } catch {
+      trackPortfolioEvent("contact_submit_result", {
+        result: "error",
+        intent: intent?.id ?? "general",
+      });
       toast({
         title: uiTexts.messages.errorTitle,
         description: uiTexts.messages.cannotSend,
@@ -147,36 +147,28 @@ export function ContactFormCard({
   };
 
   return (
-    <IOSCard variant="glass" padding="lg" className={className}>
+    <IOSCard variant="glass" padding="lg" className={`${contrast ? "[&_label]:!text-white [&_input]:!bg-white/10 [&_input]:!text-white [&_input::placeholder]:!text-white/38 [&_textarea]:!bg-white/10 [&_textarea]:!text-white [&_textarea::placeholder]:!text-white/38" : ""} ${className ?? ""}`}>
       <h3 className={titleClassName ?? "text-lg font-semibold text-foreground mb-4"}>
         {uiTexts.sections.sendMessage}
       </h3>
 
-      <AnimatePresence mode="wait" initial={false}>
       {isSubmitted ? (
-        <motion.div
-          key="success"
-          initial={reducedMotion ? false : { opacity: 0, y: 18, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={reducedMotion ? undefined : { opacity: 0, y: -10 }}
-          className="py-8 text-center"
-          role="status"
-          aria-live="polite"
-        >
-          <motion.div
-            initial={reducedMotion ? false : { x: -24, rotate: -8 }}
-            animate={{ x: 0, rotate: 0 }}
-            className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-success/10"
-          >
-            <CheckCircle className="size-8 text-success" />
-          </motion.div>
-          <p className="font-semibold text-foreground">{uiTexts.messages.messageSent}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{uiTexts.messages.willReplyShort}</p>
-        </motion.div>
+        <div className="py-8 text-center animate-ios-spring" role="status" aria-live="polite">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-success/10 flex items-center justify-center">
+            <CheckCircle className="w-8 h-8 text-success" />
+          </div>
+          <p className="font-semibold text-foreground">
+            {uiTexts.messages.messageSent}
+          </p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {uiTexts.messages.willReplyShort}
+          </p>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {/* Honeypot field (anti-spam) */}
           <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               left: "-10000px",
@@ -185,52 +177,27 @@ export function ContactFormCard({
               height: "1px",
               overflow: "hidden",
             }}
-            aria-hidden="true"
           >
             <label>
-              Company
+              Portfolio verification
               <input
                 type="text"
-                name="company"
+                name="portfolio_verification"
                 tabIndex={-1}
-                autoComplete="off"
-                value={formData.company}
+                autoComplete="new-password"
+                data-1p-ignore="true"
+                data-lpignore="true"
+                value={formData.portfolioVerification}
                 onChange={(e) =>
-                  setFormData({ ...formData, company: e.target.value })
+                  setFormData({ ...formData, portfolioVerification: e.target.value })
                 }
               />
             </label>
           </div>
 
-          {intents.length > 0 ? (
-            <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {locale === "en" ? "Conversation" : "Type d’échange"}
-              </p>
-              <div className="flex flex-wrap gap-2" role="group" aria-label={locale === "en" ? "Conversation type" : "Type d’échange"}>
-                {intents.map((intent) => (
-                  <button
-                    key={intent.id}
-                    type="button"
-                    onClick={() => onIntentChange?.(intent.id)}
-                    aria-pressed={activeIntentId === intent.id}
-                    className={cn(
-                      "min-h-11 rounded-full border px-4 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                      activeIntentId === intent.id
-                        ? "border-primary bg-primary text-white"
-                        : "border-border bg-background text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {intent.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
           <IOSInput
             ref={nameRef}
-            id="contact-name"
+            id={`${idPrefix}-name`}
             type="text"
             label={uiTexts.form.name}
             placeholder={uiTexts.form.namePlaceholder}
@@ -248,7 +215,7 @@ export function ContactFormCard({
 
           <IOSInput
             ref={emailRef}
-            id="contact-email"
+            id={`${idPrefix}-email`}
             type="email"
             label={uiTexts.form.email}
             placeholder={uiTexts.form.emailPlaceholder}
@@ -266,9 +233,9 @@ export function ContactFormCard({
 
           <IOSTextarea
             ref={messageRef}
-            id="contact-message"
+            id={`${idPrefix}-message`}
             label={uiTexts.form.message}
-            placeholder={activeIntent?.placeholder ?? uiTexts.form.messagePlaceholder}
+            placeholder={intent?.placeholder ?? uiTexts.form.messagePlaceholder}
             value={formData.message}
             onChange={(e) => {
               setFormData({ ...formData, message: e.target.value });
@@ -278,7 +245,7 @@ export function ContactFormCard({
             errorText={errors.message}
             rows={4}
             minLength={20}
-            maxLength={messageMaxLength}
+            maxLength={4000}
             required
           />
 
@@ -292,7 +259,6 @@ export function ContactFormCard({
           </IOSButton>
         </form>
       )}
-      </AnimatePresence>
     </IOSCard>
   );
 }
