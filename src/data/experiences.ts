@@ -573,9 +573,6 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
             "Suivi par session avec logs RPE, humeur, douleur, énergie et sommeil",
         },
       ],
-      links: {
-        website: "https://hyrun.app/",
-      },
     },
     // 2024
     {
@@ -940,9 +937,6 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
           description: "Intégration native des vidéos de l'artiste",
         },
       ],
-      links: {
-        website: "https://www.caroline-senyk.fr/",
-      },
     },
     {
       id: "6",
@@ -1981,9 +1975,6 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
             "Session tracking with RPE, mood, pain, energy and sleep logs",
         },
       ],
-      links: {
-        website: "https://hyrun.app/",
-      },
     },
     // 2024
     {
@@ -2345,9 +2336,6 @@ const experiencesByLocale: Record<Locale, Experience[]> = {
           description: "Native integration of the artist's videos",
         },
       ],
-      links: {
-        website: "https://www.caroline-senyk.fr/",
-      },
     },
     {
       id: "6",

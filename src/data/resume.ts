@@ -280,7 +280,6 @@ const experiencesByLocale: Record<Locale, WorkExperience[]> = {
         "Internationalisation multi-langues FR/EN (i18next)",
       ],
       skills: ["Next.js", "React.js", "Bootstrap", "Prisma", "i18n", "SASS"],
-      url: "https://www.caroline-senyk.fr/",
     },
     {
       id: "5",
@@ -716,7 +715,6 @@ const experiencesByLocale: Record<Locale, WorkExperience[]> = {
         "Multi-language internationalization FR/EN (i18next)",
       ],
       skills: ["Next.js", "React.js", "Bootstrap", "Prisma", "i18n", "SASS"],
-      url: "https://www.caroline-senyk.fr/",
     },
     {
       id: "5",
